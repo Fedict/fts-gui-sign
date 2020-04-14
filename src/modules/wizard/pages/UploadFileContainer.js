@@ -1,0 +1,97 @@
+import React from 'react'
+import { navigateToVersionCheckLoading, } from "../actions/WizardActions"
+import { uploadFile } from "../actions/UploadFileActions"
+import { connect } from 'react-redux';
+import { CardContainer } from '../../components/CardContainer/CardContainer';
+import { NumberdText } from '../../components/NumberedText/NumberdText';
+
+export class UploadFileContainer extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            file: {}
+        }
+    }
+    onchange(e) {
+       
+        const file = e.target.files[0]
+        this.setState({ file: file })
+    }
+
+    handleSubmit() {
+
+        this.props.uploadFile(this.state.file)
+        this.props.navigateToVersionCheckLoading()
+    }
+
+    render() {
+        return (
+            <div className="row mt-3">
+                <CardContainer
+                    title={"Digitaal handtekenen"}
+                    hasNextButton
+                    nextButtonText="Hantekenen met eID"
+                    onClickNext={() => { this.handleSubmit() }}
+                    nextButtonIsDisabled={this.state.file.name ? false : true}>
+                    <div className="form-group">
+                        <div className="container" >
+                            <NumberdText number="1"> Selecteer een document door op de knop "Selecteer bestand" te klikken.</NumberdText>
+                            <NumberdText number="2"> Sluit jouw eID-kaartlezer aan op uw computer of gebruik de ingebouwde kaartlezer (indien aanwezig).</NumberdText>
+                            <NumberdText number="3">  Steek jouw elektronische identiteitskaart (eID) in de kaartlezer.</NumberdText>
+                            <NumberdText number="4">  Klik op “Handtekenen met eID” en geef jouw pincode van jouw identiteitskaart in wanneer daarom gevraagd wordt.</NumberdText>
+
+                            <div className="row">
+                                <div className="card col col-12">
+                                    <div className="card-body">
+                                        <div className="row">
+                                            <div className="col col-auto">
+                                                <button
+                                                    className='btn btn-primary'
+                                                    type="button"
+                                                    id="button_select_file"
+                                                    value=""
+                                                    onClick={() => { document.getElementById('input_hidden_select_file').click() }}
+                                                > Selecteer bestand </button>
+
+                                                <input
+                                                    type="file"
+                                                    style={{ display: "none" }}
+                                                    id="input_hidden_select_file"
+                                                    onChange={(e) => { this.onchange(e) }} />
+                                            </div>
+                                            <div className="col col-auto ">
+                                                <p className="align-bottom pt-1" >geselecteerd bestand : {this.state.file.name || 'geen document geselecteerd'}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        {/* 
+                                <label className="custom-file-label" htmlFor="exampleFormControlInput1">upload file</label>
+                                <input type="file" className="custom-file-input" id="exampleFormControlInput1" /> */}
+                    </div>
+                </CardContainer>
+
+            </div>
+        )
+    }
+}
+
+const mapStateToProps = (state) => {
+    return (state) => ({
+        wizard: state.wizard
+    })
+}
+const mapDispatchToProps = ({
+    navigateToVersionCheckLoading,
+    uploadFile,
+
+
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(UploadFileContainer)

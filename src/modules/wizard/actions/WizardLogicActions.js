@@ -1,0 +1,350 @@
+import { navigateToStep } from "./WizardActions"
+import {
+    WIZARD_STATE_VERSION_CHECK_UPDATE,
+    WIZARD_STATE_VERSION_CHECK_INSTALL,
+    WIZARD_STATE_CERTIFICATES_LOADING,
+    WIZARD_STATE_CERTIFICATES_CHOOSE,
+    WIZARD_STATE_PIN_INPUT,
+    WIZARD_STATE_SUCCES,
+    WIZARD_STATE_VALIDATE_LOADING,
+    WIZARD_STATE_SIGNING_LOADING,
+    WIZARD_STATE_DIGEST_LOADING,
+    WIZARD_STATE_PIN_PAD,
+    WIZARD_STATE_UPLOAD,
+} from "../wizard/WizardConstants"
+import { controller } from "../../eIdLink/controller"
+import { showErrorMessage } from "./MessageActions"
+import { MessageCertificatesNotFound } from "../message/messages/MessageCertificatesNotFound"
+import { saveCertificateList, selectCertificate } from "./CertificateActions"
+import { getDataToSignAPI, signDocumentAPI, validateCertificatesAPI } from "../../communication/communication"
+import { setDigest } from "./DigestActions"
+import { handleErrorEID } from "./ErrorHandleActions"
+import { ErrorGeneral } from "../message/messages/ErrorGeneral"
+import { setSignature } from "./SignatureActions"
+import { setDownloadFile } from "./UploadFileActions"
+
+//----------------------------------
+// helpers                    
+//----------------------------------
+
+
+const getCertificatesFromResponse = (response) => {
+
+    let certificateList = []
+
+    if (response && response.Readers && response.Readers.length >= 1) {
+        for (const reader of response.Readers) {
+            if (reader && reader.certificates && reader.certificates.length >= 1) {
+                for (const certificate of reader.certificates) {
+                    const certificateObject = {
+                        readerName: reader.ReaderName,
+                        readerType: reader.ReaderType,
+                        cardType: reader.cardType,
+                        certificate: certificate
+                    }
+                    certificateList.push(certificateObject)
+                }
+            }
+        }
+    }
+
+    return certificateList
+}
+
+const createCertificateObject = (certificate, certificateChain) => {
+
+    if (certificate && certificateChain) {
+
+        let certificateChainStrings = []
+
+        if (certificateChain.rootCA) {
+            certificateChainStrings.push(certificateChain.rootCA);
+        }
+
+        if (certificateChain.subCA) {
+            certificateChainStrings = [
+                ...certificateChainStrings,
+                ...certificateChain.subCA];
+        }
+
+        const certificateChainApi = certificateChainStrings.map((val) => {
+            return ({
+                "encodedCertificate": val
+            })
+        })
+
+        return {
+            certificate: { "encodedCertificate": certificate },
+            certificateChain: certificateChainApi,
+
+        }
+
+    }
+}
+
+
+
+
+//----------------------------------
+//logic
+//----------------------------------
+
+export const checkVersion = () => (dispatch, getStore) => {
+    //TODO implement browserchecks
+
+    let eIDLink = controller.getInstance()
+
+    eIDLink.getVersion(window.configData.eIDLinkMinimumVersion,
+        (data) => {
+            dispatch(navigateToStep(WIZARD_STATE_CERTIFICATES_LOADING))
+        },
+        (data) => {
+            dispatch(navigateToStep(WIZARD_STATE_VERSION_CHECK_INSTALL))
+        },
+        (data) => {
+            dispatch(navigateToStep(WIZARD_STATE_VERSION_CHECK_UPDATE))
+        }
+    )
+
+}
+
+export const getCertificates = () => (dispatch, getStore) => {
+
+    let eIDLink = controller.getInstance()
+
+    eIDLink.getCertificate()
+        .then((response) => {
+            const certificateList = getCertificatesFromResponse(response)
+
+            dispatch(saveCertificateList(certificateList))
+
+            if (certificateList.length === 0) {
+                dispatch(showErrorMessage(MessageCertificatesNotFound))
+            }
+
+            else {
+                getCertificateChainsFromReader(certificateList)
+                    .then((newList) => {
+                        dispatch(saveCertificateList(newList))
+                        dispatch(navigateToStep(WIZARD_STATE_VALIDATE_LOADING))
+                    })
+                    .catch((error) => {
+                        dispatch(handleErrorEID(error, true))
+                    })
+            }
+        })
+        .catch(
+            (error) => {
+                dispatch(handleErrorEID(error))
+            }
+        )
+
+}
+
+
+
+export const getCertificateChainsFromReader = (certificateList) => {
+    return Promise.all(
+        certificateList
+            .map(async val => {
+               
+                val.certificateChain = await getCertificateChainFromReader(val.certificate)
+                val.APIBody = createCertificateObject(val.certificate, val.certificateChain)
+                return val
+            }))
+}
+
+export const getCertificateChainFromReader = (certificate) => {
+    let eIDLink = controller.getInstance()
+    return new Promise((resolve, reject) => {
+        eIDLink.getCertificateChain(
+            'nl',
+            "0123456789ABCDEF0123456789ABCDEF",
+            certificate)
+            .then((resp) => {
+                resolve(resp.certificateChain)
+            })
+            .catch((err) => reject(err))
+    })
+}
+
+
+export const validateCertificates = () => (dispatch, getStore) => {
+    const store = getStore()
+    const { certificate } = store
+
+    if (certificate
+        && certificate.certificateList) {
+
+        const APIBody = certificate.certificateList.map((val) => val.APIBody)
+
+        validateCertificatesAPI(APIBody)
+            .then((val) => {
+                const indications = val.indications
+                const newList = certificate.certificateList.map((val, index) => {
+                    const res = indications[index]
+                    //TODO handle not passed certificates
+                    if (res.indication === "PASSED") {
+                        val.indication = res.indication
+                        return val
+                    }
+                    else {
+                        return undefined
+                    }
+                }).filter(val => val)
+
+                dispatch(saveCertificateList(newList))
+
+                if (newList.length <= 0) {
+                    dispatch(showErrorMessage(MessageCertificatesNotFound))
+                }
+                else {
+                    if (newList.length === 1) {
+                        dispatch(selectCertificate(newList[0]))
+                        dispatchEvent(navigateToStep(WIZARD_STATE_DIGEST_LOADING))
+                    }
+                    else {
+                        dispatch(navigateToStep(WIZARD_STATE_CERTIFICATES_CHOOSE))
+                    }
+                }
+            })
+            .catch(() => {
+                //TODO API ERROR handling
+                dispatch(showErrorMessage(ErrorGeneral))
+            })
+
+    }
+}
+
+
+export const getDigest = () => (dispatch, getStore) => {
+    const store = getStore()
+    const { certificate } = store
+    const { uploadFile } = store
+
+
+    if (certificate
+        && certificate.certificateSelected
+        && certificate.certificateSelected.APIBody) {
+        getDataToSignAPI(certificate.certificateSelected.APIBody, uploadFile.file)
+            .then((resp) => {
+                dispatch(setDigest(resp))
+                dispatch(navigateToSign())
+            })
+            .catch(() => {
+                //TODO API ERROR handling
+                dispatch(showErrorMessage(ErrorGeneral))
+            })
+
+    }
+
+}
+
+export const navigateToSign = () => (dispatch, getStore) => {
+    const { certificate } = getStore()
+    if (certificate
+        && certificate.certificateSelected
+        && certificate.certificateSelected.readerType) {
+
+        if (certificate.certificateSelected.readerType === "pinpad") {
+            dispatch(navigateToStep(WIZARD_STATE_PIN_PAD))
+        }
+        else {
+            dispatch(navigateToStep(WIZARD_STATE_PIN_INPUT))
+        }
+    }
+    else {
+        dispatch(showErrorMessage(ErrorGeneral))
+    }
+}
+
+export const sign = (pin) => (dispatch, getStore) => {
+    //TODO navigate to spinner
+    const { certificate, digest } = getStore()
+
+    if (certificate
+        && certificate.certificateSelected
+        && certificate.certificateSelected.certificate
+        && digest
+        && digest.digest
+        && digest.digestAlgorithm) {
+        let eIDLink = controller.getInstance()
+
+        const lang = 'nl' //TODO connect to store and translations
+        const mac = "0123456789ABCDEF0123456789ABCDEF"
+        const u_cert = certificate.certificateSelected.certificate
+        const u_digest = digest.digest
+        const algo = digest.digestAlgorithm
+
+        eIDLink.sign(lang, mac, u_cert, algo, u_digest, pin).then(
+            (response) => {
+                dispatch(setSignature(response))
+                dispatch(signDocument())
+                
+            },
+            (error) => { dispatch(handleErrorEID(error, true)) }
+        )
+    }
+    else {
+        dispatch(showErrorMessage(ErrorGeneral))
+    }
+
+
+}
+
+export const signDocument = () => (dispatch, getStore) => {
+   
+    const { certificate, signature, uploadFile } = getStore()
+
+    if (certificate
+        && certificate.certificateSelected
+        && certificate.certificateSelected.APIBody
+        && signature
+        && signature.signature
+        && uploadFile
+        && uploadFile.file) {
+
+        dispatch(navigateToStep(WIZARD_STATE_SIGNING_LOADING))
+
+        signDocumentAPI(
+            certificate.certificateSelected.APIBody,
+            uploadFile.file,
+            signature.signature)
+            .then((resp) => {
+               
+                if (resp
+                    && resp
+                    && resp.name
+                    && resp.bytes) {
+                    dispatch(setDownloadFile(resp))
+                    dispatch(navigateToStep(WIZARD_STATE_SUCCES))
+                }
+                else {
+                    dispatch(showErrorMessage(ErrorGeneral))
+                }
+
+            })
+            .catch((error) => {
+             
+                //TODO API ERROR handling
+                dispatch(showErrorMessage(ErrorGeneral))
+            })
+
+    }
+    else {
+       
+        dispatch(showErrorMessage(ErrorGeneral))
+    }
+}
+
+export const STORE_RESET = "STORE_RESET"
+
+export const resetWizard = () => (dispatch, getStore) => {
+    let eIDLink = controller.getInstance()
+
+    eIDLink.stop()
+
+    dispatch({ type: STORE_RESET })
+
+    dispatch(navigateToStep(WIZARD_STATE_UPLOAD))
+}

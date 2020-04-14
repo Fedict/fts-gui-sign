@@ -1,0 +1,18 @@
+{
+
+    "Readers": 
+    
+    [
+        {
+            "ReaderName": "ACS ACR38U-CCID",
+            "ReaderType": "standard",
+            "cardType": "BEID",
+            "usercertificates": [
+                "MIIG9jCCBN6gAwIBAgI……moIgJxA23/qiwQ==",
+                "MIIFrDCCA5SgAwIBAgI……Rv8k0nDz4qCHA=="
+            ]
+        }
+    ],
+    "result": "OK",
+    "correlationId": "3daa114f-1ae9-4ae1-ba15-c79f7383ab35"
+}
