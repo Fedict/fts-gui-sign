@@ -8,6 +8,7 @@ import MessageReducer from "../modules/wizard/reducers/MessageReducer";
 import CertificateReducer from "../modules/wizard/reducers/CertificateReducer";
 import DigestReducer from "../modules/wizard/reducers/DigestReducer";
 import SignatureReducer from "../modules/wizard/reducers/SignatureReducer";
+import PinErrorReducer from "../modules/wizard/reducers/PinErrorReducer";
 
 export default function configureStore(initialState = {}) {
 
@@ -27,7 +28,8 @@ export default function configureStore(initialState = {}) {
         message: MessageReducer,
         certificate: CertificateReducer,
         digest: DigestReducer,
-        signature: SignatureReducer
+        signature: SignatureReducer,
+        pinError: PinErrorReducer,
     })
 
     return createStore(rootReducer, initialState, enhancer)

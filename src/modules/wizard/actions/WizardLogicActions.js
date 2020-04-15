@@ -18,7 +18,7 @@ import { MessageCertificatesNotFound } from "../message/messages/MessageCertific
 import { saveCertificateList, selectCertificate } from "./CertificateActions"
 import { getDataToSignAPI, signDocumentAPI, validateCertificatesAPI } from "../../communication/communication"
 import { setDigest } from "./DigestActions"
-import { handleErrorEID } from "./ErrorHandleActions"
+import { handleErrorEID, handlePinErrorEID } from "./ErrorHandleActions"
 import { ErrorGeneral } from "../message/messages/ErrorGeneral"
 import { setSignature } from "./SignatureActions"
 import { setDownloadFile } from "./UploadFileActions"
@@ -147,7 +147,7 @@ export const getCertificateChainsFromReader = (certificateList) => {
     return Promise.all(
         certificateList
             .map(async val => {
-               
+
                 val.certificateChain = await getCertificateChainFromReader(val.certificate)
                 val.APIBody = createCertificateObject(val.certificate, val.certificateChain)
                 return val
@@ -280,9 +280,9 @@ export const sign = (pin) => (dispatch, getStore) => {
             (response) => {
                 dispatch(setSignature(response))
                 dispatch(signDocument())
-                
+
             },
-            (error) => { dispatch(handleErrorEID(error, true)) }
+            (error) => { dispatch(handlePinErrorEID(error, true)) }
         )
     }
     else {
@@ -293,7 +293,7 @@ export const sign = (pin) => (dispatch, getStore) => {
 }
 
 export const signDocument = () => (dispatch, getStore) => {
-   
+
     const { certificate, signature, uploadFile } = getStore()
 
     if (certificate
@@ -311,7 +311,7 @@ export const signDocument = () => (dispatch, getStore) => {
             uploadFile.file,
             signature.signature)
             .then((resp) => {
-               
+
                 if (resp
                     && resp
                     && resp.name
@@ -325,14 +325,14 @@ export const signDocument = () => (dispatch, getStore) => {
 
             })
             .catch((error) => {
-             
+
                 //TODO API ERROR handling
                 dispatch(showErrorMessage(ErrorGeneral))
             })
 
     }
     else {
-       
+
         dispatch(showErrorMessage(ErrorGeneral))
     }
 }

@@ -26,7 +26,7 @@ export class PinInputContainer extends React.Component {
     }
 
     render() {
-        const { resetWizard } = this.props
+        const { resetWizard, pinError } = this.props
         return (
             <div className="row mt-3">
                 <CardContainer
@@ -41,6 +41,14 @@ export class PinInputContainer extends React.Component {
 
                     <div className="form-group">
                         <p>Geef uw pincode in</p>
+                        {(pinError && pinError.message)
+                            ? (
+                                <div className="text-center">
+                                    <div className="alert alert-danger">
+                                        {pinError.message}
+                                    </div>
+                                </div>)
+                            : null}
                         <div className="row mb-2">
                             <div className="col-auto">
                                 <input
@@ -62,6 +70,7 @@ export class PinInputContainer extends React.Component {
 
 const mapStateToProps = (state) => {
     return (state) => ({
+        pinError: state.pinError
     })
 }
 const mapDispatchToProps = ({

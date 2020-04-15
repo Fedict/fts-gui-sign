@@ -1,10 +1,12 @@
-import { PIN_ERROR_SET_ERROR } from "../actions/PinErrorActions"
+
+import { STORE_RESET } from "../actions/WizardLogicActions"
+import { PIN_ERROR_SET_ERROR } from "../actions/ErrorHandleActions"
 
 const initialState = {
-    message: {}
+    message: ""
 }
 
-const UploadFileReducer = (state = initialState, action) => {
+const PinErrorReducer = (state = initialState, action) => {
     switch (action.type) {
         case PIN_ERROR_SET_ERROR: {
             return {
@@ -20,4 +22,4 @@ const UploadFileReducer = (state = initialState, action) => {
     }
 }
 
-export default UploadFileReducer
+export default PinErrorReducer
