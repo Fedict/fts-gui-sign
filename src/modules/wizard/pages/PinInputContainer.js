@@ -35,7 +35,7 @@ export class PinInputContainer extends React.Component {
                     hasCancelButton
                     cancelButtonText="Cancel"
                     onClickCancel={() => { resetWizard() }}
-                    nextButtonText="hantekenen met eID"
+                    nextButtonText="handtekenen met eID"
                     onClickNext={() => { this.handleSubmit() }}
                     nextButtonIsDisabled={this.state.pin.length === 0}>
 

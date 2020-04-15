@@ -32,7 +32,7 @@ export class UploadFileContainer extends React.Component {
                 <CardContainer
                     title={"Digitaal handtekenen"}
                     hasNextButton
-                    nextButtonText="Hantekenen met eID"
+                    nextButtonText="Handtekenen met eID"
                     onClickNext={() => { this.handleSubmit() }}
                     nextButtonIsDisabled={this.state.file.name ? false : true}>
 
