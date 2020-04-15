@@ -41,6 +41,7 @@ export class CertificateChooseContainer extends React.Component {
                     >
                         <p>Er zijn meerdere certificaten gevonden. Selecteer het certificaat dat u wilt gebruiken</p>
                         <CertificateSelect
+                            id="certificate_select"
                             onChange={(cert) => { this.onChange(cert) }}
                             certificates={certificate.certificateList} />
                     </CardContainer>

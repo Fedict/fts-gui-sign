@@ -12,6 +12,9 @@ export class PinInputContainer extends React.Component {
             pin: ""
         }
     }
+    componentDidMount() {
+        document.getElementById('input_code').focus()
+    }
     onchange(e) {
         const pin = e.target.value
         this.setState({ pin: pin })
@@ -35,6 +38,7 @@ export class PinInputContainer extends React.Component {
                     nextButtonText="hantekenen met eID"
                     onClickNext={() => { this.handleSubmit() }}
                     nextButtonIsDisabled={this.state.pin.length === 0}>
+
                     <div className="form-group">
                         <p>Geef uw pincode in</p>
                         <div className="row mb-2">
@@ -42,7 +46,7 @@ export class PinInputContainer extends React.Component {
                                 <input
                                     type="password"
                                     className="form-control"
-                                    id="pincode"
+                                    id="input_code"
                                     value={this.state.pin}
                                     onChange={(e) => { this.onchange(e) }} />
                             </div>
