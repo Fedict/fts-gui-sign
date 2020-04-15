@@ -44,7 +44,7 @@ export class SuccesContainer extends React.Component {
                             Zo dadelijk zal de download van jouw document automatisch starten, indien dit niet het geval is dan kan je de download manueel starten
                             </div>
 
-                        <button className="btn btn-primary" onClick={() => { this.downloadFile() }} >Download document</button>
+                        <button className="btn btn-primary" id="button_download_file" onClick={() => { this.downloadFile() }} >Download document</button>
 
                     </div>
                 </CardContainer>

@@ -15,7 +15,7 @@ export class UploadFileContainer extends React.Component {
         }
     }
     onchange(e) {
-       
+
         const file = e.target.files[0]
         this.setState({ file: file })
     }
@@ -35,6 +35,7 @@ export class UploadFileContainer extends React.Component {
                     nextButtonText="Hantekenen met eID"
                     onClickNext={() => { this.handleSubmit() }}
                     nextButtonIsDisabled={this.state.file.name ? false : true}>
+
                     <div className="form-group">
                         <div className="container" >
                             <NumberdText number="1"> Selecteer een document door op de knop "Selecteer bestand" te klikken.</NumberdText>
@@ -44,9 +45,9 @@ export class UploadFileContainer extends React.Component {
 
                             <div className="row">
                                 <div className="card col col-12">
-                                    <div className="card-body">
-                                        <div className="row">
-                                            <div className="col col-auto">
+                                    <div className="card-body ">
+                                        <div className="row ">
+                                            <div className="col col-auto align-self-center ">
                                                 <button
                                                     className='btn btn-primary'
                                                     type="button"
@@ -61,8 +62,11 @@ export class UploadFileContainer extends React.Component {
                                                     id="input_hidden_select_file"
                                                     onChange={(e) => { this.onchange(e) }} />
                                             </div>
-                                            <div className="col col-auto ">
-                                                <p className="align-bottom pt-1" >geselecteerd bestand : {this.state.file.name || 'geen document geselecteerd'}</p>
+                                            <div className="col col-auto align-self-center ">
+                                                <p className="btn m-0" >
+                                                    geselecteerd bestand :
+                                                 <span id='name_select_file'> {this.state.file.name || 'geen document geselecteerd'}</span>
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
@@ -70,10 +74,6 @@ export class UploadFileContainer extends React.Component {
                             </div>
 
                         </div>
-
-                        {/* 
-                                <label className="custom-file-label" htmlFor="exampleFormControlInput1">upload file</label>
-                                <input type="file" className="custom-file-input" id="exampleFormControlInput1" /> */}
                     </div>
                 </CardContainer>
 

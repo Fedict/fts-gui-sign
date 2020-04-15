@@ -20,12 +20,13 @@ export class CertificateSelect extends React.Component {
         }
     }
     render() {
-        const { certificates } = this.props
+        const { certificates, id } = this.props
         const { selectedIndex } = this.state
 
         const selectCards = certificates.map((certificate, index) => {
             return (
                 <div key={index}
+                    id={"card_" + id + "_" + index}
                     className={" card mb-3 " + ((index === selectedIndex) ? " border border-primary" : "")}
                     onClick={() => { this.onSelect(index) }}>
                     <div className="row no-gutters form-check align-content-center">

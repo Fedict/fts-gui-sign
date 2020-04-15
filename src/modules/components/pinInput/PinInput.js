@@ -10,7 +10,7 @@ export const PinInput = () => {
                 <p>error</p>
                 <div className="row mb-2">
                     <div className="col-auto">
-                        <input type="password" className="form-control" id="pincode" />
+                        <input type="password" id="input_code" className="form-control" id="pincode" />
                     </div>
                     <div className="col-auto">
                         <button type="submit" className="btn btn-primary">Submit</button>

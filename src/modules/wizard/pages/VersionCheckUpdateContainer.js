@@ -28,7 +28,7 @@ export class VersionCheckUpdateContainer extends React.Component {
                     <p>De geïnstaleerde versie van eIDLink is niet up to date.</p>
                     <p>Gelieve een nieuwe versie van eIDLink te instaleren om gebruik te kunnen maken van deze applicatie</p>
 
-                    <button className="btn btn-primary">Download en instaleer eIDLink</button>
+                    <button className="btn btn-primary" id="button_install_eID">Download en installeer eIDLink</button>
 
                 </CardContainer>
             </div>
