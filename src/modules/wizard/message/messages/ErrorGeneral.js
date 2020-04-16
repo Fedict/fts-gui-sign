@@ -4,7 +4,7 @@ export const ErrorGeneral = {
 
     type: messageTypes.ERROR,
     title: "Er is iets fout gegaan",
-    message: "er is iets fout gegaan. herlaad de pagina en probeer opnieuw",
+    message: "Er is iets fout gegaan. Herlaad de pagina en probeer opnieuw",
     body: null,
     nextButton: {
         text: null,
