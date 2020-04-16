@@ -1,3 +1,3 @@
 export const isChromeExtensionDetected = () => {
-    return "EZChromeExt" in window;
+    return "EIDChromeExt" in window;
 }
