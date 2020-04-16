@@ -1,11 +1,11 @@
-const url = window.configData.BEurl
+const url = (window && window.configData) ? window.configData.BEurl : ""
 
-const signerLocationCountry = window.configData.signerLocationCountry || ""
-const signerLocationLocality = window.configData.signerLocationLocality || ""
-const signerLocationPostalAddress = window.configData.signerLocationPostalAddress || [""]
-const signerLocationPostalCode = window.configData.signerLocationPostalCode || ""
-const signerLocationStateOrProvince = window.configData.signerLocationStateOrProvince || ""
-const signerLocationStreet = window.configData.signerLocationStreet || ""
+const signerLocationCountry = (window && window.configData) ? window.configData.signerLocationCountry : ""
+const signerLocationLocality = (window && window.configData) ? window.configData.signerLocationLocality : ""
+const signerLocationPostalAddress = (window && window.configData) ? window.configData.signerLocationPostalAddress : [""]
+const signerLocationPostalCode = (window && window.configData) ? window.configData.signerLocationPostalCode : ""
+const signerLocationStateOrProvince = (window && window.configData) ? window.configData.signerLocationStateOrProvince : ""
+const signerLocationStreet = (window && window.configData) ? window.configData.signerLocationStreet : ""
 
 export const validateCertificateAPI = (certificateBody) => {
 
