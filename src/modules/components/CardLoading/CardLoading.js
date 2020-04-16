@@ -3,7 +3,8 @@ import { CardContainer } from "../CardContainer/CardContainer"
 
 export const CardLoading = ({ title, hasCancelButton,
     cancelButtonText,
-    onClickCancel }) => {
+    onClickCancel,
+    children }) => {
     return (
         <CardContainer
             title={title}
@@ -11,6 +12,7 @@ export const CardLoading = ({ title, hasCancelButton,
             cancelButtonText={cancelButtonText}
             onClickCancel={onClickCancel} >
             <div className="text-center">
+                {children}
                 <div className="spinner-border text-primary " role="status">
                     <span className="sr-only">Loading...</span>
                 </div>

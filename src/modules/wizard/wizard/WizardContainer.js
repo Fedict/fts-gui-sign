@@ -12,7 +12,9 @@ import {
     WIZARD_STATE_PIN_INPUT,
     WIZARD_STATE_SUCCES,
     WIZARD_STATE_SIGNING_LOADING,
-    WIZARD_STATE_MESSAGE
+    WIZARD_STATE_MESSAGE,
+    WIZARD_STATE_SIGNING_PRESIGN_LOADING,
+    WIZARD_STATE_PINPAD_ERROR
 } from './WizardConstants'
 import UploadFileContainer from '../pages/UploadFileContainer'
 import { connect } from 'react-redux'
@@ -29,6 +31,8 @@ import MessageContainerWithStore from '../message/MessageContainer'
 import { MessageContainer } from '../message/MessageContainer'
 import CertificateChooseContainer from '../pages/CertificateChooseContainer'
 import { ErrorGeneral } from '../message/messages/ErrorGeneral'
+import SigningPreSignLoading from '../pages/SigningPreSignLoading'
+import { PinPadError } from '../pages/PinPadError'
 
 export const WizardContainer = ({ wizard }) => {
 
@@ -63,6 +67,10 @@ export const WizardContainer = ({ wizard }) => {
         case WIZARD_STATE_MESSAGE:
             return <MessageContainerWithStore />
 
+        case WIZARD_STATE_SIGNING_PRESIGN_LOADING:
+            return <SigningPreSignLoading />
+        case WIZARD_STATE_PINPAD_ERROR:
+            return <PinPadError />
         default:
             return <MessageContainer message={ErrorGeneral} />
     }

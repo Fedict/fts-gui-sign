@@ -10,7 +10,7 @@ import {
     Error_EID_card_error,
     Error_EID_card_blocked
 } from "../message/messages/ErrorsEIDLink";
-import { navigateToSign } from "./WizardLogicActions";
+import { navigateToPinError } from "./WizardLogicActions";
 
 export const errorStatuses = {
     http_status_0: "http_status_0",
@@ -99,7 +99,7 @@ export const handleErrorEID = (error, isInSession) => (dispatch, getStore) => {
 export const PIN_ERROR_SET_ERROR = "PIN_ERROR_SET_ERROR"
 export const showPinError = (message) => (dispatch, getStore) => {
     dispatch({ type: PIN_ERROR_SET_ERROR, payload: message })
-    dispatch(navigateToSign())
+    dispatch(navigateToPinError())
 }
 
 // export const pinErrors = {

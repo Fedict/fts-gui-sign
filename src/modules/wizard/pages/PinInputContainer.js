@@ -3,6 +3,8 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { CardContainer } from '../../components/CardContainer/CardContainer';
 import { sign, resetWizard } from '../actions/WizardLogicActions'
+import { navigateToStep } from '../actions/WizardActions';
+import { WIZARD_STATE_SIGNING_PRESIGN_LOADING } from '../wizard/WizardConstants';
 export class PinInputContainer extends React.Component {
 
     constructor(props) {
@@ -22,6 +24,7 @@ export class PinInputContainer extends React.Component {
 
     handleSubmit() {
         this.props.sign(this.state.pin)
+        this.props.navigateToStep(WIZARD_STATE_SIGNING_PRESIGN_LOADING)
 
     }
 
@@ -75,7 +78,8 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = ({
     sign,
-    resetWizard
+    resetWizard,
+    navigateToStep
 
 
 })

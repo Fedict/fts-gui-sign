@@ -1,7 +1,8 @@
 import * as navigation from "./WizardActions"
 import { navigateToStep } from "./WizardActions"
 import { navigateToSign } from "./WizardLogicActions"
-import { WIZARD_STATE_PIN_PAD, WIZARD_STATE_PIN_INPUT } from "../wizard/WizardConstants"
+import {  WIZARD_STATE_PIN_INPUT, WIZARD_STATE_SIGNING_PRESIGN_LOADING } from "../wizard/WizardConstants"
+
 
 const ORIGINAL_navigateToStep = navigateToStep
 
@@ -9,6 +10,7 @@ describe("Pinpad support", () => {
 
     beforeEach(() => {
         navigation.navigateToStep = jest.fn()
+      
         // Object.defineProperty(window, 'configData', {BEurl: ""})
         global.window.configData = { BEurl: "" }
     })
@@ -27,7 +29,7 @@ describe("Pinpad support", () => {
         navigateToSign()(dispatch, getStore)
 
         expect(navigation.navigateToStep.mock.calls.length).toBe(1)
-        expect(navigation.navigateToStep.mock.calls[0][0]).toBe(WIZARD_STATE_PIN_PAD)
+        expect(navigation.navigateToStep.mock.calls[0][0]).toBe(WIZARD_STATE_SIGNING_PRESIGN_LOADING)
     })
 
     test("navigateToSign : navigation to pin input page", () => {
@@ -45,7 +47,7 @@ describe("Pinpad support", () => {
         navigateToSign()(dispatch, getStore)
 
         expect(navigation.navigateToStep.mock.calls.length).toBe(1)
-        expect(navigation.navigateToStep.mock.calls[0][0]).toBe(WIZARD_STATE_PIN_INPUT)
+        expect(navigation.navigateToStep.mock.calls[0][0]).toBe(WIZARD_STATE_PIN_INPUT)       
     })
 
     afterEach(() => {

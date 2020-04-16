@@ -9,8 +9,9 @@ import {
     WIZARD_STATE_VALIDATE_LOADING,
     WIZARD_STATE_SIGNING_LOADING,
     WIZARD_STATE_DIGEST_LOADING,
-    WIZARD_STATE_PIN_PAD,
     WIZARD_STATE_UPLOAD,
+    WIZARD_STATE_SIGNING_PRESIGN_LOADING,
+    WIZARD_STATE_PINPAD_ERROR,
 } from "../wizard/WizardConstants"
 import { controller } from "../../eIdLink/controller"
 import { showErrorMessage } from "./MessageActions"
@@ -247,7 +248,26 @@ export const navigateToSign = () => (dispatch, getStore) => {
         && certificate.certificateSelected.readerType) {
 
         if (certificate.certificateSelected.readerType === "pinpad") {
-            dispatch(navigateToStep(WIZARD_STATE_PIN_PAD))
+            dispatch(navigateToStep(WIZARD_STATE_SIGNING_PRESIGN_LOADING))
+            dispatch(sign(null))
+        }
+        else {
+            dispatch(navigateToStep(WIZARD_STATE_PIN_INPUT))
+        }
+    }
+    else {
+        dispatch(showErrorMessage(ErrorGeneral))
+    }
+}
+
+export const navigateToPinError = () => (dispatch, getStore) => {
+    const { certificate } = getStore()
+    if (certificate
+        && certificate.certificateSelected
+        && certificate.certificateSelected.readerType) {
+
+        if (certificate.certificateSelected.readerType === "pinpad") {
+            dispatch(navigateToStep(WIZARD_STATE_PINPAD_ERROR))
         }
         else {
             dispatch(navigateToStep(WIZARD_STATE_PIN_INPUT))
@@ -261,6 +281,7 @@ export const navigateToSign = () => (dispatch, getStore) => {
 export const sign = (pin) => (dispatch, getStore) => {
     //TODO navigate to spinner
     const { certificate, digest } = getStore()
+
 
     if (certificate
         && certificate.certificateSelected
