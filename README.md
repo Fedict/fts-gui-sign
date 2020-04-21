@@ -81,4 +81,4 @@ For the Latest versions of the npm dependencies, reference the package.json
     -"jquery": "3.4.0"
 
 ### dev dependencies
--"@types/jest": "^25.1.4"
+    -"@types/jest": "^25.1.4"
