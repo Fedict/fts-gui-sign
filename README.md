@@ -1,5 +1,13 @@
 # GUI-sign
 
+## Building the application itself
+
+There are two separate commands for building the application. One builds the dev version and the other the production version. In the dockerfile the production version is used. So in order to build the application for a production environment:
+
+```BASH
+npm run build
+```
+
 ## Unit Tests
 
 It is possible to activate the unit tests using the following command

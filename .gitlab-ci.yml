@@ -1,0 +1,54 @@
+stages:
+  - test
+  - package
+  - deploy
+
+before_script:
+  - echo "Logging into the docker repo"
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+
+image: node:latest
+
+cache:
+  key: "$CI_PIPELINE_ID"
+
+test:
+  stage: test
+  script:
+    - echo "Running unit tests"
+    - npm run test
+
+package:
+  stage: package
+  script:
+    - echo "Building the docker Image"
+    - docker build -t $CI_REGISTRY/eidas/gui-sign .
+  except:
+    - master
+
+package_master:
+  stage: package
+  script:
+    - echo "Building the docker Image"
+    - docker build -t $CI_REGISTRY/eidas/gui-sign .
+  only:
+    - master
+  when: manual
+
+deploy:
+  stage: deploy
+  script:
+    - echo "Pushing the image to the docker hub"
+    - docker push $CI_REGISTRY/eidas/gui-sign:latest
+    - export HTTPS_PROXY="$HTTPS_PROXY_SERVER"
+    - oc login https://$OPENSHIFT_SERVER --token=$OPENSHIFT_TOKEN
+    - oc rollout latest dc/$OPENSHIFT_POD -n $OPENSHIFT_PROJECT
+
+deploy_master:
+  stage: deploy
+  script:
+    - echo "Pushing the image to the docker hub"
+    - docker push $CI_REGISTRY/eidas/gui-sign:latest
+  when: manual
+  only:
+    - master
