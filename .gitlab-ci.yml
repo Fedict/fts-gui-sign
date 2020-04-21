@@ -11,8 +11,16 @@ image: node:latest
 
 cache:
   key: "$CI_PIPELINE_ID"
+  paths:
+    - node_modules/
 
-test:
+test_install:
+  stage: test
+  script:
+    - echo "Installing modules to test"
+    - npm install
+
+test_test:
   stage: test
   script:
     - echo "Running unit tests"
