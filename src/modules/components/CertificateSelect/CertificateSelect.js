@@ -34,7 +34,7 @@ export class CertificateSelect extends React.Component {
                         <div className="col">
                             <div className="card-body">
                                 <p>reader : {certificate.readerName}</p>
-                                <p>naam : naam van persoon (signature)
+                                <p>naam :  {certificate.commonName}
                                 </p>
                             </div>
                         </div>

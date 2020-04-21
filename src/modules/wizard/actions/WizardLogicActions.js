@@ -177,7 +177,12 @@ export const validateCertificates = () => (dispatch, getStore) => {
     if (certificate
         && certificate.certificateList) {
 
-        const APIBody = certificate.certificateList.map((val) => val.APIBody)
+        const APIBody = certificate.certificateList.map((val) => {
+            return {
+                ...val.APIBody,
+                "expectedKeyUsage": "NON_REPUDIATION"
+            }
+        })
 
         validateCertificatesAPI(APIBody)
             .then((val) => {
@@ -185,8 +190,10 @@ export const validateCertificates = () => (dispatch, getStore) => {
                 const newList = certificate.certificateList.map((val, index) => {
                     const res = indications[index]
                     //TODO handle not passed certificates
-                    if (res.indication === "PASSED") {
+                    if (res.indication === "PASSED" && res.keyUsageCheckOk) {
                         val.indication = res.indication
+                        val.keyUsageCheckOk = res.keyUsageCheckOk
+                        val.commonName = res.commonName
                         return val
                     }
                     else {
@@ -202,7 +209,7 @@ export const validateCertificates = () => (dispatch, getStore) => {
                 else {
                     if (newList.length === 1) {
                         dispatch(selectCertificate(newList[0]))
-                        dispatchEvent(navigateToStep(WIZARD_STATE_DIGEST_LOADING))
+                        dispatch(navigateToStep(WIZARD_STATE_DIGEST_LOADING))
                     }
                     else {
                         dispatch(navigateToStep(WIZARD_STATE_CERTIFICATES_CHOOSE))
