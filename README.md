@@ -32,7 +32,6 @@ window.configData = {
     eIDLinkMinimumVersion: "1.0.0", //Minimum version of eID link
     BEurl: "https://validate.ta.fts.bosa.belgium.be/signandvalidation", // URL to the backend
 
-
     signerLocationCountry: "",
     signerLocationLocality: "",
     signerLocationPostalAddress: [""],
@@ -65,21 +64,21 @@ docker run -it -p 3000:3001 node-web:latest
 For the Latest versions of the npm dependencies, reference the package.json
 
 ### dependencies
--"@testing-library/jest-dom": "4.2.4"
--"@testing-library/react": "9.5.0"
--"@testing-library/user-event": "7.2.1",
--"bootstrap": "4.4.1",
--"node-sass": "4.13.1",
--"react": "16.13.0",
--"react-dom": "16.13.0",
--"react-intl": "3.12.1",
--"react-redux": "7.2.0",
--"react-scripts": "3.4.1",
--"redux": "4.0.5",
--"redux-thunk": "2.3.0",
--"popper.js": "1.16.1",
--"typescript": "^3.8.3",
--"jquery": "3.4.0"
+    -"@testing-library/jest-dom": "4.2.4"
+    -"@testing-library/react": "9.5.0"
+    -"@testing-library/user-event": "7.2.1",
+    -"bootstrap": "4.4.1",
+    -"node-sass": "4.13.1",
+    -"react": "16.13.0",
+    -"react-dom": "16.13.0",
+    -"react-intl": "3.12.1",
+    -"react-redux": "7.2.0",
+    -"react-scripts": "3.4.1",
+    -"redux": "4.0.5",
+    -"redux-thunk": "2.3.0",
+    -"popper.js": "1.16.1",
+    -"typescript": "^3.8.3",
+    -"jquery": "3.4.0"
 
 ### dev dependencies
 -"@types/jest": "^25.1.4"
