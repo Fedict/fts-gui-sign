@@ -18,7 +18,7 @@ test_install:
   stage: test
   script:
     - echo "Installing modules to test"
-    - npm install
+    - npm install --silent
 
 test_test:
   stage: test
