@@ -1,3 +1,5 @@
+image: node:latest
+
 stages:
   - test
   - package
@@ -6,8 +8,6 @@ stages:
 before_script:
   - echo "Logging into the docker repo"
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-
-image: node:latest
 
 cache:
   key: "$CI_PIPELINE_ID"
