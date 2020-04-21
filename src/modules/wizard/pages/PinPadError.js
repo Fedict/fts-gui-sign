@@ -1,8 +1,53 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { CardError } from '../../components/CardError/CardError'
+import { resetWizard, navigateToSign } from "../actions/WizardLogicActions"
 
-export class PinPadError extends React.Component{
+export class PinPadError extends React.Component {
 
-    render(){
-        return <p>pinerror</p>
+    onClickCancel() {
+        this.props.resetWizard()
+    }
+
+    onClickNext() {
+        this.props.navigateToSign()
+    }
+    render() {
+
+        const { pinError } = this.props
+        if (pinError && pinError.message) {
+            return (
+                <CardError
+                    title={"Pincode is fout"}
+                    hasCancelButton={true}
+                    cancelButtonText={'cancel'}
+                    onClickCancel={() => { this.onClickCancel() }}
+                    hasNextButton={true}
+                    nextButtonText={'probeer opnieuw'}
+                    onClickNext={() => { this.onClickNext() }}
+                    text={pinError.message}
+                >
+
+                </CardError>
+            )
+        }
+        else {
+            //todo create general error
+            return null
+        }
+
     }
 }
+
+const mapStateToProps = (state) => {
+    return (state) => ({
+        certificate: state.certificate,
+        pinError: state.pinError
+    })
+}
+const mapDispatchToProps = ({
+    resetWizard,
+    navigateToSign
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(PinPadError)

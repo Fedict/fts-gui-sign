@@ -32,7 +32,7 @@ import { MessageContainer } from '../message/MessageContainer'
 import CertificateChooseContainer from '../pages/CertificateChooseContainer'
 import { ErrorGeneral } from '../message/messages/ErrorGeneral'
 import SigningPreSignLoading from '../pages/SigningPreSignLoading'
-import { PinPadError } from '../pages/PinPadError'
+import PinPadError from '../pages/PinPadError'
 
 export const WizardContainer = ({ wizard }) => {
 
