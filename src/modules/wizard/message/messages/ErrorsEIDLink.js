@@ -1,4 +1,5 @@
 import { ErrorGeneral } from "./ErrorGeneral";
+import { WIZARD_STATE_CERTIFICATES_LOADING } from "../../wizard/WizardConstants";
 
 //TODO create correct messages
 export const Error_EID_http_status_0 = ErrorGeneral
@@ -21,7 +22,12 @@ export const Error_EID_no_reader_InSession = {
 }
 
 export const Error_EID_no_reader_NotInSession = {
-    ...createError("Geen eID lezer gevonden", "Er is geen eID lezer gevonden.")
+    ...createError("Geen eID lezer gevonden", "Er is geen eID lezer gevonden."),
+    nextButton: {
+        text: "Probeer opnieuw",
+        isVisible: true,
+        nextPage: WIZARD_STATE_CERTIFICATES_LOADING
+    },
 }
 
 export const Error_EID_unsupported_reader = {
@@ -33,7 +39,12 @@ export const Error_EID_no_card_InSession = {
 }
 
 export const Error_EID_no_card_NotInSession = {
-    ...createError("Geen eID kaart gevonden", "Er is geen eID kaart gevonden.")
+    ...createError("Geen eID kaart gevonden", "Er is geen eID kaart gevonden."),
+    nextButton: {
+        text: "Probeer opnieuw",
+        isVisible: true,
+        nextPage: WIZARD_STATE_CERTIFICATES_LOADING
+    },
 }
 
 export const Error_EID_card_error = {

@@ -92,7 +92,7 @@ const createCertificateObject = (certificate, certificateChain) => {
 
 export const checkVersion = () => (dispatch, getStore) => {
     //TODO implement browserchecks
-
+    
     let eIDLink = controller.getInstance()
 
     eIDLink.getVersion(window.configData.eIDLinkMinimumVersion,
@@ -130,7 +130,7 @@ export const getCertificates = () => (dispatch, getStore) => {
                         dispatch(navigateToStep(WIZARD_STATE_VALIDATE_LOADING))
                     })
                     .catch((error) => {
-                        dispatch(handleErrorEID(error, true))
+                        dispatch(handleErrorEID(error))
                     })
             }
         })
