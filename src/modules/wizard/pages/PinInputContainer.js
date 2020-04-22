@@ -23,8 +23,9 @@ export class PinInputContainer extends React.Component {
     }
 
     handleSubmit() {
-        this.props.sign(this.state.pin)
         this.props.navigateToStep(WIZARD_STATE_SIGNING_PRESIGN_LOADING)
+        this.props.sign(this.state.pin)
+      
 
     }
 

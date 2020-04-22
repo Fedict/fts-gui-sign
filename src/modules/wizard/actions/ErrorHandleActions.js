@@ -68,7 +68,6 @@ export const handleErrorEID = (error, isInSession) => (dispatch, getStore) => {
         case errorStatuses.signature_failed:
             //TODO create error message
             break
-        //TODO create pin error handeling
 
         case errorStatuses.pin_1_attempt_left:
         case errorStatuses.pin_2_attempts_left:
@@ -77,6 +76,7 @@ export const handleErrorEID = (error, isInSession) => (dispatch, getStore) => {
         case errorStatuses.pin_length:
         case errorStatuses.pin_too_short:
         case errorStatuses.pin_incorrect:
+        case errorStatuses.pin_timeout:
             dispatch(showErrorMessage(ErrorGeneral))
             break;
 
@@ -84,9 +84,6 @@ export const handleErrorEID = (error, isInSession) => (dispatch, getStore) => {
             dispatch(showErrorMessage(Error_EID_card_blocked))
             break;
 
-        case errorStatuses.pin_timeout:
-            dispatch(showErrorMessage(ErrorGeneral))
-            break;
         case errorStatuses.cancel:
 
             break;
@@ -102,15 +99,6 @@ export const showPinError = (message) => (dispatch, getStore) => {
     dispatch(navigateToPinError())
 }
 
-// export const pinErrors = {
-//     pin_incorrect: "pin_incorrect",
-//     pin_too_short: "pin_too_short",
-//     pin_length: "pin_length",
-//     pin_too_long: "pin_too_long",
-//     pin_3_attempts_left: "pin_3_attempts_left",
-//     pin_2_attempts_left: "pin_2_attempts_left",
-//     pin_1_attempt_left: "pin_1_attempt_left",
-// }
 
 export const pinErrorText = {
     pin_incorrect: "Pincode is incorrect",
@@ -120,6 +108,7 @@ export const pinErrorText = {
     pin_3_attempts_left: "Pincode is incorrect : u heeft nog 3 pogingen",
     pin_2_attempts_left: "Pincode is incorrect : u heeft nog 2 pogingen",
     pin_1_attempt_left: "Pincode is incorrect : u heeft nog 1 poging",
+    pin_timeout: "Invoeren van pincode duurde te lang."
 }
 
 export const handlePinErrorEID = (error, isInSession) => (dispatch, getStore) => {
@@ -144,6 +133,9 @@ export const handlePinErrorEID = (error, isInSession) => (dispatch, getStore) =>
             break;
         case errorStatuses.pin_incorrect:
             dispatch(showPinError(pinErrorText.pin_incorrect))
+            break;
+        case errorStatuses.pin_timeout:
+            dispatch(showPinError(pinErrorText.pin_timeout))
             break;
         default:
             dispatch(handleErrorEID(error, isInSession))

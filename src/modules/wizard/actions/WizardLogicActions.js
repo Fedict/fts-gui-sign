@@ -218,7 +218,7 @@ export const validateCertificates = () => (dispatch, getStore) => {
             })
             .catch(() => {
                 //TODO API ERROR handling
-                dispatch(showErrorMessage(ErrorGeneral))
+                dispatch(showErrorMessage(MessageCertificatesNotFound))
             })
 
     }
