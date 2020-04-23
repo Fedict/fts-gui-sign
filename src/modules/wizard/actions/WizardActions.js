@@ -12,9 +12,6 @@ export const navigateToVersionCheckLoading = () => (dispatch, getstate) => {
 
 export const navigateToStep = (route) => (dispatch, getstate) => {
     const store = getstate()
-    const wizard = store.wizard || {}
-    if (wizard.state !== WIZARD_STATE_UPLOAD) {
-        dispatch({ type: WIZARD_CHANGE_STATE, payload: route })
-    }
+    dispatch({ type: WIZARD_CHANGE_STATE, payload: route })
 
 }

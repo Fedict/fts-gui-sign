@@ -12,6 +12,8 @@ import {
     WIZARD_STATE_UPLOAD,
     WIZARD_STATE_SIGNING_PRESIGN_LOADING,
     WIZARD_STATE_PINPAD_ERROR,
+    WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENTION,
+    WIZARD_STATE_VERSION_CHECK_LOADING,
 } from "../wizard/WizardConstants"
 import { controller } from "../../eIdLink/controller"
 import { showErrorMessage } from "./MessageActions"
@@ -97,7 +99,7 @@ export const checkVersion = () => (dispatch, getStore) => {
 
     eIDLink.getVersion(window.configData.eIDLinkMinimumVersion,
         (data) => {
-            dispatch(navigateToStep(WIZARD_STATE_CERTIFICATES_LOADING))
+            dispatch(navigateToStep(WIZARD_STATE_UPLOAD))
         },
         (data) => {
             dispatch(navigateToStep(WIZARD_STATE_VERSION_CHECK_INSTALL))
@@ -106,7 +108,7 @@ export const checkVersion = () => (dispatch, getStore) => {
             dispatch(navigateToStep(WIZARD_STATE_VERSION_CHECK_UPDATE))
         },
         () => {
-            console.log("no extention installed")
+            dispatch(navigateToStep(WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENTION))
         }
     )
 
@@ -371,11 +373,21 @@ export const signDocument = () => (dispatch, getStore) => {
 export const STORE_RESET = "STORE_RESET"
 
 export const resetWizard = () => (dispatch, getStore) => {
+    const store = getStore()
+    const { reader } = store
     let eIDLink = controller.getInstance()
-
     eIDLink.stop()
-
     dispatch({ type: STORE_RESET })
 
-    dispatch(navigateToStep(WIZARD_STATE_UPLOAD))
+    if (reader && reader.isOk) {
+        dispatch(navigateToStep(WIZARD_STATE_UPLOAD))
+    }
+    else {
+        dispatch(navigateToStep(WIZARD_STATE_VERSION_CHECK_LOADING))
+    }
+
+
+
+
+
 }
