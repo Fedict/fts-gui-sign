@@ -92,8 +92,8 @@ const createCertificateObject = (certificate, certificateChain) => {
 
 export const checkVersion = () => (dispatch, getStore) => {
     //TODO implement browserchecks
-    
-    let eIDLink = controller.getInstance()
+
+    let eIDLink = controller.getNewInstance()
 
     eIDLink.getVersion(window.configData.eIDLinkMinimumVersion,
         (data) => {
@@ -104,6 +104,9 @@ export const checkVersion = () => (dispatch, getStore) => {
         },
         (data) => {
             dispatch(navigateToStep(WIZARD_STATE_VERSION_CHECK_UPDATE))
+        },
+        () => {
+            console.log("no extention installed")
         }
     )
 
