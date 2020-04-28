@@ -17,9 +17,6 @@ export class VersionCheckInstallContainer extends React.Component {
         return (
             <div className="row mt-3">
                 <CardContainer title={"installeer eID link"}
-                    hasCancelButton
-                    cancelButtonText="Cancel"
-
                     onClickCancel={() => { resetWizard() }}
                     hasNextButton
                     nextButtonText="ga verder"

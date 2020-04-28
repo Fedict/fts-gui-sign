@@ -14,7 +14,8 @@ import {
     WIZARD_STATE_SIGNING_LOADING,
     WIZARD_STATE_MESSAGE,
     WIZARD_STATE_SIGNING_PRESIGN_LOADING,
-    WIZARD_STATE_PINPAD_ERROR
+    WIZARD_STATE_PINPAD_ERROR,
+    WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENTION
 } from './WizardConstants'
 import UploadFileContainer from '../pages/UploadFileContainer'
 import { connect } from 'react-redux'
@@ -33,6 +34,7 @@ import CertificateChooseContainer from '../pages/CertificateChooseContainer'
 import { ErrorGeneral } from '../message/messages/ErrorGeneral'
 import SigningPreSignLoading from '../pages/SigningPreSignLoading'
 import PinPadError from '../pages/PinPadError'
+import VersionCheckInstallExtentionContainer from '../pages/VersionCheckInstallExtentionContainer'
 
 export const WizardContainer = ({ wizard }) => {
 
@@ -46,8 +48,12 @@ export const WizardContainer = ({ wizard }) => {
             return <VersionCheckUpdateContainer />;
         case WIZARD_STATE_VERSION_CHECK_INSTALL:
             return <VersionCheckInstallContainer />;
+
+        case WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENTION:
+            return <VersionCheckInstallExtentionContainer />
         case WIZARD_STATE_CERTIFICATES_LOADING:
             return <CertificatesLoadingContainer />;
+
 
         case WIZARD_STATE_CERTIFICATES_CHOOSE:
             return <CertificateChooseContainer />
@@ -71,6 +77,8 @@ export const WizardContainer = ({ wizard }) => {
             return <SigningPreSignLoading />
         case WIZARD_STATE_PINPAD_ERROR:
             return <PinPadError />
+
+
         default:
             return <MessageContainer message={ErrorGeneral} />
     }
