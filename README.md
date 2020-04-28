@@ -2,7 +2,7 @@
 
 ## Building the application itself
 
-There are two separate commands for building the application. One builds the dev version and the other the production version. In the dockerfile the production version is used. So in order to build the application for a production environment:
+There are two separate commands for building the application. One builds the dev version and the other the production version. In order to succesfully build the project, the latest version of npm is required. So 6.14 at the minimum. In the dockerfile the production version is used. So in order to build the application for a production environment:
 
 ```BASH
 npm run build
