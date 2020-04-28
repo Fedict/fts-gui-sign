@@ -25,6 +25,7 @@ import { handleErrorEID, handlePinErrorEID } from "./ErrorHandleActions"
 import { ErrorGeneral } from "../message/messages/ErrorGeneral"
 import { setSignature } from "./SignatureActions"
 import { setDownloadFile } from "./UploadFileActions"
+import { readerSetCheck, readerSetOk } from "./ReaderActions"
 
 //----------------------------------
 // helpers                    
@@ -99,15 +100,23 @@ export const checkVersion = () => (dispatch, getStore) => {
 
     eIDLink.getVersion(window.configData.eIDLinkMinimumVersion,
         (data) => {
+            dispatch(readerSetCheck(true))
+            dispatch(readerSetOk(true))
             dispatch(navigateToStep(WIZARD_STATE_UPLOAD))
         },
         (data) => {
+            dispatch(readerSetCheck(true))
+            dispatch(readerSetOk(false))
             dispatch(navigateToStep(WIZARD_STATE_VERSION_CHECK_INSTALL))
         },
         (data) => {
+            dispatch(readerSetCheck(true))
+            dispatch(readerSetOk(false))
             dispatch(navigateToStep(WIZARD_STATE_VERSION_CHECK_UPDATE))
         },
         () => {
+            dispatch(readerSetCheck(true))
+            dispatch(readerSetOk(false))
             dispatch(navigateToStep(WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENTION))
         }
     )
@@ -373,17 +382,21 @@ export const signDocument = () => (dispatch, getStore) => {
 export const STORE_RESET = "STORE_RESET"
 
 export const resetWizard = () => (dispatch, getStore) => {
-    const store = getStore()
-    const { reader } = store
+
     let eIDLink = controller.getInstance()
     eIDLink.stop()
     dispatch({ type: STORE_RESET })
 
-    if (reader && reader.isOk) {
-        dispatch(navigateToStep(WIZARD_STATE_UPLOAD))
-    }
-    else {
-        dispatch(navigateToStep(WIZARD_STATE_VERSION_CHECK_LOADING))
+    const store = getStore()
+    const { reader } = store
+
+    if (reader) {
+        if (reader.isChecked && reader.isOk) {
+            dispatch(navigateToStep(WIZARD_STATE_UPLOAD))
+        }
+        else {
+            dispatch(navigateToStep(WIZARD_STATE_VERSION_CHECK_LOADING))
+        }
     }
 
 
