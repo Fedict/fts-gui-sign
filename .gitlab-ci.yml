@@ -14,11 +14,16 @@ cache:
   paths:
     - node_modules/
 
+test_install:
+  stage: test
+  script:
+    - echo "Installing modules"
+    - npm install --silent
+
 test_test:
   stage: test
   script:
     - echo "Running unit tests"
-    - npm install --silent
     - npm run test
 
 package:
