@@ -1,5 +1,5 @@
 import { FILE_UPLOAD_CHANGE_FILE, FILE_SET_DOWNLOAD_FILE } from "../actions/UploadFileActions"
-import { STORE_RESET } from "../actions/WizardLogicActions"
+import { STORE_RESET } from "../../signWizard/actions/WizardLogicActions"
 
 const initialState = {
     file: {},
@@ -10,10 +10,10 @@ const initialState = {
 }
 
 const UploadFileReducer = (state = initialState, action) => {
-   
+
     switch (action.type) {
         case FILE_UPLOAD_CHANGE_FILE: {
-            
+
             return {
                 ...state,
                 "file": action.payload

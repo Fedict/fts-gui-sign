@@ -1,10 +1,10 @@
 import React from 'react'
-import { navigateToVersionCheckLoading, navigateToStep } from "../actions/WizardActions"
-import { uploadFile } from "../actions/UploadFileActions"
+import { navigateToVersionCheckLoading, navigateToStep } from "../../wizard/actions/WizardActions"
+import { uploadFile } from "../../fileUpload/actions/UploadFileActions"
 import { connect } from 'react-redux';
 import { CardContainer } from '../../components/CardContainer/CardContainer';
 import { NumberdText } from '../../components/NumberedText/NumberdText';
-import { WIZARD_STATE_CERTIFICATES_LOADING } from '../wizard/WizardConstants';
+import { WIZARD_STATE_CERTIFICATES_LOADING } from '../../wizard/wizard/WizardConstants';
 
 export class UploadFileContainer extends React.Component {
 

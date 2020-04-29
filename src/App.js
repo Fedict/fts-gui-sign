@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Navbar } from './modules/components/Navbar/Navbar';
-import WizardContainer from './modules/wizard/wizard/WizardContainer';
+import WizardContainer from './modules/signWizard/WizardContainer';
 
 function App() {
   return (

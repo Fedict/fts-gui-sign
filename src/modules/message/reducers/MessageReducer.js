@@ -1,6 +1,6 @@
 import { MESSAGE_SET_INFO, MESSAGE_SET_ERROR } from "../actions/MessageActions"
-import { messageTypes } from "../message/MessageConstants"
-import { STORE_RESET } from "../actions/WizardLogicActions"
+import { messageTypes } from "../MessageConstants"
+import { STORE_RESET } from "../../signWizard/actions/WizardLogicActions"
 
 const initialState = {
     type: "", //ERROR, INFO 

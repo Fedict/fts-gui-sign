@@ -1,11 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { navigateToStep } from "../actions/WizardActions"
-import { ErrorGeneral } from './messages/ErrorGeneral'
+import { navigateToStep } from "../wizard/actions/WizardActions"
+import { ErrorGeneral } from '../signWizard/messages/ErrorGeneral'
 import { messageTypes } from './MessageConstants'
-import { CardError } from '../../components/CardError/CardError'
-import { CardInfo } from '../../components/CardInfo/CardInfo'
-import { resetWizard } from '../actions/WizardLogicActions'
+import { CardError } from '../components/CardError/CardError'
+import { CardInfo } from '../components/CardInfo/CardInfo'
+import { resetWizard } from '../signWizard/actions/WizardLogicActions'
 
 
 export class MessageContainer extends React.Component {

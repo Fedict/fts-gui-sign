@@ -3,13 +3,13 @@ import { compose, applyMiddleware, combineReducers, createStore } from "redux";
 
 
 import wizardReducer from '../modules/wizard/reducers/WizardReducer'
-import UploadFileReducer from "../modules/wizard/reducers/UploadFileReducer";
-import MessageReducer from "../modules/wizard/reducers/MessageReducer";
-import CertificateReducer from "../modules/wizard/reducers/CertificateReducer";
-import DigestReducer from "../modules/wizard/reducers/DigestReducer";
-import SignatureReducer from "../modules/wizard/reducers/SignatureReducer";
-import PinErrorReducer from "../modules/wizard/reducers/PinErrorReducer";
-import ReaderReducer from "../modules/wizard/reducers/ReaderReducer";
+import UploadFileReducer from "../modules/fileUpload/reducers/UploadFileReducer";
+import MessageReducer from "../modules/message/reducers/MessageReducer";
+import CertificateReducer from "../modules/signWizard/reducers/CertificateReducer";
+import DigestReducer from "../modules/signWizard/reducers/DigestReducer";
+import SignatureReducer from "../modules/signWizard/reducers/SignatureReducer";
+import PinErrorReducer from "../modules/signWizard/reducers/PinErrorReducer";
+import ReaderReducer from "../modules/signWizard/reducers/ReaderReducer";
 
 export default function configureStore(initialState = {}) {
 

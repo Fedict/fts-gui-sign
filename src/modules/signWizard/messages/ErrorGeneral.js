@@ -1,4 +1,4 @@
-import { messageTypes } from "../MessageConstants";
+import { messageTypes } from "../../message/MessageConstants";
 
 export const ErrorGeneral = {
 

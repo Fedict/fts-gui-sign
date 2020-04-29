@@ -1,5 +1,5 @@
-import { navigateToStep } from "../actions/WizardActions"
-import { WIZARD_STATE_MESSAGE } from "../wizard/WizardConstants"
+import { navigateToStep } from "../../wizard/actions/WizardActions"
+import { WIZARD_STATE_MESSAGE } from "../../wizard/wizard/WizardConstants"
 
 
 export const MESSAGE_SET_ERROR = "MESSAGE_SET_ERROR"

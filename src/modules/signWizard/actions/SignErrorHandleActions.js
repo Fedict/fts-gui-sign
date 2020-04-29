@@ -1,5 +1,5 @@
-import { showErrorMessage } from "./MessageActions";
-import { ErrorGeneral } from "../message/messages/ErrorGeneral";
+import { showErrorMessage } from "../../message/actions/MessageActions";
+import { ErrorGeneral } from "../messages/ErrorGeneral";
 import {
     Error_EID_http_status_0,
     Error_EID_no_card_InSession,
@@ -9,7 +9,7 @@ import {
     Error_EID_no_reader_NotInSession,
     Error_EID_card_error,
     Error_EID_card_blocked
-} from "../message/messages/ErrorsEIDLink";
+} from "../messages/ErrorsEIDLink";
 import { navigateToPinError } from "./WizardLogicActions";
 
 export const errorStatuses = {

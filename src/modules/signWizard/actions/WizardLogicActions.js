@@ -1,4 +1,4 @@
-import { navigateToStep } from "./WizardActions"
+import { navigateToStep } from "../../wizard/actions/WizardActions"
 import {
     WIZARD_STATE_VERSION_CHECK_UPDATE,
     WIZARD_STATE_VERSION_CHECK_INSTALL,
@@ -14,17 +14,17 @@ import {
     WIZARD_STATE_PINPAD_ERROR,
     WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENTION,
     WIZARD_STATE_VERSION_CHECK_LOADING,
-} from "../wizard/WizardConstants"
+} from "../../wizard/wizard/WizardConstants"
 import { controller } from "../../eIdLink/controller"
-import { showErrorMessage } from "./MessageActions"
-import { MessageCertificatesNotFound } from "../message/messages/MessageCertificatesNotFound"
+import { showErrorMessage } from "../../message/actions/MessageActions"
+import { MessageCertificatesNotFound } from "../messages/MessageCertificatesNotFound"
 import { saveCertificateList, selectCertificate } from "./CertificateActions"
 import { getDataToSignAPI, signDocumentAPI, validateCertificatesAPI } from "../../communication/communication"
 import { setDigest } from "./DigestActions"
-import { handleErrorEID, handlePinErrorEID } from "./ErrorHandleActions"
-import { ErrorGeneral } from "../message/messages/ErrorGeneral"
+import { handleErrorEID, handlePinErrorEID } from "./SignErrorHandleActions"
+import { ErrorGeneral } from "../messages/ErrorGeneral"
 import { setSignature } from "./SignatureActions"
-import { setDownloadFile } from "./UploadFileActions"
+import { setDownloadFile } from "../../fileUpload/actions/UploadFileActions"
 import { readerSetCheck, readerSetOk } from "./ReaderActions"
 
 //----------------------------------
