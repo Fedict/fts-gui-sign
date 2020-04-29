@@ -13,7 +13,8 @@ export class DigestLoadingContainer extends React.Component {
         const { resetWizard } = this.props
         return (
             <div className="row mt-3">
-                <CardLoading title={"Tekenen"}
+                <CardLoading
+                    title={"Signing document"}
                     hasCancelButton
                     cancelButtonText="Cancel"
                     onClickCancel={() => { resetWizard() }}
@@ -31,7 +32,7 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = ({
     getDigest,
-     resetWizard
+    resetWizard
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(DigestLoadingContainer)

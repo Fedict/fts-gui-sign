@@ -14,7 +14,7 @@ export class SigningLoadingContainer extends React.Component {
         const { resetWizard } = this.props
         return (
             <div className="row mt-3">
-                <CardLoading title={"Tekenen"}
+                <CardLoading title={"Sign document"}
                     hasCancelButton
                     cancelButtonText="Cancel"
                     onClickCancel={() => { resetWizard() }}

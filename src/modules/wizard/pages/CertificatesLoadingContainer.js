@@ -10,11 +10,10 @@ export class CertificatesLoadingContainer extends React.Component {
     }
 
     render() {
-
         const { resetWizard } = this.props
         return (
             <div className="row mt-3">
-                <CardLoading title={"Ophalen van certificaten"}
+                <CardLoading title={"Retrieving certificates"}
                     hasCancelButton
                     cancelButtonText="Cancel"
                     onClickCancel={() => { resetWizard() }}
@@ -24,6 +23,7 @@ export class CertificatesLoadingContainer extends React.Component {
             </div>
         )
     }
+
 }
 const mapStateToProps = (state) => {
     return (state) => ({

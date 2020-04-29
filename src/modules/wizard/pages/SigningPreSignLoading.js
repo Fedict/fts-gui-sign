@@ -16,7 +16,7 @@ export class SigningPreSignLoading extends React.Component {
 
         return (
             <div className="row mt-3">
-                <CardLoading title={"Tekenen"}
+                <CardLoading title={"Sign document"}
                     hasCancelButton
                     cancelButtonText="Cancel"
                     onClickCancel={() => { resetWizard() }}
@@ -26,7 +26,7 @@ export class SigningPreSignLoading extends React.Component {
                         ? (
                             <div>
                                 <div className="alert alert-info">
-                                    Voer je pincode in als deze gevraagt wordt
+                                   Please enter your PIN when prompted
                                 </div>
                             </div>
                         )

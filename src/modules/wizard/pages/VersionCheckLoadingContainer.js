@@ -16,7 +16,7 @@ export class VersionCheckLoadingContainer extends React.Component {
         const { resetWizard } = this.props
         return (
             <div className="row mt-3">
-                <CardLoading title={"Zoeken naar ID-kaart lezer"}
+                <CardLoading title={"Searching for eId reader"}
                 >
 
                 </CardLoading>

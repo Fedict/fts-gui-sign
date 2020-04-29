@@ -16,16 +16,16 @@ export class VersionCheckInstallContainer extends React.Component {
 
         return (
             <div className="row mt-3">
-                <CardContainer title={"installeer eID link"}
+                <CardContainer title={"Install eId link"}
                     onClickCancel={() => { resetWizard() }}
                     hasNextButton
-                    nextButtonText="ga verder"
+                    nextButtonText="Next"
                     onClickNext={() => { this.handleButtonNextClick() }}
                 >
-                    <p>Er is geen versie van eIDLink gevonden.</p>
-                    <p>Gelieve eIDlink te instaleren om gebruik te kunnen maken van deze applicatie</p>
+                    <p>No eId link is found</p>
+                    <p>Please install eId link to use this application</p>
 
-                    <button className="btn btn-primary" id="button_install_eID">Download en installeer eIDLink</button>
+                    <button className="btn btn-primary" id="button_install_eID">Download and install eId link</button>
 
                 </CardContainer>
             </div>

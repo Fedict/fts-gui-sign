@@ -34,18 +34,21 @@ export class VersionCheckInstallExtentionContainer extends React.Component {
 
         return (
             <div className="row mt-3">
-                <CardContainer title={"installeer eID link extentie"}
+                <CardContainer title={"Install eId link extention"}
                     onClickCancel={() => { resetWizard() }}
                     hasNextButton
-                    nextButtonText="ga verder"
+                    nextButtonText="Next"
                     onClickNext={() => { this.handleButtonNextClick() }}
                 >
-                    <p>Er is geen versie van eIDLink extentie gevonden.</p>
-                    <p>Gelieve eIDlink te instaleren om gebruik te kunnen maken van deze applicatie</p>
+                    <p>No eId link extention found</p>
+                    <p>Please install the eId link extention to use this application</p>
 
-                    <button className="btn btn-primary" id="button_install_eID" onClick={() => { this.openExtentionLink() }}>
-                        Download en installeer eIDLink extentie
-                        </button>
+                    <button
+                        className="btn btn-primary"
+                        id="button_install_eID"
+                        onClick={() => { this.openExtentionLink() }}>
+                        Install eId link extention
+                    </button>
 
                 </CardContainer>
             </div>
