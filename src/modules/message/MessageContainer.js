@@ -1,8 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { navigateToStep } from "../wizard/WizardActions"
-import { ErrorGeneral } from '../signWizard/messages/ErrorGeneral'
-import { messageTypes } from './MessageConstants'
+import { messageTypes, ErrorGeneral } from './MessageConstants'
 import { CardError } from '../components/CardError/CardError'
 import { CardInfo } from '../components/CardInfo/CardInfo'
 import { resetWizard } from '../signWizard/actions/WizardLogicActions'
@@ -20,7 +19,7 @@ export class MessageContainer extends React.Component {
     }
 
     render() {
-        const { message, resetWizard } = this.props
+        const { message, onCancel } = this.props
 
         let shownMessage = {}
         if (message) {
@@ -49,7 +48,11 @@ export class MessageContainer extends React.Component {
                     title={shownMessage.title}
                     hasCancelButton={shownMessage.hasCancleButton}
                     cancelButtonText="Cancel"
-                    onClickCancel={() => { resetWizard() }}
+                    onClickCancel={() => {
+                        if (onCancel) {
+                            onCancel()
+                        }
+                    }}
                     hasNextButton={shownMessage.nextButton.isVisible}
                     nextButtonText={shownMessage.nextButton.text}
                     onClickNext={() => { this.handleButtonNextClick() }}

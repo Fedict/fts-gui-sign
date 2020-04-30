@@ -1,6 +1,6 @@
 import React from 'react';
 
-import  Navbar  from './modules/Navbar/Navbar';
+import Navbar from './modules/Navbar/Navbar';
 import WizardContainer from './modules/signWizard/WizardContainer';
 
 import {
@@ -8,6 +8,7 @@ import {
   Switch,
   Route,
 } from "react-router-dom";
+import ValidateWizardContainer from './modules/validateWizard/ValidateWizardContainer';
 
 function App() {
   return (
@@ -21,7 +22,9 @@ function App() {
             </div>
           </Route>
           <Route path="/validate">
-            <p>here the validate wizard</p>
+            <div className="container">
+              <ValidateWizardContainer />
+            </div>
           </Route>
           <Route path="/">
             <p>here the homePage</p>

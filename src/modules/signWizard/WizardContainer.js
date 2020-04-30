@@ -35,9 +35,10 @@ import CertificateChooseContainer from './pages/CertificateChooseContainer'
 import SigningPreSignLoading from './pages/SigningPreSignLoading'
 import PinPadError from './pages/PinPadError'
 import VersionCheckInstallExtentionContainer from './pages/VersionCheckInstallExtentionContainer'
-import { ErrorGeneral } from './messages/ErrorGeneral'
+import { ErrorGeneral } from '../message/MessageConstants'
+import { resetWizard } from './actions/WizardLogicActions'
 
-export const WizardContainer = ({ wizard, reader }) => {
+export const WizardContainer = ({ wizard, reader, resetWizard }) => {
 
 
     switch (wizard.state) {
@@ -79,7 +80,7 @@ export const WizardContainer = ({ wizard, reader }) => {
         case WIZARD_STATE_SUCCES:
             return <SuccesContainer />
         case WIZARD_STATE_MESSAGE:
-            return <MessageContainerWithStore />
+            return <MessageContainerWithStore onCancel={() => { (resetWizard()) }} />
 
         case WIZARD_STATE_SIGNING_PRESIGN_LOADING:
             return <SigningPreSignLoading />
@@ -88,7 +89,7 @@ export const WizardContainer = ({ wizard, reader }) => {
 
 
         default:
-            return <MessageContainer message={ErrorGeneral} />
+            return <MessageContainer message={ErrorGeneral} onCancel={() => { (resetWizard()) }} />
     }
 
 
@@ -102,7 +103,7 @@ const mapStateToProps = (state) => {
     })
 }
 const mapDispatchToProps = ({
-
+    resetWizard
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(WizardContainer)

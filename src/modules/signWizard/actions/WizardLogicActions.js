@@ -22,11 +22,11 @@ import { saveCertificateList, selectCertificate } from "./CertificateActions"
 import { getDataToSignAPI, signDocumentAPI, validateCertificatesAPI } from "../../communication/communication"
 import { setDigest } from "./DigestActions"
 import { handleErrorEID, handlePinErrorEID } from "./SignErrorHandleActions"
-import { ErrorGeneral } from "../messages/ErrorGeneral"
 import { setSignature } from "./SignatureActions"
 import { setDownloadFile } from "../../fileUpload/actions/UploadFileActions"
 import { readerSetCheck, readerSetOk } from "./ReaderActions"
 import { resetStore } from "../../../store/storeActions"
+import { ErrorGeneral } from "../../message/MessageConstants"
 
 //----------------------------------
 // helpers                    
