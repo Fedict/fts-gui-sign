@@ -3,8 +3,8 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { CardContainer } from '../../components/CardContainer/CardContainer';
 import { sign, resetWizard } from '../actions/WizardLogicActions'
-import { navigateToStep } from '../../wizard/actions/WizardActions';
-import { WIZARD_STATE_SIGNING_PRESIGN_LOADING } from '../../wizard/wizard/WizardConstants';
+import { navigateToStep } from '../../wizard/WizardActions';
+import { WIZARD_STATE_SIGNING_PRESIGN_LOADING } from '../../wizard/WizardConstants';
 export class PinInputContainer extends React.Component {
 
     constructor(props) {

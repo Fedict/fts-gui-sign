@@ -2,7 +2,7 @@ import thunk from "redux-thunk";
 import { compose, applyMiddleware, combineReducers, createStore } from "redux";
 
 
-import wizardReducer from '../modules/wizard/reducers/WizardReducer'
+import wizardReducer from '../modules/wizard/WizardReducer'
 import UploadFileReducer from "../modules/fileUpload/reducers/UploadFileReducer";
 import MessageReducer from "../modules/message/reducers/MessageReducer";
 import CertificateReducer from "../modules/signWizard/reducers/CertificateReducer";

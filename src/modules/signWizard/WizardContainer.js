@@ -16,7 +16,7 @@ import {
     WIZARD_STATE_SIGNING_PRESIGN_LOADING,
     WIZARD_STATE_PINPAD_ERROR,
     WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENTION
-} from '../wizard/wizard/WizardConstants'
+} from '../wizard/WizardConstants'
 import UploadFileContainer from './pages/UploadFileContainer'
 import { connect } from 'react-redux'
 import VersionCheckLoadingContainer from './pages/VersionCheckLoadingContainer'

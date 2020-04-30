@@ -1,6 +1,5 @@
-
-import { STORE_RESET } from "../actions/WizardLogicActions"
 import { SIGNATURE_SET_SIGNATURE } from "../actions/SignatureActions"
+import { STORE_RESET } from "../../../store/storeActions"
 
 const initialState = {
 

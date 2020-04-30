@@ -1,5 +1,5 @@
-import { WIZARD_CHANGE_STATE } from "../actions/WizardActions"
-import { WIZARD_STATE_UPLOAD, WIZARD_STATE_VERSION_CHECK_LOADING } from "../wizard/WizardConstants"
+import { WIZARD_CHANGE_STATE } from "./WizardActions"
+import { WIZARD_STATE_UPLOAD, WIZARD_STATE_VERSION_CHECK_LOADING } from "./WizardConstants"
 
 
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { navigateToStep } from "../wizard/actions/WizardActions"
+import { navigateToStep } from "../wizard/WizardActions"
 import { ErrorGeneral } from '../signWizard/messages/ErrorGeneral'
 import { messageTypes } from './MessageConstants'
 import { CardError } from '../components/CardError/CardError'

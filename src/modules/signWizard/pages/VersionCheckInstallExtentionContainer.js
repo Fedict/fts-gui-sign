@@ -1,8 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { CardContainer } from '../../components/CardContainer/CardContainer'
-import { navigateToStep } from "../../wizard/actions/WizardActions"
-import { WIZARD_STATE_VERSION_CHECK_LOADING } from '../../wizard/wizard/WizardConstants'
+import { navigateToStep } from "../../wizard/WizardActions"
+import { WIZARD_STATE_VERSION_CHECK_LOADING } from '../../wizard/WizardConstants'
 import { resetWizard } from '../actions/WizardLogicActions'
 import { isChrome, isEdgeChromium, getBrowser, browser } from '../../browserDetection/BrowserDetection'
 export class VersionCheckInstallExtentionContainer extends React.Component {

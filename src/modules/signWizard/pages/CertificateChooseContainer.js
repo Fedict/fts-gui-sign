@@ -2,8 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { CardContainer } from '../../components/CardContainer/CardContainer'
 import { CertificateSelect } from '../../components/CertificateSelect/CertificateSelect'
-import { WIZARD_STATE_DIGEST_LOADING } from '../../wizard/wizard/WizardConstants'
-import { navigateToStep } from '../../wizard/actions/WizardActions'
+import { WIZARD_STATE_DIGEST_LOADING } from '../../wizard/WizardConstants'
+import { navigateToStep } from '../../wizard/WizardActions'
 import { selectCertificate } from "../actions/CertificateActions"
 import { resetWizard } from '../actions/WizardLogicActions'
 

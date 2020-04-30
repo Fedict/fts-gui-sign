@@ -1,6 +1,6 @@
 
-import { STORE_RESET } from "../actions/WizardLogicActions"
 import { PIN_ERROR_SET_ERROR } from "../actions/SignErrorHandleActions"
+import { STORE_RESET } from "../../../store/storeActions"
 
 const initialState = {
     message: ""

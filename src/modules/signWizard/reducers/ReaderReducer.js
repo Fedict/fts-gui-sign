@@ -1,7 +1,6 @@
 
-
-import { STORE_RESET } from "../actions/WizardLogicActions";
 import { READER_SET_CHECK, READER_SET_OK } from "../actions/ReaderActions";
+import { STORE_RESET } from "../../../store/storeActions";
 
 const initialState = {
     isChecked: false,

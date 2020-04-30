@@ -1,4 +1,4 @@
-import { navigateToStep } from "../../wizard/actions/WizardActions"
+import { navigateToStep } from "../../wizard/WizardActions"
 import {
     WIZARD_STATE_VERSION_CHECK_UPDATE,
     WIZARD_STATE_VERSION_CHECK_INSTALL,
@@ -14,7 +14,7 @@ import {
     WIZARD_STATE_PINPAD_ERROR,
     WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENTION,
     WIZARD_STATE_VERSION_CHECK_LOADING,
-} from "../../wizard/wizard/WizardConstants"
+} from "../../wizard/WizardConstants"
 import { controller } from "../../eIdLink/controller"
 import { showErrorMessage } from "../../message/actions/MessageActions"
 import { MessageCertificatesNotFound } from "../messages/MessageCertificatesNotFound"
@@ -26,6 +26,7 @@ import { ErrorGeneral } from "../messages/ErrorGeneral"
 import { setSignature } from "./SignatureActions"
 import { setDownloadFile } from "../../fileUpload/actions/UploadFileActions"
 import { readerSetCheck, readerSetOk } from "./ReaderActions"
+import { resetStore } from "../../../store/storeActions"
 
 //----------------------------------
 // helpers                    
@@ -379,13 +380,13 @@ export const signDocument = () => (dispatch, getStore) => {
     }
 }
 
-export const STORE_RESET = "STORE_RESET"
+
 
 export const resetWizard = () => (dispatch, getStore) => {
 
     let eIDLink = controller.getInstance()
     eIDLink.stop()
-    dispatch({ type: STORE_RESET })
+    dispatch(resetStore())
 
     const store = getStore()
     const { reader } = store

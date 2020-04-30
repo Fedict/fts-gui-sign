@@ -1,4 +1,4 @@
-import { WIZARD_STATE_CERTIFICATES_LOADING } from "../../wizard/wizard/WizardConstants";
+import { WIZARD_STATE_CERTIFICATES_LOADING } from "../../wizard/WizardConstants";
 
 export const MessageCertificatesNotFound = {
 

@@ -1,5 +1,5 @@
 import { ErrorGeneral } from "./ErrorGeneral";
-import { WIZARD_STATE_CERTIFICATES_LOADING } from "../../wizard/wizard/WizardConstants";
+import { WIZARD_STATE_CERTIFICATES_LOADING } from "../../wizard/WizardConstants";
 
 //TODO create correct messages
 export const Error_EID_http_status_0 = ErrorGeneral

@@ -3,7 +3,8 @@ import {
     CERTIFICATE_SAVE_LIST,
     CERTIFICATE_SELECT_CERTIFICATE
 } from "../actions/CertificateActions"
-import { STORE_RESET } from "../actions/WizardLogicActions";
+import { STORE_RESET } from "../../../store/storeActions"
+
 
 const initialState = {
     certificateList: [],

@@ -1,5 +1,6 @@
 import { FILE_UPLOAD_CHANGE_FILE, FILE_SET_DOWNLOAD_FILE } from "../actions/UploadFileActions"
-import { STORE_RESET } from "../../signWizard/actions/WizardLogicActions"
+import { STORE_RESET } from "../../../store/storeActions"
+
 
 const initialState = {
     file: {},

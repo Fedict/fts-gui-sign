@@ -1,6 +1,7 @@
 
 import { DIGEST_SET_DIGEST } from "../actions/DigestActions"
-import { STORE_RESET } from "../actions/WizardLogicActions"
+import { STORE_RESET } from "../../../store/storeActions"
+
 
 const initialState = {
 
