@@ -15,7 +15,8 @@ import {
     WIZARD_STATE_MESSAGE,
     WIZARD_STATE_SIGNING_PRESIGN_LOADING,
     WIZARD_STATE_PINPAD_ERROR,
-    WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENTION
+    WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENTION,
+    WIZARD_STATE_START
 } from '../wizard/WizardConstants'
 import UploadFileContainer from './pages/UploadFileContainer'
 import { connect } from 'react-redux'
@@ -36,10 +37,17 @@ import PinPadError from './pages/PinPadError'
 import VersionCheckInstallExtentionContainer from './pages/VersionCheckInstallExtentionContainer'
 import { ErrorGeneral } from './messages/ErrorGeneral'
 
-export const WizardContainer = ({ wizard }) => {
+export const WizardContainer = ({ wizard, reader }) => {
 
 
     switch (wizard.state) {
+        case WIZARD_STATE_START:
+            if (reader && reader.ok) {
+                return <UploadFileContainer />
+            }
+            else {
+                return <VersionCheckLoadingContainer />
+            }
         case WIZARD_STATE_UPLOAD:
             return <UploadFileContainer />;
         case WIZARD_STATE_VERSION_CHECK_LOADING:
@@ -89,7 +97,8 @@ export const WizardContainer = ({ wizard }) => {
 
 const mapStateToProps = (state) => {
     return (state) => ({
-        wizard: state.wizard
+        wizard: state.wizard,
+        reader: StaticRange.reader
     })
 }
 const mapDispatchToProps = ({

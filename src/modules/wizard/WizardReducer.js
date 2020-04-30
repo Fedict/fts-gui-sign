@@ -1,11 +1,9 @@
 import { WIZARD_CHANGE_STATE } from "./WizardActions"
-import { WIZARD_STATE_UPLOAD, WIZARD_STATE_VERSION_CHECK_LOADING } from "./WizardConstants"
-
-
-
+import {  WIZARD_STATE_START } from "./WizardConstants"
 
 const initialState = {
-    state: WIZARD_STATE_VERSION_CHECK_LOADING
+    state: WIZARD_STATE_START,
+   
 }
 
 const wizardReducer = (state = initialState, action) => {
