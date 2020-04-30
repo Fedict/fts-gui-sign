@@ -1,7 +1,7 @@
-FROM node:13.12.0-alpine
+FROM node:10.20.1-buster-slim
 WORKDIR /app
-COPY package*.json /app/
-RUN npm install --silent
+COPY package.json /app/
+RUN npm install
 RUN npm install serve -g
 COPY . /app
 
