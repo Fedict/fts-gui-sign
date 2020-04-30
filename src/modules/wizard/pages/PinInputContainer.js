@@ -34,12 +34,12 @@ export class PinInputContainer extends React.Component {
         return (
             <div className="row mt-3">
                 <CardContainer
-                    title={"Digitaal handtekenen"}
+                    title={"Enter pin code"}
                     hasNextButton
                     hasCancelButton
                     cancelButtonText="Cancel"
                     onClickCancel={() => { resetWizard() }}
-                    nextButtonText="handtekenen met eID"
+                    nextButtonText="Sign with eId"
                     onClickNext={() => { this.handleSubmit() }}
                     nextButtonIsDisabled={this.state.pin.length === 0}>
 

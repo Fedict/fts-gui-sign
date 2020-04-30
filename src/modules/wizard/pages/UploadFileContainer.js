@@ -1,47 +1,46 @@
 import React from 'react'
-import { navigateToVersionCheckLoading, } from "../actions/WizardActions"
+import { navigateToVersionCheckLoading, navigateToStep } from "../actions/WizardActions"
 import { uploadFile } from "../actions/UploadFileActions"
 import { connect } from 'react-redux';
 import { CardContainer } from '../../components/CardContainer/CardContainer';
 import { NumberdText } from '../../components/NumberedText/NumberdText';
+import { WIZARD_STATE_CERTIFICATES_LOADING } from '../wizard/WizardConstants';
 
 export class UploadFileContainer extends React.Component {
 
     constructor(props) {
         super(props);
-
         this.state = {
             file: {}
         }
     }
-    onchange(e) {
 
+    onchange(e) {
         const file = e.target.files[0]
         this.setState({ file: file })
     }
 
     handleSubmit() {
-
         this.props.uploadFile(this.state.file)
-        this.props.navigateToVersionCheckLoading()
+        this.props.navigateToStep(WIZARD_STATE_CERTIFICATES_LOADING)
     }
 
     render() {
         return (
             <div className="row mt-3">
                 <CardContainer
-                    title={"Digitaal handtekenen"}
+                    title={"Digital sign a document"}
                     hasNextButton
-                    nextButtonText="Handtekenen met eID"
+                    nextButtonText="sign with eId"
                     onClickNext={() => { this.handleSubmit() }}
                     nextButtonIsDisabled={this.state.file.name ? false : true}>
 
                     <div className="form-group">
                         <div className="container" >
-                            <NumberdText number="1"> Selecteer een document door op de knop "Selecteer bestand" te klikken.</NumberdText>
-                            <NumberdText number="2"> Sluit jouw eID-kaartlezer aan op uw computer of gebruik de ingebouwde kaartlezer (indien aanwezig).</NumberdText>
-                            <NumberdText number="3">  Steek jouw elektronische identiteitskaart (eID) in de kaartlezer.</NumberdText>
-                            <NumberdText number="4">  Klik op “Handtekenen met eID” en geef jouw pincode van jouw identiteitskaart in wanneer daarom gevraagd wordt.</NumberdText>
+                            <NumberdText number="1">Select a document by ckicking on the button "Select document".</NumberdText>
+                            <NumberdText number="2">Connect your eId reader to your pc.</NumberdText>
+                            <NumberdText number="3">Insert your eId card in the eId card reader.</NumberdText>
+                            <NumberdText number="4">Click on the button "sign with eId" and enter your PIN when prompted.</NumberdText>
 
                             <div className="row">
                                 <div className="card col col-12">
@@ -53,8 +52,10 @@ export class UploadFileContainer extends React.Component {
                                                     type="button"
                                                     id="button_select_file"
                                                     value=""
-                                                    onClick={() => { document.getElementById('input_hidden_select_file').click() }}
-                                                > Selecteer bestand </button>
+                                                    onClick={() => { 
+                                                        document.getElementById('input_hidden_select_file').click()
+                                                     }}
+                                                > Select document </button>
 
                                                 <input
                                                     type="file"
@@ -64,8 +65,8 @@ export class UploadFileContainer extends React.Component {
                                             </div>
                                             <div className="col col-auto align-self-center ">
                                                 <p className="btn m-0" >
-                                                    geselecteerd bestand :
-                                                 <span id='name_select_file'> {this.state.file.name || 'geen document geselecteerd'}</span>
+                                                    Selected document:
+                                                 <span id='name_select_file'> {this.state.file.name || 'no document selected'}</span>
                                                 </p>
                                             </div>
                                         </div>
@@ -90,6 +91,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = ({
     navigateToVersionCheckLoading,
     uploadFile,
+    navigateToStep
 
 
 })

@@ -12,6 +12,8 @@ import {
     WIZARD_STATE_UPLOAD,
     WIZARD_STATE_SIGNING_PRESIGN_LOADING,
     WIZARD_STATE_PINPAD_ERROR,
+    WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENTION,
+    WIZARD_STATE_VERSION_CHECK_LOADING,
 } from "../wizard/WizardConstants"
 import { controller } from "../../eIdLink/controller"
 import { showErrorMessage } from "./MessageActions"
@@ -23,6 +25,7 @@ import { handleErrorEID, handlePinErrorEID } from "./ErrorHandleActions"
 import { ErrorGeneral } from "../message/messages/ErrorGeneral"
 import { setSignature } from "./SignatureActions"
 import { setDownloadFile } from "./UploadFileActions"
+import { readerSetCheck, readerSetOk } from "./ReaderActions"
 
 //----------------------------------
 // helpers                    
@@ -92,18 +95,29 @@ const createCertificateObject = (certificate, certificateChain) => {
 
 export const checkVersion = () => (dispatch, getStore) => {
     //TODO implement browserchecks
-    
-    let eIDLink = controller.getInstance()
+
+    let eIDLink = controller.getNewInstance()
 
     eIDLink.getVersion(window.configData.eIDLinkMinimumVersion,
         (data) => {
-            dispatch(navigateToStep(WIZARD_STATE_CERTIFICATES_LOADING))
+            dispatch(readerSetCheck(true))
+            dispatch(readerSetOk(true))
+            dispatch(navigateToStep(WIZARD_STATE_UPLOAD))
         },
         (data) => {
+            dispatch(readerSetCheck(true))
+            dispatch(readerSetOk(false))
             dispatch(navigateToStep(WIZARD_STATE_VERSION_CHECK_INSTALL))
         },
         (data) => {
+            dispatch(readerSetCheck(true))
+            dispatch(readerSetOk(false))
             dispatch(navigateToStep(WIZARD_STATE_VERSION_CHECK_UPDATE))
+        },
+        () => {
+            dispatch(readerSetCheck(true))
+            dispatch(readerSetOk(false))
+            dispatch(navigateToStep(WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENTION))
         }
     )
 
@@ -368,11 +382,25 @@ export const signDocument = () => (dispatch, getStore) => {
 export const STORE_RESET = "STORE_RESET"
 
 export const resetWizard = () => (dispatch, getStore) => {
+
     let eIDLink = controller.getInstance()
-
     eIDLink.stop()
-
     dispatch({ type: STORE_RESET })
 
-    dispatch(navigateToStep(WIZARD_STATE_UPLOAD))
+    const store = getStore()
+    const { reader } = store
+
+    if (reader) {
+        if (reader.isChecked && reader.isOk) {
+            dispatch(navigateToStep(WIZARD_STATE_UPLOAD))
+        }
+        else {
+            dispatch(navigateToStep(WIZARD_STATE_VERSION_CHECK_LOADING))
+        }
+    }
+
+
+
+
+
 }

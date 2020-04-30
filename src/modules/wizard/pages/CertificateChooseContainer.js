@@ -14,32 +14,30 @@ export class CertificateChooseContainer extends React.Component {
         if (selectCertificate) {
             selectCertificate(cert)
         }
-
     }
 
     navigateToNextStep() {
         const { navigateToStep } = this.props
         if (navigateToStep) { navigateToStep(WIZARD_STATE_DIGEST_LOADING) }
     }
+    
     render() {
 
         const { certificate, resetWizard } = this.props
         if (certificate) {
-
-
             return (
                 <div className="row mt-3">
                     <CardContainer
-                        title="Selecteer een certificaat"
+                        title="Select a certificate"
                         hasCancelButton
                         cancelButtonText="Cancel"
                         onClickCancel={() => { resetWizard() }}
                         hasNextButton
-                        nextButtonText="Selecteer"
+                        nextButtonText="Select"
                         onClickNext={() => { this.navigateToNextStep() }}
                         nextButtonIsDisabled={(certificate && !certificate.certificateSelected)}
                     >
-                        <p>Er zijn meerdere certificaten gevonden. Selecteer het certificaat dat u wilt gebruiken</p>
+                        <p>Multiple valid certificates are found. Please select the certificate you want to use.</p>
                         <CertificateSelect
                             id="certificate_select"
                             onChange={(cert) => { this.onChange(cert) }}

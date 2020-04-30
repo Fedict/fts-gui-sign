@@ -16,19 +16,19 @@ export class VersionCheckUpdateContainer extends React.Component {
         const { resetWizard } = this.props
         return (
             <div className="row mt-3">
-                <CardContainer title={"Update eID link"}
+                <CardContainer title={"Update eId link"}
                     hasCancelButton
                     cancelButtonText="Cancel"
 
                     onClickCancel={() => { resetWizard() }}
                     hasNextButton
-                    nextButtonText="ga verder"
+                    nextButtonText="next"
                     onClickNext={() => { this.handleButtonNextClick() }}
                 >
-                    <p>De geïnstaleerde versie van eIDLink is niet up to date.</p>
-                    <p>Gelieve een nieuwe versie van eIDLink te instaleren om gebruik te kunnen maken van deze applicatie</p>
+                    <p>The installed version of eId link is not up to date.</p>
+                    <p>Please install the latest version of eIdlink to use this aplication </p>
 
-                    <button className="btn btn-primary" id="button_install_eID">Download en installeer eIDLink</button>
+                    <button className="btn btn-primary" id="button_install_eID">Download and install eId link</button>
 
                 </CardContainer>
             </div>

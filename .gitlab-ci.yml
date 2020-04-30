@@ -17,7 +17,7 @@ cache:
 test_install:
   stage: test
   script:
-    - echo "Installing modules to test"
+    - echo "Installing modules"
     - npm install --silent
 
 test_test:

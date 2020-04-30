@@ -18,12 +18,12 @@ export class PinPadError extends React.Component {
         if (pinError && pinError.message) {
             return (
                 <CardError
-                    title={"Pincode is fout"}
+                    title={"The entered pincode is wrong"}
                     hasCancelButton={true}
-                    cancelButtonText={'cancel'}
+                    cancelButtonText={'Cancel'}
                     onClickCancel={() => { this.onClickCancel() }}
                     hasNextButton={true}
-                    nextButtonText={'probeer opnieuw'}
+                    nextButtonText={'Try again'}
                     onClickNext={() => { this.onClickNext() }}
                     text={pinError.message}
                 >

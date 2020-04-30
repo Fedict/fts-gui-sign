@@ -1,33 +1,34 @@
 import { isChromeExtensionDetected } from "./detect";
-import { createChromeEZLinkStrategy } from "./strategies.js";
+import { getEIDLinkExtentionStrategy, getDefaultStrategy } from "./strategies.js";
 
 export const controller = (() => {
 
-    let strategie
+    let strategy
 
     const initSignStrategy = () => {
         if (isChromeExtensionDetected()) {
             console.log("ChromeExt - Chrome extension detected");
-            return createChromeEZLinkStrategy();
+            return getEIDLinkExtentionStrategy();
         }
-        return {
-            getVersion: () => { },
-            getInfo: () => { },
-            getCertificate: () => { },
-            getCertificateChain: () => { },
-            sign: () => { },
-            stop: () => { }
-        }
+        //todo firefox strategy
+        //todo safari strategy
+        return getDefaultStrategy()
     }
 
     const getInstance = () => {
-        if (!strategie) {
-            strategie = initSignStrategy()
+        if (!strategy) {
+            strategy = initSignStrategy()
         }
-        return strategie
+        return strategy
     }
 
+    const getNewInstance = () => {
+        console.log("get New instance")
+        strategy = initSignStrategy()
+        return strategy
+    }
     return {
-        getInstance
+        getInstance,
+        getNewInstance
     }
 })()

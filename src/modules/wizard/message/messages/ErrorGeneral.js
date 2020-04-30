@@ -3,8 +3,8 @@ import { messageTypes } from "../MessageConstants";
 export const ErrorGeneral = {
 
     type: messageTypes.ERROR,
-    title: "Er is iets fout gegaan",
-    message: "Er is iets fout gegaan. Herlaad de pagina en probeer opnieuw",
+    title: "Something went wrong",
+    message: "Something went wrong. Please reload the page and try again.",
     body: null,
     nextButton: {
         text: null,

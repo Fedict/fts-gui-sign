@@ -33,18 +33,23 @@ export class SuccesContainer extends React.Component {
         return (
             <div className="row mt-3">
                 <CardContainer
-                    title={"Jouw document werd succesvol digitaal ondertekend!"}
+                    title={"Your document has been successfully signed!"}
                     hasNextButton
-                    nextButtonText="Volgend document handtekenen"
+                    nextButtonText="Sign next document"
                     onClickNext={() => { resetWizard() }}
                 >
                     <div className="form-group">
 
                         <div className="alert alert-primary">
-                            Zo dadelijk zal de download van jouw document automatisch starten, indien dit niet het geval is dan kan je de download manueel starten
-                            </div>
+                            Your document will be automatically downloaded. If this is not the case, you can start the download manually
+                        </div>
 
-                        <button className="btn btn-primary" id="button_download_file" onClick={() => { this.downloadFile() }} >Download document</button>
+                        <button
+                            className="btn btn-primary"
+                            id="button_download_file"
+                            onClick={() => { this.downloadFile() }} >
+                            Download document
+                        </button>
 
                     </div>
                 </CardContainer>

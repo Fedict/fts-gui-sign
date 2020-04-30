@@ -2,11 +2,11 @@ import { WIZARD_STATE_CERTIFICATES_LOADING } from "../../wizard/WizardConstants"
 
 export const MessageCertificatesNotFound = {
 
-    title: "Geen certificaten gevonden",
-    message: "Er zijn geen certificaten gevonden. Probeer later opnieuw",
+    title: "No Certificates found",
+    message: "There are no valid certificates found.",
     body: null,
     nextButton: {
-        text: "zoek opnieuw",
+        text: "Search again",
         isVisible: true,
         nextPage: WIZARD_STATE_CERTIFICATES_LOADING
     },

@@ -5,7 +5,10 @@ import { checkVersion, resetWizard } from "../actions/WizardLogicActions"
 
 export class VersionCheckLoadingContainer extends React.Component {
     componentDidMount() {
-        this.props.checkVersion()
+        setTimeout(() => {
+            this.props.checkVersion()
+        }, 1000);
+
     }
 
     render() {
@@ -13,10 +16,7 @@ export class VersionCheckLoadingContainer extends React.Component {
         const { resetWizard } = this.props
         return (
             <div className="row mt-3">
-                <CardLoading title={"Zoeken naar ID-kaart lezer"}
-                    hasCancelButton
-                    cancelButtonText="Cancel"
-                    onClickCancel={() => { resetWizard() }}
+                <CardLoading title={"Searching for eId reader"}
                 >
 
                 </CardLoading>

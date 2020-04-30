@@ -18,39 +18,39 @@ const createError = (title, message) => {
     }
 }
 export const Error_EID_no_reader_InSession = {
-    ...createError("De eID lezer is verwijderd", "De eId lezer is verwijderd")
+    ...createError("The eId reader was removed", "The eId reader was removed")
 }
 
 export const Error_EID_no_reader_NotInSession = {
-    ...createError("Geen eID lezer gevonden", "Er is geen eID lezer gevonden."),
+    ...createError("No eId reader found", "No eId reader found"),
     nextButton: {
-        text: "Probeer opnieuw",
+        text: "Try again",
         isVisible: true,
         nextPage: WIZARD_STATE_CERTIFICATES_LOADING
     },
 }
 
 export const Error_EID_unsupported_reader = {
-    ...createError("eID lezer is niet ondersteunt", "deze applicatie onderstuert deze reader niet")
+    ...createError("The eId reader is not supported", "This application doesn't support this eID reader type")
 }
 
 export const Error_EID_no_card_InSession = {
-    ...createError("De eID kaart is verwijderd", "De eId kaart is verwijderd")
+    ...createError("The eId card was removed", "The eId card was removed")
 }
 
 export const Error_EID_no_card_NotInSession = {
-    ...createError("Geen eID kaart gevonden", "Er is geen eID kaart gevonden."),
+    ...createError("No eId card found", "No eId card found"),
     nextButton: {
-        text: "Probeer opnieuw",
+        text: "Try again",
         isVisible: true,
         nextPage: WIZARD_STATE_CERTIFICATES_LOADING
     },
 }
 
 export const Error_EID_card_error = {
-    ...createError("Er is iets fout gegaan", "Er is iets fout gegaan met de kaart")
+    ...createError("Something went wrong", "Something went wrong. Please reload the page and try again.")
 }
 
 export const Error_EID_card_blocked = {
-    ...createError("Kaart is geblokeerd", "Kaart is geblokeerd")
+    ...createError("The eId card is blocked", "The eId card is blocked")
 }

@@ -13,7 +13,7 @@ export class ValidateLoadingContainer extends React.Component {
         const { resetWizard } = this.props
         return (
             <div className="row mt-3">
-                <CardLoading title={"Valideren van certificaat"}
+                <CardLoading title={"Validating certificates"}
                     hasCancelButton
                     cancelButtonText="Cancel"
                     onClickCancel={() => { resetWizard() }}

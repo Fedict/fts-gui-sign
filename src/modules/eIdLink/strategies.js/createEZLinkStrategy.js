@@ -1,22 +1,22 @@
 export const createEZLinkStrategy = (api) => {
 
-    const getVersion = (minimumVersion, onCorrectVersion, onNotInstalled, onNeedsUpdate) => {
-        
+    const getVersion = (minimumVersion, onCorrectVersion, onNotInstalled, onNeedsUpdate, onNoExtentionInstalled) => {
+
         api.checkVersion(minimumVersion,
             function (installedVersion) {
-             
+
                 if (onCorrectVersion && typeof onCorrectVersion === "function") {
                     onCorrectVersion(installedVersion)
                 }
             },
             (msg) => {
-                
+
                 if (onNotInstalled && typeof onNotInstalled === "function") {
-                    onNotInstalled(msg)                    
+                    onNotInstalled(msg)
                 }
             },
             (installedVersion) => {
-                
+
                 if (onNeedsUpdate && typeof onNeedsUpdate === "function") {
                     onNeedsUpdate(installedVersion)
                 }
