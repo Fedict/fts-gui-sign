@@ -147,6 +147,49 @@ export const signDocumentAPI = async (certificateBody, document, signature) => {
 
 }
 
+export const validateSignature = async (document) => {
+    const documentB64 = await getBase64Data(document)
+    const body = {
+        // "originalDocuments": [
+        //     {
+        //         "bytes": "string",
+        //         "digestAlgorithm": "SHA1",
+        //         "name": "string"
+        //     }
+        // ],
+        // "policy": {
+        //     "bytes": "string",
+        //     "digestAlgorithm": "SHA1",
+        //     "name": "string"
+        // },
+        // "signatureId": "string",
+        "signedDocument": {
+           
+                "bytes": documentB64,
+                // "digestAlgorithm": "SHA256",
+                "name": document.name
+            
+        }
+    }
+
+    return fetch(url + "/validation/validateSignature", {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {
+            'Content-Type': 'application/json'
+
+        },
+    })
+        .then((respons) => {
+            try {
+                return respons.json()
+            }
+            catch{
+                return respons.text()
+            }
+
+        })
+}
 
 const getBase64Data = (document) => {
     return new Promise((resolve, reject) => {
