@@ -2,61 +2,51 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { CardContainer } from '../../components/CardContainer/CardContainer';
 import { resetWizard } from '../actions/WizardLogicActions';
+import { indication, indicationKeys } from '../constants/indicationConstants';
+import { MessageContainer } from '../../message/MessageContainer';
+import { ErrorGeneral } from '../../message/MessageConstants';
 
-export class SuccesContainer extends React.Component {
 
-    downloadFile() {
-        const { uploadFile } = this.props
-
-        if (uploadFile
-            && uploadFile.downloadFile
-            && uploadFile.downloadFile.name
-            && uploadFile.downloadFile.bytes) {
-
-            let linkSource = `data:application/octet-stream;base64,{base64}`;
-            linkSource = linkSource.replace("{base64}", uploadFile.downloadFile.bytes)
-            const downloadLink = document.createElement("a");
-            const fileName = uploadFile.downloadFile.name;
-
-            downloadLink.href = linkSource;
-            downloadLink.download = fileName;
-            downloadLink.click();
-        }
-    }
-    componentDidMount() {
-
-        this.downloadFile()
-    }
+export class ResultContainer extends React.Component {
 
     render() {
-        const { resetWizard } = this.props
-        return (
-            <div className="row mt-3">
-                <CardContainer
-                    title={"result of the validation"}
-                    hasNextButton
-                    nextButtonText="Sign next document"
-                    onClickNext={() => { resetWizard() }}
-                >
-                    <div className="form-group">
+        const { validation, resetWizard } = this.props
 
-                        <div className="alert alert-primary">
-                            Your document will be automatically downloaded. If this is not the case, you can start the download manually
+
+        let result = <MessageContainer message={ErrorGeneral} onCancel={() => { resetWizard() }} />
+
+        if (indicationKeys.includes(validation.indication)) {
+            const indicationUsed = indication[validation.indication]
+            result = (
+                <div className="row mt-3">
+                    <CardContainer
+                        title={"result of the validation"}
+                        hasNextButton
+                        nextButtonText="Validate next document"
+                        onClickNext={() => { resetWizard() }}
+                    >
+                        <div className="text-center">
+                            <div className={"alert " + indicationUsed.className}>
+                                {indicationUsed.message}
+                            </div>
+
                         </div>
 
-                        
+                    </CardContainer>
 
-                    </div>
-                </CardContainer>
+                </div>
+            )
+        }
+        return (
+            <div>{ result }</div>
 
-            </div>
         )
     }
 }
 
 const mapStateToProps = (state) => {
     return (state) => ({
-        uploadFile: state.uploadFile
+        validation: state.validation
     })
 }
 const mapDispatchToProps = ({
@@ -65,4 +55,4 @@ const mapDispatchToProps = ({
 
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(SuccesContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(ResultContainer)

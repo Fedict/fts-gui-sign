@@ -26,12 +26,16 @@ export const validateCertificateAPI = (certificateBody) => {
 
         },
     })
-        .then((respons) => {
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("request fail")
+            }
+
             try {
-                return respons.json()
+                return response.json()
             }
             catch{
-                return respons.text()
+                return response.text()
             }
 
         })
@@ -48,12 +52,16 @@ export const validateCertificatesAPI = (certificateBody) => {
 
         },
     })
-        .then((respons) => {
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("request fail")
+            }
+
             try {
-                return respons.json()
+                return response.json()
             }
             catch{
-                return respons.text()
+                return response.text()
             }
 
         })
@@ -106,12 +114,16 @@ export const getDataToSignAPI = async (certificateBody, document) => {
 
         },
     })
-        .then((respons) => {
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("request fail")
+            }
+
             try {
-                return respons.json()
+                return response.json()
             }
             catch{
-                return respons.text()
+                return response.text()
             }
 
         })
@@ -135,12 +147,16 @@ export const signDocumentAPI = async (certificateBody, document, signature) => {
 
         },
     })
-        .then((respons) => {
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("request fail")
+            }
+
             try {
-                return respons.json()
+                return response.json()
             }
             catch{
-                return respons.text()
+                return response.text()
             }
 
         })
@@ -164,11 +180,11 @@ export const validateSignature = async (document) => {
         // },
         // "signatureId": "string",
         "signedDocument": {
-           
-                "bytes": documentB64,
-                // "digestAlgorithm": "SHA256",
-                "name": document.name
-            
+
+            "bytes": documentB64,
+            // "digestAlgorithm": "SHA256",
+            "name": document.name
+
         }
     }
 
@@ -180,12 +196,16 @@ export const validateSignature = async (document) => {
 
         },
     })
-        .then((respons) => {
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("request fail")
+            }
+
             try {
-                return respons.json()
+                return response.json()
             }
             catch{
-                return respons.text()
+                return response.text()
             }
 
         })
