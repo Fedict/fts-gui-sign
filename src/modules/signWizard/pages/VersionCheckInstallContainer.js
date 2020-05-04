@@ -11,6 +11,15 @@ export class VersionCheckInstallContainer extends React.Component {
         this.props.navigateToStep(WIZARD_STATE_VERSION_CHECK_LOADING)
     }
 
+    handleOnClick() {
+        if (window.configData && window.configData.eIDLinkUrl) {
+            window.open(window.configData.eIDLinkUrl, "_blank")
+
+        }
+
+
+    }
+
     render() {
         const { resetWizard } = this.props
 
@@ -25,7 +34,7 @@ export class VersionCheckInstallContainer extends React.Component {
                     <p>No eId link is found</p>
                     <p>Please install eId link to use this application</p>
 
-                    <button className="btn btn-primary" id="button_install_eID">Download and install eId link</button>
+                    <button className="btn btn-primary" id="button_install_eID" onClick={() => { this.handleOnClick() }}>Download and install eId link</button>
 
                 </CardContainer>
             </div>

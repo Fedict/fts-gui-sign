@@ -5,7 +5,7 @@ window.configData = {
         edge:""
     },
 
-
+    eIDLinkUrl : "",
     BEurl: "https://validate.ta.fts.bosa.belgium.be/signandvalidation",
 
 
