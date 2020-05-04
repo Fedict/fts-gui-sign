@@ -9,10 +9,5 @@ window.configData = {
     BEurl: "https://validate.ta.fts.bosa.belgium.be/signandvalidation",
 
 
-    signerLocationCountry: "",
-    signerLocationLocality: "",
-    signerLocationPostalAddress: [""],
-    signerLocationPostalCode: "",
-    signerLocationStateOrProvince: "",
-    signerLocationStreet: "",
+    
 }
