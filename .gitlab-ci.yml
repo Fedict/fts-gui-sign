@@ -30,7 +30,7 @@ package:
   stage: package
   script:
     - echo "Building the docker Image"
-    - docker build --build-arg http://dc-proxy.names.belgium.be:3128 --build-arg https_proxy http://dc-proxy.names.belgium.be:31 -t $CI_REGISTRY/eidas/gui-sign .
+    - docker build --build-arg http://dc-proxy.names.belgium.be:3128 --build-arg https_proxy http://dc-proxy.names.belgium.be:3128 -t $CI_REGISTRY/eidas/gui-sign .
   except:
     - master
 
@@ -38,7 +38,7 @@ package_master:
   stage: package
   script:
     - echo "Building the docker Image"
-    - docker build -t $CI_REGISTRY/eidas/gui-sign .
+    - docker build --build-arg http://dc-proxy.names.belgium.be:3128 --build-arg https_proxy http://dc-proxy.names.belgium.be:3128 -t $CI_REGISTRY/eidas/gui-sign .
   only:
     - master
   when: manual
