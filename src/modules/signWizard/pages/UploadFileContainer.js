@@ -78,7 +78,7 @@ export class UploadFileContainer extends React.Component {
                         </div>
                     </div>
                 </CardContainer>
-                <DisplayFile file={this.state.file} />
+                <DisplayFile file={this.state.file} key={(this.state.file.size) ? this.state.file.size : 0} />
             </div>
         )
     }
