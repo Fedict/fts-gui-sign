@@ -1,7 +1,7 @@
-import * as navigation from "../../wizard/actions/WizardActions"
-import { navigateToStep } from "../../wizard/actions/WizardActions"
+import * as navigation from "../../wizard/WizardActions"
+import { navigateToStep } from "../../wizard/WizardActions"
 import { navigateToSign } from "./WizardLogicActions"
-import {  WIZARD_STATE_PIN_INPUT, WIZARD_STATE_SIGNING_PRESIGN_LOADING } from "../../wizard/wizard/WizardConstants"
+import {  WIZARD_STATE_PIN_INPUT, WIZARD_STATE_SIGNING_PRESIGN_LOADING } from "../../wizard/WizardConstants"
 
 
 const ORIGINAL_navigateToStep = navigateToStep
