@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { CardContainer } from '../../components/CardContainer/CardContainer';
 import { NumberdText } from '../../components/NumberedText/NumberdText';
 import { WIZARD_STATE_CERTIFICATES_LOADING } from '../../wizard/WizardConstants';
+import { DisplayFile } from '../../components/DisplayFile/DisplayFile';
 
 export class UploadFileContainer extends React.Component {
 
@@ -52,9 +53,9 @@ export class UploadFileContainer extends React.Component {
                                                     type="button"
                                                     id="button_select_file"
                                                     value=""
-                                                    onClick={() => { 
+                                                    onClick={() => {
                                                         document.getElementById('input_hidden_select_file').click()
-                                                     }}
+                                                    }}
                                                 > Select document </button>
 
                                                 <input
@@ -77,7 +78,7 @@ export class UploadFileContainer extends React.Component {
                         </div>
                     </div>
                 </CardContainer>
-
+                <DisplayFile file={this.state.file} />
             </div>
         )
     }
