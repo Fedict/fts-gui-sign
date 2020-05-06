@@ -1,4 +1,4 @@
-import { navigateToStep } from "../../wizard/WizardActions"
+import { navigateToStep, setNewFlowId } from "../../wizard/WizardActions"
 import {
     WIZARD_STATE_VERSION_CHECK_UPDATE,
     WIZARD_STATE_VERSION_CHECK_INSTALL,
@@ -31,6 +31,7 @@ import { ErrorGeneral } from "../../message/MessageConstants"
 //----------------------------------
 // helpers                    
 //----------------------------------
+
 
 
 const getCertificatesFromResponse = (response) => {
@@ -87,6 +88,17 @@ const createCertificateObject = (certificate, certificateChain) => {
     }
 }
 
+
+const INCORECT_FLOW_ID = "INCORECT_FLOW_ID"
+const handleFlowIdError = (flowId, getStore) => (resp) => {
+    const flowIdcurrent = getStore().wizard.flowId
+    if (flowIdcurrent === flowId) {
+        return resp
+    }
+    else {
+        throw INCORECT_FLOW_ID
+    }
+}
 
 
 
@@ -199,7 +211,10 @@ export const validateCertificates = () => (dispatch, getStore) => {
             }
         })
 
+        const flowId = getStore().wizard.flowId
+
         validateCertificatesAPI(APIBody)
+            .then(handleFlowIdError(flowId, getStore))
             .then((val) => {
                 const indications = val.indications
                 const newList = certificate.certificateList.map((val, index) => {
@@ -231,9 +246,12 @@ export const validateCertificates = () => (dispatch, getStore) => {
                     }
                 }
             })
-            .catch(() => {
-                //TODO API ERROR handling
-                dispatch(showErrorMessage(MessageCertificatesNotFound))
+            .catch((err) => {
+                if (err !== INCORECT_FLOW_ID) {
+                    //TODO API ERROR handling
+                    dispatch(showErrorMessage(MessageCertificatesNotFound))
+                }
+
             })
 
     }
@@ -249,14 +267,18 @@ export const getDigest = () => (dispatch, getStore) => {
     if (certificate
         && certificate.certificateSelected
         && certificate.certificateSelected.APIBody) {
+        const flowId = getStore().wizard.flowId
         getDataToSignAPI(certificate.certificateSelected.APIBody, uploadFile.file)
+            .then(handleFlowIdError(flowId, getStore))
             .then((resp) => {
                 dispatch(setDigest(resp))
                 dispatch(navigateToSign())
             })
-            .catch(() => {
+            .catch((err) => {
                 //TODO API ERROR handling
-                dispatch(showErrorMessage(ErrorGeneral))
+                if (err !== INCORECT_FLOW_ID) {
+                    dispatch(showErrorMessage(ErrorGeneral))
+                }
             })
 
     }
@@ -339,6 +361,8 @@ export const signDocument = () => (dispatch, getStore) => {
 
     const { certificate, signature, uploadFile } = getStore()
 
+   
+
     if (certificate
         && certificate.certificateSelected
         && certificate.certificateSelected.APIBody
@@ -348,11 +372,12 @@ export const signDocument = () => (dispatch, getStore) => {
         && uploadFile.file) {
 
         dispatch(navigateToStep(WIZARD_STATE_SIGNING_LOADING))
-
+        const flowId = getStore().wizard.flowId
         signDocumentAPI(
             certificate.certificateSelected.APIBody,
             uploadFile.file,
             signature.signature)
+            .then(handleFlowIdError(flowId, getStore))
             .then((resp) => {
 
                 if (resp
@@ -367,10 +392,12 @@ export const signDocument = () => (dispatch, getStore) => {
                 }
 
             })
-            .catch((error) => {
+            .catch((err) => {
 
                 //TODO API ERROR handling
-                dispatch(showErrorMessage(ErrorGeneral))
+                if (err !== INCORECT_FLOW_ID) {
+                    dispatch(showErrorMessage(ErrorGeneral))
+                }
             })
 
     }
@@ -387,7 +414,7 @@ export const resetWizard = () => (dispatch, getStore) => {
     let eIDLink = controller.getInstance()
     eIDLink.stop()
     dispatch(resetStore())
-
+    dispatch(setNewFlowId())
     const store = getStore()
     const { reader } = store
 
