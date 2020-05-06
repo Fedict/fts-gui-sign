@@ -18,7 +18,7 @@ export class ResultContainer extends React.Component {
         if (indicationKeys.includes(validation.indication)) {
             const indicationUsed = indication[validation.indication]
             result = (
-                <div className="row mt-3">
+               
                     <CardContainer
                         title={"result of the validation"}
                         hasNextButton
@@ -34,7 +34,7 @@ export class ResultContainer extends React.Component {
 
                     </CardContainer>
 
-                </div>
+               
             )
         }
         return (

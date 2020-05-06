@@ -12,7 +12,7 @@ export class CertificatesLoadingContainer extends React.Component {
     render() {
         const { resetWizard } = this.props
         return (
-            <div className="row mt-3">
+           
                 <CardLoading title={"Retrieving certificates"}
                     hasCancelButton
                     cancelButtonText="Cancel"
@@ -20,7 +20,7 @@ export class CertificatesLoadingContainer extends React.Component {
                 >
 
                 </CardLoading>
-            </div>
+            
         )
     }
 

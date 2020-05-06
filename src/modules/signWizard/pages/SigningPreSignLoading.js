@@ -15,7 +15,7 @@ export class SigningPreSignLoading extends React.Component {
             && certificate.certificateSelected.readerType === "pinpad")
 
         return (
-            <div className="row mt-3">
+            
                 <CardLoading title={"Sign document"}
                     hasCancelButton
                     cancelButtonText="Cancel"
@@ -43,7 +43,7 @@ export class SigningPreSignLoading extends React.Component {
                         )
                         : null}
                 </CardLoading>
-            </div>
+          
         )
 
     }

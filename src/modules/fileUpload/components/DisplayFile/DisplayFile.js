@@ -1,6 +1,7 @@
 import React from 'react'
 import { CardContainer } from '../../../components/CardContainer/CardContainer'
 import { connect } from 'react-redux'
+import IMAGE from './img.jpg'
 
 
 export class DisplayFile extends React.Component {
@@ -8,9 +9,9 @@ export class DisplayFile extends React.Component {
     constructor(props) {
         super(props)
 
-      
+
     }
-    
+
     render() {
         const { uploadFile } = this.props
         if (uploadFile && uploadFile.displayFile) {
@@ -28,12 +29,12 @@ export class DisplayFile extends React.Component {
 
                     )
                 }
-                if (data.isXml) {
-                    return <p>xml</p>
-                }
+                // if (data.isXml) {
+                //     return <p>xml</p>
+                // }
             }
         }
-        return null
+        return <img src={IMAGE} width="100%"  height="100%"/>
 
     }
 }

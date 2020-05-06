@@ -43,7 +43,7 @@ export class MessageContainer extends React.Component {
         }
 
         return (
-            <div className="row mt-3">
+           
                 <Container
                     title={shownMessage.title}
                     hasCancelButton={shownMessage.hasCancleButton}
@@ -61,7 +61,7 @@ export class MessageContainer extends React.Component {
                 >
                     {shownMessage.body}
                 </Container>
-            </div>
+            
         )
 
     }

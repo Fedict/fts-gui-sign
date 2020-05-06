@@ -37,61 +37,89 @@ import PinPadError from './pages/PinPadError'
 import VersionCheckInstallExtentionContainer from './pages/VersionCheckInstallExtentionContainer'
 import { ErrorGeneral } from '../message/MessageConstants'
 import { resetWizard } from './actions/WizardLogicActions'
+import DisplayFile from '../fileUpload/components/DisplayFile/DisplayFile'
 
 export const WizardContainer = ({ wizard, reader, resetWizard }) => {
 
 
+    let content = null;
     switch (wizard.state) {
         case WIZARD_STATE_START:
             if (reader && reader.ok) {
-                return <UploadFileContainer />
+                content = <UploadFileContainer />
             }
             else {
-                return <VersionCheckLoadingContainer />
+                content = <VersionCheckLoadingContainer />
             }
+            break;
         case WIZARD_STATE_UPLOAD:
-            return <UploadFileContainer />;
+            content = <UploadFileContainer />;
+            break;
         case WIZARD_STATE_VERSION_CHECK_LOADING:
-            return <VersionCheckLoadingContainer />;
+            content = <VersionCheckLoadingContainer />;
+            break;
         case WIZARD_STATE_VERSION_CHECK_UPDATE:
-            return <VersionCheckUpdateContainer />;
+            content = <VersionCheckUpdateContainer />;
+            break;
         case WIZARD_STATE_VERSION_CHECK_INSTALL:
-            return <VersionCheckInstallContainer />;
+            content = <VersionCheckInstallContainer />;
+            break;
 
         case WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENTION:
-            return <VersionCheckInstallExtentionContainer />
+            content = <VersionCheckInstallExtentionContainer />;
+            break;
         case WIZARD_STATE_CERTIFICATES_LOADING:
-            return <CertificatesLoadingContainer />;
-
+            content = <CertificatesLoadingContainer />;
+            break;
 
         case WIZARD_STATE_CERTIFICATES_CHOOSE:
-            return <CertificateChooseContainer />
+            content = <CertificateChooseContainer />;
+            break;
 
         case WIZARD_STATE_VALIDATE_LOADING:
-            return <ValidateLoadingContainer />
+            content = <ValidateLoadingContainer />;
+            break;
 
         case WIZARD_STATE_DIGEST_LOADING:
-            return <DigestLoadingContainer />
+            content = <DigestLoadingContainer />;
+            break;
         case WIZARD_STATE_PIN_INPUT:
-            return <PinInputContainer />
+            content = <PinInputContainer />;
+            break;
 
         case WIZARD_STATE_SIGNING_LOADING:
-            return <SigningLoadingContainer />
+            content = <SigningLoadingContainer />;
+            break;
         case WIZARD_STATE_SUCCES:
-            return <SuccesContainer />
+            content = <SuccesContainer />;
+            break;
         case WIZARD_STATE_MESSAGE:
-            return <MessageContainerWithStore onCancel={() => { (resetWizard()) }} />
+            content = <MessageContainerWithStore onCancel={() => { (resetWizard()) }} />;
+            break;
 
         case WIZARD_STATE_SIGNING_PRESIGN_LOADING:
-            return <SigningPreSignLoading />
+            content = <SigningPreSignLoading />;
+            break;
         case WIZARD_STATE_PINPAD_ERROR:
-            return <PinPadError />
-
-
+            content = <PinPadError />
+            break;
         default:
-            return <MessageContainer message={ErrorGeneral} onCancel={() => { (resetWizard()) }} />
+            content = <MessageContainer message={ErrorGeneral} onCancel={() => { (resetWizard()) }} />
+            break;
     }
 
+
+    return (
+        <div >
+            <div className={"row mx-5 mt-3"}>
+                <div className={"col col-6"}>
+                    <DisplayFile />
+                </div>
+                <div className={"col col-6"}>
+                    {content}
+                </div>
+            </div>
+        </div >)
 
 }
 

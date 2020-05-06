@@ -24,7 +24,7 @@ export class VersionCheckInstallContainer extends React.Component {
         const { resetWizard } = this.props
 
         return (
-            <div className="row mt-3">
+            
                 <CardContainer title={"Install eId link"}
                     onClickCancel={() => { resetWizard() }}
                     hasNextButton
@@ -37,7 +37,7 @@ export class VersionCheckInstallContainer extends React.Component {
                     <button className="btn btn-primary" id="button_install_eID" onClick={() => { this.handleOnClick() }}>Download and install eId link</button>
 
                 </CardContainer>
-            </div>
+          
         )
     }
 }

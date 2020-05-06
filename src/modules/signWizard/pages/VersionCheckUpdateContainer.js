@@ -15,7 +15,7 @@ export class VersionCheckUpdateContainer extends React.Component {
 
         const { resetWizard } = this.props
         return (
-            <div className="row mt-3">
+            
                 <CardContainer title={"Update eId link"}
                     hasCancelButton
                     cancelButtonText="Cancel"
@@ -31,7 +31,7 @@ export class VersionCheckUpdateContainer extends React.Component {
                     <button className="btn btn-primary" id="button_install_eID">Download and install eId link</button>
 
                 </CardContainer>
-            </div>
+            
         )
     }
 }

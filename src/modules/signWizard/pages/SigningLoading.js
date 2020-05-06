@@ -13,7 +13,7 @@ export class SigningLoadingContainer extends React.Component {
 
         const { resetWizard } = this.props
         return (
-            <div className="row mt-3">
+            
                 <CardLoading title={"Sign document"}
                     hasCancelButton
                     cancelButtonText="Cancel"
@@ -21,7 +21,7 @@ export class SigningLoadingContainer extends React.Component {
                 >
 
                 </CardLoading>
-            </div>
+            
         )
     }
 }

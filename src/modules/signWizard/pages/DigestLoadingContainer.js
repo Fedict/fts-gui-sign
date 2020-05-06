@@ -12,7 +12,7 @@ export class DigestLoadingContainer extends React.Component {
 
         const { resetWizard } = this.props
         return (
-            <div className="row mt-3">
+            
                 <CardLoading
                     title={"Signing document"}
                     hasCancelButton
@@ -21,7 +21,7 @@ export class DigestLoadingContainer extends React.Component {
                 >
 
                 </CardLoading>
-            </div>
+            
         )
     }
 }

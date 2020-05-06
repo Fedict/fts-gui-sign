@@ -13,11 +13,11 @@ import ValidateWizardContainer from './modules/validateWizard/ValidateWizardCont
 function App() {
   return (
     <Router>
-      <div className="App">
+      <div >
         <Navbar />
         <Switch>
           <Route path="/sign">
-            <div className="container">
+            <div className="container-fluid">
               <WizardContainer />
             </div>
           </Route>

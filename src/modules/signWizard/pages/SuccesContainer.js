@@ -31,7 +31,7 @@ export class SuccesContainer extends React.Component {
     render() {
         const { resetWizard } = this.props
         return (
-            <div className="row mt-3">
+         
                 <CardContainer
                     title={"Your document has been successfully signed!"}
                     hasNextButton
@@ -54,7 +54,7 @@ export class SuccesContainer extends React.Component {
                     </div>
                 </CardContainer>
 
-            </div>
+         
         )
     }
 }

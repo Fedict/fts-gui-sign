@@ -32,7 +32,7 @@ export class PinInputContainer extends React.Component {
     render() {
         const { resetWizard, pinError } = this.props
         return (
-            <div className="row mt-3">
+      
                 <CardContainer
                     title={"Enter pin code"}
                     hasNextButton
@@ -67,7 +67,7 @@ export class PinInputContainer extends React.Component {
                     </div>
                 </CardContainer>
 
-            </div>
+            
         )
     }
 }

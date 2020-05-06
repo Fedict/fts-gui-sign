@@ -33,7 +33,7 @@ export class VersionCheckInstallExtentionContainer extends React.Component {
         const { resetWizard } = this.props
 
         return (
-            <div className="row mt-3">
+           
                 <CardContainer title={"Install eId link extention"}
                     onClickCancel={() => { resetWizard() }}
                     hasNextButton
@@ -51,7 +51,7 @@ export class VersionCheckInstallExtentionContainer extends React.Component {
                     </button>
 
                 </CardContainer>
-            </div>
+            
         )
     }
 }

@@ -14,7 +14,7 @@ export const CardContainer = (
     }
 ) => {
     return (
-        <div className="col col-8 mx-auto align-middle">
+        <div className="col col-12 mx-auto align-middle">
             <div className="card " >
 
                 {(title)
@@ -55,6 +55,6 @@ export const CardContainer = (
                     </div>)
                     : null}
             </div>
-        </div>
+         </div>
     )
 }

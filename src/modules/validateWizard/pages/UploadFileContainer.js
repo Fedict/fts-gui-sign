@@ -28,7 +28,7 @@ export class UploadFileContainer extends React.Component {
 
     render() {
         return (
-            <div className="row mt-3">
+          
                 <CardContainer
                     title={"Validate signed document"}
                     hasNextButton
@@ -77,7 +77,7 @@ export class UploadFileContainer extends React.Component {
                     </div>
                 </CardContainer>
 
-            </div>
+            
         )
     }
 
