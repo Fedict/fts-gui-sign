@@ -1,11 +1,11 @@
 import React from 'react'
 import { navigateToVersionCheckLoading, navigateToStep } from "../../wizard/WizardActions"
-import { uploadFile } from "../../fileUpload/actions/UploadFileActions"
+import { uploadFile, displayFile } from "../../fileUpload/actions/UploadFileActions"
 import { connect } from 'react-redux';
 import { CardContainer } from '../../components/CardContainer/CardContainer';
 import { NumberdText } from '../../components/NumberedText/NumberdText';
 import { WIZARD_STATE_CERTIFICATES_LOADING } from '../../wizard/WizardConstants';
-import { DisplayFile } from '../../components/DisplayFile/DisplayFile';
+import  DisplayFile  from '../../fileUpload/components/DisplayFile/DisplayFile';
 
 export class UploadFileContainer extends React.Component {
 
@@ -19,6 +19,8 @@ export class UploadFileContainer extends React.Component {
     onchange(e) {
         const file = e.target.files[0]
         this.setState({ file: file })
+        this.props.displayFile(file)
+
     }
 
     handleSubmit() {
@@ -78,7 +80,7 @@ export class UploadFileContainer extends React.Component {
                         </div>
                     </div>
                 </CardContainer>
-                <DisplayFile file={this.state.file} key={(this.state.file.size) ? this.state.file.size : 0} />
+                <DisplayFile />
             </div>
         )
     }
@@ -92,7 +94,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = ({
     navigateToVersionCheckLoading,
     uploadFile,
-    navigateToStep
+    navigateToStep,
+    displayFile
 
 
 })
