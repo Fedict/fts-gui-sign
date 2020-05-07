@@ -5,23 +5,23 @@ import {
 } from "react-router-dom";
 import { connect } from 'react-redux';
 
-import { navigateToStep } from "../wizard/WizardActions"
+import { navigateToStep, setNewFlowId } from "../wizard/WizardActions"
 import { resetStore } from "../../store/storeActions"
-import { WIZARD_STATE_VERSION_CHECK_LOADING } from '../wizard/WizardConstants';
+import { WIZARD_STATE_VERSION_CHECK_LOADING, WIZARD_STATE_START } from '../wizard/WizardConstants';
 
 
-export const Navbar = ({ location, resetStore }) => {
+export const Navbar = ({ location, resetStore, navigateToStep, setNewFlowId }) => {
 
     console.log(location)
     const links = [
         {
             to: '/sign',
             label: 'Sign',
-            onclick: () => { resetStore(); navigateToStep(WIZARD_STATE_VERSION_CHECK_LOADING) }
+            onclick: () => { resetStore(); setNewFlowId(); navigateToStep(WIZARD_STATE_START) }
         }, {
             to: '/validate',
             label: 'Validate',
-            onclick: () => { resetStore() }
+            onclick: () => { resetStore(); setNewFlowId(); navigateToStep(WIZARD_STATE_START) }
         },
     ].map((val, index) => {
         return (
@@ -62,6 +62,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = ({
     navigateToStep,
     resetStore,
+    setNewFlowId
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Navbar))
