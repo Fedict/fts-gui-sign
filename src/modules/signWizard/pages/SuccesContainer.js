@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux';
-import { CardContainer } from '../../components/CardContainer/CardContainer';
+import { CardContainer } from '../../components/Card/CardContainer';
 import { resetWizard } from '../actions/WizardLogicActions';
 
 export class SuccesContainer extends React.Component {

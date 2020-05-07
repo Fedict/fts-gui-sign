@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { CardError } from '../../components/CardError/CardError'
+import { CardError } from '../../components/Card/CardError'
 import { resetWizard, navigateToSign } from "../actions/WizardLogicActions"
 
 export class PinPadError extends React.Component {

@@ -1,18 +1,20 @@
 import React from "react"
-import { CardContainer } from "../CardContainer/CardContainer"
+import { CardContainer } from "./CardContainer"
 
-export const CardError = ({
-    title,
-    children,
-    hasCancelButton,
-    cancelButtonText,
-    onClickCancel,
-    hasNextButton,
-    nextButtonText,
-    onClickNext,
-    nextButtonIsDisabled,
-    text
-}) => {
+export const CardInfo = (
+    {
+        title,
+        children,
+        hasCancelButton,
+        cancelButtonText,
+        onClickCancel,
+        hasNextButton,
+        nextButtonText,
+        onClickNext,
+        nextButtonIsDisabled,
+        text
+    }
+) => {
     return (
         <CardContainer
             title={title}
@@ -25,12 +27,11 @@ export const CardError = ({
             nextButtonIsDisabled={nextButtonIsDisabled}
         >
             <div className="text-center">
-                <div className="alert alert-danger">
+                <div className="alert alert-info">
                     {text}
                 </div>
                 {children}
             </div>
         </CardContainer>
-
     )
 }

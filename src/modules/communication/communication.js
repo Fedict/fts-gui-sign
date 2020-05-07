@@ -1,68 +1,13 @@
+//-----------------------------------------
+//--- constants                         ---
+//-----------------------------------------
+
 const url = (window && window.configData) ? window.configData.BEurl : ""
+const REQUEST_FAILED = "REQUEST_FAILED"
 
-
-
-export const validateCertificateAPI = (certificateBody) => {
-
-    let body = {
-        "certificate": {
-            "encodedCertificate": ""
-        },
-        "certificateChain": [],
-        "validationTime": null
-    }
-    body = { ...body, ...certificateBody }
-
-    return fetch(url + "/validation/validateCertificate", {
-        method: 'POST',
-        body: JSON.stringify(body),
-        headers: {
-            'Content-Type': 'application/json'
-
-        },
-    })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error("request fail")
-            }
-
-            try {
-                return response.json()
-            }
-            catch{
-                return response.text()
-            }
-
-        })
-
-
-}
-export const validateCertificatesAPI = (certificateBody) => {
-
-    return fetch(url + "/validation/validateCertificates", {
-        method: 'POST',
-        body: JSON.stringify(certificateBody),
-        headers: {
-            'Content-Type': 'application/json'
-
-        },
-    })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error("request fail")
-            }
-
-            try {
-                return response.json()
-            }
-            catch{
-                return response.text()
-            }
-
-        })
-
-
-}
+//-----------------------------------------
+//--- helpers                           ---
+//-----------------------------------------
 
 const createBody = (certificateBody, documentName, documentBase64) => {
 
@@ -76,7 +21,6 @@ const createBody = (certificateBody, documentName, documentBase64) => {
                 //     "name": "string"
                 // }
             ],
-           
             "signingCertificate": certificateBody.certificate,
             "signingDate": "2020-04-06T09:45:44"
         },
@@ -90,23 +34,74 @@ const createBody = (certificateBody, documentName, documentBase64) => {
     }
 }
 
+const getBase64Data = (document) => {
+    return new Promise((resolve, reject) => {
+        let reader = new FileReader();
+
+        reader.onloadend = () => {
+            let b64 = reader.result.replace(/^data:.+;base64,/, '')
+            resolve(b64)
+        }
+
+        reader.onerror = () => {
+            reject()
+        }
+
+        reader.readAsDataURL(document)
+    })
+}
+
+//-----------------------------------------
+//--- API requests                      ---
+//-----------------------------------------
+
+export const validateCertificatesAPI = (certificateBody) => {
+
+    return fetch(url + "/validation/validateCertificates",
+        {
+            method: 'POST',
+            body: JSON.stringify(certificateBody),
+            headers: {
+                'Content-Type': 'application/json'
+
+            },
+        }
+    )
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(REQUEST_FAILED)
+            }
+            try {
+                return response.json()
+            }
+            catch{
+                return response.text()
+            }
+
+        })
+}
+
+
+
 export const getDataToSignAPI = async (certificateBody, document) => {
 
     const documentB64 = await getBase64Data(document)
 
     const body = createBody(certificateBody, document.name, documentB64);
 
-    return fetch(url + "/signing/getDataToSign", {
-        method: 'POST',
-        body: JSON.stringify(body),
-        headers: {
-            'Content-Type': 'application/json'
+    return fetch(url + "/signing/getDataToSign",
+        {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {
+                'Content-Type': 'application/json'
 
-        },
-    })
+            },
+        }
+    )
         .then((response) => {
             if (!response.ok) {
-                throw new Error("request fail")
+                throw new Error(REQUEST_FAILED)
             }
 
             try {
@@ -124,6 +119,7 @@ export const getDataToSignAPI = async (certificateBody, document) => {
 
 export const signDocumentAPI = async (certificateBody, document, signature) => {
     const documentB64 = await getBase64Data(document)
+
     const body = {
         ...createBody(certificateBody, document.name, documentB64),
         "signatureValue": signature
@@ -139,7 +135,7 @@ export const signDocumentAPI = async (certificateBody, document, signature) => {
     })
         .then((response) => {
             if (!response.ok) {
-                throw new Error("request fail")
+                throw new Error(REQUEST_FAILED)
             }
 
             try {
@@ -153,7 +149,7 @@ export const signDocumentAPI = async (certificateBody, document, signature) => {
 
 }
 
-export const validateSignature = async (document) => {
+export const validateSignatureAPI = async (document) => {
     const documentB64 = await getBase64Data(document)
     const body = {
         // "originalDocuments": [
@@ -188,7 +184,7 @@ export const validateSignature = async (document) => {
     })
         .then((response) => {
             if (!response.ok) {
-                throw new Error("request fail")
+                throw new Error(REQUEST_FAILED)
             }
 
             try {
@@ -201,19 +197,3 @@ export const validateSignature = async (document) => {
         })
 }
 
-const getBase64Data = (document) => {
-    return new Promise((resolve, reject) => {
-        let reader = new FileReader();
-
-        reader.onloadend = () => {
-            let b64 = reader.result.replace(/^data:.+;base64,/, '')
-            resolve(b64)
-        }
-
-        reader.onerror = () => {
-            reject()
-        }
-
-        reader.readAsDataURL(document)
-    })
-}

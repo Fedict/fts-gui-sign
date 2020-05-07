@@ -2,8 +2,8 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { navigateToStep } from "../wizard/WizardActions"
 import { messageTypes, ErrorGeneral } from './MessageConstants'
-import { CardError } from '../components/CardError/CardError'
-import { CardInfo } from '../components/CardInfo/CardInfo'
+import { CardError } from '../components/Card/CardError'
+import { CardInfo } from '../components/Card/CardInfo'
 import { resetWizard } from '../signWizard/actions/WizardLogicActions'
 
 

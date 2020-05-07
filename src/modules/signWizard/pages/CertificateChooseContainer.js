@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { CardContainer } from '../../components/CardContainer/CardContainer'
+import { CardContainer } from '../../components/Card/CardContainer'
 import { CertificateSelect } from '../../components/CertificateSelect/CertificateSelect'
 import { WIZARD_STATE_DIGEST_LOADING } from '../../wizard/WizardConstants'
 import { navigateToStep } from '../../wizard/WizardActions'

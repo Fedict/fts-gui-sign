@@ -1,7 +1,6 @@
 import React from 'react'
 
 export const NumberdText = ({ children, number }) => {
-
     return (
         <div className="row mb-4">
             <div className="col col-1">

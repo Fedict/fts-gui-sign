@@ -20,12 +20,10 @@ export const getBrowser = () => {
     // INTERNET EXPLORER
     else if (navigator.userAgent.indexOf("MSIE") != -1) {
         return (browser.IE)
-
     }
     // EDGE
     else if (navigator.userAgent.indexOf("Edge") != -1) {
         return (browser.EDGE)
-
     }
     // SAFARI
     else if (navigator.userAgent.indexOf("Safari") != -1) {
@@ -40,3 +38,9 @@ export const getBrowser = () => {
         return(browser.OTHERS)
     }
 };
+
+export const checkBrowserFunction = () =>{
+    //TODO create check on browser featurs 
+    // - FILE api
+    
+}

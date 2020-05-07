@@ -10,10 +10,10 @@ export class CertificateSelect extends React.Component {
         }
     }
     onSelect(index) {
+        const { certificates, onChange } = this.props;
 
         this.setState({ selectedIndex: index })
 
-        const { certificates, onChange } = this.props;
         if (onChange && typeof onChange === "function") {
             const selectedCertificate = certificates[index]
             onChange(selectedCertificate)
@@ -30,7 +30,6 @@ export class CertificateSelect extends React.Component {
                     className={" card mb-3 " + ((index === selectedIndex) ? " border border-primary" : "")}
                     onClick={() => { this.onSelect(index) }}>
                     <div className="row no-gutters form-check align-content-center">
-
                         <div className="col">
                             <div className="card-body">
                                 <p>reader : {certificate.readerName}</p>
@@ -39,7 +38,8 @@ export class CertificateSelect extends React.Component {
                             </div>
                         </div>
                     </div>
-                </div>)
+                </div>
+            )
         })
 
         return selectCards

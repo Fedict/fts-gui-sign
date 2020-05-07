@@ -1,5 +1,5 @@
 import React from 'react'
-import { CardLoading } from '../../components/CardLoading/CardLoading'
+import { CardLoading } from '../../components/Card/CardLoading'
 import { connect } from 'react-redux'
 import { checkVersion, resetWizard } from "../actions/WizardLogicActions"
 

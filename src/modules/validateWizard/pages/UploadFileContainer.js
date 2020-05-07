@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { uploadFile } from '../../fileUpload/actions/UploadFileActions'
 import { navigateToStep } from "../../wizard/WizardActions"
 import { WIZARD_STATE_VALIDATE_LOADING } from '../../wizard/WizardConstants';
-import { CardContainer } from '../../components/CardContainer/CardContainer';
+import { CardContainer } from '../../components/Card/CardContainer';
 import { NumberdText } from '../../components/NumberedText/NumberdText';
 
 export class UploadFileContainer extends React.Component {

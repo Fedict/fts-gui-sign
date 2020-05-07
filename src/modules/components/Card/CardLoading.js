@@ -1,10 +1,15 @@
 import React from "react"
-import { CardContainer } from "../CardContainer/CardContainer"
+import { CardContainer } from "./CardContainer"
 
-export const CardLoading = ({ title, hasCancelButton,
-    cancelButtonText,
-    onClickCancel,
-    children }) => {
+export const CardLoading = (
+    {
+        title,
+        hasCancelButton,
+        cancelButtonText,
+        onClickCancel,
+        children
+    }
+) => {
     return (
         <CardContainer
             title={title}
@@ -18,6 +23,5 @@ export const CardLoading = ({ title, hasCancelButton,
                 </div>
             </div>
         </CardContainer>
-
     )
 }
