@@ -24,7 +24,6 @@ export class SuccesContainer extends React.Component {
         }
     }
     componentDidMount() {
-
         this.downloadFile()
     }
 
@@ -53,8 +52,6 @@ export class SuccesContainer extends React.Component {
 
                     </div>
                 </CardContainer>
-
-         
         )
     }
 }
@@ -66,8 +63,6 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = ({
     resetWizard
-
-
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(SuccesContainer)

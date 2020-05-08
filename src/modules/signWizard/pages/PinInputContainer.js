@@ -23,51 +23,53 @@ export class PinInputContainer extends React.Component {
     }
 
     handleSubmit() {
-        this.props.navigateToStep(WIZARD_STATE_SIGNING_PRESIGN_LOADING)
-        this.props.sign(this.state.pin)
-      
+        const { navigateToStep, sign } = this.props
+        navigateToStep(WIZARD_STATE_SIGNING_PRESIGN_LOADING)
+        sign(this.state.pin)
+
 
     }
 
     render() {
         const { resetWizard, pinError } = this.props
+        const {pin} = this.state
         return (
-      
-                <CardContainer
-                    title={"Enter pin code"}
-                    hasNextButton
-                    hasCancelButton
-                    cancelButtonText="Cancel"
-                    onClickCancel={() => { resetWizard() }}
-                    nextButtonText="Sign with eId"
-                    onClickNext={() => { this.handleSubmit() }}
-                    nextButtonIsDisabled={this.state.pin.length === 0}>
 
-                    <div className="form-group">
-                        <p>Geef uw pincode in</p>
-                        {(pinError && pinError.message)
-                            ? (
-                                <div className="text-center">
-                                    <div className="alert alert-danger">
-                                        {pinError.message}
-                                    </div>
-                                </div>)
-                            : null}
-                        <div className="row mb-2">
-                            <div className="col-auto">
-                                <input
-                                    type="password"
-                                    className="form-control"
-                                    id="input_code"
-                                    value={this.state.pin}
-                                    onChange={(e) => { this.onchange(e) }} />
-                            </div>
+            <CardContainer
+                title={"Enter pin code"}
+                hasNextButton
+                hasCancelButton
+                cancelButtonText="Cancel"
+                onClickCancel={() => { resetWizard() }}
+                nextButtonText="Sign with eId"
+                onClickNext={() => { this.handleSubmit() }}
+                nextButtonIsDisabled={pin.length === 0}>
 
+                <div className="form-group">
+                    <p>Geef uw pincode in</p>
+                    {(pinError && pinError.message)
+                        ? (
+                            <div className="text-center">
+                                <div className="alert alert-danger">
+                                    {pinError.message}
+                                </div>
+                            </div>)
+                        : null}
+                    <div className="row mb-2">
+                        <div className="col-auto">
+                            <input
+                                type="password"
+                                className="form-control"
+                                id="input_code"
+                                value={pin}
+                                onChange={(e) => { this.onchange(e) }} />
                         </div>
-                    </div>
-                </CardContainer>
 
-            
+                    </div>
+                </div>
+            </CardContainer>
+
+
         )
     }
 }

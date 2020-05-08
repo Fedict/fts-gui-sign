@@ -18,7 +18,6 @@ const CertificateReducer = (state = initialState, action) => {
             return { ...state, certificateList: action.payload }
         case CERTIFICATE_SELECT_CERTIFICATE:
             return { ...state, certificateSelected: action.payload }
-        
         case STORE_RESET:
             return initialState
         default:

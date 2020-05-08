@@ -2,11 +2,10 @@
 import { DIGEST_SET_DIGEST } from "../actions/DigestActions"
 import { STORE_RESET } from "../../../store/storeActions"
 
-
 const initialState = {
-
+    digest: "",
+    digestAlgorithm: ""
 }
-
 
 const DigestReducer = (state = initialState, action) => {
     switch (action.type) {

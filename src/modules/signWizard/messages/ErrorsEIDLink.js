@@ -1,8 +1,7 @@
 import { WIZARD_STATE_CERTIFICATES_LOADING } from "../../wizard/WizardConstants";
 import { ErrorGeneral } from "../../message/MessageConstants";
 
-//TODO create correct messages
-export const Error_EID_http_status_0 = ErrorGeneral
+
 
 const createError = (title, message) => {
     return {
@@ -17,6 +16,8 @@ const createError = (title, message) => {
         hasCancleButton: true
     }
 }
+export const Error_EID_http_status_0 = ErrorGeneral
+
 export const Error_EID_no_reader_InSession = {
     ...createError("The eId reader was removed", "The eId reader was removed")
 }

@@ -24,14 +24,10 @@ export class ValidateLoadingContainer extends React.Component {
         )
     }
 }
-const mapStateToProps = (state) => {
-    return (state) => ({
 
-    })
-}
 const mapDispatchToProps = ({
     validateCertificates,
      resetWizard
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(ValidateLoadingContainer)
+export default connect(null, mapDispatchToProps)(ValidateLoadingContainer)

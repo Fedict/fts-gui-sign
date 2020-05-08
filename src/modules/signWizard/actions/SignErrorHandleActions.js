@@ -1,5 +1,3 @@
-import { showErrorMessage } from "../../message/actions/MessageActions";
-
 import {
     Error_EID_http_status_0,
     Error_EID_no_card_InSession,
@@ -12,6 +10,7 @@ import {
 } from "../messages/ErrorsEIDLink";
 import { navigateToPinError } from "./WizardLogicActions";
 import { ErrorGeneral } from "../../message/MessageConstants";
+import { showErrorMessage } from "../../message/actions/MessageActions";
 
 export const errorStatuses = {
     http_status_0: "http_status_0",
@@ -33,7 +32,7 @@ export const errorStatuses = {
 }
 
 
-export const handleErrorEID = (error, isInSession) => (dispatch, getStore) => {
+export const handleErrorEID = (error, isInSession) => (dispatch) => {
 
     switch (error.message) {
         case errorStatuses.http_status_0:
@@ -100,7 +99,6 @@ export const showPinError = (message) => (dispatch, getStore) => {
     dispatch(navigateToPinError())
 }
 
-
 export const pinErrorText = {
     pin_incorrect: "Pincode is incorrect",
     pin_too_short: "Pincode is te kort",
@@ -112,7 +110,7 @@ export const pinErrorText = {
     pin_timeout: "Invoeren van pincode duurde te lang."
 }
 
-export const handlePinErrorEID = (error, isInSession) => (dispatch, getStore) => {
+export const handlePinErrorEID = (error, isInSession) => (dispatch) => {
     switch (error.message) {
         case errorStatuses.pin_1_attempt_left:
             dispatch(showPinError(pinErrorText.pin_1_attempt_left))

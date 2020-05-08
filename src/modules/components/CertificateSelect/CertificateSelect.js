@@ -33,7 +33,7 @@ export class CertificateSelect extends React.Component {
                         <div className="col">
                             <div className="card-body">
                                 <p>reader : {certificate.readerName}</p>
-                                <p>naam :  {certificate.commonName}
+                                <p>name :  {certificate.commonName}
                                 </p>
                             </div>
                         </div>

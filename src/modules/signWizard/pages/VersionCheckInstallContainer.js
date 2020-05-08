@@ -41,14 +41,10 @@ export class VersionCheckInstallContainer extends React.Component {
         )
     }
 }
-const mapStateToProps = (state) => {
-    return (state) => ({
 
-    })
-}
 const mapDispatchToProps = ({
     navigateToStep,
     resetWizard
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(VersionCheckInstallContainer)
+export default connect(null, mapDispatchToProps)(VersionCheckInstallContainer)

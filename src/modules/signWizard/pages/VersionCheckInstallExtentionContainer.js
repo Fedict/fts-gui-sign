@@ -2,9 +2,9 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { CardContainer } from '../../components/Card/CardContainer'
 import { navigateToStep } from "../../wizard/WizardActions"
-import { WIZARD_STATE_VERSION_CHECK_LOADING } from '../../wizard/WizardConstants'
 import { resetWizard } from '../actions/WizardLogicActions'
-import { isChrome, isEdgeChromium, getBrowser, browser } from '../../browserDetection/BrowserDetection'
+import { getBrowser, browser } from '../../browserDetection/BrowserDetection'
+
 export class VersionCheckInstallExtentionContainer extends React.Component {
 
     handleButtonNextClick() {
@@ -55,14 +55,10 @@ export class VersionCheckInstallExtentionContainer extends React.Component {
         )
     }
 }
-const mapStateToProps = (state) => {
-    return (state) => ({
 
-    })
-}
 const mapDispatchToProps = ({
     navigateToStep,
     resetWizard
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(VersionCheckInstallExtentionContainer)
+export default connect(null, mapDispatchToProps)(VersionCheckInstallExtentionContainer)

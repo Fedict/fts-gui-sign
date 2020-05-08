@@ -2,7 +2,6 @@ import { navigateToStep, setNewFlowId } from "../../wizard/WizardActions"
 import {
     WIZARD_STATE_VERSION_CHECK_UPDATE,
     WIZARD_STATE_VERSION_CHECK_INSTALL,
-    WIZARD_STATE_CERTIFICATES_LOADING,
     WIZARD_STATE_CERTIFICATES_CHOOSE,
     WIZARD_STATE_PIN_INPUT,
     WIZARD_STATE_SUCCES,
@@ -31,8 +30,6 @@ import { ErrorGeneral } from "../../message/MessageConstants"
 //----------------------------------
 // helpers                    
 //----------------------------------
-
-
 
 const getCertificatesFromResponse = (response) => {
 
@@ -112,17 +109,17 @@ export const checkVersion = () => (dispatch, getStore) => {
     let eIDLink = controller.getNewInstance()
 
     eIDLink.getVersion(window.configData.eIDLinkMinimumVersion,
-        (data) => {
+        () => {
             dispatch(readerSetCheck(true))
             dispatch(readerSetOk(true))
             dispatch(navigateToStep(WIZARD_STATE_UPLOAD))
         },
-        (data) => {
+        () => {
             dispatch(readerSetCheck(true))
             dispatch(readerSetOk(false))
             dispatch(navigateToStep(WIZARD_STATE_VERSION_CHECK_INSTALL))
         },
-        (data) => {
+        () => {
             dispatch(readerSetCheck(true))
             dispatch(readerSetOk(false))
             dispatch(navigateToStep(WIZARD_STATE_VERSION_CHECK_UPDATE))
@@ -139,7 +136,6 @@ export const checkVersion = () => (dispatch, getStore) => {
 export const getCertificates = () => (dispatch, getStore) => {
 
     let eIDLink = controller.getInstance()
-
     eIDLink.getCertificate()
         .then((response) => {
             const certificateList = getCertificatesFromResponse(response)
@@ -175,7 +171,6 @@ export const getCertificateChainsFromReader = (certificateList) => {
     return Promise.all(
         certificateList
             .map(async val => {
-
                 val.certificateChain = await getCertificateChainFromReader(val.certificate)
                 val.APIBody = createCertificateObject(val.certificate, val.certificateChain)
                 return val
@@ -186,7 +181,7 @@ export const getCertificateChainFromReader = (certificate) => {
     let eIDLink = controller.getInstance()
     return new Promise((resolve, reject) => {
         eIDLink.getCertificateChain(
-            'nl',
+            'en',
             "0123456789ABCDEF0123456789ABCDEF",
             certificate)
             .then((resp) => {
@@ -361,7 +356,7 @@ export const signDocument = () => (dispatch, getStore) => {
 
     const { certificate, signature, uploadFile } = getStore()
 
-   
+
 
     if (certificate
         && certificate.certificateSelected

@@ -64,29 +64,24 @@ export const WizardContainer = ({ wizard, reader, resetWizard }) => {
         case WIZARD_STATE_VERSION_CHECK_INSTALL:
             content = <VersionCheckInstallContainer />;
             break;
-
         case WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENTION:
             content = <VersionCheckInstallExtentionContainer />;
             break;
         case WIZARD_STATE_CERTIFICATES_LOADING:
             content = <CertificatesLoadingContainer />;
             break;
-
         case WIZARD_STATE_CERTIFICATES_CHOOSE:
             content = <CertificateChooseContainer />;
             break;
-
         case WIZARD_STATE_VALIDATE_LOADING:
             content = <ValidateLoadingContainer />;
             break;
-
         case WIZARD_STATE_DIGEST_LOADING:
             content = <DigestLoadingContainer />;
             break;
         case WIZARD_STATE_PIN_INPUT:
             content = <PinInputContainer />;
             break;
-
         case WIZARD_STATE_SIGNING_LOADING:
             content = <SigningLoadingContainer />;
             break;
@@ -96,7 +91,6 @@ export const WizardContainer = ({ wizard, reader, resetWizard }) => {
         case WIZARD_STATE_MESSAGE:
             content = <MessageContainerWithStore onCancel={() => { (resetWizard()) }} />;
             break;
-
         case WIZARD_STATE_SIGNING_PRESIGN_LOADING:
             content = <SigningPreSignLoading />;
             break;

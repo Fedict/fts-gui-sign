@@ -3,6 +3,7 @@ import { CardLoading } from '../../components/Card/CardLoading'
 import { connect } from 'react-redux'
 import { getCertificates } from "../actions/WizardLogicActions"
 import { resetWizard } from '../actions/WizardLogicActions'
+
 export class CertificatesLoadingContainer extends React.Component {
 
     componentDidMount() {
@@ -25,14 +26,10 @@ export class CertificatesLoadingContainer extends React.Component {
     }
 
 }
-const mapStateToProps = (state) => {
-    return (state) => ({
 
-    })
-}
 const mapDispatchToProps = ({
     getCertificates,
      resetWizard
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(CertificatesLoadingContainer)
+export default connect(null, mapDispatchToProps)(CertificatesLoadingContainer)

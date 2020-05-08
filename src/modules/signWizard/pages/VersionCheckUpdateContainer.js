@@ -15,34 +15,30 @@ export class VersionCheckUpdateContainer extends React.Component {
 
         const { resetWizard } = this.props
         return (
-            
-                <CardContainer title={"Update eId link"}
-                    hasCancelButton
-                    cancelButtonText="Cancel"
 
-                    onClickCancel={() => { resetWizard() }}
-                    hasNextButton
-                    nextButtonText="next"
-                    onClickNext={() => { this.handleButtonNextClick() }}
-                >
-                    <p>The installed version of eId link is not up to date.</p>
-                    <p>Please install the latest version of eIdlink to use this aplication </p>
+            <CardContainer title={"Update eId link"}
+                hasCancelButton
+                cancelButtonText="Cancel"
 
-                    <button className="btn btn-primary" id="button_install_eID">Download and install eId link</button>
+                onClickCancel={() => { resetWizard() }}
+                hasNextButton
+                nextButtonText="next"
+                onClickNext={() => { this.handleButtonNextClick() }}
+            >
+                <p>The installed version of eId link is not up to date.</p>
+                <p>Please install the latest version of eIdlink to use this aplication </p>
 
-                </CardContainer>
-            
+                <button className="btn btn-primary" id="button_install_eID">Download and install eId link</button>
+
+            </CardContainer>
+
         )
     }
 }
-const mapStateToProps = (state) => {
-    return (state) => ({
 
-    })
-}
 const mapDispatchToProps = ({
     navigateToStep,
     resetWizard
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(VersionCheckUpdateContainer)
+export default connect(null, mapDispatchToProps)(VersionCheckUpdateContainer)

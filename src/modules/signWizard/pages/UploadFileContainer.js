@@ -94,8 +94,6 @@ const mapDispatchToProps = ({
     uploadFile,
     navigateToStep,
     displayFile
-
-
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(UploadFileContainer)

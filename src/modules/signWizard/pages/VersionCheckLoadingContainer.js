@@ -24,14 +24,10 @@ export class VersionCheckLoadingContainer extends React.Component {
         )
     }
 }
-const mapStateToProps = (state) => {
-    return (state) => ({
 
-    })
-}
 const mapDispatchToProps = ({
     checkVersion,
     resetWizard
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(VersionCheckLoadingContainer)
+export default connect(null, mapDispatchToProps)(VersionCheckLoadingContainer)
