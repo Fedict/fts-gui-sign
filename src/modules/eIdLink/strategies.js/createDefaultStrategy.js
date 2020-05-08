@@ -1,5 +1,4 @@
-//todo implement rejection reason
-
+export const NO_EXTENTION_ACTIVE = "NO_EXTENTION_ACTIVE"
 export const createDefaultStrategy = () => {
 
     const getVersion = (minimumVersion, onCorrectVersion, onNotInstalled, onNeedsUpdate, onNoExtentionInstalled) => {
@@ -7,19 +6,19 @@ export const createDefaultStrategy = () => {
     }
 
     const getInfo = () => {
-        return Promise.reject("reason")
+        return Promise.reject(NO_EXTENTION_ACTIVE)
     }
 
     const getCertificate = (lang, mac) => {
-        return Promise.reject("reason")
+        return Promise.reject(NO_EXTENTION_ACTIVE)
     }
 
     const getCertificateChain = (lang, mac, userCert) => {
-        return Promise.reject("reason")
+        return Promise.reject(NO_EXTENTION_ACTIVE)
     }
 
     const sign = (lang, mac, cert, algo, digest, pin) => {
-        return Promise.reject("reason")
+        return Promise.reject(NO_EXTENTION_ACTIVE)
     }
 
     return {

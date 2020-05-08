@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 
 import { navigateToStep, setNewFlowId } from "../wizard/WizardActions"
 import { resetStore } from "../../store/storeActions"
-import { WIZARD_STATE_VERSION_CHECK_LOADING, WIZARD_STATE_START } from '../wizard/WizardConstants';
+import { WIZARD_STATE_START } from '../wizard/WizardConstants';
 
 
 export const Navbar = ({ location, resetStore, navigateToStep, setNewFlowId }) => {

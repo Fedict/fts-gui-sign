@@ -1,4 +1,4 @@
-import { createEZLinkStrategy } from "./createEZLinkStrategy"
+import { createEIDLinkExtentionStrategy } from "./createEIDLinkExtentionStrategy"
 
 describe("unit tests for createEZLinkStrategy", () => {
 
@@ -7,7 +7,7 @@ describe("unit tests for createEZLinkStrategy", () => {
         let api = { checkVersion: () => { } }
 
         test("createEZLinkStrategy returns function getVersion", () => {
-            const result = createEZLinkStrategy(api)
+            const result = createEIDLinkExtentionStrategy(api)
 
             expect(result).toBeTruthy();
             expect(result.getVersion).toBeTruthy();
@@ -21,7 +21,7 @@ describe("unit tests for createEZLinkStrategy", () => {
                 api.checkVersion = jest.fn((minimumVersion, onCorrectVersion, onNotInstalled, onNeedsUpdate) => { onCorrectVersion(value) })
                 const onMock = jest.fn()
 
-                const strategy = createEZLinkStrategy(api)
+                const strategy = createEIDLinkExtentionStrategy(api)
                 strategy.getVersion(null, onMock, null, null)
 
                 expect(onMock.mock.calls.length).toBe(1);
@@ -35,7 +35,7 @@ describe("unit tests for createEZLinkStrategy", () => {
                 const onMock2 = undefined
                 const onMock3 = null
 
-                const strategy = createEZLinkStrategy(api)
+                const strategy = createEIDLinkExtentionStrategy(api)
                 strategy.getVersion(null, onMock1, null, null)
                 strategy.getVersion(null, onMock2, null, null)
                 strategy.getVersion(null, onMock3, null, null)
@@ -120,8 +120,8 @@ describe("unit tests for createEZLinkStrategy", () => {
             expect(typeof result.getInfo).toBe("function")
         })
 
-    }) 
-    
+    })
+
     describe("tests for getCertificate", () => {
         let api = { getUserCertificates: () => { } }
 
@@ -134,7 +134,7 @@ describe("unit tests for createEZLinkStrategy", () => {
         })
 
     })
-    
+
     describe("tests for getCertificateChain", () => {
         let api = { getUserCertificateChain: () => { } }
 
@@ -147,7 +147,7 @@ describe("unit tests for createEZLinkStrategy", () => {
         })
 
     })
-    
+
     describe("tests for sign", () => {
         let api = { sign: () => { } }
 

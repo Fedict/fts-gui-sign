@@ -7,64 +7,59 @@ import { CardInfo } from '../components/Card/CardInfo'
 import { resetWizard } from '../signWizard/actions/WizardLogicActions'
 
 
-export class MessageContainer extends React.Component {
+export const MessageContainer = ({ message, navigateToStep, onCancel }) => {
 
-
-    handleButtonNextClick() {
-        const { message } = this.props
+    const handleButtonNextClick = () => {
         if (message && message.nextButton && message.nextButton.nextPage) {
-            this.props.navigateToStep(message.nextButton.nextPage)
+            navigateToStep(message.nextButton.nextPage)
         }
 
     }
 
-    render() {
-        const { message, onCancel } = this.props
-
-        let shownMessage = {}
-        if (message) {
-            shownMessage = {
-                ...message
-            }
-            if (message.nextButton) {
-                shownMessage.nextButton = { ...message.nextButton }
-            }
-            else {
-                shownMessage.nextButton = { isVisible: false }
-            }
+    let shownMessage = {}
+    if (message) {
+        shownMessage = {
+            ...message
+        }
+        if (message.nextButton) {
+            shownMessage.nextButton = { ...message.nextButton }
         }
         else {
-            shownMessage = ErrorGeneral
+            shownMessage.nextButton = { isVisible: false }
         }
-
-        let Container = CardError
-        if (shownMessage.type === messageTypes.INFO) {
-            Container = CardInfo
-        }
-
-        return (
-           
-                <Container
-                    title={shownMessage.title}
-                    hasCancelButton={shownMessage.hasCancleButton}
-                    cancelButtonText="Cancel"
-                    onClickCancel={() => {
-                        if (onCancel) {
-                            onCancel()
-                        }
-                    }}
-                    hasNextButton={shownMessage.nextButton.isVisible}
-                    nextButtonText={shownMessage.nextButton.text}
-                    onClickNext={() => { this.handleButtonNextClick() }}
-
-                    text={shownMessage.message}
-                >
-                    {shownMessage.body}
-                </Container>
-            
-        )
-
     }
+    else {
+        shownMessage = ErrorGeneral
+    }
+
+    let Container = CardError
+    if (shownMessage.type === messageTypes.INFO) {
+        Container = CardInfo
+    }
+
+    return (
+
+        <Container
+            title={shownMessage.title}
+            hasCancelButton={shownMessage.hasCancleButton}
+            cancelButtonText="Cancel"
+            onClickCancel={() => {
+                if (onCancel) {
+                    onCancel()
+                }
+            }}
+            hasNextButton={shownMessage.nextButton.isVisible}
+            nextButtonText={shownMessage.nextButton.text}
+            onClickNext={() => { handleButtonNextClick() }}
+
+            text={shownMessage.message}
+        >
+            {shownMessage.body}
+        </Container>
+
+    )
+
+
 }
 const mapStateToProps = (state) => {
     return (state) => ({

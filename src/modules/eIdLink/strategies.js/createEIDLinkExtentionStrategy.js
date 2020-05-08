@@ -1,4 +1,4 @@
-export const createEZLinkStrategy = (api) => {
+export const createEIDLinkExtentionStrategy = (api) => {
 
     const getVersion = (minimumVersion, onCorrectVersion, onNotInstalled, onNeedsUpdate, onNoExtentionInstalled) => {
 

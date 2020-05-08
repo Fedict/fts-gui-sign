@@ -1,12 +1,10 @@
-//TODO create timeout system
-
-import { createEZLinkStrategy } from "./createEZLinkStrategy";
+import { createEIDLinkExtentionStrategy } from "./createEIDLinkExtentionStrategy";
 import { createDefaultStrategy } from "./createDefaultStrategy";
 
 export const getEIDLinkExtentionStrategy = () => {
 
     var api = new window.EIDChromeExt();
-    var strategy = createEZLinkStrategy(api);
+    var strategy = createEIDLinkExtentionStrategy(api);
     strategy.stop = function () {
         api.suspend();
     };
@@ -16,7 +14,6 @@ export const getEIDLinkExtentionStrategy = () => {
 
 
 export const getDefaultStrategy = () => {
-    console.log("deze word gegenereerd")
     var strategy = createDefaultStrategy()
     return strategy
 }
