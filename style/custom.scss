@@ -1,5 +1,6 @@
 $theme-colors: (
-  "primary": #11a0ba,
+  // "primary": #11a0ba,
+  "primary": #552299,
 );
 
 // $theme-colors: (
@@ -13,7 +14,7 @@ $theme-colors: (
 //   "dark":      #78909C
 // );
 
-@import '~bootstrap/scss/bootstrap.scss';
+@import '../node_modules/bootstrap/scss/bootstrap.scss';
 
 
 

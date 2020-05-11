@@ -14,12 +14,18 @@ export class VersionCheckInstallExtentionContainer extends React.Component {
     openExtentionLink() {
         let url
         if (window.configData && window.configData.eIDLinkExtentionUrls) {
-            if ((getBrowser() === browser.CHROME) && window.configData.eIDLinkExtentionUrls.chrome) {
-                console.log("ik ben hier")
+            const UsedBrowser = getBrowser()
+            if ((UsedBrowser === browser.CHROME) && window.configData.eIDLinkExtentionUrls.chrome) {
                 url = window.configData.eIDLinkExtentionUrls.chrome
             }
-            if ((getBrowser() === browser.EDGE) && window.configData.eIDLinkExtentionUrls.edge) {
+            if ((UsedBrowser === browser.EDGE) && window.configData.eIDLinkExtentionUrls.edge) {
                 url = window.configData.eIDLinkExtentionUrls.edge
+            }
+            if ((UsedBrowser === browser.FIREFOX) && window.configData.eIDLinkExtentionUrls.firefox) {
+                url = window.configData.eIDLinkExtentionUrls.firefox
+            }
+            if ((UsedBrowser === browser.SAFARI) && window.configData.eIDLinkExtentionUrls.safari) {
+                url = window.configData.eIDLinkExtentionUrls.safari
             }
 
         }
@@ -33,25 +39,25 @@ export class VersionCheckInstallExtentionContainer extends React.Component {
         const { resetWizard } = this.props
 
         return (
-           
-                <CardContainer title={"Install eId link extention"}
-                    onClickCancel={() => { resetWizard() }}
-                    hasNextButton
-                    nextButtonText="Next"
-                    onClickNext={() => { this.handleButtonNextClick() }}
-                >
-                    <p>No eId link extention found</p>
-                    <p>Please install the eId link extention to use this application</p>
 
-                    <button
-                        className="btn btn-primary"
-                        id="button_install_eID"
-                        onClick={() => { this.openExtentionLink() }}>
-                        Install eId link extention
+            <CardContainer title={"Install eId link extention"}
+                onClickCancel={() => { resetWizard() }}
+                hasNextButton
+                nextButtonText="Next"
+                onClickNext={() => { this.handleButtonNextClick() }}
+            >
+                <p>No eId link extention found</p>
+                <p>Please install the eId link extention to use this application</p>
+
+                <button
+                    className="btn btn-primary"
+                    id="button_install_eID"
+                    onClick={() => { this.openExtentionLink() }}>
+                    Install eId link extention
                     </button>
 
-                </CardContainer>
-            
+            </CardContainer>
+
         )
     }
 }
