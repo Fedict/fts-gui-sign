@@ -16,35 +16,45 @@ const initialState = {
 }
 
 const getDisplayFileData = (file) => {
-    const type = file.type
-    let data = {
+    if (file) {
+        const type = file.type
+        let data = {
+            isPdf: false,
+            isXml: false,
+            name: file.name,
+            url: ""
+        }
+        switch (type) {
+            case "application/pdf":
+                data.isPdf = true
+                data.url = URL.createObjectURL(file)
+                break;
+            case "application/xml":
+            case "text/xml":
+                data.isXml = true
+                
+                break;
+
+            default:
+                break
+        }
+
+        return (data)
+    }
+    return {
         isPdf: false,
         isXml: false,
-        name: file.name,
+        name: "",
         url: ""
     }
-    switch (type) {
-        case "application/pdf":
-            data.isPdf = true
-            data.url = URL.createObjectURL(file)
-            console.log("url", data.url)
-            break;
-        case "application/xml":
-        case "text/xml":
-            data.isXml = true
-            break;
-
-        default:
-            break
-    }
-
-    return (data)
 }
 
 
 const removeURL = (url) => {
     URL.revokeObjectURL(url)
 }
+
+
 
 const UploadFileReducer = (state = initialState, action) => {
 

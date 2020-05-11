@@ -1,5 +1,29 @@
+const getXMLData = (document) => {
+    return new Promise((resolve, rejects) => {
+        let reader = new FileReader();
+        reader.onload = (event) => {
+
+            resolve(event.target.result);
+        }
+        reader.onerror = (err) => {
+            rejects(err);
+        }
+
+        reader.readAsText(document);
+    })
+}
+
 export const FILE_DISPLAY_FILE = "FILE_DISPLAY_FILE"
-export const displayFile = (file) => { return { type: FILE_DISPLAY_FILE, payload: file } }
+export const displayFile = (file) => async (dispatch) => {
+
+    dispatch({ type: FILE_DISPLAY_FILE, payload: file })
+
+    if (file.type === "application/xml" || file.type === "text/xml") {
+        const content = await getXMLData(file)
+        console.log(content);
+    }
+
+}
 
 
 export const FILE_UPLOAD_CHANGE_FILE = "FILE_UPLOAD_CHANGE_FILE"

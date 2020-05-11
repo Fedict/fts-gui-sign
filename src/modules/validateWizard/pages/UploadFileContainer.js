@@ -34,7 +34,7 @@ export class UploadFileContainer extends React.Component {
                     hasNextButton
                     nextButtonText="Validate document"
                     onClickNext={() => { this.handleSubmit() }}
-                    nextButtonIsDisabled={this.state.file.name ? false : true}>
+                    nextButtonIsDisabled={(this.state.file && this.state.file.name) ? false : true}>
 
                     <div className="form-group">
                         <div className="container" >
@@ -65,7 +65,7 @@ export class UploadFileContainer extends React.Component {
                                             <div className="col col-auto align-self-center ">
                                                 <p className="btn m-0" >
                                                     Selected document:
-                                                 <span id='name_select_file'> {this.state.file.name || 'no document selected'}</span>
+                                                 <span id='name_select_file'> {(this.state.file && this.state.file.name) || 'no document selected'}</span>
                                                 </p>
                                             </div>
                                         </div>
