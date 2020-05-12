@@ -1,4 +1,4 @@
-import { FILE_UPLOAD_CHANGE_FILE, FILE_SET_DOWNLOAD_FILE, FILE_DISPLAY_FILE } from "../actions/UploadFileActions"
+import { FILE_UPLOAD_CHANGE_FILE, FILE_SET_DOWNLOAD_FILE, FILE_DISPLAY_FILE, FILE_DISPLAY_XML_CONTENT } from "../actions/UploadFileActions"
 import { STORE_RESET } from "../../../store/storeActions"
 
 const initialState = {
@@ -86,6 +86,14 @@ const UploadFileReducer = (state = initialState, action) => {
                 displayFile: getDisplayFileData(action.payload)
             }
         }
+        case FILE_DISPLAY_XML_CONTENT:
+            return {
+                ...state,
+                displayFile: {
+                    ...state.displayFile,
+                    xmlContent : action.payload
+                }
+            }
         case STORE_RESET:
             return initialState
         default:
