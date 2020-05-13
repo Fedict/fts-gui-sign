@@ -7,7 +7,13 @@ window.configData = {
         safari: ""
     },
 
+    eIDLinkUrls: {
+        windows: "",
+        macOs: "",
+        linux: ""
+    },
     eIDLinkUrl: "",
+
     BEurl: "https://validate.ta.fts.bosa.belgium.be/signandvalidation",
 
 
