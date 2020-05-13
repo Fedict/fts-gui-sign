@@ -1,7 +1,7 @@
 import React from 'react'
 import { CardLoading } from '../../components/Card/CardLoading'
 import { connect } from 'react-redux'
-import { checkVersion, resetWizard } from "../actions/WizardLogicActions"
+import { checkVersion } from "../actions/WizardLogicActions"
 
 export class VersionCheckLoadingContainer extends React.Component {
     componentDidMount() {
@@ -13,7 +13,7 @@ export class VersionCheckLoadingContainer extends React.Component {
 
     render() {
 
-        const { resetWizard } = this.props
+
         return (
            
                 <CardLoading title={"Searching for eId reader"}
@@ -27,7 +27,6 @@ export class VersionCheckLoadingContainer extends React.Component {
 
 const mapDispatchToProps = ({
     checkVersion,
-    resetWizard
 })
 
 export default connect(null, mapDispatchToProps)(VersionCheckLoadingContainer)

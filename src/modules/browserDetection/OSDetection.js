@@ -18,7 +18,7 @@ export const getOS = () => {
     return OS.OTHER
 }
 
-const browserIsAccepted = () => {
+export const OSIsAccepted = () => {
     const usedOS = getOS;
     if (usedOS === OS.OTHER) {
         return false

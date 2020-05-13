@@ -26,7 +26,7 @@ export const DisplayFile = ({ uploadFile }) => {
             // }
         }
     }
-    return <div className="mr-5"><img src={IMAGE} width="100%" /></div>
+    return <div className="mr-5"><img src={IMAGE} width="100%" alt="" /></div>
 
 }
 

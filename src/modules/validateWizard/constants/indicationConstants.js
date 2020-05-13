@@ -24,7 +24,7 @@ export const indication = {
 
 export const indicationKeys = Object.keys(indication)
 
-const subIndication =
+export const subIndication =
 {
     FORMAT_FAILURE : {},
     HASH_FAILURE : {},

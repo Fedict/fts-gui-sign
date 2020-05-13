@@ -2,7 +2,7 @@ import { WIZARD_STATE_START, WIZARD_STATE_RESULT } from "../../wizard/WizardCons
 import { resetStore } from "../../../store/storeActions"
 import { navigateToStep, setNewFlowId } from "../../wizard/WizardActions"
 import { validateSignatureAPI } from "../../communication/communication"
-import { validationSetResult, validationSetIndication, validationSetSubIndication } from "./ValidationActions"
+import { validationSetIndication, validationSetSubIndication } from "./ValidationActions"
 import { showErrorMessage } from "../../message/actions/MessageActions"
 import { ErrorGeneral } from "../../message/MessageConstants"
 
