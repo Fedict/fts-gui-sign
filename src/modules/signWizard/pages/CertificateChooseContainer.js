@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { CardContainer } from '../../components/Card/CardContainer'
 import { CertificateSelect } from '../../components/CertificateSelect/CertificateSelect'
-import { WIZARD_STATE_DIGEST_LOADING } from '../../wizard/WizardConstants'
+import {  WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN } from '../../wizard/WizardConstants'
 import { navigateToStep } from '../../wizard/WizardActions'
 import { selectCertificate } from "../actions/CertificateActions"
 import { resetWizard } from '../actions/WizardLogicActions'
@@ -18,7 +18,7 @@ export class CertificateChooseContainer extends React.Component {
 
     navigateToNextStep() {
         const { navigateToStep } = this.props
-        if (navigateToStep) { navigateToStep(WIZARD_STATE_DIGEST_LOADING) }
+        if (navigateToStep) { navigateToStep(WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN) }
     }
     
     render() {

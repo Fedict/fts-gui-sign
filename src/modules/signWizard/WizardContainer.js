@@ -16,7 +16,8 @@ import {
     WIZARD_STATE_SIGNING_PRESIGN_LOADING,
     WIZARD_STATE_PINPAD_ERROR,
     WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENTION,
-    WIZARD_STATE_START
+    WIZARD_STATE_START,
+    WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN
 } from '../wizard/WizardConstants'
 import UploadFileContainer from './pages/UploadFileContainer'
 import { connect } from 'react-redux'
@@ -38,6 +39,7 @@ import VersionCheckInstallExtentionContainer from './pages/VersionCheckInstallEx
 import { ErrorGeneral } from '../message/MessageConstants'
 import { resetWizard } from './actions/WizardLogicActions'
 import DisplayFile from '../fileUpload/components/DisplayFile/DisplayFile'
+import CertificateValidateChainContainer from './pages/CertificateValidateChainContainer'
 
 export const WizardContainer = ({ wizard, reader, resetWizard }) => {
 
@@ -72,6 +74,9 @@ export const WizardContainer = ({ wizard, reader, resetWizard }) => {
             break;
         case WIZARD_STATE_CERTIFICATES_CHOOSE:
             content = <CertificateChooseContainer />;
+            break;
+        case WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN:
+            content = <CertificateValidateChainContainer />
             break;
         case WIZARD_STATE_VALIDATE_LOADING:
             content = <ValidateLoadingContainer />;

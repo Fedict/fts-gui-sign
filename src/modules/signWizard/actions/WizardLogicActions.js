@@ -13,6 +13,8 @@ import {
     WIZARD_STATE_PINPAD_ERROR,
     WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENTION,
     WIZARD_STATE_VERSION_CHECK_LOADING,
+    WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN
+    
 } from "../../wizard/WizardConstants"
 import { controller } from "../../eIdLink/controller"
 import { showErrorMessage } from "../../message/actions/MessageActions"
@@ -31,33 +33,15 @@ import { ErrorGeneral } from "../../message/MessageConstants"
 // helpers                    
 //----------------------------------
 
-const getCertificatesFromResponse = (response) => {
-
-    let certificateList = []
-
-    if (response && response.Readers && response.Readers.length >= 1) {
-        for (const reader of response.Readers) {
-            if (reader && reader.certificates && reader.certificates.length >= 1) {
-                for (const certificate of reader.certificates) {
-                    const certificateObject = {
-                        readerName: reader.ReaderName,
-                        readerType: reader.ReaderType,
-                        cardType: reader.cardType,
-                        certificate: certificate
-                    }
-                    certificateList.push(certificateObject)
-                }
-            }
-        }
-    }
-
-    return certificateList
-}
-
 const createCertificateObject = (certificate, certificateChain) => {
 
-    if (certificate && certificateChain) {
+    let createdCertificateObject = {}
 
+    if (certificate) {
+        createdCertificateObject.certificate = { "encodedCertificate": certificate }
+    }
+
+    if (certificateChain) {
         let certificateChainStrings = []
 
         if (certificateChain.rootCA) {
@@ -75,15 +59,38 @@ const createCertificateObject = (certificate, certificateChain) => {
                 "encodedCertificate": val
             })
         })
-
-        return {
-            certificate: { "encodedCertificate": certificate },
-            certificateChain: certificateChainApi,
-
-        }
-
+        createdCertificateObject.certificateChain = certificateChainApi;
     }
+
+    return createdCertificateObject
 }
+
+const getCertificatesFromResponse = (response) => {
+
+    let certificateList = []
+
+    if (response && response.Readers && response.Readers.length >= 1) {
+        for (const reader of response.Readers) {
+            if (reader && reader.certificates && reader.certificates.length >= 1) {
+                for (const certificate of reader.certificates) {
+                    const certificateObject = {
+                        readerName: reader.ReaderName,
+                        readerType: reader.ReaderType,
+                        cardType: reader.cardType,
+                        certificate: certificate,
+                        APIBody: createCertificateObject(certificate)
+                    }
+                    certificateList.push(certificateObject)
+                }
+            }
+        }
+    }
+
+    return certificateList
+}
+
+
+
 
 
 const INCORECT_FLOW_ID = "INCORECT_FLOW_ID"
@@ -147,14 +154,14 @@ export const getCertificates = () => (dispatch, getStore) => {
             }
 
             else {
-                getCertificateChainsFromReader(certificateList)
-                    .then((newList) => {
-                        dispatch(saveCertificateList(newList))
-                        dispatch(navigateToStep(WIZARD_STATE_VALIDATE_LOADING))
-                    })
-                    .catch((error) => {
-                        dispatch(handleErrorEID(error))
-                    })
+                // getCertificateChainsFromReader(certificateList)
+                //     .then((newList) => {
+                //         dispatch(saveCertificateList(newList))
+                dispatch(navigateToStep(WIZARD_STATE_VALIDATE_LOADING))
+                // })
+                // .catch((error) => {
+                //     dispatch(handleErrorEID(error))
+                // })
             }
         })
         .catch(
@@ -190,6 +197,7 @@ export const getCertificateChainFromReader = (certificate) => {
             .catch((err) => reject(err))
     })
 }
+
 
 
 export const validateCertificates = () => (dispatch, getStore) => {
@@ -233,7 +241,7 @@ export const validateCertificates = () => (dispatch, getStore) => {
                 else {
                     if (newList.length === 1) {
                         dispatch(selectCertificate(newList[0]))
-                        dispatch(navigateToStep(WIZARD_STATE_DIGEST_LOADING))
+                        dispatch(navigateToStep(WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN))
                     }
                     else {
                         dispatch(navigateToStep(WIZARD_STATE_CERTIFICATES_CHOOSE))
@@ -251,6 +259,75 @@ export const validateCertificates = () => (dispatch, getStore) => {
     }
 }
 
+export const validateCertificateChain = () => (dispatch, getStore) => {
+    console.log("validateCertificateChain")
+    let eIDLink = controller.getInstance()
+    const store = getStore()
+    const { certificate } = store
+    if (certificate
+        && certificate.certificateSelected && certificate.certificateSelected.certificate) {
+        const usedCertificate = certificate.certificateSelected.certificate
+
+        eIDLink.getCertificateChain(
+            'en',
+            "0123456789ABCDEF0123456789ABCDEF",
+            usedCertificate)
+            .then((resp) => {
+                const newCertificate = {
+                    ...certificate.certificateSelected,
+                    APIBody: createCertificateObject(usedCertificate, resp.certificateChain),
+                }
+                dispatch(validateCertificate(newCertificate))
+
+            })
+            .catch((error) => {
+                dispatch(handleErrorEID(error))
+            })
+
+    }
+}
+
+export const validateCertificate = (certificateObject) => (dispatch, getStore) => {
+
+    if (certificateObject.APIBody) {
+
+        const APIBody = [{
+            ...certificateObject.APIBody,
+            "expectedKeyUsage": "NON_REPUDIATION"
+        }
+        ]
+
+        const flowId = getStore().wizard.flowId
+
+        validateCertificatesAPI(APIBody)
+            .then(handleFlowIdError(flowId, getStore))
+            .then((val) => {
+                const selectedObject = { ...certificateObject }
+                const indications = val.indications
+                const indication = indications[0]
+                selectedObject.indication = indication.indication;
+                selectedObject.keyUsageCheckOk = indication.keyUsageCheckOk;
+                selectedObject.commonName = indication.commonName;
+
+
+                if (indication.indication === "PASSED" && indication.keyUsageCheckOk) {
+                    dispatch(selectCertificate(selectedObject))
+                    dispatch(navigateToStep(WIZARD_STATE_DIGEST_LOADING))
+                }
+                else {
+                    dispatch(showErrorMessage(MessageCertificatesNotFound))
+                }
+            })
+            .catch((err) => {
+                if (err !== INCORECT_FLOW_ID) {
+                    //TODO API ERROR handling
+                    dispatch(showErrorMessage(MessageCertificatesNotFound))
+                }
+
+            })
+
+    }
+}
 
 export const getDigest = () => (dispatch, getStore) => {
     const store = getStore()
