@@ -222,7 +222,7 @@ export const validateCertificates = () => (dispatch, getStore) => {
                 const indications = val.indications
                 const newList = certificate.certificateList.map((val, index) => {
                     const res = indications[index]
-                    if (res.indication === "PASSED" && res.keyUsageCheckOk) {
+                    if ( res.keyUsageCheckOk) {
                         val.indication = res.indication
                         val.keyUsageCheckOk = res.keyUsageCheckOk
                         val.commonName = res.commonName
