@@ -45,6 +45,7 @@ window.configData = {
         linux: ""
     },
 
+    signingProfileId: "XADES_1", //signing profile id used
     signerLocationCountry: "",
     signerLocationLocality: "",
     signerLocationPostalAddress: [""],

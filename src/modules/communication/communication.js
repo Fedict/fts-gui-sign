@@ -3,6 +3,7 @@
 //-----------------------------------------
 
 const url = (window && window.configData) ? window.configData.BEurl : ""
+const signingProfileId = (window && window.configData) ? window.configData.signingProfileId : ""
 const REQUEST_FAILED = "REQUEST_FAILED"
 
 //-----------------------------------------
@@ -24,7 +25,7 @@ const createBody = (certificateBody, documentName, documentBase64) => {
             "signingCertificate": certificateBody.certificate,
             "signingDate": "2020-04-06T09:45:44"
         },
-        "signingProfileId": "XADES_1",
+        "signingProfileId": signingProfileId,
         "toSignDocument": {
             "bytes": documentBase64,
             // "digestAlgorithm": "SHA256",
