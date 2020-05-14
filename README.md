@@ -29,7 +29,7 @@ the enviroment variables are set in a config.js. This config.js is build and hos
 ### Contents of the js file 
 ```javascript
 window.configData = {
-    eIDLinkMinimumVersion: "1.0.0", //Minimum version of eID link
+    eIDLinkMinimumVersion: "1.0.0", //Minimum version of eIDLink
     BEurl: "https://validate.ta.fts.bosa.belgium.be/signandvalidation", // URL to the backend
 
     eIDLinkExtensionUrls: { //list of url of the instalation files for the eIDlink extension
