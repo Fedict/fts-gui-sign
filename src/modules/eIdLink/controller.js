@@ -1,5 +1,5 @@
 import { isChromeExtensionDetected } from "./detect";
-import { getEIDLinkExtentionStrategy, getDefaultStrategy } from "./strategies.js";
+import { getEIDLinkExtensionStrategy, getDefaultStrategy } from "./strategies/index.js";
 
 export const controller = (() => {
 
@@ -8,7 +8,7 @@ export const controller = (() => {
     const initSignStrategy = () => {
         if (isChromeExtensionDetected()) {
             console.log("ChromeExt - Chrome extension detected");
-            return getEIDLinkExtentionStrategy();
+            return getEIDLinkExtensionStrategy();
         }
         //todo firefox strategy
         //todo safari strategy

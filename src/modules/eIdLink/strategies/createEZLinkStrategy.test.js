@@ -1,13 +1,13 @@
-import { createEIDLinkExtentionStrategy } from "./createEIDLinkExtentionStrategy"
+import { createEIDLinkExtensionStrategy } from "./createEIDLinkExtensionStrategy"
 
-describe("unit tests for createEIDLinkExtentionStrategy", () => {
+describe("unit tests for createEIDLinExtensionStrategy", () => {
 
     describe("tests for getVersion", () => {
 
         let api = { checkVersion: () => { } }
 
-        test("createEIDLinkExtentionStrategy returns function getVersion", () => {
-            const result = createEIDLinkExtentionStrategy(api)
+        test("createEIDLinkExtensionStrategy returns function getVersion", () => {
+            const result = createEIDLinkExtensionStrategy(api)
 
             expect(result).toBeTruthy();
             expect(result.getVersion).toBeTruthy();
@@ -21,7 +21,7 @@ describe("unit tests for createEIDLinkExtentionStrategy", () => {
                 api.checkVersion = jest.fn((minimumVersion, onCorrectVersion, onNotInstalled, onNeedsUpdate) => { onCorrectVersion(value) })
                 const onMock = jest.fn()
 
-                const strategy = createEIDLinkExtentionStrategy(api)
+                const strategy = createEIDLinkExtensionStrategy(api)
                 strategy.getVersion(null, onMock, null, null)
 
                 expect(onMock.mock.calls.length).toBe(1);
@@ -35,7 +35,7 @@ describe("unit tests for createEIDLinkExtentionStrategy", () => {
                 const onMock2 = undefined
                 const onMock3 = null
 
-                const strategy = createEIDLinkExtentionStrategy(api)
+                const strategy = createEIDLinkExtensionStrategy(api)
                 strategy.getVersion(null, onMock1, null, null)
                 strategy.getVersion(null, onMock2, null, null)
                 strategy.getVersion(null, onMock3, null, null)
@@ -52,7 +52,7 @@ describe("unit tests for createEIDLinkExtentionStrategy", () => {
                 api.checkVersion = jest.fn((minimumVersion, onCorrectVersion, onNotInstalled, onNeedsUpdate) => { onNotInstalled(value) })
                 const onMock = jest.fn()
 
-                const strategy = createEIDLinkExtentionStrategy(api)
+                const strategy = createEIDLinkExtensionStrategy(api)
                 strategy.getVersion(null, null, onMock, null)
 
                 expect(onMock.mock.calls.length).toBe(1);
@@ -66,7 +66,7 @@ describe("unit tests for createEIDLinkExtentionStrategy", () => {
                 const onMock2 = undefined
                 const onMock3 = null
 
-                const strategy = createEIDLinkExtentionStrategy(api)
+                const strategy = createEIDLinkExtensionStrategy(api)
                 strategy.getVersion(null, null, onMock1, null)
                 strategy.getVersion(null, null, onMock2, null)
                 strategy.getVersion(null, null, onMock3, null)
@@ -83,7 +83,7 @@ describe("unit tests for createEIDLinkExtentionStrategy", () => {
                 api.checkVersion = jest.fn((minimumVersion, onCorrectVersion, onNotInstalled, onNeedsUpdate) => { onNeedsUpdate(value) })
                 const onMock = jest.fn()
 
-                const strategy = createEIDLinkExtentionStrategy(api)
+                const strategy = createEIDLinkExtensionStrategy(api)
                 strategy.getVersion(null, null, null, onMock)
 
                 expect(onMock.mock.calls.length).toBe(1);
@@ -97,7 +97,7 @@ describe("unit tests for createEIDLinkExtentionStrategy", () => {
                 const onMock2 = undefined
                 const onMock3 = null
 
-                const strategy = createEIDLinkExtentionStrategy(api)
+                const strategy = createEIDLinkExtensionStrategy(api)
                 strategy.getVersion(null, null, null, onMock1)
                 strategy.getVersion(null, null, null, onMock2)
                 strategy.getVersion(null, null, null, onMock3)
@@ -112,8 +112,8 @@ describe("unit tests for createEIDLinkExtentionStrategy", () => {
     describe("tests for getInfo", () => {
         let api = { getInfo: () => { } }
 
-        test("createEIDLinkExtentionStrategy returns function getInfo", () => {
-            const result = createEIDLinkExtentionStrategy(api)
+        test("createEIDLinkExtensionStrategy returns function getInfo", () => {
+            const result = createEIDLinkExtensionStrategy(api)
 
             expect(result).toBeTruthy();
             expect(result.getInfo).toBeTruthy();
@@ -125,8 +125,8 @@ describe("unit tests for createEIDLinkExtentionStrategy", () => {
     describe("tests for getCertificate", () => {
         let api = { getUserCertificates: () => { } }
 
-        test("createEIDLinkExtentionStrategy returns function getInfo", () => {
-            const result = createEIDLinkExtentionStrategy(api)
+        test("createEIDLinkExtensionStrategy returns function getInfo", () => {
+            const result = createEIDLinkExtensionStrategy(api)
 
             expect(result).toBeTruthy();
             expect(result.getCertificate).toBeTruthy();
@@ -138,8 +138,8 @@ describe("unit tests for createEIDLinkExtentionStrategy", () => {
     describe("tests for getCertificateChain", () => {
         let api = { getUserCertificateChain: () => { } }
 
-        test("createEIDLinkExtentionStrategy returns function getInfo", () => {
-            const result = createEIDLinkExtentionStrategy(api)
+        test("createEIDLinkExtensionStrategy returns function getInfo", () => {
+            const result = createEIDLinkExtensionStrategy(api)
 
             expect(result).toBeTruthy();
             expect(result.getCertificateChain).toBeTruthy();
@@ -151,8 +151,8 @@ describe("unit tests for createEIDLinkExtentionStrategy", () => {
     describe("tests for sign", () => {
         let api = { sign: () => { } }
 
-        test("createEIDLinkExtentionStrategy returns function getInfo", () => {
-            const result = createEIDLinkExtentionStrategy(api)
+        test("createEIDLinkExtensionStrategy returns function getInfo", () => {
+            const result = createEIDLinkExtensionStrategy(api)
 
             expect(result).toBeTruthy();
             expect(result.sign).toBeTruthy();

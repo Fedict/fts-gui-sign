@@ -1,6 +1,6 @@
-export const createEIDLinkExtentionStrategy = (api) => {
+export const createEIDLinkExtensionStrategy = (api) => {
 
-    const getVersion = (minimumVersion, onCorrectVersion, onNotInstalled, onNeedsUpdate, onNoExtentionInstalled) => {
+    const getVersion = (minimumVersion, onCorrectVersion, onNotInstalled, onNeedsUpdate, onNoExtensionInstalled) => {
 
         api.checkVersion(minimumVersion,
             function (installedVersion) {

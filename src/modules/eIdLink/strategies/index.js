@@ -1,10 +1,10 @@
-import { createEIDLinkExtentionStrategy } from "./createEIDLinkExtentionStrategy";
+import { createEIDLinkExtensionStrategy } from "./createEIDLinkExtensionStrategy";
 import { createDefaultStrategy } from "./createDefaultStrategy";
 
-export const getEIDLinkExtentionStrategy = () => {
+export const getEIDLinkExtensionStrategy = () => {
 
     var api = new window.EIDChromeExt();
-    var strategy = createEIDLinkExtentionStrategy(api);
+    var strategy = createEIDLinkExtensionStrategy(api);
     strategy.stop = function () {
         api.suspend();
     };

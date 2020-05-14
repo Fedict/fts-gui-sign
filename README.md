@@ -32,7 +32,7 @@ window.configData = {
     eIDLinkMinimumVersion: "1.0.0", //Minimum version of eID link
     BEurl: "https://validate.ta.fts.bosa.belgium.be/signandvalidation", // URL to the backend
 
-    eIDLinkExtentionUrls: { //list of url of the instalation files for the eIDlink extention
+    eIDLinkExtensionUrls: { //list of url of the instalation files for the eIDlink extension
         chrome: "https://chrome.google.com/webstore/detail/eazylink/pencgnkbgaekikmiahiaakjdgaibiipp",
         edge: "",
         firefox: "",

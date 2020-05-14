@@ -11,7 +11,7 @@ import {
     WIZARD_STATE_UPLOAD,
     WIZARD_STATE_SIGNING_PRESIGN_LOADING,
     WIZARD_STATE_PINPAD_ERROR,
-    WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENTION,
+    WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENSION,
     WIZARD_STATE_VERSION_CHECK_LOADING,
     WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN
     
@@ -134,7 +134,7 @@ export const checkVersion = () => (dispatch, getStore) => {
         () => {
             dispatch(readerSetCheck(true))
             dispatch(readerSetOk(false))
-            dispatch(navigateToStep(WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENTION))
+            dispatch(navigateToStep(WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENSION))
         }
     )
 

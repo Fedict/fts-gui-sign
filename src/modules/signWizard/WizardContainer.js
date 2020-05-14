@@ -15,7 +15,7 @@ import {
     WIZARD_STATE_MESSAGE,
     WIZARD_STATE_SIGNING_PRESIGN_LOADING,
     WIZARD_STATE_PINPAD_ERROR,
-    WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENTION,
+    WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENSION,
     WIZARD_STATE_START,
     WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN
 } from '../wizard/WizardConstants'
@@ -35,7 +35,7 @@ import { MessageContainer } from '../message/MessageContainer'
 import CertificateChooseContainer from './pages/CertificateChooseContainer'
 import SigningPreSignLoading from './pages/SigningPreSignLoading'
 import PinPadError from './pages/PinPadError'
-import VersionCheckInstallExtentionContainer from './pages/VersionCheckInstallExtentionContainer'
+import VersionCheckInstallExtensionContainer from './pages/VersionCheckInstallExtensionContainer'
 import { ErrorGeneral } from '../message/MessageConstants'
 import { resetWizard } from './actions/WizardLogicActions'
 import DisplayFile from '../fileUpload/components/DisplayFile/DisplayFile'
@@ -66,8 +66,8 @@ export const WizardContainer = ({ wizard, reader, resetWizard }) => {
         case WIZARD_STATE_VERSION_CHECK_INSTALL:
             content = <VersionCheckInstallContainer />;
             break;
-        case WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENTION:
-            content = <VersionCheckInstallExtentionContainer />;
+        case WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENSION:
+            content = <VersionCheckInstallExtensionContainer />;
             break;
         case WIZARD_STATE_CERTIFICATES_LOADING:
             content = <CertificatesLoadingContainer />;
