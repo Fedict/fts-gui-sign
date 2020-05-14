@@ -39,7 +39,7 @@ export class UploadFileContainer extends React.Component {
 
                 <div className="form-group">
                     <div className="container" >
-                        <NumberdText number="1">Select a document by ckicking on the button "Select document".</NumberdText>
+                        <NumberdText number="1">Select a document by clicking on the button "Select document".</NumberdText>
                         <NumberdText number="2">Connect your eId reader to your pc.</NumberdText>
                         <NumberdText number="3">Insert your eId card in the eId card reader.</NumberdText>
                         <NumberdText number="4">Click on the button "sign with eId" and enter your PIN when prompted.</NumberdText>

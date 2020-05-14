@@ -42,7 +42,7 @@ export class VersionCheckUpdateContainer extends React.Component {
                 onClickNext={() => { this.handleButtonNextClick() }}
             >
                 <p>The installed version of eId link is not up to date.</p>
-                <p>Please install the latest version of eIdlink to use this aplication </p>
+                <p>Please install the latest version of eIDLink to use this aplication </p>
 
                 <button className="btn btn-primary" id="button_install_eID" onClick={() => { this.handleOnClick() }}>Download and install eId link</button>
 

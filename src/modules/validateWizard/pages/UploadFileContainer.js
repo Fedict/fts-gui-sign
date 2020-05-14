@@ -38,7 +38,7 @@ export class UploadFileContainer extends React.Component {
 
                     <div className="form-group">
                         <div className="container" >
-                            <NumberdText number="1">Select a document by ckicking on the button "Select document".</NumberdText>
+                            <NumberdText number="1">Select a document by clicking on the button "Select document".</NumberdText>
                             <NumberdText number="2">Click on the button "Validate document" to validate the document.</NumberdText>
 
                             <div className="row">
