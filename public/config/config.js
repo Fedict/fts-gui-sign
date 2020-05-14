@@ -13,7 +13,12 @@ window.configData = {
         linux: ""
     },
 
-    signingProfileId: "XADES_1",
+    defaultSigningProfileId: "XADES_1",
+    signingProfileIds: {
+        "application/pdf" : "PADES_1",
+        "application/xml" : "XADES_1",
+        "text/xml" : "XADES_1"
+    },
 
     BEurl: "https://validate.ta.fts.bosa.belgium.be/signandvalidation",
 

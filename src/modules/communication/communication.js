@@ -3,14 +3,23 @@
 //-----------------------------------------
 
 const url = (window && window.configData) ? window.configData.BEurl : ""
-const signingProfileId = (window && window.configData) ? window.configData.signingProfileId : ""
 const REQUEST_FAILED = "REQUEST_FAILED"
 
 //-----------------------------------------
 //--- helpers                           ---
 //-----------------------------------------
 
-const createBody = (certificateBody, documentName, documentBase64) => {
+const getsigningProfileId = (documentType) => {
+
+    
+    if (window && window.configData && window.configData.signingProfileIds) {
+        return window.configData.signingProfileIds[documentType]
+    }
+
+    return (window && window.configData) ? window.configData.defaultSigningProfileId : ""
+}
+
+const createBody = (certificateBody, documentName, documentBase64, documentType) => {
 
     return {
         "clientSignatureParameters": {
@@ -25,7 +34,7 @@ const createBody = (certificateBody, documentName, documentBase64) => {
             "signingCertificate": certificateBody.certificate,
             "signingDate": "2020-04-06T09:45:44"
         },
-        "signingProfileId": signingProfileId,
+        "signingProfileId": getsigningProfileId(documentType),
         "toSignDocument": {
             "bytes": documentBase64,
             // "digestAlgorithm": "SHA256",
@@ -88,7 +97,7 @@ export const getDataToSignAPI = async (certificateBody, document) => {
 
     const documentB64 = await getBase64Data(document)
 
-    const body = createBody(certificateBody, document.name, documentB64);
+    const body = createBody(certificateBody, document.name, documentB64, document.type);
 
     return fetch(url + "/signing/getDataToSign",
         {
@@ -122,7 +131,7 @@ export const signDocumentAPI = async (certificateBody, document, signature) => {
     const documentB64 = await getBase64Data(document)
 
     const body = {
-        ...createBody(certificateBody, document.name, documentB64),
+        ...createBody(certificateBody, document.name, documentB64, document.type),
         "signatureValue": signature
     }
 
