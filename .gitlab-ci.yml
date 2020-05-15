@@ -6,6 +6,7 @@ stages:
   - deploy
 
 before_script:
+  - scl enable rh-nodejs12 bash
   - echo "Logging into the docker repo"
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
 
