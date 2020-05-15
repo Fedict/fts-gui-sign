@@ -8,7 +8,7 @@ window.configData = {
     },
 
     eIDLinkUrls: {
-        windows: "",
+        windows: "./documents/eidlink.msi",
         macOs: "",
         linux: ""
     },
