@@ -43,11 +43,13 @@ export class VersionCheckInstallExtensionContainer extends React.Component {
             <CardContainer title={"Install eIDLink extension"}
                 onClickCancel={() => { resetWizard() }}
                 hasNextButton
-                nextButtonText="Next"
+                nextButtonText="I have installed eIDLink Extension"
                 onClickNext={() => { this.handleButtonNextClick() }}
             >
-                <p>No eIDLink extension found</p>
-                <p>Please install the eIDLink extension to use this application</p>
+                <p>No eIDLink extension found.</p>
+                <p>Please install the eIDLink extension to use this application.</p>
+                <p>If you click the button, you will be redirected to the install page of the eID extension .</p>
+                <p>After you installed the eIDLink extension you can come back to this page an push the "I have installed eIDLink Extension" button.</p>
 
                 <button
                     className="btn btn-primary"
