@@ -3,16 +3,38 @@ import { connect } from 'react-redux'
 import { CardContainer } from '../../components/Card/CardContainer'
 import { navigateToStep } from "../../wizard/WizardActions"
 import { WIZARD_STATE_VERSION_CHECK_LOADING } from '../../wizard/WizardConstants'
-import { resetWizard } from '../actions/WizardLogicActions'
+import { resetWizard, checkVersion } from '../actions/WizardLogicActions'
 import { getOS, OS } from '../../browserDetection/OSDetection'
 export class VersionCheckUpdateContainer extends React.Component {
+
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            intervalId: ""
+        }
+    }
+
+    componentDidMount() {
+        const { checkVersion } = this.props
+        const id = setInterval(() => {
+            checkVersion()
+        }, 5000);
+        this.setState({ intervalId: id })
+    }
+    componentWillUnmount() {
+        const id = this.state.intervalId
+        if (id) {
+            clearInterval(id)
+        }
+    }
 
     //TODO loop to check if correct version is installed
     handleButtonNextClick() {
         this.props.navigateToStep(WIZARD_STATE_VERSION_CHECK_LOADING)
     }
 
-    handleOnClick(){
+    handleOnClick() {
         const usedOs = getOS()
         if (usedOs === OS.WINDOWS && window.configData && window.configData.eIDLinkUrls && window.configData.eIDLinkUrls.windows) {
             window.open(window.configData.eIDLinkUrls.windows, "_blank")
@@ -25,7 +47,7 @@ export class VersionCheckUpdateContainer extends React.Component {
         if (usedOs === OS.LINUX && window.configData && window.configData.eIDLinkUrls && window.configData.eIDLinkUrls.linux) {
             window.open(window.configData.eIDLinkUrls.linux, "_blank")
 
-        } 
+        }
     }
     render() {
 
@@ -54,7 +76,8 @@ export class VersionCheckUpdateContainer extends React.Component {
 
 const mapDispatchToProps = ({
     navigateToStep,
-    resetWizard
+    resetWizard,
+    checkVersion
 })
 
 export default connect(null, mapDispatchToProps)(VersionCheckUpdateContainer)

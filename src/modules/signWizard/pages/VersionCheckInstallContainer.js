@@ -3,14 +3,36 @@ import { connect } from 'react-redux'
 import { CardContainer } from '../../components/Card/CardContainer'
 import { navigateToStep } from "../../wizard/WizardActions"
 import { WIZARD_STATE_VERSION_CHECK_LOADING } from '../../wizard/WizardConstants'
-import { resetWizard } from '../actions/WizardLogicActions'
+import { resetWizard, checkVersion } from '../actions/WizardLogicActions'
 import { OS, getOS } from "../../browserDetection/OSDetection"
 export class VersionCheckInstallContainer extends React.Component {
 
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            intervalId: ""
+        }
+    }
+
+    componentDidMount() {
+        const { checkVersion } = this.props
+        const id = setInterval(() => {
+            checkVersion()
+        }, 5000);
+        this.setState({ intervalId: id })
+    }
+    componentWillUnmount() {
+        const id = this.state.intervalId
+        if (id) {
+            clearInterval(id)
+        }
+    }
     //TODO loop to check if correct version is installed
     handleButtonNextClick() {
         this.props.navigateToStep(WIZARD_STATE_VERSION_CHECK_LOADING)
     }
+
 
     handleOnClick() {
         const usedOs = getOS()
@@ -38,7 +60,7 @@ export class VersionCheckInstallContainer extends React.Component {
             <CardContainer title={"Install eIDLink"}
                 onClickCancel={() => { resetWizard() }}
                 hasNextButton
-                nextButtonText="Next"
+                nextButtonText="I have installed eIDLink"
                 onClickNext={() => { this.handleButtonNextClick() }}
             >
                 <p>No eIDLink is found</p>
@@ -54,6 +76,7 @@ export class VersionCheckInstallContainer extends React.Component {
 
 const mapDispatchToProps = ({
     navigateToStep,
+    checkVersion,
     resetWizard
 })
 
