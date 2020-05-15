@@ -6,7 +6,6 @@ stages:
   - deploy
 
 before_script:
-  - scl enable rh-nodejs12 bash
   - echo "Logging into the docker repo"
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
 
@@ -19,12 +18,14 @@ test_install:
   stage: test
   script:
     - echo "Installing modules"
+    - scl enable rh-nodejs12 bash
     - npm install --silent
 
 test_test:
   stage: test
   script:
     - echo "Running unit tests"
+    - scl enable rh-nodejs12 bash
     - npm run test
 
 package:
