@@ -18,14 +18,12 @@ test_install:
   stage: test
   script:
     - echo "Installing modules"
-    - scl enable rh-nodejs12 bash
     - npm install --silent
 
 test_test:
   stage: test
   script:
     - echo "Running unit tests"
-    - scl enable rh-nodejs12 bash
     - npm run test
 
 package:
