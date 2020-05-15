@@ -34,7 +34,7 @@ function App() {
             </Route>
             <Route path="/">
 
-              <p>here the homePage</p>
+              <WizardContainer />
             </Route>
 
           </Switch>)
