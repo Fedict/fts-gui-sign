@@ -5,6 +5,7 @@ import { navigateToStep } from "../../wizard/WizardActions"
 import { resetWizard } from '../actions/WizardLogicActions'
 import { getBrowser, browser } from '../../browserDetection/BrowserDetection'
 
+
 export class VersionCheckInstallExtensionContainer extends React.Component {
 
     handleButtonNextClick() {
@@ -36,6 +37,7 @@ export class VersionCheckInstallExtensionContainer extends React.Component {
         //return correct link for browser
     }
     render() {
+        const usedBrowser = getBrowser()
         const { resetWizard } = this.props
 
         return (
@@ -51,12 +53,16 @@ export class VersionCheckInstallExtensionContainer extends React.Component {
                 <p>If you click the button, you will be redirected to the install page of the eID extension .</p>
                 <p>After you installed the eIDLink extension you can come back to this page an push the "I have installed eIDLink Extension" button.</p>
 
-                <button
-                    className="btn btn-primary"
-                    id="button_install_eID"
-                    onClick={() => { this.openExtensionLink() }}>
-                    Install eIDLink extension
-                    </button>
+                {(usedBrowser === browser.CHROME || usedBrowser === browser.EDGE)
+                    ? <img src="./img/ChromeWebStore_BadgeWBorder_v2_206x58.png" />
+                    : (<button
+                        className="btn btn-primary"
+                        id="button_install_eID"
+                        onClick={() => { this.openExtensionLink() }}>
+                        {
+
+                            "Install eIDLink extension"}
+                    </button>)}
 
             </CardContainer>
 
