@@ -1,8 +1,8 @@
 window.configData = {
-    eIDLinkMinimumVersion: "1.0.1",
+    eIDLinkMinimumVersion: "1.1",
     eIDLinkExtensionUrls: {
         chrome: "https://chrome.google.com/webstore/detail/eazylink/pencgnkbgaekikmiahiaakjdgaibiipp",
-        edge: "",
+        edge: "https://chrome.google.com/webstore/detail/eazylink/pencgnkbgaekikmiahiaakjdgaibiipp",
         firefox: "",
         safari: ""
     },

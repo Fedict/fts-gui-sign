@@ -1,4 +1,4 @@
-import { navigateToStep, setNewFlowId } from "../../wizard/WizardActions"
+import { navigateToStep, setNewFlowId, getRequestId, addRequestId, removeRequestId } from "../../wizard/WizardActions"
 import {
     WIZARD_STATE_VERSION_CHECK_UPDATE,
     WIZARD_STATE_VERSION_CHECK_INSTALL,
@@ -14,7 +14,7 @@ import {
     WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENSION,
     WIZARD_STATE_VERSION_CHECK_LOADING,
     WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN
-    
+
 } from "../../wizard/WizardConstants"
 import { controller } from "../../eIdLink/controller"
 import { showErrorMessage } from "../../message/actions/MessageActions"
@@ -106,32 +106,119 @@ const handleFlowIdError = (flowId, getStore) => (resp) => {
 
 
 
+const createRequestId = (dispatch, getStore) => {
+    const { wizard } = getStore()
+    const requestIds = wizard.requestIds
+
+    const requestId = getRequestId(requestIds)
+    dispatch(addRequestId(requestId))
+
+    setTimeout(() => {
+
+        const { wizard } = getStore()
+        const requestIds = [...wizard.requestIds]
+        dispatch(removeRequestId(requestId))
+        if (requestIds.includes(requestId)) {
+            console.log("request timeOut")
+            let eIDLink = controller.getInstance()
+            eIDLink.stop()
+            dispatch(checkVersion(true))
+        }
+        else {
+            //nothing wrong
+        }
+    }, 10000)
+    return requestId
+}
+
+const INCORECT_REQUEST_ID = "INCORECT_REQUEST_ID"
+const handleRequestIdError = (id, dispatch, getStore) => (resp) => {
+    const { wizard } = getStore()
+    const requestIds = [...wizard.requestIds]
+    dispatch(removeRequestId(id))
+    if (requestIds.includes(id)) {
+        return resp
+    }
+    else {
+        throw INCORECT_REQUEST_ID
+        // dispatch(checkVersion(true))
+        // throw INCORECT_FLOW_ID
+    }
+}
+
+const createGetVersionRequestId = () => (dispatch, getStore) => {
+
+    const { wizard } = getStore()
+    const requestIds = wizard.requestIds
+
+    const requestId = getRequestId(requestIds)
+    dispatch(addRequestId(requestId))
+
+    setTimeout(() => {
+        const { wizard } = getStore()
+        const requestIds = [...wizard.requestIds]
+
+        dispatch(removeRequestId(requestId))
+
+        if (requestIds.includes(requestId)) {
+
+            console.log("getVersion request timeOut")
+            let eIDLink = controller.getInstance()
+            eIDLink.stop()
+
+            dispatch(readerSetCheck(true))
+            dispatch(readerSetOk(false))
+            dispatch(navigateToStep(WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENSION))
+        }
+        else {
+            //nothing wrong
+        }
+    }, 2000)
+    return requestId
+}
+
+
+
+
+
 //----------------------------------
 //logic
 //----------------------------------
 
-export const checkVersion = () => (dispatch, getStore) => {
+export const checkVersion = (isErrorCheck) => (dispatch, getStore) => {
     //TODO implement browserchecks
 
     let eIDLink = controller.getNewInstance()
 
+    const requestId = dispatch(createGetVersionRequestId())
+
     eIDLink.getVersion(window.configData.eIDLinkMinimumVersion,
         () => {
+            dispatch(removeRequestId(requestId))
             dispatch(readerSetCheck(true))
             dispatch(readerSetOk(true))
-            dispatch(navigateToStep(WIZARD_STATE_UPLOAD))
+            if (isErrorCheck) {
+                dispatch(showErrorMessage(ErrorGeneral))
+            }
+            else {
+                dispatch(navigateToStep(WIZARD_STATE_UPLOAD))
+            }
+
         },
         () => {
+            dispatch(removeRequestId(requestId))
             dispatch(readerSetCheck(true))
             dispatch(readerSetOk(false))
             dispatch(navigateToStep(WIZARD_STATE_VERSION_CHECK_INSTALL))
         },
         () => {
+            dispatch(removeRequestId(requestId))
             dispatch(readerSetCheck(true))
             dispatch(readerSetOk(false))
             dispatch(navigateToStep(WIZARD_STATE_VERSION_CHECK_UPDATE))
         },
         () => {
+            dispatch(removeRequestId(requestId))
             dispatch(readerSetCheck(true))
             dispatch(readerSetOk(false))
             dispatch(navigateToStep(WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENSION))
@@ -142,8 +229,13 @@ export const checkVersion = () => (dispatch, getStore) => {
 
 export const getCertificates = () => (dispatch, getStore) => {
 
+
     let eIDLink = controller.getInstance()
+
+    const requestId = dispatch(createRequestId)
+
     eIDLink.getCertificate()
+        .then(handleRequestIdError(requestId, dispatch, getStore))
         .then((response) => {
             const certificateList = getCertificatesFromResponse(response)
 
@@ -154,53 +246,24 @@ export const getCertificates = () => (dispatch, getStore) => {
             }
 
             else {
-                // getCertificateChainsFromReader(certificateList)
-                //     .then((newList) => {
-                //         dispatch(saveCertificateList(newList))
+
                 dispatch(navigateToStep(WIZARD_STATE_VALIDATE_LOADING))
-                // })
-                // .catch((error) => {
-                //     dispatch(handleErrorEID(error))
-                // })
+                
             }
         })
-        .catch(
-            (error) => {
-                dispatch(handleErrorEID(error))
+        .catch((err) => {
+            if (err !== INCORECT_REQUEST_ID) {
+                dispatch(removeRequestId(requestId))
+                dispatch(handleErrorEID(err))
             }
-        )
+
+        })
 
 }
-
-
-
-export const getCertificateChainsFromReader = (certificateList) => {
-    return Promise.all(
-        certificateList
-            .map(async val => {
-                val.certificateChain = await getCertificateChainFromReader(val.certificate)
-                val.APIBody = createCertificateObject(val.certificate, val.certificateChain)
-                return val
-            }))
-}
-
-export const getCertificateChainFromReader = (certificate) => {
-    let eIDLink = controller.getInstance()
-    return new Promise((resolve, reject) => {
-        eIDLink.getCertificateChain(
-            'en',
-            "0123456789ABCDEF0123456789ABCDEF",
-            certificate)
-            .then((resp) => {
-                resolve(resp.certificateChain)
-            })
-            .catch((err) => reject(err))
-    })
-}
-
 
 
 export const validateCertificates = () => (dispatch, getStore) => {
+
     const store = getStore()
     const { certificate } = store
 
@@ -222,7 +285,7 @@ export const validateCertificates = () => (dispatch, getStore) => {
                 const indications = val.indications
                 const newList = certificate.certificateList.map((val, index) => {
                     const res = indications[index]
-                    if ( res.keyUsageCheckOk) {
+                    if (res.keyUsageCheckOk) {
                         val.indication = res.indication
                         val.keyUsageCheckOk = res.keyUsageCheckOk
                         val.commonName = res.commonName
@@ -260,18 +323,22 @@ export const validateCertificates = () => (dispatch, getStore) => {
 }
 
 export const validateCertificateChain = () => (dispatch, getStore) => {
-    console.log("validateCertificateChain")
     let eIDLink = controller.getInstance()
+
     const store = getStore()
     const { certificate } = store
+
     if (certificate
         && certificate.certificateSelected && certificate.certificateSelected.certificate) {
         const usedCertificate = certificate.certificateSelected.certificate
+
+        const requestId = dispatch(createRequestId)
 
         eIDLink.getCertificateChain(
             'en',
             "0123456789ABCDEF0123456789ABCDEF",
             usedCertificate)
+            .then(handleRequestIdError(requestId, dispatch, getStore))
             .then((resp) => {
                 const newCertificate = {
                     ...certificate.certificateSelected,
@@ -281,7 +348,10 @@ export const validateCertificateChain = () => (dispatch, getStore) => {
 
             })
             .catch((error) => {
-                dispatch(handleErrorEID(error))
+                if (error !== INCORECT_REQUEST_ID) {
+                    dispatch(removeRequestId(requestId))
+                    dispatch(handleErrorEID(error))
+                }
             })
 
     }
@@ -404,6 +474,7 @@ export const sign = (pin) => (dispatch, getStore) => {
         && digest
         && digest.digest
         && digest.digestAlgorithm) {
+
         let eIDLink = controller.getInstance()
 
         const lang = 'nl' //TODO connect to store and translations
@@ -412,14 +483,23 @@ export const sign = (pin) => (dispatch, getStore) => {
         const u_digest = digest.digest
         const algo = digest.digestAlgorithm
 
-        eIDLink.sign(lang, mac, u_cert, algo, u_digest, pin).then(
-            (response) => {
-                dispatch(setSignature(response))
-                dispatch(signDocument())
+        const requestId = dispatch(createRequestId)
 
-            },
-            (error) => { dispatch(handlePinErrorEID(error, true)) }
-        )
+        eIDLink.sign(lang, mac, u_cert, algo, u_digest, pin)
+            .then(handleRequestIdError(requestId, dispatch, getStore))
+            .then(
+                (response) => {
+                    dispatch(setSignature(response))
+                    dispatch(signDocument())
+
+                },
+                (error) => {
+                    if (error !== INCORECT_REQUEST_ID) {
+                        dispatch(removeRequestId(requestId))
+                        dispatch(handlePinErrorEID(error, true))
+                    }
+                }
+            )
     }
     else {
         dispatch(showErrorMessage(ErrorGeneral))

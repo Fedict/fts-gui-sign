@@ -1,4 +1,4 @@
-import { WIZARD_CHANGE_STATE, WIZARD_RESET_FLOW_ID } from "./WizardActions"
+import { WIZARD_CHANGE_STATE, WIZARD_RESET_FLOW_ID, WIZARD_REQUEST_ID_ADD, WIZARD_REQUEST_ID_REMOVE } from "./WizardActions"
 import { WIZARD_STATE_START } from "./WizardConstants"
 
 const generateId = (oldId) => {
@@ -14,7 +14,8 @@ const generateId = (oldId) => {
 
 const initialState = {
     state: WIZARD_STATE_START,
-    flowId: generateId("")
+    flowId: generateId(""),
+    requestIds: []
 }
 
 const wizardReducer = (state = initialState, action) => {
@@ -30,6 +31,19 @@ const wizardReducer = (state = initialState, action) => {
             return {
                 ...state,
                 flowId: generateId(state.flowId)
+            }
+        }
+
+        case WIZARD_REQUEST_ID_ADD: {
+            return {
+                ...state,
+                requestIds: [...state.requestIds, action.payload]
+            }
+        }
+        case WIZARD_REQUEST_ID_REMOVE: {
+            return {
+                ...state,
+                requestIds: state.requestIds.filter(val => val !== action.payload)
             }
         }
         default:
