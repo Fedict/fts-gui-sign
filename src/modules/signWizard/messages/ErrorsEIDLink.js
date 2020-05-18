@@ -23,7 +23,7 @@ export const Error_EID_no_reader_InSession = {
 }
 
 export const Error_EID_no_reader_NotInSession = {
-    ...createError("No eId reader found", "No eId reader found"),
+    ...createError("No eId reader found", "Please attach your eID reader"),
     nextButton: {
         text: "Try again",
         isVisible: true,
@@ -40,7 +40,7 @@ export const Error_EID_no_card_InSession = {
 }
 
 export const Error_EID_no_card_NotInSession = {
-    ...createError("No eId card found", "No eId card found"),
+    ...createError("No eId card found", "Please insert your eID card"),
     nextButton: {
         text: "Try again",
         isVisible: true,

@@ -111,10 +111,10 @@ export const WizardContainer = ({ wizard, reader, resetWizard }) => {
     return (
         <div >
             <div className={"row mx-5 mt-3"}>
-                <div className={"col col-6"}>
+                <div className={"col col-7"}>
                     <DisplayFile />
                 </div>
-                <div className={"col col-6"}>
+                <div className={"col col-5"}>
                     {content}
                 </div>
             </div>
