@@ -54,7 +54,7 @@ export class VersionCheckInstallExtensionContainer extends React.Component {
                 <p>After you installed the eIDLink extension you can come back to this page an push the "I have installed eIDLink Extension" button.</p>
 
                 {(usedBrowser === browser.CHROME || usedBrowser === browser.EDGE)
-                    ? <img src="./img/ChromeWebStore_BadgeWBorder_v2_206x58.png" />
+                    ? <img src="./img/ChromeWebStore_BadgeWBorder_v2_206x58.png" style={{ cursor: "pointer" }} onClick={() => { this.openExtensionLink() }} />
                     : (<button
                         className="btn btn-primary"
                         id="button_install_eID"
