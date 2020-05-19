@@ -1,5 +1,14 @@
 var no_support_title = "Browser is not supported"
-var no_support_message = '<div class="alert alert-danger">Your browser is not supported. Please try to use another browser. Chrome, Edge (based on Chromium), Firefox.</div>'
+var no_support_message = '<div class="alert alert-danger">' +
+    '<p>Your browser is not supported. Please use one of the following browsers:</p>' +
+    '<div class="col col-10 mx-auto" >' +
+    '<ul class="text-left">' +
+    '<li>Chrome</li>' +
+    '<li>Edge (based on Chromium)</li>' +
+    '<li>Firefox</li>' +
+    '</ul>' +
+    '</div>'+
+    '</div>'
 
 
 window.onload = function () {
