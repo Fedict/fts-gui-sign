@@ -24,6 +24,9 @@ export class VersionCheckInstallExtensionContainer extends React.Component {
             }
             if ((UsedBrowser === browser.FIREFOX) && window.configData.eIDLinkExtensionUrls.firefox) {
                 url = window.configData.eIDLinkExtensionUrls.firefox
+                //TODO remove this when firefox url links to store page
+                window.open(url, "_self" )
+                url = ""
             }
             if ((UsedBrowser === browser.SAFARI) && window.configData.eIDLinkExtensionUrls.safari) {
                 url = window.configData.eIDLinkExtensionUrls.safari
