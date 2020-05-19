@@ -3,7 +3,7 @@ window.configData = {
     eIDLinkExtensionUrls: {
         chrome: "https://chrome.google.com/webstore/detail/eazylink/pencgnkbgaekikmiahiaakjdgaibiipp",
         edge: "https://chrome.google.com/webstore/detail/eazylink/pencgnkbgaekikmiahiaakjdgaibiipp",
-        firefox: "",
+        firefox: "https://eid.static.bosa.fgov.be/eidlink-fx.xpi",
         safari: ""
     },
 
