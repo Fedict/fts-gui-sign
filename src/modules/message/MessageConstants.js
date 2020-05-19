@@ -20,7 +20,7 @@ export const ErrorGeneral = {
 export const ErrorNotSupported = {
     type: messageTypes.ERROR,
     title: "Browser is not supported",
-    message: "Your browser is not supported. Please try to use another browser",
+    message: "Your browser is not supported. Please try to use another browser. Chrome, Edge (based on Chromium), Firefox.",
     body: null,
     nextButton: {
         text: null,
