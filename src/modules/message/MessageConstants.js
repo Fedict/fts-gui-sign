@@ -1,3 +1,5 @@
+import React from 'react'
+
 export const messageTypes = {
     ERROR: "ERROR",
     INFO: "INFO"
@@ -20,7 +22,17 @@ export const ErrorGeneral = {
 export const ErrorNotSupported = {
     type: messageTypes.ERROR,
     title: "Browser is not supported",
-    message: "Your browser is not supported. Please try to use an other browser",
+    message: (
+        <div>
+            <p>Your browser is not supported. Please use one of the following browsers:</p>
+            <div class="col col-10 mx-auto" >
+                <ul class="text-left">
+                    <li>Chrome</li>
+                    <li>Edge (based on Chromium)</li>
+                    <li>Firefox</li>
+                </ul>
+            </div>
+        </div>),
     body: null,
     nextButton: {
         text: null,

@@ -248,7 +248,7 @@ export const getCertificates = () => (dispatch, getStore) => {
             else {
 
                 dispatch(navigateToStep(WIZARD_STATE_VALIDATE_LOADING))
-                
+
             }
         })
         .catch((err) => {
@@ -489,11 +489,14 @@ export const sign = (pin) => (dispatch, getStore) => {
             .then(handleRequestIdError(requestId, dispatch, getStore))
             .then(
                 (response) => {
+                    console.log("this is a respone")
                     dispatch(setSignature(response))
                     dispatch(signDocument())
 
-                },
+                })
+            .catch(
                 (error) => {
+                    console.log("this is error")
                     if (error !== INCORECT_REQUEST_ID) {
                         dispatch(removeRequestId(requestId))
                         dispatch(handlePinErrorEID(error, true))

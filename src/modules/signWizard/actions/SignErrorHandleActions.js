@@ -100,14 +100,14 @@ export const showPinError = (message) => (dispatch, getStore) => {
 }
 
 export const pinErrorText = {
-    pin_incorrect: "Pincode is incorrect",
-    pin_too_short: "Pincode is te kort",
-    pin_length: "Pincode heeft niet de juiste lengte",
-    pin_too_long: "Pincode is te lang",
-    pin_3_attempts_left: "Pincode is incorrect : u heeft nog 3 pogingen",
-    pin_2_attempts_left: "Pincode is incorrect : u heeft nog 2 pogingen",
-    pin_1_attempt_left: "Pincode is incorrect : u heeft nog 1 poging",
-    pin_timeout: "Invoeren van pincode duurde te lang."
+    pin_incorrect: "PIN is incorrect",
+    pin_too_short: "PIN is to short",
+    pin_length: "PIN doesn't have the correct length",
+    pin_too_long: "PIN is to long",
+    pin_3_attempts_left: "PIN is incorrect :  3 attempts remaining",
+    pin_2_attempts_left: "PIN is incorrect : 2 attempts remaining",
+    pin_1_attempt_left: "PIN is incorrect : 1 attempt remaining",
+    pin_timeout: "entering the PIN took to long."
 }
 
 export const handlePinErrorEID = (error, isInSession) => (dispatch) => {
