@@ -34,114 +34,112 @@ export const subIndication =
     HASH_FAILURE: {
         key: "HASH_FAILURE",
         className: "alert-danger",
-        message: "At least one hash of a signed document does not match the corresponding hash value in the signature "
+        message: "At least one hash of the signed document does not match the corresponding hash value in the signature "
     },
     SIG_CRYPTO_FAILURE: {
-        key: "HASH_FAILURE",
+        key: "SIG_CRYPTO_FAILURE",
         className: "alert-danger",
-        message: "The signature value in the signature could not be verified using the signer's public key in the signing certificate."
+        message: "The signature could not be verified using the signer's public key in the signing certificate."
     },
     REVOKED: {
-        key: "HASH_FAILURE",
+        key: "REVOKED",
         className: "alert-danger",
-        message: "the signing certificate has been revoked; and there is PoE available that the signature has been created after the revocation time. "
+        message: "The signing certificate has been revoked. The signature has been created after the revocation time. "
     },
     SIG_CONSTRAINTS_FAILURE: {
         key: "HASH_FAILURE",
         className: "alert-warning",
-        message: "One or more attributes of the signature do not match the validation constraints"
+        message: "the signature does not match the validation constraints"
     },
     CHAIN_CONSTRAINTS_FAILURE: {
         key: "HASH_FAILURE",
         className: "alert-warning",
-        message: "The certificate chain used in the validation process does not match the validation constraints related to the certificate. "
+        message: "The certificate chain used in the validation process does not match the validation constraints. "
     },
     CERTIFICATE_CHAIN_GENERAL_FAILURE: {
         key: "HASH_FAILURE",
-        className: "alert-danger",
-        message: "The set of certificates available for chain validation produced an error for an unspecified reason."
+        className: "alert-warning",
+        message: "The set of certificates available for chain validation produced an unspecified error."
     },
     CRYPTO_CONSTRAINTS_FAILURE: {
         key: "HASH_FAILURE",
-        className: "alert-danger",
-        message: "at least one of the algorithms that have been used in the signature involved in validating the signature, or the size of a key used with such an algorithm, is below the required cryptographic security level"
+        className: "alert-warning",
+        message: "A algorithm used in the signature, or the size of a key used with the algorithm, is below the required cryptographic security level"
     },
     EXPIRED: {
         key: "HASH_FAILURE",
-        className: "alert-danger",
-        message: "There is proof that the signature has been created after,the expiration date (notAfter) of the signing certificate.  "
+        className: "alert-warning",
+        message: "The signature has been created after,the expiration date (notAfter) of the signing certificate."
     },
     NOT_YET_VALID: {
         key: "HASH_FAILURE",
-        className: "alert-danger",
-        message: "because the signing time lies before the issuance date (notBefore) of the signing certificate."
+        className: "alert-warning",
+        message: "The signing time lies before the issuance date (notBefore) of the signing certificate."
     },
     POLICY_PROCESSING_ERROR: {
         key: "HASH_FAILURE",
-        className: "alert-danger",
-        message: "A given formal policy file could not be processed for any reason."
+        className: "alert-warning",
+        message: "A given formal policy file could not be processed."
     },
     SIGNATURE_POLICY_NOT_AVAILABLE: {
         key: "HASH_FAILURE",
-        className: "alert-danger",
+        className: "alert-warning",
         message: "The electronic document containing the details of the policy is not available. "
     },
     TIMESTAMP_ORDER_FAILURE: {
         key: "HASH_FAILURE",
-        className: "alert-danger",
-        message: "because some constraints on the order of signature time-stamps and/or signed data object(s) time-stamps are not respected "
+        className: "alert-warning",
+        message: "A constraint on the order of signature time-stamps and/or signed data time-stamps is not respected "
     },
     NO_SIGNING_CERTIFICATE_FOUND: {
         key: "HASH_FAILURE",
-        className: "alert-danger",
-        message: " the signing certificate cannot be identified "
+        className: "alert-warning",
+        message: "The signing certificate cannot be identified "
     },
     NO_CERTIFICATE_CHAIN_FOUND: {
         key: "HASH_FAILURE",
-        className: "alert-danger",
-        message: "No certificate chain has been found for the identified signing certificate.  "
+        className: "alert-warning",
+        message: "No certificate chain found."
     },
     REVOKED_NO_POE: {
         key: "HASH_FAILURE",
-        className: "alert-danger",
-        message: "because the signing certificate was revoked at the validation date/time.  "
+        className: "alert-warning",
+        message: "The signing certificate was revoked.  "
     },
     REVOKED_CA_NO_POE: {
         key: "HASH_FAILURE",
-        className: "alert-danger",
-        message: "at least one certificate chain was found but an intermediate CA certificate is revoked.  "
+        className: "alert-warning",
+        message: "A certificate chain was found but an intermediate CA certificate is revoked."
     },
     OUT_OF_BOUNDS_NO_POE: {
         key: "HASH_FAILURE",
-        className: "alert-danger",
-        message: " the signing certificate is expired or not yet valid at the validation date/time and the Signature Validation Algorithm cannot ascertain that the signing time lies within the validity interval of the signing certificate.  "
+        className: "alert-warning",
+        message: "The signing certificate is expired or not yet valid at the validation date/time."
     },
     CRYPTO_CONSTRAINTS_FAILURE_NO_POE: {
         key: "HASH_FAILURE",
-        className: "alert-danger",
-        message: " at least one of the algorithms that have been used in objects (e.g. the signature value, a certificate, etc.) involved in"
-            + "validating the signature, or the size of a key used with such an algorithm, is below the required"
-            + "cryptographic security level, and there is no proof that this material was produced before the time up"
-            + "to which this algorithm/key was considered secure.  "
+        className: "alert-warning",
+        message: "A algorithms that has been used in the document, or the size of a key used with such an algorithm, is below the required"
+            + "cryptographic security level"
     },
     NO_POE: {
         key: "HASH_FAILURE",
-        className: "alert-danger",
-        message: "a proof of existence is missing to ascertain that a signed object has been produced before some compromising event  "
+        className: "alert-warning",
+        message: "A proof of existence is missing"
     },
     TRY_LATER: {
         key: "HASH_FAILURE",
-        className: "alert-danger",
-        message: "not all constraints can be fulfilled using available information. "
+        className: "alert-warning",
+        message: "Not all constraints can be fulfilled using available information. "
     },
     SIGNED_DATA_NOT_FOUND: {
         key: "HASH_FAILURE",
-        className: "alert-danger",
-        message: "because signed data cannot be obtained. "
+        className: "alert-warning",
+        message: "Signed data cannot be obtained. "
     },
     GENERIC: {
         key: "HASH_FAILURE",
-        className: "alert-danger",
+        className: "alert-warning",
         message: "Something went wrong"
     }
 }
