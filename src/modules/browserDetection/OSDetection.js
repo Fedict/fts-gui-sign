@@ -1,3 +1,6 @@
+/**
+ * Enum variable with values for operating systems. 
+ */
 export const OS = {
     WINDOWS: "Windows",
     MACOS: "MacOS",
@@ -5,6 +8,12 @@ export const OS = {
     UNIX: "UNIX",
     OTHER: "other"
 }
+
+/**
+ * Function to determine the used os based on navigator.appVersion string.
+ * 
+ * @return {string} Returns a string with a value out of os enum
+ */
 export const getOS = () => {
     if (navigator.appVersion.indexOf("Win") !== -1) {
         return OS.WINDOWS
@@ -18,6 +27,11 @@ export const getOS = () => {
     return OS.OTHER
 }
 
+/**
+ * Function to test if the os is compatible
+ * 
+ * @return {boolean} boolean that represents if os is supported 
+ */
 export const OSIsAccepted = () => {
     const usedOS = getOS;
     if (usedOS === OS.OTHER) {
