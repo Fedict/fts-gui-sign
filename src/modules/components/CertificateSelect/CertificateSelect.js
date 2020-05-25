@@ -1,5 +1,14 @@
 import React from 'react'
 
+/**
+ * Select componnent for selecting a certificate
+ * Props
+ * - {[object]} certificates - array of certificates
+ * - {object} certificates[].readerName - name of the eID card reader
+ * - {object} certificates[].commonName - common name of the certificate
+ * - {function} onChange - onChange function triggerd when a certificate is selected
+ * - {string} id - a addon for the id of the element  (id={"card_" + id + "_" + index})
+ */
 export class CertificateSelect extends React.Component {
 
     constructor(props) {

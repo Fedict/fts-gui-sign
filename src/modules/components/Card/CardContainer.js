@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
  * @param {boolean} [props.hasNextButton] - represents if the next button is visible
  * @param {node} [props.nextButtonText] - text on the next button
  * @param {function} [props.onClickNext] - onClick function of the next button
- * @param {boolean} props.nextButtonIsDisabled - represents if the next button is Disabled
+ * @param {boolean} [props.nextButtonIsDisabled] - represents if the next button is Disabled
  */
 export const CardContainer = (
     {

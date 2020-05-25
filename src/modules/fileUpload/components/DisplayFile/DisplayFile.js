@@ -4,11 +4,20 @@ import { connect } from 'react-redux'
 import IMAGE from './img.jpg'
 
 
+/**
+ * Componnent to display a file
+ * if no file is pressent a picture is shown
+ * @param {object} props  
+ * @param {object} props.uploadFile - upload file object from the redux store 
+ * @param {object} props.uploadFile.displayFile - file that is shown 
+ * @param {boolean} props.uploadFile.displayFile.isPdf - indicates if the file is a pdf
+ * @param {string} props.uploadFile.displayFile.name - name of the file
+ * @param {object} props.uploadFile.displayFile.url - dataURL for the file
+ */
 export const DisplayFile = ({ uploadFile }) => {
 
     if (uploadFile && uploadFile.displayFile) {
         const data = uploadFile.displayFile
-        console.log("data", data)
         if (data) {
             if (data.isPdf) {
                 return (
