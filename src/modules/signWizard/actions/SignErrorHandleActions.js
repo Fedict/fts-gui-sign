@@ -28,7 +28,7 @@ export const errorStatuses = {
     pin_1_attempt_left: "pin_1_attempt_left",
     card_blocked: "card_blocked",
     pin_timeout: "pin_timeout",
-    cancel: "Cancel",
+    cancel: "cancel",
     signature_failed: "signature_failed"
 }
 
