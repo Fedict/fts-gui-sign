@@ -1,11 +1,16 @@
 import React from 'react'
 
+/**
+ * @constant {object} messageTypes - enum with the possible types of messagetypes
+ */
 export const messageTypes = {
     ERROR: "ERROR",
     INFO: "INFO"
 }
 
-
+/**
+ * @constant {object} ErrorGeneral - object of a default error.
+ */
 export const ErrorGeneral = {
     type: messageTypes.ERROR,
     title: "Something went wrong",
@@ -19,6 +24,9 @@ export const ErrorGeneral = {
     hasCancleButton: true
 }
 
+/**
+ * @constant {object} ErrorNotSupported - object of a browser not supported error.
+ */
 export const ErrorNotSupported = {
     type: messageTypes.ERROR,
     title: "Browser is not supported",

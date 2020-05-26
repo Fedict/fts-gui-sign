@@ -17,6 +17,9 @@ const initialState = {
 
 }
 
+/**
+ * reducer for the messageHandeling
+ */
 const MessageReducer = (state = initialState, action) => {
     switch (action.type) {
         case MESSAGE_SET_ERROR: {

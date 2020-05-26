@@ -15,7 +15,6 @@ const initialState = {
     }
 }
 
-
 const getDisplayFileData = (file) => {
     if (file) {
         const type = file.type
