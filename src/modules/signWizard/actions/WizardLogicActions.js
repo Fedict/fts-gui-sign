@@ -106,7 +106,7 @@ const handleFlowIdError = (flowId, getStore) => (resp) => {
 
 
 
-const createRequestId = (dispatch, getStore) => {
+const createRequestId = (timeout) =>(dispatch, getStore) => {
     const { wizard } = getStore()
     const requestIds = wizard.requestIds
 
@@ -127,7 +127,7 @@ const createRequestId = (dispatch, getStore) => {
         else {
             //nothing wrong
         }
-    }, 10000)
+    }, timeout)
     return requestId
 }
 
@@ -230,7 +230,7 @@ export const getCertificates = () => (dispatch, getStore) => {
 
     let eIDLink = controller.getInstance()
 
-    const requestId = dispatch(createRequestId)
+    const requestId = dispatch(createRequestId(10000))
 
     eIDLink.getCertificate()
         .then(handleRequestIdError(requestId, dispatch, getStore))
@@ -330,7 +330,7 @@ export const validateCertificateChain = () => (dispatch, getStore) => {
         && certificate.certificateSelected && certificate.certificateSelected.certificate) {
         const usedCertificate = certificate.certificateSelected.certificate
 
-        const requestId = dispatch(createRequestId)
+        const requestId = dispatch(createRequestId(10000))
 
         eIDLink.getCertificateChain(
             'en',
@@ -481,7 +481,7 @@ export const sign = (pin) => (dispatch, getStore) => {
         const u_digest = digest.digest
         const algo = digest.digestAlgorithm
 
-        const requestId = dispatch(createRequestId)
+        const requestId = dispatch(createRequestId(15000))
 
         eIDLink.sign(lang, mac, u_cert, algo, u_digest, pin)
             .then(handleRequestIdError(requestId, dispatch, getStore))
