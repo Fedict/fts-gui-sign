@@ -171,7 +171,7 @@ const createGetVersionRequestId = () => (dispatch, getStore) => {
         else {
             //nothing wrong
         }
-    }, 2000)
+    }, 4000)
     return requestId
 }
 
