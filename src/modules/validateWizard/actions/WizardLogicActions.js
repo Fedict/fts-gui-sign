@@ -36,7 +36,6 @@ export const validateDocument = () => (dispatch, getStore) => {
         })
         .catch((err) => {
             if (err !== INCORECT_FLOW_ID) {
-                console.log("err", err)
                 dispatch(showErrorMessage(ErrorGeneral))
             }
         })

@@ -12,7 +12,6 @@ import { WIZARD_STATE_START } from '../wizard/WizardConstants';
 
 export const Navbar = ({ location, resetStore, navigateToStep, setNewFlowId }) => {
 
-    console.log(location)
     const links = [
         {
             to: '/sign',

@@ -106,7 +106,7 @@ const handleFlowIdError = (flowId, getStore) => (resp) => {
 
 
 
-const createRequestId = (timeout) =>(dispatch, getStore) => {
+const createRequestId = (timeout) => (dispatch, getStore) => {
     const { wizard } = getStore()
     const requestIds = wizard.requestIds
 
@@ -231,8 +231,10 @@ export const getCertificates = () => (dispatch, getStore) => {
     let eIDLink = controller.getInstance()
 
     const requestId = dispatch(createRequestId(10000))
+    const flowId = getStore().wizard.flowId
 
     eIDLink.getCertificate()
+        .then(handleFlowIdError(flowId, getStore))
         .then(handleRequestIdError(requestId, dispatch, getStore))
         .then((response) => {
             const certificateList = getCertificatesFromResponse(response)
@@ -331,11 +333,13 @@ export const validateCertificateChain = () => (dispatch, getStore) => {
         const usedCertificate = certificate.certificateSelected.certificate
 
         const requestId = dispatch(createRequestId(10000))
+        const flowId = getStore().wizard.flowId
 
         eIDLink.getCertificateChain(
             'en',
             "0123456789ABCDEF0123456789ABCDEF",
             usedCertificate)
+            .then(handleFlowIdError(flowId, getStore))
             .then(handleRequestIdError(requestId, dispatch, getStore))
             .then((resp) => {
                 const newCertificate = {
@@ -482,19 +486,19 @@ export const sign = (pin) => (dispatch, getStore) => {
         const algo = digest.digestAlgorithm
 
         const requestId = dispatch(createRequestId(15000))
+        const flowId = getStore().wizard.flowId
 
         eIDLink.sign(lang, mac, u_cert, algo, u_digest, pin)
+            .then(handleFlowIdError(flowId, getStore))
             .then(handleRequestIdError(requestId, dispatch, getStore))
             .then(
                 (response) => {
-                    console.log("this is a respone")
                     dispatch(setSignature(response))
                     dispatch(signDocument())
 
                 })
             .catch(
                 (error) => {
-                    console.log("this is error")
                     if (error !== INCORECT_REQUEST_ID) {
                         dispatch(removeRequestId(requestId))
                         dispatch(handlePinErrorEID(error, true))
@@ -512,8 +516,6 @@ export const sign = (pin) => (dispatch, getStore) => {
 export const signDocument = () => (dispatch, getStore) => {
 
     const { certificate, signature, uploadFile } = getStore()
-
-
 
     if (certificate
         && certificate.certificateSelected

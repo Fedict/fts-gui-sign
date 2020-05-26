@@ -7,7 +7,7 @@ export class SigningPreSignLoading extends React.Component {
 
     render() {
 
-        const { certificate, resetWizard, pinError } = this.props
+        const { certificate, resetWizard} = this.props
 
         const isPinPadReader = (certificate
             && certificate.certificateSelected
