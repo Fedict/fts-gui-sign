@@ -105,7 +105,7 @@ export const pinErrorText = {
     pin_incorrect: "PIN is incorrect",
     pin_too_short: "PIN is to short",
     pin_length: "PIN doesn't have the correct length",
-    pin_too_long: "PIN is to long",
+    pin_too_long: "PIN is too long",
     pin_3_attempts_left: "PIN is incorrect :  3 attempts remaining",
     pin_2_attempts_left: "PIN is incorrect : 2 attempts remaining",
     pin_1_attempt_left: "PIN is incorrect : 1 attempt remaining",
