@@ -7,7 +7,7 @@ export class SigningPreSignLoading extends React.Component {
 
     render() {
 
-        const { certificate, resetWizard, pinError } = this.props
+        const { certificate, resetWizard} = this.props
 
         const isPinPadReader = (certificate
             && certificate.certificateSelected
@@ -27,17 +27,6 @@ export class SigningPreSignLoading extends React.Component {
                             <div>
                                 <div className="alert alert-info">
                                    Please enter your PIN when prompted
-                                </div>
-                            </div>
-                        )
-                        : null}
-                    {(isPinPadReader
-                        && pinError
-                        && pinError.message)
-                        ? (
-                            <div>
-                                <div className="alert alert-danger">
-                                    {pinError.message}
                                 </div>
                             </div>
                         )

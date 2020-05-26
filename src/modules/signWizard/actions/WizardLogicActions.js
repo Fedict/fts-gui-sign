@@ -106,7 +106,7 @@ const handleFlowIdError = (flowId, getStore) => (resp) => {
 
 
 
-const createRequestId = (dispatch, getStore) => {
+const createRequestId = (timeout) => (dispatch, getStore) => {
     const { wizard } = getStore()
     const requestIds = wizard.requestIds
 
@@ -127,7 +127,7 @@ const createRequestId = (dispatch, getStore) => {
         else {
             //nothing wrong
         }
-    }, 10000)
+    }, timeout)
     return requestId
 }
 
@@ -166,14 +166,12 @@ const createGetVersionRequestId = () => (dispatch, getStore) => {
             let eIDLink = controller.getInstance()
             eIDLink.stop()
 
-            dispatch(readerSetCheck(true))
-            dispatch(readerSetOk(false))
-            dispatch(navigateToStep(WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENSION))
+            window.location.reload();
         }
         else {
             //nothing wrong
         }
-    }, 2000)
+    }, 4000)
     return requestId
 }
 
@@ -232,9 +230,11 @@ export const getCertificates = () => (dispatch, getStore) => {
 
     let eIDLink = controller.getInstance()
 
-    const requestId = dispatch(createRequestId)
+    const requestId = dispatch(createRequestId(10000))
+    const flowId = getStore().wizard.flowId
 
     eIDLink.getCertificate()
+        .then(handleFlowIdError(flowId, getStore))
         .then(handleRequestIdError(requestId, dispatch, getStore))
         .then((response) => {
             const certificateList = getCertificatesFromResponse(response)
@@ -332,12 +332,14 @@ export const validateCertificateChain = () => (dispatch, getStore) => {
         && certificate.certificateSelected && certificate.certificateSelected.certificate) {
         const usedCertificate = certificate.certificateSelected.certificate
 
-        const requestId = dispatch(createRequestId)
+        const requestId = dispatch(createRequestId(10000))
+        const flowId = getStore().wizard.flowId
 
         eIDLink.getCertificateChain(
             'en',
             "0123456789ABCDEF0123456789ABCDEF",
             usedCertificate)
+            .then(handleFlowIdError(flowId, getStore))
             .then(handleRequestIdError(requestId, dispatch, getStore))
             .then((resp) => {
                 const newCertificate = {
@@ -471,6 +473,7 @@ export const sign = (pin) => (dispatch, getStore) => {
     if (certificate
         && certificate.certificateSelected
         && certificate.certificateSelected.certificate
+        && certificate.certificateSelected.readerType
         && digest
         && digest.digest
         && digest.digestAlgorithm) {
@@ -483,20 +486,25 @@ export const sign = (pin) => (dispatch, getStore) => {
         const u_digest = digest.digest
         const algo = digest.digestAlgorithm
 
-        const requestId = dispatch(createRequestId)
+        let timeoutTime = 10000
+        if (certificate.certificateSelected.readerType === "pinpad") {
+            timeoutTime = 30000
+        }
+
+        const requestId = dispatch(createRequestId(timeoutTime))
+        const flowId = getStore().wizard.flowId
 
         eIDLink.sign(lang, mac, u_cert, algo, u_digest, pin)
+            .then(handleFlowIdError(flowId, getStore))
             .then(handleRequestIdError(requestId, dispatch, getStore))
             .then(
                 (response) => {
-                    console.log("this is a respone")
                     dispatch(setSignature(response))
                     dispatch(signDocument())
 
                 })
             .catch(
                 (error) => {
-                    console.log("this is error")
                     if (error !== INCORECT_REQUEST_ID) {
                         dispatch(removeRequestId(requestId))
                         dispatch(handlePinErrorEID(error, true))
@@ -514,8 +522,6 @@ export const sign = (pin) => (dispatch, getStore) => {
 export const signDocument = () => (dispatch, getStore) => {
 
     const { certificate, signature, uploadFile } = getStore()
-
-
 
     if (certificate
         && certificate.certificateSelected
