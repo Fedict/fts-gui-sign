@@ -1,5 +1,20 @@
 import React from "react"
+import PropTypes from 'prop-types';
 
+
+/**
+ * Basic card with buttons
+ * @param {object} props 
+ * @param {node} [props.title] - title of the card
+ * @param {node} [props.children] - content that is displayed in the card
+ * @param {boolean} [props.hasCancelButton] - represents if the cancel button is visible
+ * @param {node} [props.cancelButtonText] - text on the cancel button
+ * @param {function} [props.onClickCancel] - onClick function of the cancel button
+ * @param {boolean} [props.hasNextButton] - represents if the next button is visible
+ * @param {node} [props.nextButtonText] - text on the next button
+ * @param {function} [props.onClickNext] - onClick function of the next button
+ * @param {boolean} [props.nextButtonIsDisabled] - represents if the next button is Disabled
+ */
 export const CardContainer = (
     {
         title,
@@ -66,4 +81,16 @@ export const CardContainer = (
             </div>
         </div>
     )
+}
+
+CardContainer.propTypes = {
+    title: PropTypes.node,
+    children: PropTypes.node,
+    hasCancelButton: PropTypes.bool,
+    cancelButtonText: PropTypes.node,
+    onClickCancel: PropTypes.func,
+    hasNextButton: PropTypes.bool,
+    nextButtonText: PropTypes.node,
+    onClickNext: PropTypes.func,
+    nextButtonIsDisabled: PropTypes.bool
 }

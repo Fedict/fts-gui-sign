@@ -5,16 +5,18 @@ export const controller = (() => {
 
     let strategy
 
+    
     const initSignStrategy = () => {
         if (isChromeExtensionDetected()) {
             console.log("ChromeExt - Chrome extension detected");
             return getEIDLinkExtensionStrategy();
         }
-        //todo firefox strategy
-        //todo safari strategy
         return getDefaultStrategy()
     }
 
+    /**
+     * function that returns a object with the folowing functions :
+     */
     const getInstance = () => {
         if (!strategy) {
             strategy = initSignStrategy()
@@ -22,6 +24,9 @@ export const controller = (() => {
         return strategy
     }
 
+    /**
+     * function that creates a new strategy object
+     */
     const getNewInstance = () => {
         console.log("get New instance")
         strategy = initSignStrategy()

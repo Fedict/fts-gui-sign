@@ -6,9 +6,10 @@ import {
     Error_EID_no_reader_InSession,
     Error_EID_no_reader_NotInSession,
     Error_EID_card_error,
-    Error_EID_card_blocked
+    Error_EID_card_blocked,
+    Error_EID_signature_failed
 } from "../messages/ErrorsEIDLink";
-import { navigateToPinError } from "./WizardLogicActions";
+import { navigateToPinError, resetWizard } from "./WizardLogicActions";
 import { ErrorGeneral } from "../../message/MessageConstants";
 import { showErrorMessage } from "../../message/actions/MessageActions";
 
@@ -27,7 +28,7 @@ export const errorStatuses = {
     pin_1_attempt_left: "pin_1_attempt_left",
     card_blocked: "card_blocked",
     pin_timeout: "pin_timeout",
-    cancel: "Cancel",
+    cancel: "cancel",
     signature_failed: "signature_failed"
 }
 
@@ -66,6 +67,7 @@ export const handleErrorEID = (error, isInSession) => (dispatch) => {
             break;
 
         case errorStatuses.signature_failed:
+            dispatch(showErrorMessage(Error_EID_signature_failed))
             //TODO create error message
             break
 
@@ -85,7 +87,7 @@ export const handleErrorEID = (error, isInSession) => (dispatch) => {
             break;
 
         case errorStatuses.cancel:
-
+            dispatch(resetWizard())
             break;
 
         default: break;
@@ -100,14 +102,14 @@ export const showPinError = (message) => (dispatch, getStore) => {
 }
 
 export const pinErrorText = {
-    pin_incorrect: "Pincode is incorrect",
-    pin_too_short: "Pincode is te kort",
-    pin_length: "Pincode heeft niet de juiste lengte",
-    pin_too_long: "Pincode is te lang",
-    pin_3_attempts_left: "Pincode is incorrect : u heeft nog 3 pogingen",
-    pin_2_attempts_left: "Pincode is incorrect : u heeft nog 2 pogingen",
-    pin_1_attempt_left: "Pincode is incorrect : u heeft nog 1 poging",
-    pin_timeout: "Invoeren van pincode duurde te lang."
+    pin_incorrect: "PIN is incorrect",
+    pin_too_short: "PIN is to short",
+    pin_length: "PIN doesn't have the correct length",
+    pin_too_long: "PIN is too long",
+    pin_3_attempts_left: "PIN is incorrect :  3 attempts remaining",
+    pin_2_attempts_left: "PIN is incorrect : 2 attempts remaining",
+    pin_1_attempt_left: "PIN is incorrect : 1 attempt remaining",
+    pin_timeout: "entering the PIN took too long."
 }
 
 export const handlePinErrorEID = (error, isInSession) => (dispatch) => {

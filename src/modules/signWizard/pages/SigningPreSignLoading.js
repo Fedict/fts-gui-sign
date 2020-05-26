@@ -31,17 +31,6 @@ export class SigningPreSignLoading extends React.Component {
                             </div>
                         )
                         : null}
-                    {(isPinPadReader
-                        && pinError
-                        && pinError.message)
-                        ? (
-                            <div>
-                                <div className="alert alert-danger">
-                                    {pinError.message}
-                                </div>
-                            </div>
-                        )
-                        : null}
                 </CardLoading>
           
         )

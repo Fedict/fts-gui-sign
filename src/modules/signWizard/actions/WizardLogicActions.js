@@ -106,7 +106,7 @@ const handleFlowIdError = (flowId, getStore) => (resp) => {
 
 
 
-const createRequestId = (dispatch, getStore) => {
+const createRequestId = (timeout) =>(dispatch, getStore) => {
     const { wizard } = getStore()
     const requestIds = wizard.requestIds
 
@@ -127,7 +127,7 @@ const createRequestId = (dispatch, getStore) => {
         else {
             //nothing wrong
         }
-    }, 10000)
+    }, timeout)
     return requestId
 }
 
@@ -166,14 +166,12 @@ const createGetVersionRequestId = () => (dispatch, getStore) => {
             let eIDLink = controller.getInstance()
             eIDLink.stop()
 
-            dispatch(readerSetCheck(true))
-            dispatch(readerSetOk(false))
-            dispatch(navigateToStep(WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENSION))
+            window.location.reload();
         }
         else {
             //nothing wrong
         }
-    }, 2000)
+    }, 4000)
     return requestId
 }
 
@@ -232,7 +230,7 @@ export const getCertificates = () => (dispatch, getStore) => {
 
     let eIDLink = controller.getInstance()
 
-    const requestId = dispatch(createRequestId)
+    const requestId = dispatch(createRequestId(10000))
 
     eIDLink.getCertificate()
         .then(handleRequestIdError(requestId, dispatch, getStore))
@@ -248,7 +246,7 @@ export const getCertificates = () => (dispatch, getStore) => {
             else {
 
                 dispatch(navigateToStep(WIZARD_STATE_VALIDATE_LOADING))
-                
+
             }
         })
         .catch((err) => {
@@ -332,7 +330,7 @@ export const validateCertificateChain = () => (dispatch, getStore) => {
         && certificate.certificateSelected && certificate.certificateSelected.certificate) {
         const usedCertificate = certificate.certificateSelected.certificate
 
-        const requestId = dispatch(createRequestId)
+        const requestId = dispatch(createRequestId(10000))
 
         eIDLink.getCertificateChain(
             'en',
@@ -483,17 +481,20 @@ export const sign = (pin) => (dispatch, getStore) => {
         const u_digest = digest.digest
         const algo = digest.digestAlgorithm
 
-        const requestId = dispatch(createRequestId)
+        const requestId = dispatch(createRequestId(15000))
 
         eIDLink.sign(lang, mac, u_cert, algo, u_digest, pin)
             .then(handleRequestIdError(requestId, dispatch, getStore))
             .then(
                 (response) => {
+                    console.log("this is a respone")
                     dispatch(setSignature(response))
                     dispatch(signDocument())
 
-                },
+                })
+            .catch(
                 (error) => {
+                    console.log("this is error")
                     if (error !== INCORECT_REQUEST_ID) {
                         dispatch(removeRequestId(requestId))
                         dispatch(handlePinErrorEID(error, true))

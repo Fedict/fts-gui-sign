@@ -15,6 +15,7 @@ const initialState = {
     }
 }
 
+
 const getDisplayFileData = (file) => {
     if (file) {
         const type = file.type
@@ -55,7 +56,9 @@ const removeURL = (url) => {
 }
 
 
-
+/**
+ * reducer for the fileHandeling
+ */
 const UploadFileReducer = (state = initialState, action) => {
 
     switch (action.type) {

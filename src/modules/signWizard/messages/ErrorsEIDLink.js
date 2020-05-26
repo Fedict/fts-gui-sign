@@ -55,3 +55,7 @@ export const Error_EID_card_error = {
 export const Error_EID_card_blocked = {
     ...createError("The eId card is blocked", "The eId card is blocked")
 }
+
+export const Error_EID_signature_failed = {
+    ...createError("Something went wrong", "Something went wrong. Please reload the page and try again.")
+}
