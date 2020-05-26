@@ -473,6 +473,7 @@ export const sign = (pin) => (dispatch, getStore) => {
     if (certificate
         && certificate.certificateSelected
         && certificate.certificateSelected.certificate
+        && certificate.certificateSelected.readerType
         && digest
         && digest.digest
         && digest.digestAlgorithm) {
@@ -485,7 +486,12 @@ export const sign = (pin) => (dispatch, getStore) => {
         const u_digest = digest.digest
         const algo = digest.digestAlgorithm
 
-        const requestId = dispatch(createRequestId(15000))
+        let timeoutTime = 10000
+        if (certificate.certificateSelected.readerType === "pinpad") {
+            timeoutTime = 30000
+        }
+
+        const requestId = dispatch(createRequestId(timeoutTime))
         const flowId = getStore().wizard.flowId
 
         eIDLink.sign(lang, mac, u_cert, algo, u_digest, pin)
