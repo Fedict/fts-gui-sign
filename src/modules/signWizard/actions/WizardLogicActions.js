@@ -166,9 +166,7 @@ const createGetVersionRequestId = () => (dispatch, getStore) => {
             let eIDLink = controller.getInstance()
             eIDLink.stop()
 
-            dispatch(readerSetCheck(true))
-            dispatch(readerSetOk(false))
-            dispatch(navigateToStep(WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENSION))
+            window.location.reload();
         }
         else {
             //nothing wrong
