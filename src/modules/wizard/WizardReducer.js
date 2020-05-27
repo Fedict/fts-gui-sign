@@ -1,5 +1,6 @@
 import { WIZARD_CHANGE_STATE, WIZARD_RESET_FLOW_ID, WIZARD_REQUEST_ID_ADD, WIZARD_REQUEST_ID_REMOVE } from "./WizardActions"
 import { WIZARD_STATE_START } from "./WizardConstants"
+import { STORE_RESET } from "../../store/storeActions"
 
 const generateId = (oldId) => {
 
@@ -44,6 +45,12 @@ const wizardReducer = (state = initialState, action) => {
             return {
                 ...state,
                 requestIds: state.requestIds.filter(val => val !== action.payload)
+            }
+        }
+        case STORE_RESET: {
+            return {
+                ...state,
+                requestIds: []
             }
         }
         default:
