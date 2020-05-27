@@ -61,6 +61,7 @@ export class PinInputContainer extends React.Component {
                                 type="password"
                                 className="form-control"
                                 id="input_code"
+                                maxLength="12"
                                 value={pin}
                                 onChange={(e) => { this.onchange(e) }} />
                         </div>
