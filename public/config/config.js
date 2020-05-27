@@ -1,5 +1,5 @@
 window.configData = {
-    eIDLinkMinimumVersion: "1.1",
+    eIDLinkMinimumVersion: "1.3",
     eIDLinkExtensionUrls: {
         chrome: "https://chrome.google.com/webstore/detail/eazylink/pencgnkbgaekikmiahiaakjdgaibiipp",
         edge: "https://chrome.google.com/webstore/detail/eazylink/pencgnkbgaekikmiahiaakjdgaibiipp",
@@ -10,14 +10,48 @@ window.configData = {
     eIDLinkUrls: {
         windows: "https://eid.static.bosa.fgov.be/eidlink.msi",
         macOs: "https://eid.static.bosa.fgov.be/eidlink.dmg",
-        linux: ""
+        linux: {
+            debian: {
+                url: "https://eid.static.bosa.fgov.be/eidlink-archive.deb",
+                distributions: [
+                    'Debian 9 "Stretch"',
+                    'Debian 10 "Buster"',
+                    'Ubuntu 18.04 LTS "Bionic Beaver"',
+                    'Ubuntu 20.04 LTS',
+                ]
+            },
+            fedora: {
+                url: "https://eid.static.bosa.fgov.be/eidlink-archive-fedora.rpm",
+                distributions: [
+                    'Fedora 31',
+                    'Fedora 32'
+                ]
+            },
+            redHat: {
+                url: "https://eid.static.bosa.fgov.be/eidlink-archive-el.rpm",
+                distributions:  [
+                    'Red Hat Enterprise Linux 7 "Maipo"',
+                    'Red Hat Enterprise Linux 8 "Ootpa"',
+                    'Similar distributions, such as CentOS'
+                ]
+            }
+            ,
+            openSUSE: {
+                url: "https://eid.static.bosa.fgov.be/eidlink-archive-suse.rpm",
+                distributions: [
+                    'OpenSUSE Leap 15.0',
+                    'OpenSUSE Leap 15.1'
+                ]
+            },
+
+        }
     },
 
     defaultSigningProfileId: "XADES_1",
     signingProfileIds: {
-        "application/pdf" : "PADES_1",
-        "application/xml" : "XADES_1",
-        "text/xml" : "XADES_1"
+        "application/pdf": "PADES_1",
+        "application/xml": "XADES_1",
+        "text/xml": "XADES_1"
     },
 
     BEurl: "https://validate.ta.fts.bosa.belgium.be/signandvalidation",
