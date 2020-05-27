@@ -16,8 +16,7 @@ export class VersionCheckLoadingContainer extends React.Component {
 
         return (
            
-                <CardLoading title={"Loading"}
-                >
+                <CardLoading >
 
                 </CardLoading>
             
