@@ -6,7 +6,21 @@ import { CardError } from '../components/Card/CardError'
 import { CardInfo } from '../components/Card/CardInfo'
 import { resetWizard } from '../signWizard/actions/WizardLogicActions'
 
-
+/**
+ * a card that shows a message and has a cancel and next button
+ * @param {object} props
+ * @param {object} [props.message] - message object 
+ * @param {node} [props.message.title] - title of the message card
+ * @param {node} [props.message.message] - text in the highlighted part of the message
+ * @param {node} [props.message.body] - text under the highlighted box
+ * @param {object} [props.message.nextButton] - information about the nextbutton of the message card
+ * @param {node} [props.message.nextButton.text] - text on the nexty button
+ * @param {boolean} [props.message.nextButton.isVisible] - indicates if the button is visible
+ * @param {string} [props.message.nextButton.nextPage] - Wizard id of the page where the nextbutton has to navigate to
+ * @param {string} [props.message.hasCancleButton] - indicates if the cancel button is visible
+ * @param {function} [props.navigateToStep] - action to navigate to a page
+ * @param {function} [props.onCancel] - onCancel callback
+ */
 export const MessageContainer = ({ message, navigateToStep, onCancel }) => {
 
     const handleButtonNextClick = () => {

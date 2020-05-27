@@ -25,7 +25,7 @@ export const ErrorGeneral = {
 }
 
 /**
- * @constant {object} ErrorNotSupported - object of a browser not supported error.
+ * @constant {object} ErrorNotSupported - object of a "browser not supported" error.
  */
 export const ErrorNotSupported = {
     type: messageTypes.ERROR,
