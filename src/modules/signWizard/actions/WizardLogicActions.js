@@ -252,7 +252,7 @@ export const getCertificates = () => (dispatch, getStore) => {
             }
         })
         .catch((err) => {
-            if (err !== INCORECT_REQUEST_ID) {
+            if (err !== INCORECT_REQUEST_ID && err !== INCORECT_FLOW_ID) {
                 dispatch(removeRequestId(requestId))
                 dispatch(handleErrorEID(err))
             }
@@ -350,7 +350,7 @@ export const validateCertificateChain = () => (dispatch, getStore) => {
 
             })
             .catch((error) => {
-                if (error !== INCORECT_REQUEST_ID) {
+                if (error !== INCORECT_REQUEST_ID && error !== INCORECT_FLOW_ID) {
                     dispatch(removeRequestId(requestId))
                     dispatch(handleErrorEID(error))
                 }
@@ -505,7 +505,7 @@ export const sign = (pin) => (dispatch, getStore) => {
                 })
             .catch(
                 (error) => {
-                    if (error !== INCORECT_REQUEST_ID) {
+                    if (error !== INCORECT_REQUEST_ID && error !== INCORECT_FLOW_ID) {
                         dispatch(removeRequestId(requestId))
                         dispatch(handlePinErrorEID(error, true))
                     }
