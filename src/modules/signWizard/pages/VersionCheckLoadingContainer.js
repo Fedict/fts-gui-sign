@@ -16,7 +16,7 @@ export class VersionCheckLoadingContainer extends React.Component {
 
         return (
            
-                <CardLoading title={"Searching for eId reader"}
+                <CardLoading title={"Loading"}
                 >
 
                 </CardLoading>
