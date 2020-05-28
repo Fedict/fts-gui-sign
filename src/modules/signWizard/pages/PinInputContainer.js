@@ -16,6 +16,11 @@ export class PinInputContainer extends React.Component {
     }
     componentDidMount() {
         document.getElementById('input_code').focus()
+        window.addEventListener("keyup", (event)=>{console.log(event)})
+    }
+    onKeyUp(e){
+
+        
     }
     onchange(e) {
         const pin = e.target.value
