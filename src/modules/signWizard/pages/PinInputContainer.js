@@ -13,14 +13,39 @@ export class PinInputContainer extends React.Component {
         this.state = {
             pin: ""
         }
+
+        this.onKeyUp = this.onKeyUp.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this)
     }
     componentDidMount() {
-        document.getElementById('input_code').focus()
-        window.addEventListener("keyup", (event)=>{console.log(event)})
-    }
-    onKeyUp(e){
+        // document.getElementById('input_code').focus()
+        document.addEventListener("keyup",  this.onKeyUp )
 
-        
+    }
+    componentWillUnmount() {
+        document.removeEventListener("keyup", this.onKeyUp )
+    }
+
+    onKeyUp(e) {
+
+        if (e.key === 'Enter') {
+            this.handleSubmit()
+        }
+        else {
+            if (e.key === 'Backspace') {
+                let pincode = this.state.pin + ""
+                pincode = pincode.substr(0, pincode.length - 1)
+                this.setState({ pin: pincode })
+            }
+            if (e.key.length === 1) {
+                let pincode = this.state.pin + ""
+                pincode = pincode + e.key
+                this.setState({ pin: pincode })
+            }
+            else {
+            }
+        }
+
     }
     onchange(e) {
         const pin = e.target.value
@@ -31,13 +56,12 @@ export class PinInputContainer extends React.Component {
         const { navigateToStep, sign } = this.props
         navigateToStep(WIZARD_STATE_SIGNING_PRESIGN_LOADING)
         sign(this.state.pin)
-
-
     }
 
     render() {
         const { resetWizard, pinError } = this.props
-        const {pin} = this.state
+        const { pin } = this.state
+        const pinstring = "*".repeat(pin.length)
         return (
 
             <CardContainer
@@ -62,13 +86,14 @@ export class PinInputContainer extends React.Component {
                         : null}
                     <div className="row mb-2">
                         <div className="col-auto">
-                            <input
+                            {pinstring}
+                            {/* <input
                                 type="password"
                                 className="form-control"
                                 id="input_code"
                                 maxLength="12"
                                 value={pin}
-                                onChange={(e) => { this.onchange(e) }} />
+                                onChange={(e) => { this.onchange(e) }} /> */}
                         </div>
 
                     </div>
