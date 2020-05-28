@@ -21,6 +21,9 @@ export const getOS = () => {
     if (navigator.appVersion.indexOf("Mac") !== -1) {
         return OS.MACOS
     }
+    if (navigator.appVersion.indexOf("X11") !== -1) {
+        return OS.LINUX
+    }
     if (navigator.appVersion.indexOf("Linux") !== -1) {
         return OS.LINUX
     }
