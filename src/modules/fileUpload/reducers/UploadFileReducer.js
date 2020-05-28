@@ -32,7 +32,7 @@ const getDisplayFileData = (file) => {
             case "application/xml":
             case "text/xml":
                 data.isXml = true
-                
+
                 break;
 
             default:
@@ -62,17 +62,15 @@ const UploadFileReducer = (state = initialState, action) => {
 
     switch (action.type) {
         case FILE_UPLOAD_CHANGE_FILE: {
-            if (state.displayFile.url) {
-                removeURL(state.displayFile.url)
-            }
             return {
                 ...state,
                 "file": action.payload,
-                displayFile: initialState.displayFile
-
             }
         }
         case FILE_SET_DOWNLOAD_FILE: {
+            if (state.displayFile.url) {
+                removeURL(state.displayFile.url)
+            }
             return {
                 ...state,
                 downloadFile: action.payload,
@@ -93,10 +91,13 @@ const UploadFileReducer = (state = initialState, action) => {
                 ...state,
                 displayFile: {
                     ...state.displayFile,
-                    xmlContent : action.payload
+                    xmlContent: action.payload
                 }
             }
         case STORE_RESET:
+            if (state.displayFile.url) {
+                removeURL(state.displayFile.url)
+            }
             return initialState
         default:
             return state
