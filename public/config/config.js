@@ -47,7 +47,7 @@ window.configData = {
         }
     },
 
-    defaultSigningProfileId: "XADES_1",
+    defaultSigningProfileId: "CADES_1",
     signingProfileIds: {
         "application/pdf": "PADES_1",
         "application/xml": "XADES_1",
