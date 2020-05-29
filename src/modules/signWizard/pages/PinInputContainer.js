@@ -27,20 +27,25 @@ export class PinInputContainer extends React.Component {
     }
 
     onKeyUp(e) {
-
+        let pincode = this.state.pin + ""
         if (e.key === 'Enter') {
-            this.handleSubmit()
+            if (pincode.length >= 4) {
+                this.handleSubmit()
+            }
+
         }
         else {
             if (e.key === 'Backspace') {
-                let pincode = this.state.pin + ""
+
                 pincode = pincode.substr(0, pincode.length - 1)
                 this.setState({ pin: pincode })
             }
             if (e.key.length === 1) {
-                let pincode = this.state.pin + ""
-                pincode = pincode + e.key
-                this.setState({ pin: pincode })
+                if (pincode.length < 12) {
+                    pincode = pincode + e.key
+                    this.setState({ pin: pincode })
+                }
+
             }
             else {
             }
@@ -72,7 +77,7 @@ export class PinInputContainer extends React.Component {
                 onClickCancel={() => { resetWizard() }}
                 nextButtonText="Sign with eId"
                 onClickNext={() => { this.handleSubmit() }}
-                nextButtonIsDisabled={pin.length === 0}>
+                nextButtonIsDisabled={pin.length < 4}>
 
                 <div className="form-group">
                     <p>Geef uw pincode in</p>
@@ -85,14 +90,11 @@ export class PinInputContainer extends React.Component {
                             </div>)
                         : null}
                     <div className="row mb-2">
-                        <div className="col-auto">
-                            <input
-                                type="text"
-                                className="form-control"
+                        <div className="col-6">
+                            <div
+                                className=" form-control"
                                 id="input_code"
-                                maxLength="12"
-                                value={pinstring}
-                            />
+                            >{pinstring}</div>
                         </div>
 
                     </div>
