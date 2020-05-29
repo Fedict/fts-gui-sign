@@ -22,8 +22,8 @@
     "typescript": "3.8.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "./node_modules/.bin/node-sass ./style/custom.scss ./public/style/custom.css && react-scripts build",
+    "start": "set REACT_APP_VERSION=0.1.0 && react-scripts start",
+    "build": "set REACT_APP_VERSION=0.1.0 && ./node_modules/.bin/node-sass ./style/custom.scss ./public/style/custom.css && react-scripts build",
     "test": "react-scripts test --watchAll=false",
     "tests": "react-scripts test",
     "eject": "react-scripts eject"
