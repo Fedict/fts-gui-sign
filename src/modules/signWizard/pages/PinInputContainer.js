@@ -19,11 +19,11 @@ export class PinInputContainer extends React.Component {
     }
     componentDidMount() {
         // document.getElementById('input_code').focus()
-        document.addEventListener("keyup",  this.onKeyUp )
+        document.addEventListener("keyup", this.onKeyUp)
 
     }
     componentWillUnmount() {
-        document.removeEventListener("keyup", this.onKeyUp )
+        document.removeEventListener("keyup", this.onKeyUp)
     }
 
     onKeyUp(e) {
@@ -86,14 +86,13 @@ export class PinInputContainer extends React.Component {
                         : null}
                     <div className="row mb-2">
                         <div className="col-auto">
-                            {pinstring}
-                            {/* <input
-                                type="password"
+                            <input
+                                type="text"
                                 className="form-control"
                                 id="input_code"
                                 maxLength="12"
-                                value={pin}
-                                onChange={(e) => { this.onchange(e) }} /> */}
+                                value={pinstring}
+                            />
                         </div>
 
                     </div>
