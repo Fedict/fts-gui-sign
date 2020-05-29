@@ -20,12 +20,11 @@ export const DisplayFile = ({ uploadFile }) => {
         if (data) {
             if (data.isPdf) {
                 return (
-                    <CardContainer
-                        title={'Selected document ' + data.name}>
-                        <object style={{ height: "70vh", width: "100%" }} type="application/pdf" data={data.url}>
-                            <p>PDF cannot be shown</p>
-                        </object>
-                    </CardContainer>
+
+
+                    <object style={{ height: "75vh", width: "100%" }} type="application/pdf" data={data.url}>
+                        <p>PDF cannot be shown</p>
+                    </object>
 
                 )
             }
@@ -35,17 +34,17 @@ export const DisplayFile = ({ uploadFile }) => {
         }
     }
     return (
-        <CardContainer><div style={{
+        <div style={{
             height: "75vh",
             width: "100%",
             backgroundColor: "white",
-            backgroundImage:"url('./img/img.jpg')",
+            backgroundImage: "url('./img/img.jpg')",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover"
         }}>
         </div>
-        </CardContainer>
+
     )
 
 }
