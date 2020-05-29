@@ -27,12 +27,12 @@ export const FILE_DISPLAY_XML_CONTENT = "FILE_DISPLAY_XML_CONTENT"
 export const displayFile = (file) => async (dispatch) => {
 
     dispatch({ type: FILE_DISPLAY_FILE, payload: file })
-
-    if (file.type === "application/xml" || file.type === "text/xml") {
-        const content = await getContentData(file)
-        dispatch({type: FILE_DISPLAY_XML_CONTENT, payload : content})
+    if (file) {
+        if (file.type === "application/xml" || file.type === "text/xml") {
+            const content = await getContentData(file)
+            dispatch({ type: FILE_DISPLAY_XML_CONTENT, payload: content })
+        }
     }
-
 }
 
 

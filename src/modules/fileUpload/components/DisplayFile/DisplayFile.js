@@ -1,7 +1,6 @@
 import React from 'react'
 import { CardContainer } from '../../../components/Card/CardContainer'
 import { connect } from 'react-redux'
-import IMAGE from './img.jpg'
 
 
 /**
@@ -23,7 +22,7 @@ export const DisplayFile = ({ uploadFile }) => {
                 return (
                     <CardContainer
                         title={'Selected document ' + data.name}>
-                        <object width="100%" height="500" type="application/pdf" data={data.url}>
+                        <object style={{ height: "70vh", width: "100%" }} type="application/pdf" data={data.url}>
                             <p>PDF cannot be shown</p>
                         </object>
                     </CardContainer>
@@ -35,7 +34,19 @@ export const DisplayFile = ({ uploadFile }) => {
             // }
         }
     }
-    return <div className="mr-5"><img src={IMAGE} width="100%" alt="" /></div>
+    return (
+        <CardContainer><div style={{
+            height: "75vh",
+            width: "100%",
+            backgroundColor: "white",
+            backgroundImage:"url('./img/img.jpg')",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover"
+        }}>
+        </div>
+        </CardContainer>
+    )
 
 }
 
