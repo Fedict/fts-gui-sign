@@ -22,7 +22,7 @@ export const DisplayFile = ({ uploadFile }) => {
                 return (
 
 
-                    <object style={{ height: "75vh", width: "100%" }} type="application/pdf" data={data.url}>
+                    <object style={{ height: "85vh", width: "100%" }} type="application/pdf" data={data.url}>
                         <p>PDF cannot be shown</p>
                     </object>
 
@@ -35,7 +35,7 @@ export const DisplayFile = ({ uploadFile }) => {
     }
     return (
         <div style={{
-            height: "75vh",
+            height: "85vh",
             width: "100%",
             backgroundColor: "white",
             backgroundImage: "url('./img/img.jpg')",
