@@ -25,7 +25,7 @@ export class VersionCheckInstallExtensionContainer extends React.Component {
             if ((UsedBrowser === browser.FIREFOX) && window.configData.eIDLinkExtensionUrls.firefox) {
                 url = window.configData.eIDLinkExtensionUrls.firefox
                 //TODO remove this when firefox url links to store page
-                window.open(url + '?dt=' + new Date().getTime(), "_self" )
+                window.open(url + '?dt=' + new Date().getTime(), "_self")
                 url = ""
             }
             if ((UsedBrowser === browser.SAFARI) && window.configData.eIDLinkExtensionUrls.safari) {
@@ -35,7 +35,7 @@ export class VersionCheckInstallExtensionContainer extends React.Component {
         }
 
         if (url) {
-            window.open(url +  '?dt=' + new Date().getTime(), "_blank")
+            window.open(url + '?dt=' + new Date().getTime(), "_blank")
         }
         //return correct link for browser
     }
@@ -57,7 +57,10 @@ export class VersionCheckInstallExtensionContainer extends React.Component {
                 <p>After you installed the eIDLink extension you can come back to this page an push the "I have installed eIDLink Extension" button.</p>
 
                 {(usedBrowser === browser.CHROME || usedBrowser === browser.EDGE)
-                    ? <img src="./img/ChromeWebStore_BadgeWBorder_v2_206x58.png" style={{ cursor: "pointer" }} onClick={() => { this.openExtensionLink() }} />
+                    ? (<img src="./img/ChromeWebStore_BadgeWBorder_v2_206x58.png"
+                        style={{ cursor: "pointer" }}
+                        alt={"button to Chrome webstore"}
+                        onClick={() => { this.openExtensionLink() }} />)
                     : (<button
                         className="btn btn-primary"
                         id="button_install_eID"
