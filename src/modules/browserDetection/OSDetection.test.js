@@ -1,4 +1,3 @@
-import { getBrowser, browser } from "./BrowserDetection"
 import { OS, getOS } from "./OSDetection";
 
 describe("tests of BrowserDetection", () => {
