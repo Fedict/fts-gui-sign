@@ -1,5 +1,6 @@
 import { getBrowser, browser } from "./BrowserDetection"
 
+const ORIGINAL_window = { ...window }
 describe("tests of BrowserDetection", () => {
 
     beforeAll(() => {
@@ -34,7 +35,10 @@ describe("tests of BrowserDetection", () => {
         expect(result).toEqual(browser.SAFARI)
     })
 
-    
+    afterAll(() => {
+        window = ORIGINAL_window
+    })
+
 
 
 
