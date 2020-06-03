@@ -125,7 +125,7 @@ describe("unit tests for createEIDLinExtensionStrategy", () => {
     describe("tests for getCertificate", () => {
         let api = { getUserCertificates: () => { } }
 
-        test("createEIDLinkExtensionStrategy returns function getInfo", () => {
+        test("createEIDLinkExtensionStrategy returns function getCertificate ", () => {
             const result = createEIDLinkExtensionStrategy(api)
 
             expect(result).toBeTruthy();
@@ -138,7 +138,7 @@ describe("unit tests for createEIDLinExtensionStrategy", () => {
     describe("tests for getCertificateChain", () => {
         let api = { getUserCertificateChain: () => { } }
 
-        test("createEIDLinkExtensionStrategy returns function getInfo", () => {
+        test("createEIDLinkExtensionStrategy returns function getCertificateChain", () => {
             const result = createEIDLinkExtensionStrategy(api)
 
             expect(result).toBeTruthy();
@@ -151,7 +151,7 @@ describe("unit tests for createEIDLinExtensionStrategy", () => {
     describe("tests for sign", () => {
         let api = { sign: () => { } }
 
-        test("createEIDLinkExtensionStrategy returns function getInfo", () => {
+        test("createEIDLinkExtensionStrategy returns function sign", () => {
             const result = createEIDLinkExtensionStrategy(api)
 
             expect(result).toBeTruthy();

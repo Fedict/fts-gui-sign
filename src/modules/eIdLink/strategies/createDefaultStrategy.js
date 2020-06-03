@@ -25,7 +25,7 @@ export const createDefaultStrategy = () => {
      * @param {function} onNoExtensionInstalled - callback when eIDLink extension in not installed
      */
     const getVersion = (minimumVersion, onCorrectVersion, onNotInstalled, onNeedsUpdate, onNoExtensionInstalled) => {
-        onNoExtensionInstalled()
+        if (typeof onNoExtensionInstalled === "function") { onNoExtensionInstalled() }
     }
 
     /**
@@ -35,11 +35,11 @@ export const createDefaultStrategy = () => {
         return Promise.reject(NO_EXTENSION_ACTIVE)
     }
 
-  /**
-   *  function that returns a rejected promise
-   * @param {string} lang - language of the browser
-   * @param {string} mac - mac
-   */
+    /**
+     *  function that returns a rejected promise
+     * @param {string} lang - language of the browser
+     * @param {string} mac - mac
+     */
     const getCertificate = (lang, mac) => {
         return Promise.reject(NO_EXTENSION_ACTIVE)
     }
