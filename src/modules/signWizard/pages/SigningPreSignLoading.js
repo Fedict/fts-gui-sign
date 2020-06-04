@@ -1,0 +1,51 @@
+import React from "react"
+import { CardLoading } from "../../components/Card/CardLoading"
+import { resetWizard } from "../actions/WizardLogicActions"
+import { connect } from "react-redux"
+
+export class SigningPreSignLoading extends React.Component {
+
+    render() {
+
+        const { certificate, resetWizard} = this.props
+
+        const isPinPadReader = (certificate
+            && certificate.certificateSelected
+            && certificate.certificateSelected.readerType
+            && certificate.certificateSelected.readerType === "pinpad")
+
+        return (
+            
+                <CardLoading title={"Sign document"}
+                    hasCancelButton
+                    cancelButtonText="Cancel"
+                    onClickCancel={() => { resetWizard() }}
+                >
+
+                    {(isPinPadReader)
+                        ? (
+                            <div>
+                                <div className="alert alert-info">
+                                   Please enter your PIN when prompted
+                                </div>
+                            </div>
+                        )
+                        : null}
+                </CardLoading>
+          
+        )
+
+    }
+}
+
+const mapStateToProps = (state) => {
+    return (state) => ({
+        certificate: state.certificate,
+        pinError: state.pinError
+    })
+}
+const mapDispatchToProps = ({
+    resetWizard
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(SigningPreSignLoading)
