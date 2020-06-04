@@ -1,0 +1,80 @@
+# this file can be processed by running something like: 
+# oc process -f openshift/container-gateway.yml --param-file=openshift/container-gateway.env | oc create -f -
+
+apiVersion: v1
+kind: Template
+metadata:
+  name: container-guisign
+  labels:
+    name: guisign
+  annotations:
+    description: Template for the Sign Gui
+objects:
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: guisign
+    spec:
+      replicas: 1
+      selector:
+        deploymentconfig: guisign 
+      strategy:
+        resources: {}
+        rollingParams:
+          intervalSeconds: 1
+          maxSurge: 100%
+          maxUnavailable: 0%
+          timeoutSeconds: 600
+          updatePeriodSeconds: 1
+        type: Rolling
+      template:
+        metadata:
+          labels:
+            deploymentconfig: guisign
+            application: guisign
+        spec:
+          containers:
+          - image: registry-fsf.services.belgium.be:5000/eidas/gui-sign:latest
+            imagePullPolicy: Always
+            name: guisign # The name your container will have within the pod (mostly relevant if you have multiple containers in a pod)
+            env: []
+            port: []
+            resources: # Specify the resources needed
+              requests: # Minimal resources needed for your application to run at an acceptable level (ideally you figure these out through stress-testing)
+                cpu: 50m
+                memory: 64Mi
+              limits: # Maximum resources you want your container to use (to limit costs)
+                cpu: 1000m
+                memory: 1024Mi
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: guisign-svc # You will use this name to link the route
+      annotations:
+        description: "The Container Gui Sign"
+    spec:
+      selector:
+        deploymentconfig: guisign
+      ports:
+        - name: guisign-web
+          port: 80
+          protocol: TCP
+          targetPort: 8080
+        - name: guisign-web-ssl
+          port: 443
+          protocol: TCP
+          targetPort: 8080
+
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      name: guisign # Needs to be unique compared to other routes
+      annotations:
+        description: "The route to expose the Gui Sign port"
+    spec:
+      host: sign.ta.fts.bosa.belgium.be # The part of your url before the slash. You cannot have routes using the same host in multiple projects unless this feature is activated for your cluster (security choice based on your governance).
+      to:
+        kind: Service
+        name: guisign-svc
+      port:
+        targetPort: guisign-web-ssl

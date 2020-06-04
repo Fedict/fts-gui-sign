@@ -1,0 +1,67 @@
+import React from 'react'
+import {
+    Link,
+    withRouter
+} from "react-router-dom";
+import { connect } from 'react-redux';
+
+import { navigateToStep, setNewFlowId } from "../wizard/WizardActions"
+import { resetStore } from "../../store/storeActions"
+import { WIZARD_STATE_START } from '../wizard/WizardConstants';
+
+
+export const Navbar = ({ location, resetStore, navigateToStep, setNewFlowId }) => {
+
+    const links = [
+        {
+            to: '/sign',
+            label: 'Sign',
+            onclick: () => { resetStore(); setNewFlowId(); navigateToStep(WIZARD_STATE_START) }
+        }, {
+            to: '/validate',
+            label: 'Validate',
+            onclick: () => { resetStore(); setNewFlowId(); navigateToStep(WIZARD_STATE_START) }
+        },
+    ].map((val, index) => {
+        return (
+            <Link key={index}
+                to={val.to}
+                onClick={() => {
+                    if (val.onclick) {
+                        val.onclick()
+                    }
+                }}
+                className={"nav-item nav-link" + (location.pathname === val.to ? " active" : "")}>
+
+                {val.label}
+            </Link>
+        )
+    })
+    return (
+        <header className="">
+            <nav className="navbar navbar-expand navbar-light sticky-top">
+                <a href="/#" className="navbar-brand">
+                    <img src="/img/logo-bosa.png" alt="BOSA"
+                        style={{ width: "188px", height: "54px" }} />
+                </a>
+                <div className="navbar-nav">
+                    {links}
+                </div>
+
+            </nav>
+        </header>
+    )
+}
+
+const mapStateToProps = (state) => {
+    return (state) => ({
+
+    })
+}
+const mapDispatchToProps = ({
+    navigateToStep,
+    resetStore,
+    setNewFlowId
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Navbar))
