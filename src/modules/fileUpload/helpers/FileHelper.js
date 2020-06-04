@@ -20,3 +20,22 @@ export const getBase64Data = (document) => {
         reader.readAsDataURL(document)
     })
 }
+
+/**
+ * function that returns a promise that resolves in the content of the file.
+ * @param {file} document 
+ */
+export const getContentData = (document) => {
+    return new Promise((resolve, rejects) => {
+        let reader = new FileReader();
+        reader.onload = (event) => {
+
+            resolve(event.target.result);
+        }
+        reader.onerror = (err) => {
+            rejects(err);
+        }
+
+        reader.readAsText(document);
+    })
+}

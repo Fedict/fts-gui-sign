@@ -1,21 +1,4 @@
-/**
- * function that returns a promise that resolves in the content of the file.
- * @param {file} document 
- */
-const getContentData = (document) => {
-    return new Promise((resolve, rejects) => {
-        let reader = new FileReader();
-        reader.onload = (event) => {
-
-            resolve(event.target.result);
-        }
-        reader.onerror = (err) => {
-            rejects(err);
-        }
-
-        reader.readAsText(document);
-    })
-}
+import { getContentData } from "../helpers/FileHelper"
 
 export const FILE_DISPLAY_FILE = "FILE_DISPLAY_FILE"
 export const FILE_DISPLAY_XML_CONTENT = "FILE_DISPLAY_XML_CONTENT"

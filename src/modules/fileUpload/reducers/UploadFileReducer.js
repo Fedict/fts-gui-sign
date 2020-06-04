@@ -1,7 +1,7 @@
 import { FILE_UPLOAD_CHANGE_FILE, FILE_SET_DOWNLOAD_FILE, FILE_DISPLAY_FILE, FILE_DISPLAY_XML_CONTENT } from "../actions/UploadFileActions"
 import { STORE_RESET } from "../../../store/storeActions"
 
-const initialState = {
+export const initialState = {
     file: {},
     downloadFile: {
         bytes: "",
@@ -15,7 +15,7 @@ const initialState = {
     }
 }
 
-const getDisplayFileData = (file) => {
+export const getDisplayFileData = (file) => {
     if (file) {
         const type = file.type
         let data = {
@@ -50,7 +50,7 @@ const getDisplayFileData = (file) => {
 }
 
 
-const removeURL = (url) => {
+export const removeURL = (url) => {
     URL.revokeObjectURL(url)
 }
 
