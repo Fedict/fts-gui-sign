@@ -33,7 +33,7 @@ import { ErrorGeneral } from "../../message/MessageConstants"
 // helpers                    
 //----------------------------------
 
-const createCertificateObject = (certificate, certificateChain) => {
+export const createCertificateObject = (certificate, certificateChain) => {
 
     let createdCertificateObject = {}
 
@@ -65,7 +65,7 @@ const createCertificateObject = (certificate, certificateChain) => {
     return createdCertificateObject
 }
 
-const getCertificatesFromResponse = (response) => {
+export const getCertificatesFromResponse = (response) => {
 
     let certificateList = []
 
@@ -94,7 +94,7 @@ const getCertificatesFromResponse = (response) => {
 
 
 const INCORECT_FLOW_ID = "INCORECT_FLOW_ID"
-const handleFlowIdError = (flowId, getStore) => (resp) => {
+export const handleFlowIdError = (flowId, getStore) => (resp) => {
     const flowIdcurrent = getStore().wizard.flowId
     if (flowIdcurrent === flowId) {
         return resp
@@ -106,7 +106,7 @@ const handleFlowIdError = (flowId, getStore) => (resp) => {
 
 
 
-const createRequestId = (timeout) => (dispatch, getStore) => {
+export const createRequestId = (timeout) => (dispatch, getStore) => {
     const { wizard } = getStore()
     const requestIds = wizard.requestIds
 
@@ -114,7 +114,6 @@ const createRequestId = (timeout) => (dispatch, getStore) => {
     dispatch(addRequestId(requestId))
 
     setTimeout(() => {
-
         const { wizard } = getStore()
         const requestIds = [...wizard.requestIds]
         dispatch(removeRequestId(requestId))
@@ -132,7 +131,7 @@ const createRequestId = (timeout) => (dispatch, getStore) => {
 }
 
 const INCORECT_REQUEST_ID = "INCORECT_REQUEST_ID"
-const handleRequestIdError = (id, dispatch, getStore) => (resp) => {
+export const handleRequestIdError = (id, dispatch, getStore) => (resp) => {
     const { wizard } = getStore()
     const requestIds = [...wizard.requestIds]
     dispatch(removeRequestId(id))
@@ -146,7 +145,7 @@ const handleRequestIdError = (id, dispatch, getStore) => (resp) => {
     }
 }
 
-const createGetVersionRequestId = () => (dispatch, getStore) => {
+export const createGetVersionRequestId = () => (dispatch, getStore) => {
 
     const { wizard } = getStore()
     const requestIds = wizard.requestIds
