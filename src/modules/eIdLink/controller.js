@@ -5,7 +5,7 @@ export const controller = (() => {
 
     let strategy
 
-    
+
     const initSignStrategy = () => {
         if (isChromeExtensionDetected()) {
             console.log("ChromeExt - Chrome extension detected");
@@ -16,6 +16,12 @@ export const controller = (() => {
 
     /**
      * function that returns a object with the folowing functions :
+    * - getVersion
+    * - getInfo
+    * - getCertificate
+    * - getCertificateChain
+    * - sign
+    * - stop
      */
     const getInstance = () => {
         if (!strategy) {
@@ -25,7 +31,7 @@ export const controller = (() => {
     }
 
     /**
-     * function that creates a new strategy object
+     * function that creates a new strategy object and retuns the new object
      */
     const getNewInstance = () => {
         console.log("get New instance")

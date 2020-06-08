@@ -57,11 +57,11 @@ export const createDefaultStrategy = () => {
     /**
      * function that returns a rejected promise
      * @param {string} lang - language of the browser
-     * @param {*} mac - mac
-     * @param {*} cert - certificate that is used to sign the document
-     * @param {*} algo - algroritme of the digest
-     * @param {*} digest - digest that is used to sign the document
-     * @param {*} pin - pincode. should be null for pinpad reader
+     * @param {string} mac - mac
+     * @param {string} cert - certificate that is used to sign the document
+     * @param {string} algo - algorithm of the digest
+     * @param {string} digest - digest that is used to sign the document
+     * @param {string} pin - pincode. should be null for pinpad reader
      */
     const sign = (lang, mac, cert, algo, digest, pin) => {
         return Promise.reject(NO_EXTENSION_ACTIVE)

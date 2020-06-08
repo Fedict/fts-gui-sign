@@ -2,6 +2,13 @@ import React from "react"
 import { EIDLinkLinuxInstallDistributionListItem } from "./EIDLinkLinuxInstallDistributionListItem"
 import { NumberdText } from '../NumberedText/NumberdText'
 
+/**
+ * display to show the instalation buttons for linux
+ * @param {object}  props
+ * @param {[object]} props.linuxDistributions - list of linux distributions and url to the archives
+ * @param {[string]} props.linuxDistributions[].distributions - list of linux distributions supported by the archive
+ * @param {string} props.linuxDistributions[].url - url to the archive download
+ */
 export const EIDLinkLinuxInstall = ({ linuxDistributions }) => {
     const list = linuxDistributions.map((val, index) => {
         return <EIDLinkLinuxInstallDistributionListItem {...val} index={index} key={index} />
