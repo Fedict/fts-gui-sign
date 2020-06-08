@@ -19,7 +19,7 @@ export const MESSAGE_SET_INFO = "MESSAGE_SET_INFO"
  * @param {string} message.nextButton.nextPage - Wizard id of the page where the nextbutton has to navigate to
  * @param {string} message.hasCancleButton - indicates if the cancel button is visible
  */
-export const showErrorMessage = (message) => (dispatch, getStore) => {
+export const showErrorMessage = (message) => (dispatch) => {
     dispatch({ type: MESSAGE_SET_ERROR, payload: message })
     dispatch(navigateToStep(WIZARD_STATE_MESSAGE))
 }
@@ -39,7 +39,7 @@ export const showErrorMessage = (message) => (dispatch, getStore) => {
  * @param {string} message.nextButton.nextPage - Wizard id of the page where the nextbutton has to navigate to
  * @param {string} message.hasCancleButton - indicates if the cancel button is visible
  */
-export const showInfoMessage = (message) => (dispatch, getStore) => {
+export const showInfoMessage = (message) => (dispatch) => {
     dispatch({ type: MESSAGE_SET_INFO, payload: message })
     dispatch(navigateToStep(WIZARD_STATE_MESSAGE))
 }

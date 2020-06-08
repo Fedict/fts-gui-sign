@@ -3,7 +3,7 @@ import { messageTypes } from "../MessageConstants"
 import { STORE_RESET } from "../../../store/storeActions"
 
 
-const initialState = {
+export const initialState = {
     type: "", //ERROR, INFO 
     title: "", //CardTitle
     message: "", //message in a highlighted body
