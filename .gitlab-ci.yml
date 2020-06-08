@@ -56,7 +56,7 @@ deploy_master:
   stage: deploy
   script:
     - echo "Pushing the image to the docker hub"
-    - docker push $CI_REGISTRY/eidas/gui-sign:latest
+    - docker push $CI_REGISTRY/eidas/gui-sign:master
   when: manual
   only:
     - master
