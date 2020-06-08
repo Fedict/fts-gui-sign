@@ -328,7 +328,8 @@ export const validateCertificateChain = () => (dispatch, getStore) => {
     const { certificate } = store
 
     if (certificate
-        && certificate.certificateSelected && certificate.certificateSelected.certificate) {
+        && certificate.certificateSelected 
+        && certificate.certificateSelected.certificate) {
         const usedCertificate = certificate.certificateSelected.certificate
 
         const requestId = dispatch(createRequestId(10000))
@@ -479,7 +480,7 @@ export const sign = (pin) => (dispatch, getStore) => {
 
         let eIDLink = controller.getInstance()
 
-        const lang = 'nl' //TODO connect to store and translations
+        const lang = 'en' //TODO connect to store and translations
         const mac = "0123456789ABCDEF0123456789ABCDEF"
         const u_cert = certificate.certificateSelected.certificate
         const u_digest = digest.digest
