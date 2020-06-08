@@ -47,7 +47,7 @@ deploy:
   stage: deploy
   script:
     - echo "Pushing the image to the docker hub"
-    - docker push $CI_REGISTRY/eidas/gui-sign:latest
+    - docker push $CI_REGISTRY/eidas/gui-sign:master
     - export HTTPS_PROXY="$HTTPS_PROXY_SERVER"
     - oc login https://$OPENSHIFT_SERVER --token=$OPENSHIFT_TOKEN
     - oc rollout latest dc/$OPENSHIFT_POD -n $OPENSHIFT_PROJECT
