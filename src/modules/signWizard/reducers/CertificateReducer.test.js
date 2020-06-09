@@ -1,7 +1,9 @@
 describe("CertificateReducer", () => {
     describe("reducer", () => {
         describe("CERTIFICATE_SAVE_LIST", () => {
-            test("action with type CERTIFICATE_SAVE_LIST changes certificateList object", () => { })
+            test("action with type CERTIFICATE_SAVE_LIST changes certificateList object", () => { 
+                
+            })
         })
 
         describe("CERTIFICATE_SELECT_CERTIFICATE", () => {
