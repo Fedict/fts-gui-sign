@@ -1,19 +1,14 @@
 import { WIZARD_CHANGE_STATE, WIZARD_RESET_FLOW_ID, WIZARD_REQUEST_ID_ADD, WIZARD_REQUEST_ID_REMOVE } from "./WizardActions"
 import { WIZARD_STATE_START } from "./WizardConstants"
 import { STORE_RESET } from "../../store/storeActions"
+import { getRequestId } from "./WizardHelper"
 
-const generateId = (oldId) => {
+export const generateId = (oldId) => {
 
-    let newId = ""
-    do {
-        newId = Math.floor(Math.random() * Math.floor(99999))
-    }
-    while (oldId === newId)
-
-    return newId
+    return getRequestId([oldId])
 }
 
-const initialState = {
+export const initialState = {
     state: WIZARD_STATE_START,
     flowId: generateId(""),
     requestIds: []

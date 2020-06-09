@@ -1,4 +1,5 @@
-import { navigateToStep, setNewFlowId, getRequestId, addRequestId, removeRequestId } from "../../wizard/WizardActions"
+import { navigateToStep, setNewFlowId, addRequestId, removeRequestId } from "../../wizard/WizardActions"
+import { getRequestId } from "../../wizard/WizardHelper"
 import {
     WIZARD_STATE_VERSION_CHECK_UPDATE,
     WIZARD_STATE_VERSION_CHECK_INSTALL,
@@ -328,7 +329,7 @@ export const validateCertificateChain = () => (dispatch, getStore) => {
     const { certificate } = store
 
     if (certificate
-        && certificate.certificateSelected 
+        && certificate.certificateSelected
         && certificate.certificateSelected.certificate) {
         const usedCertificate = certificate.certificateSelected.certificate
 

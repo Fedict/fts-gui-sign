@@ -9,15 +9,7 @@ export const setNewFlowId = () => { return { type: WIZARD_RESET_FLOW_ID } }
 
 
 
-export const getRequestId = (idList) => {
-    let newId = ""
-    do {
-        newId = Math.floor(Math.random() * Math.floor(99999))
-    }
-    while (idList.includes(newId))
 
-    return newId
-}
 
 export const WIZARD_REQUEST_ID_ADD = "WIZARD_REQUEST_ID_ADD"
 export const addRequestId = (id) => {
