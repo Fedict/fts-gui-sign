@@ -2,7 +2,7 @@
 import { DIGEST_SET_DIGEST } from "../actions/DigestActions"
 import { STORE_RESET } from "../../../store/storeActions"
 
-const initialState = {
+export const initialState = {
     digest: "",
     digestAlgorithm: ""
 }
