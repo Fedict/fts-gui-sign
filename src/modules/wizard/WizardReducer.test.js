@@ -2,7 +2,8 @@ import { getRequestId } from "./WizardHelper"
 import * as WizardHelper from "./WizardHelper"
 import wizardReducer, { generateId } from "./WizardReducer"
 import { WIZARD_STATE_START, WIZARD_STATE_DIGEST_LOADING } from "./WizardConstants"
-import { WIZARD_CHANGE_STATE, WIZARD_RESET_FLOW_ID, WIZARD_REQUEST_ID_ADD, WIZARD_REQUEST_ID_REMOVE } from "./WizardActions"
+import { WIZARD_CHANGE_STATE, WIZARD_REQUEST_ID_ADD, WIZARD_REQUEST_ID_REMOVE } from "./WizardActions"
+import { WIZARD_RESET_FLOW_ID } from "../controlIds/flowId/FlowIdActions"
 
 const ORIGINAL_getRequestId = getRequestId
 describe("WizardReducer", () => {

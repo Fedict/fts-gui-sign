@@ -1,8 +1,6 @@
 import {
     navigateToStep,
     WIZARD_CHANGE_STATE,
-    setNewFlowId,
-    WIZARD_RESET_FLOW_ID,
     addRequestId,
     removeRequestId,
     WIZARD_REQUEST_ID_ADD,
@@ -20,14 +18,7 @@ describe("WizardActions", () => {
             expect(result.payload).toEqual(payload)
         })
     })
-    describe("setNewFlowId", () => {
-        test('setNewFlowId returns a action with type WIZARD_RESET_FLOW_ID and no payload', () => {
-            const result = setNewFlowId()
-
-            expect(result.type).toBe(WIZARD_RESET_FLOW_ID)
-
-        })
-    })
+   
     
     describe("addRequestId", () => {
         test("addRequestId returns a action with type WIZARD_REQUEST_ID_ADD and payload id", () => {

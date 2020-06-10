@@ -1,10 +1,11 @@
 import { WIZARD_STATE_START, WIZARD_STATE_RESULT } from "../../wizard/WizardConstants"
 import { resetStore } from "../../../store/storeActions"
-import { navigateToStep, setNewFlowId } from "../../wizard/WizardActions"
+import { navigateToStep} from "../../wizard/WizardActions"
 import { validateSignatureAPI } from "../../communication/communication"
 import { validationSetIndication, validationSetSubIndication } from "./ValidationActions"
 import { showErrorMessage } from "../../message/actions/MessageActions"
 import { ErrorGeneral } from "../../message/MessageConstants"
+import { setNewFlowId } from "../../controlIds/flowId/FlowIdActions"
 
 const INCORECT_FLOW_ID = "INCORECT_FLOW_ID"
 

@@ -1,3 +1,0 @@
-describe('controlIdHelper', () => {
-    test('', () => { })
-})

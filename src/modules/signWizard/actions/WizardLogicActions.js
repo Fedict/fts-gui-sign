@@ -1,4 +1,4 @@
-import { navigateToStep, setNewFlowId, addRequestId, removeRequestId } from "../../wizard/WizardActions"
+import { navigateToStep, addRequestId, removeRequestId } from "../../wizard/WizardActions"
 import { getRequestId } from "../../wizard/WizardHelper"
 import {
     WIZARD_STATE_VERSION_CHECK_UPDATE,
@@ -29,6 +29,7 @@ import { setDownloadFile } from "../../fileUpload/actions/UploadFileActions"
 import { readerSetCheck, readerSetOk } from "./ReaderActions"
 import { resetStore } from "../../../store/storeActions"
 import { ErrorGeneral } from "../../message/MessageConstants"
+import { setNewFlowId } from "../../controlIds/flowId/FlowIdActions"
 
 //----------------------------------
 // helpers                    

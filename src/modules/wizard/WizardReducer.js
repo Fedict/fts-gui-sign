@@ -1,7 +1,8 @@
-import { WIZARD_CHANGE_STATE, WIZARD_RESET_FLOW_ID, WIZARD_REQUEST_ID_ADD, WIZARD_REQUEST_ID_REMOVE } from "./WizardActions"
+import { WIZARD_CHANGE_STATE, WIZARD_REQUEST_ID_ADD, WIZARD_REQUEST_ID_REMOVE } from "./WizardActions"
 import { WIZARD_STATE_START } from "./WizardConstants"
 import { STORE_RESET } from "../../store/storeActions"
 import { getRequestId } from "./WizardHelper"
+import { WIZARD_RESET_FLOW_ID } from "../controlIds/flowId/FlowIdActions"
 
 export const generateId = (oldId) => {
 

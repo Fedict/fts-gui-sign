@@ -5,10 +5,10 @@ import {
 } from "react-router-dom";
 import { connect } from 'react-redux';
 
-import { navigateToStep, setNewFlowId } from "../wizard/WizardActions"
+import { navigateToStep } from "../wizard/WizardActions"
 import { resetStore } from "../../store/storeActions"
 import { WIZARD_STATE_START } from '../wizard/WizardConstants';
-
+import { setNewFlowId } from "../controlIds/flowId/FlowIdActions"
 
 export const Navbar = ({ location, resetStore, navigateToStep, setNewFlowId }) => {
 
