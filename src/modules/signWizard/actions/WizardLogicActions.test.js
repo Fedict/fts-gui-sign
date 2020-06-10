@@ -1,6 +1,6 @@
 import * as navigation from "../../wizard/WizardActions"
 import { navigateToStep } from "../../wizard/WizardActions"
-import { navigateToSign } from "./WizardLogicActions"
+import { navigateToSign, createCertificateObject, getCertificatesFromResponse } from "./WizardLogicActions"
 import { WIZARD_STATE_PIN_INPUT, WIZARD_STATE_SIGNING_PRESIGN_LOADING } from "../../wizard/WizardConstants"
 
 
@@ -59,26 +59,203 @@ describe("Pinpad support", () => {
     })
 })
 
+
 describe("WizardLogicActions", () => {
     describe("createCertificateObject", () => {
-        test("createCertificateObject creates correct object", () => { })
-        test("createCertificateObject creates correct object without certificate", () => { })
-        test("createCertificateObject creates correct object without certificete chain", () => { })
-        test("createCertificateObject creates correct object without rootCA", () => { })
-        test("createCertificateObject creates correct object without subCA", () => { })
-        test("createCertificateObject creates correct object with 1 subCA", () => { })
-        test("createCertificateObject creates correct object with multiple subCA", () => { })
-        test("createCertificateObject creates correct object without certificate objects", () => { })
+        test("createCertificateObject creates correct object", () => {
+            const certificate = "certificateString"
+            const certificateChain = {
+                rootCA: "certificateStringroot",
+                subCA: ['certificatestringsub1', "certificatestringsub2"]
+            }
+            const result = createCertificateObject(certificate, certificateChain)
 
+            expect(result.certificate).toEqual({ encodedCertificate: certificate })
+            expect(result.certificateChain).toContainEqual({ encodedCertificate: certificateChain.rootCA })
+            expect(result.certificateChain).toContainEqual({ encodedCertificate: certificateChain.subCA[0] })
+            expect(result.certificateChain).toContainEqual({ encodedCertificate: certificateChain.subCA[1] })
+            expect(result.certificateChain.length).toBe(3)
+        })
+        test("createCertificateObject creates correct object without certificate", () => {
+            const certificate = undefined
+            const certificateChain = {
+                rootCA: "certificateStringroot",
+                subCA: ['certificatestringsub1', "certificatestringsub2"]
+            }
+            const result = createCertificateObject(certificate, certificateChain)
+
+            expect(result.certificate).toBeUndefined()
+            expect(result.certificateChain).toContainEqual({ encodedCertificate: certificateChain.rootCA })
+            expect(result.certificateChain).toContainEqual({ encodedCertificate: certificateChain.subCA[0] })
+            expect(result.certificateChain).toContainEqual({ encodedCertificate: certificateChain.subCA[1] })
+        })
+        test("createCertificateObject creates correct object without certificete chain", () => {
+            const certificate = "certificateString"
+            const certificateChain = undefined
+            const result = createCertificateObject(certificate, certificateChain)
+
+            expect(result.certificate).toEqual({ encodedCertificate: certificate })
+            expect(result.certificateChain).toBeUndefined()
+        })
+        test("createCertificateObject creates correct object without rootCA", () => {
+            const certificate = "certificateString"
+            const certificateChain = {
+                rootCA: undefined,
+                subCA: ['certificatestringsub1', "certificatestringsub2"]
+            }
+            const result = createCertificateObject(certificate, certificateChain)
+
+            expect(result.certificate).toEqual({ encodedCertificate: certificate })
+            expect(result.certificateChain).toContainEqual({ encodedCertificate: certificateChain.subCA[0] })
+            expect(result.certificateChain).toContainEqual({ encodedCertificate: certificateChain.subCA[1] })
+            expect(result.certificateChain.length).toBe(2)
+        })
+        test("createCertificateObject creates correct object without subCA", () => {
+            const certificate = "certificateString"
+            const certificateChain = {
+                rootCA: "certificateStringroot",
+                subCA: undefined
+            }
+            const result = createCertificateObject(certificate, certificateChain)
+
+            expect(result.certificate).toEqual({ encodedCertificate: certificate })
+            expect(result.certificateChain).toContainEqual({ encodedCertificate: certificateChain.rootCA })
+            expect(result.certificateChain.length).toBe(1)
+        })
+        test("createCertificateObject creates correct object with 1 subCA", () => {
+            const certificate = "certificateString"
+            const certificateChain = {
+                rootCA: "certificateStringroot",
+                subCA: ['certificatestringsub1']
+            }
+            const result = createCertificateObject(certificate, certificateChain)
+
+            expect(result.certificate).toEqual({ encodedCertificate: certificate })
+            expect(result.certificateChain).toContainEqual({ encodedCertificate: certificateChain.rootCA })
+            expect(result.certificateChain).toContainEqual({ encodedCertificate: certificateChain.subCA[0] })
+            expect(result.certificateChain.length).toBe(2)
+        })
+        test("createCertificateObject creates correct object without certificateChain object", () => {
+            const certificate = "certificateString"
+            const certificateChain = undefined
+            const result = createCertificateObject(certificate, certificateChain)
+
+            expect(result.certificate).toEqual({ encodedCertificate: certificate })
+            expect(result.certificateChain).toBeUndefined()
+        })
     })
 
     describe("getCertificatesFromResponse", () => {
-        test("getCertificatesFromResponse creates correct object without response", () => { })
-        test("getCertificatesFromResponse creates correct object without response.Readers", () => { })
-        test("getCertificatesFromResponse creates correct object with response.Readers is empty array", () => { })
-        test("getCertificatesFromResponse creates correct object with response.Readers with 1 item without certificate array", () => { })
-        test("getCertificatesFromResponse creates correct object with response.Readers with 1 item with 1 certificate", () => { })
-        test("getCertificatesFromResponse creates correct object with response.Readers with 1 item with multiple certificates", () => { })
+        test("getCertificatesFromResponse creates correct object without response", () => {
+            const result = getCertificatesFromResponse()
+            expect(result).toEqual([])
+        })
+        test("getCertificatesFromResponse creates correct object without response.Readers", () => {
+            const response = {}
+            const result = getCertificatesFromResponse(response)
+
+            expect(result).toEqual([])
+        })
+        test("getCertificatesFromResponse creates correct object with response.Readers is empty array", () => {
+            const response = {
+                Readers: []
+            }
+            const result = getCertificatesFromResponse(response)
+
+            expect(result).toEqual([])
+        })
+        test("getCertificatesFromResponse creates correct object with response.Readers with 1 item without certificate array", () => {
+            const response = {
+                Readers: [{}]
+            }
+            const result = getCertificatesFromResponse(response)
+
+            expect(result).toEqual([])
+        })
+        test("getCertificatesFromResponse creates correct object with response.Readers with 1 item with 1 certificate", () => {
+            const response = {
+                Readers: [{
+                    ReaderName: "readerName",
+                    ReaderType: "ReaderType",
+                    cardType: "cardType",
+                    certificates: ["certificateString1"]
+                }]
+            }
+            const result = getCertificatesFromResponse(response)
+
+            const expected = {
+                readerName: response.Readers[0].ReaderName,
+                readerType: response.Readers[0].ReaderType,
+                cardType: response.Readers[0].cardType,
+                certificate: response.Readers[0].certificates[0],
+                APIBody: createCertificateObject(response.Readers[0].certificates[0])
+            }
+            expect(result).toHaveLength(1)
+            expect(result[0]).toEqual(expected)
+        })
+        test("getCertificatesFromResponse creates correct object with response.Readers with 1 item with multiple certificates", () => {
+            const response = {
+                Readers: [{
+                    ReaderName: "readerName",
+                    ReaderType: "ReaderType",
+                    cardType: "cardType",
+                    certificates: ["certificateString1", "certificateString2"]
+                }]
+            }
+            const result = getCertificatesFromResponse(response)
+
+            const expected1 = {
+                readerName: response.Readers[0].ReaderName,
+                readerType: response.Readers[0].ReaderType,
+                cardType: response.Readers[0].cardType,
+                certificate: response.Readers[0].certificates[0],
+                APIBody: createCertificateObject(response.Readers[0].certificates[0])
+            }
+            const expected2 = {
+                readerName: response.Readers[0].ReaderName,
+                readerType: response.Readers[0].ReaderType,
+                cardType: response.Readers[0].cardType,
+                certificate: response.Readers[0].certificates[1],
+                APIBody: createCertificateObject(response.Readers[0].certificates[1])
+            }
+            expect(result).toHaveLength(2)
+            expect(result).toContainEqual(expected1)
+            expect(result).toContainEqual(expected2)
+        })
+        test("getCertificatesFromResponse creates correct object with response.Readers with multiple item with 1 certificate", () => {
+            const response = {
+                Readers: [{
+                    ReaderName: "readerName1",
+                    ReaderType: "ReaderType1",
+                    cardType: "cardType1",
+                    certificates: ["certificateString1"]
+                }, {
+                    ReaderName: "readerName2",
+                    ReaderType: "ReaderType2",
+                    cardType: "cardType2",
+                    certificates: ["certificateString2"]
+                }]
+            }
+            const result = getCertificatesFromResponse(response)
+
+            const expected1 = {
+                readerName: response.Readers[0].ReaderName,
+                readerType: response.Readers[0].ReaderType,
+                cardType: response.Readers[0].cardType,
+                certificate: response.Readers[0].certificates[0],
+                APIBody: createCertificateObject(response.Readers[0].certificates[0])
+            }
+            const expected2 = {
+                readerName: response.Readers[1].ReaderName,
+                readerType: response.Readers[1].ReaderType,
+                cardType: response.Readers[1].cardType,
+                certificate: response.Readers[1].certificates[0],
+                APIBody: createCertificateObject(response.Readers[1].certificates[0])
+            }
+            expect(result).toHaveLength(2)
+            expect(result).toContainEqual(expected1)
+            expect(result).toContainEqual(expected2)
+        })
     })
 
     describe("handleFlowIdError", () => {
