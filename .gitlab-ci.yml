@@ -30,7 +30,7 @@ package:
   stage: package
   script:
     - echo "Building the docker Image"
-    - docker build --build-arg http_proxy=http://dc-proxy.names.belgium.be:3128 --build-arg https_proxy=http://dc-proxy.names.belgium.be:3128 -t $CI_REGISTRY/eidas/gui-sign .
+    - docker build --build-arg http_proxy=http://dc-proxy.names.belgium.be:3128 --build-arg https_proxy=http://dc-proxy.names.belgium.be:3128 -t $CI_REGISTRY/eidas/gui-sign:latest .
   except:
     - master
 
@@ -38,10 +38,9 @@ package_master:
   stage: package
   script:
     - echo "Building the docker Image"
-    - docker build --build-arg http_proxy=http://dc-proxy.names.belgium.be:3128 --build-arg https_proxy=http://dc-proxy.names.belgium.be:3128 -t $CI_REGISTRY/eidas/gui-sign .
+    - docker build --build-arg http_proxy=http://dc-proxy.names.belgium.be:3128 --build-arg https_proxy=http://dc-proxy.names.belgium.be:3128 -t $CI_REGISTRY/eidas/gui-sign:master .
   only:
     - master
-  when: manual
 
 deploy:
   stage: deploy
@@ -49,14 +48,19 @@ deploy:
     - echo "Pushing the image to the docker hub"
     - docker push $CI_REGISTRY/eidas/gui-sign:latest
     - export HTTPS_PROXY="$HTTPS_PROXY_SERVER"
-    - oc login https://$OPENSHIFT_SERVER --token=$OPENSHIFT_TOKEN
-    - oc rollout latest dc/$OPENSHIFT_POD -n $OPENSHIFT_PROJECT
+    - oc login https://$OPENSHIFT_SERVER --token=$OPENSHIFT_TOKEN_TEST
+    - oc rollout latest dc/$OPENSHIFT_POD -n $OPENSHIFT_PROJECT_TEST
+  except:
+    - master
 
 deploy_master:
   stage: deploy
   script:
     - echo "Pushing the image to the docker hub"
-    - docker push $CI_REGISTRY/eidas/gui-sign:latest
+    - docker push $CI_REGISTRY/eidas/gui-sign:master
+    - export HTTPS_PROXY="$HTTPS_PROXY_SERVER"
+    - oc login https://$OPENSHIFT_SERVER --token=$OPENSHIFT_TOKEN_ACC
+    - oc rollout latest dc/$OPENSHIFT_POD -n $OPENSHIFT_PROJECT_ACC
   when: manual
   only:
     - master
