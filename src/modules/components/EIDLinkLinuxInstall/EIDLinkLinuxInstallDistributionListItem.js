@@ -1,6 +1,11 @@
 import React from 'react'
 
-
+/**
+ * table row that displays a list of distributions and a buttom to download the archive
+ * @param {object} props
+ * @param {string} props.distributions - list of linux distributions supported by the archive
+ * @param {string} props.url - url to the archive download
+ */
 export const EIDLinkLinuxInstallDistributionListItem = ({ url, distributions }) => {
 
     const handelClick = () => {
@@ -11,6 +16,7 @@ export const EIDLinkLinuxInstallDistributionListItem = ({ url, distributions }) 
     }
 
     const distributionDisplayList = distributions.map((val, index) => { return (<li key={index}>{val}</li>) })
+
     return (
         <tr className="row">
             <td className='col-8'>

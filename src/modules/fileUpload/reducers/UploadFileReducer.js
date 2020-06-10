@@ -1,27 +1,32 @@
 import { FILE_UPLOAD_CHANGE_FILE, FILE_SET_DOWNLOAD_FILE, FILE_DISPLAY_FILE, FILE_DISPLAY_XML_CONTENT } from "../actions/UploadFileActions"
 import { STORE_RESET } from "../../../store/storeActions"
 
-const initialState = {
-    file: {},
+export const initialState = {
+    file: {}, //uploaded file
     downloadFile: {
-        bytes: "",
-        name: ""
+        bytes: "", //base64 representation of the signed file
+        name: "" //name of the signed file
     },
-    displayFile: {
-        isPdf: false,
-        isXml: false,
-        url: "",
-        name: ""
+    displayFile: { //file to display on the screen
+        isPdf: false, //boolean to see if file is a pdf
+        isXml: false, //boolean to see if file is a xml
+        url: "", //object url to the file
+        name: "", // name of the file
+        xmlContent: "" //content of the xml file
     }
 }
 
-const getDisplayFileData = (file) => {
+/**
+ * funtion that returns a object used in the store to display a file
+ * @param {file} file - file that has to be represented
+ */
+export const getDisplayFileData = (file) => {
     if (file) {
         const type = file.type
         let data = {
             isPdf: false,
             isXml: false,
-            name: file.name,
+            name: file.name || "",
             url: ""
         }
         switch (type) {
@@ -49,8 +54,11 @@ const getDisplayFileData = (file) => {
     }
 }
 
-
-const removeURL = (url) => {
+/**
+ * function that removes the object URL
+ * @param {string} url 
+ */
+export const removeURL = (url) => {
     URL.revokeObjectURL(url)
 }
 

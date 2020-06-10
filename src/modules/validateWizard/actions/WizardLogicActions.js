@@ -6,13 +6,15 @@ import { validationSetIndication, validationSetSubIndication } from "./Validatio
 import { showErrorMessage } from "../../message/actions/MessageActions"
 import { ErrorGeneral } from "../../message/MessageConstants"
 
+const INCORECT_FLOW_ID = "INCORECT_FLOW_ID"
+
 export const resetWizard = () => (dispatch) => {
     dispatch(resetStore())
     dispatch(setNewFlowId())
     dispatch(navigateToStep(WIZARD_STATE_START))
 }
 
-const INCORECT_FLOW_ID = "INCORECT_FLOW_ID"
+
 const handleFlowIdError = (flowId, getStore) => (resp) => {
     const flowIdcurrent = getStore().wizard.flowId
     if (flowIdcurrent === flowId) {
@@ -39,7 +41,5 @@ export const validateDocument = () => (dispatch, getStore) => {
                 dispatch(showErrorMessage(ErrorGeneral))
             }
         })
-
-
 
 }

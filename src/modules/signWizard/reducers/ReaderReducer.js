@@ -2,7 +2,7 @@
 import { READER_SET_CHECK, READER_SET_OK } from "../actions/ReaderActions";
 import { STORE_RESET } from "../../../store/storeActions";
 
-const initialState = {
+export const initialState = {
     isChecked: false,
     isOk: false,
 }

@@ -6,7 +6,7 @@ import {
 import { STORE_RESET } from "../../../store/storeActions"
 
 
-const initialState = {
+export const initialState = {
     certificateList: [],
     certificateSelected: null,
 }

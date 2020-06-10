@@ -1,6 +1,6 @@
 import { VALIDATION_SET_INDICATION, VALIDATION_SET_SUBINDICATION } from "../actions/ValidationActions"
 
-
+//TODO reset Store
 
 const initialState = {
     indication: "",
