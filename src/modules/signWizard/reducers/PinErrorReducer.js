@@ -2,7 +2,7 @@
 import { PIN_ERROR_SET_ERROR } from "../actions/SignErrorHandleActions"
 import { STORE_RESET } from "../../../store/storeActions"
 
-const initialState = {
+export const initialState = {
     message: ""
 }
 

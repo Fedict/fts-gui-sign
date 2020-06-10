@@ -25,6 +25,7 @@ describe("tests of BrowserDetection", () => {
 
         expect(result).toEqual(OS.MACOS)
     })
+    
     test("detects linux on navigator.appVersion string", () => {
         const navigatorappVersionString = "Linux"
 
@@ -33,9 +34,4 @@ describe("tests of BrowserDetection", () => {
 
         expect(result).toEqual(OS.LINUX)
     })
-
-    
-
-
-
 })
