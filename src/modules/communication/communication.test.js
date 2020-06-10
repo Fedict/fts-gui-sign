@@ -9,11 +9,6 @@ const BASE64STRING = "BASE64STRING"
 
 describe("getsigningProfileId", () => {
     beforeAll(() => {
-        Object.defineProperty(window, "configData", ((value) => ({
-            get() { return value; },
-            set(v) { value = v; }
-        }))(window.configData));
-
         window.configData = {
             defaultSigningProfileId: "XADES_1",
             signingProfileIds: {
@@ -44,10 +39,7 @@ describe("getsigningProfileId", () => {
 describe("createBody", () => {
     beforeAll(() => {
 
-        Object.defineProperty(window, "configData", ((value) => ({
-            get() { return value; },
-            set(v) { value = v; }
-        }))(window.configData));
+       
 
         window.configData = {
             defaultSigningProfileId: "XADES_1",
@@ -197,10 +189,6 @@ describe('getDataToSignAPI', () => {
     beforeEach(() => {
         filehelper.getBase64Data = jest.fn(() => { return Promise.resolve(BASE64STRING) })
 
-        Object.defineProperty(window, "configData", ((value) => ({
-            get() { return value; },
-            set(v) { value = v; }
-        }))(window.configData));
 
         window.configData = {
             defaultSigningProfileId: "XADES_1",
@@ -347,10 +335,7 @@ describe('signDocumentAPI', () => {
     beforeEach(() => {
         filehelper.getBase64Data = jest.fn(() => { return Promise.resolve(BASE64STRING) })
 
-        Object.defineProperty(window, "configData", ((value) => ({
-            get() { return value; },
-            set(v) { value = v; }
-        }))(window.configData));
+    
 
         window.configData = {
             defaultSigningProfileId: "XADES_1",
