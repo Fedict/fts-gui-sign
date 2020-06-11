@@ -1,5 +1,4 @@
-import { navigateToStep, addRequestId, removeRequestId } from "../../wizard/WizardActions"
-import { getRequestId } from "../../wizard/WizardHelper"
+import { navigateToStep } from "../../wizard/WizardActions"
 import {
     WIZARD_STATE_VERSION_CHECK_UPDATE,
     WIZARD_STATE_VERSION_CHECK_INSTALL,
@@ -30,7 +29,11 @@ import { readerSetCheck, readerSetOk } from "./ReaderActions"
 import { resetStore } from "../../../store/storeActions"
 import { ErrorGeneral } from "../../message/MessageConstants"
 import { setNewFlowId } from "../../controlIds/flowId/FlowIdActions"
-
+import { removeRequestId, createRequestId } from "../../controlIds/requestId/RequestIdActions"
+import { handleRequestIdError } from "../../controlIds/requestId/RequestIdHelpers"
+import { handleFlowIdError } from "../../controlIds/flowId/FlowIdHelpers"
+import { INCORECT_REQUEST_ID } from '../../controlIds/requestId/RequestIdHelpers'
+import { INCORECT_FLOW_ID } from '../../controlIds/flowId/FlowIdHelpers'
 //----------------------------------
 // helpers                    
 //----------------------------------
@@ -92,89 +95,24 @@ export const getCertificatesFromResponse = (response) => {
 }
 
 
+const requestTimeoutFunction = (dispatch, getStore) => {
+    let eIDLink = controller.getInstance()
+    eIDLink.stop()
+    dispatch(checkVersion(true))
+}
 
+const requestTimeOutFunctionChecVersion = (dispatch, getStore) => {
+    let eIDLink = controller.getInstance()
+    eIDLink.stop()
 
-
-const INCORECT_FLOW_ID = "INCORECT_FLOW_ID"
-export const handleFlowIdError = (flowId, getStore) => (resp) => {
-    const flowIdcurrent = getStore().wizard.flowId
-    if (flowIdcurrent === flowId) {
-        return resp
-    }
-    else {
-        throw INCORECT_FLOW_ID
-    }
+    window.location.reload();
 }
 
 
 
-export const createRequestId = (timeout) => (dispatch, getStore) => {
-    const { wizard } = getStore()
-    const requestIds = wizard.requestIds
 
-    const requestId = getRequestId(requestIds)
-    dispatch(addRequestId(requestId))
 
-    setTimeout(() => {
-        const { wizard } = getStore()
-        const requestIds = [...wizard.requestIds]
-        dispatch(removeRequestId(requestId))
-        if (requestIds.includes(requestId)) {
-            console.log("request timeOut")
-            let eIDLink = controller.getInstance()
-            eIDLink.stop()
-            dispatch(checkVersion(true))
-        }
-        else {
-            //nothing wrong
-        }
-    }, timeout)
-    return requestId
-}
 
-const INCORECT_REQUEST_ID = "INCORECT_REQUEST_ID"
-export const handleRequestIdError = (id, dispatch, getStore) => (resp) => {
-    const { wizard } = getStore()
-    const requestIds = [...wizard.requestIds]
-    dispatch(removeRequestId(id))
-    if (requestIds.includes(id)) {
-        return resp
-    }
-    else {
-        throw INCORECT_REQUEST_ID
-        // dispatch(checkVersion(true))
-        // throw INCORECT_FLOW_ID
-    }
-}
-
-export const createGetVersionRequestId = () => (dispatch, getStore) => {
-
-    const { wizard } = getStore()
-    const requestIds = wizard.requestIds
-
-    const requestId = getRequestId(requestIds)
-    dispatch(addRequestId(requestId))
-
-    setTimeout(() => {
-        const { wizard } = getStore()
-        const requestIds = [...wizard.requestIds]
-
-        dispatch(removeRequestId(requestId))
-
-        if (requestIds.includes(requestId)) {
-
-            console.log("getVersion request timeOut")
-            let eIDLink = controller.getInstance()
-            eIDLink.stop()
-
-            window.location.reload();
-        }
-        else {
-            //nothing wrong
-        }
-    }, 4000)
-    return requestId
-}
 
 
 
@@ -189,7 +127,7 @@ export const checkVersion = (isErrorCheck) => (dispatch, getStore) => {
 
     let eIDLink = controller.getNewInstance()
 
-    const requestId = dispatch(createGetVersionRequestId())
+    const requestId = dispatch(createRequestId(4000, requestTimeOutFunctionChecVersion))
 
     eIDLink.getVersion(window.configData.eIDLinkMinimumVersion,
         () => {
@@ -231,8 +169,8 @@ export const getCertificates = () => (dispatch, getStore) => {
 
     let eIDLink = controller.getInstance()
 
-    const requestId = dispatch(createRequestId(10000))
-    const flowId = getStore().wizard.flowId
+    const requestId = dispatch(createRequestId(10000, requestTimeoutFunction))
+    const flowId = getStore().controlId.flowId
 
     eIDLink.getCertificate()
         .then(handleFlowIdError(flowId, getStore))
@@ -278,7 +216,7 @@ export const validateCertificates = () => (dispatch, getStore) => {
             }
         })
 
-        const flowId = getStore().wizard.flowId
+        const flowId = getStore().controlId.flowId
 
         validateCertificatesAPI(APIBody)
             .then(handleFlowIdError(flowId, getStore))
@@ -334,8 +272,8 @@ export const validateCertificateChain = () => (dispatch, getStore) => {
         && certificate.certificateSelected.certificate) {
         const usedCertificate = certificate.certificateSelected.certificate
 
-        const requestId = dispatch(createRequestId(10000))
-        const flowId = getStore().wizard.flowId
+        const requestId = dispatch(createRequestId(10000, requestTimeoutFunction))
+        const flowId = getStore().controlId.flowId
 
         eIDLink.getCertificateChain(
             'en',
@@ -371,7 +309,7 @@ export const validateCertificate = (certificateObject) => (dispatch, getStore) =
         }
         ]
 
-        const flowId = getStore().wizard.flowId
+        const flowId = getStore().controlId.flowId
 
         validateCertificatesAPI(APIBody)
             .then(handleFlowIdError(flowId, getStore))
@@ -412,7 +350,7 @@ export const getDigest = () => (dispatch, getStore) => {
     if (certificate
         && certificate.certificateSelected
         && certificate.certificateSelected.APIBody) {
-        const flowId = getStore().wizard.flowId
+        const flowId = getStore().controlId.flowId
         getDataToSignAPI(certificate.certificateSelected.APIBody, uploadFile.file)
             .then(handleFlowIdError(flowId, getStore))
             .then((resp) => {
@@ -493,8 +431,8 @@ export const sign = (pin) => (dispatch, getStore) => {
             timeoutTime = 30000
         }
 
-        const requestId = dispatch(createRequestId(timeoutTime))
-        const flowId = getStore().wizard.flowId
+        const requestId = dispatch(createRequestId(timeoutTime, requestTimeoutFunction))
+        const flowId = getStore().controlId.flowId
 
         eIDLink.sign(lang, mac, u_cert, algo, u_digest, pin)
             .then(handleFlowIdError(flowId, getStore))
@@ -534,7 +472,7 @@ export const signDocument = () => (dispatch, getStore) => {
         && uploadFile.file) {
 
         dispatch(navigateToStep(WIZARD_STATE_SIGNING_LOADING))
-        const flowId = getStore().wizard.flowId
+        const flowId = getStore().controlId.flowId
         signDocumentAPI(
             certificate.certificateSelected.APIBody,
             uploadFile.file,

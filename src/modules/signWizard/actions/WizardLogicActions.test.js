@@ -263,12 +263,7 @@ describe("WizardLogicActions", () => {
         test("handleFlowIdError throws error if flowID in the store is not the same as the flowID in att", () => { })
     })
 
-    describe("createRequestId", () => {
-        test("createRequestId return a new request ID", () => { })
-        test("createRequestId creates a setTimeout with correct interval", () => { })
-        test("createRequestId timeOut stops eIDLink and checks version when requestID is in Store and ", () => { })
-        test("createRequestId timeOut does when requestID is not in Store and ", () => { })
-    })
+  
 
     describe("handleRequestIdError", () => {
         test("handleRequestIdError removes requestId from store", () => { })
@@ -276,12 +271,7 @@ describe("WizardLogicActions", () => {
         test("handleRequestIdError throws error when requestId in not is in the store", () => { })
     })
 
-    describe("createGetVersionRequestId", () => {
-        test('createGetVersionRequestId returns a new request ID', () => { })
-        test('createGetVersionRequestId creates a setTimeout of 4000ms', () => { })
-        test('createGetVersionRequestId setTimeout reloads page when requestId is in store', () => { })
-        test('createGetVersionRequestId setTimeout does nothing when requestId in not in store', () => { })
-    })
+   
 
     describe("checkVersion", () => {
         test("checkVersion calls the checkversion of eIDLink", () => { })

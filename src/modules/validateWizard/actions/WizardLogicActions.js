@@ -17,7 +17,7 @@ export const resetWizard = () => (dispatch) => {
 
 
 const handleFlowIdError = (flowId, getStore) => (resp) => {
-    const flowIdcurrent = getStore().wizard.flowId
+    const flowIdcurrent = getStore().controlId.flowId
     if (flowIdcurrent === flowId) {
         return resp
     }
@@ -29,7 +29,7 @@ const handleFlowIdError = (flowId, getStore) => (resp) => {
 export const validateDocument = () => (dispatch, getStore) => {
 
     const { uploadFile } = getStore()
-    const flowId = getStore().wizard.flowId
+    const flowId = getStore().controlId.flowId
     validateSignatureAPI(uploadFile.file)
         .then(handleFlowIdError(flowId, getStore))
         .then((val) => {
