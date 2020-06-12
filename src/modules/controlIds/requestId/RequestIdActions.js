@@ -14,14 +14,12 @@ export const removeRequestId = (id) => {
 
 export const createRequestId = (timeout, timeoutCallbackAction) => (dispatch, getStore) => {
 
-    const requestIds = getRequestIds(getStore)
 
-    const requestId = generateIdFromArray(requestIds)
+    const requestId = generateIdFromArray(getRequestIds(getStore))
     dispatch(addRequestId(requestId))
 
     setTimeout(() => {
-        const { controlId } = getStore()
-        const requestIds = [...controlId.requestIds]
+        const requestIds = getRequestIds(getStore)
         dispatch(removeRequestId(requestId))
         if (requestIds.includes(requestId)) {
             dispatch(timeoutCallbackAction)
