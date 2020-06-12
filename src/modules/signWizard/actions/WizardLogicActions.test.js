@@ -1,10 +1,36 @@
 import * as navigation from "../../wizard/WizardActions"
 import { navigateToStep } from "../../wizard/WizardActions"
-import { navigateToSign, createCertificateObject, getCertificatesFromResponse } from "./WizardLogicActions"
-import { WIZARD_STATE_PIN_INPUT, WIZARD_STATE_SIGNING_PRESIGN_LOADING } from "../../wizard/WizardConstants"
+import {
+    navigateToSign,
+    checkVersion,
+    createCertificateObject,
+    getCertificatesFromResponse,
+    requestTimeoutFunction,
+    requestTimeOutFunctionChecVersion
+} from "./WizardLogicActions"
+import { WIZARD_STATE_PIN_INPUT, WIZARD_STATE_SIGNING_PRESIGN_LOADING, WIZARD_STATE_UPLOAD, WIZARD_STATE_VERSION_CHECK_INSTALL, WIZARD_STATE_VERSION_CHECK_UPDATE, WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENSION } from "../../wizard/WizardConstants"
 
+import { controller } from "../../eIdLink/controller"
+import * as eIDLinkController from "../../eIdLink/controller"
 
+import { createRequestId, removeRequestId } from "../../controlIds/requestId/RequestIdActions"
+import * as RequestIdActions from '../../controlIds/requestId/RequestIdActions'
+
+import { readerSetCheck, readerSetOk } from "./ReaderActions"
+import * as ReaderActions from './ReaderActions'
+
+import { showErrorMessage } from "../../message/actions/MessageActions"
+import * as MessageActions from "../../message/actions/MessageActions"
+import { ErrorGeneral } from "../../message/MessageConstants"
+
+const ORIGINAL_controller = controller
 const ORIGINAL_navigateToStep = navigateToStep
+const ORIGINAL_window = { ...window }
+const ORIGINAL_createRequestId = createRequestId
+const ORIGINAL_removeRequestId = removeRequestId
+const ORIGINAL_readerSetCheck = readerSetCheck
+const ORIGINAL_readerSetOk = readerSetOk
+const ORIGINAL_showErrorMessage = showErrorMessage
 
 describe("Pinpad support", () => {
 
@@ -258,31 +284,245 @@ describe("WizardLogicActions", () => {
         })
     })
 
-    describe("handleFlowIdError", () => {
-        test("handleFlowIdError returns response if flowID in the store is the same as the flowID in att", () => { })
-        test("handleFlowIdError throws error if flowID in the store is not the same as the flowID in att", () => { })
+
+    describe("requestTimeoutFunction", () => {
+        beforeEach(() => {
+            eIDLinkController.controller.getInstance = jest.fn()
+        })
+        test('requestTimeoutFunction stops eIDLink and checks version of eIDLink', () => {
+            const mockDispatch = jest.fn()
+            const mockGetStore = jest.fn()
+            const mockStop = jest.fn()
+            eIDLinkController.controller.getInstance = jest.fn(() => { return { stop: mockStop } })
+
+            requestTimeoutFunction(mockDispatch, mockGetStore)
+
+            expect(mockStop).toBeCalledTimes(1)
+            expect(mockDispatch).toBeCalledTimes(1)
+            expect(mockDispatch).toBeCalledWith(expect.any(Function))
+
+        })
+        afterEach(() => {
+            eIDLinkController.controller = ORIGINAL_controller
+        })
+    })
+    describe("requestTimeOutFunctionChecVersion", () => {
+        beforeEach(() => {
+            eIDLinkController.controller.getInstance = jest.fn()
+            window.location.reload = jest.fn()
+        })
+        test('requestTimeOutFunctionChecVersion stops eIDLink and reloads the page', () => {
+            const mockDispatch = jest.fn()
+            const mockGetStore = jest.fn()
+            const mockStop = jest.fn()
+            eIDLinkController.controller.getInstance = jest.fn(() => { return { stop: mockStop } })
+
+            requestTimeOutFunctionChecVersion(mockDispatch, mockGetStore)
+
+            expect(mockStop).toBeCalledTimes(1)
+            expect(window.location.reload).toBeCalledTimes(1)
+
+        })
+        afterEach(() => {
+            eIDLinkController.controller = ORIGINAL_controller
+            window = ORIGINAL_window
+        })
     })
 
-  
 
-    describe("handleRequestIdError", () => {
-        test("handleRequestIdError removes requestId from store", () => { })
-        test("handleRequestIdError returns response when requestId is in the store", () => { })
-        test("handleRequestIdError throws error when requestId in not is in the store", () => { })
-    })
 
-   
+
 
     describe("checkVersion", () => {
-        test("checkVersion calls the checkversion of eIDLink", () => { })
-        test("checkVersion creates a requestId", () => { })
-        test("checkVersion uses correct minimum version", () => { })
-        test("checkVersion navigates to FileUpload if version is correct and isErrorCheck is false", () => { })
-        test("checkVersion navigates to default error if version is correct and isErrorCheck is true", () => { })
-        test("checkVersion navigates to default error if version is correct and isErrorCheck is true", () => { })
-        test("checkVersion navigates to eIDLink install if eIDLink native host is not active", () => { })
-        test("checkVersion navigates to eIDLink update if eIDLink native host is outdated", () => { })
-        test("checkVersion navigates to eIDLink extention install if eIDLink Extention is not found", () => { })
+        beforeEach(() => {
+            const requestId = 55555
+            eIDLinkController.controller.getNewInstance = jest.fn(() => { })
+            RequestIdActions.createRequestId = jest.fn(() => { return requestId })
+            RequestIdActions.removeRequestId = jest.fn()
+            window.configData = { eIDLinkMinimumVersion: "1.0.0" }
+            ReaderActions.readerSetCheck = jest.fn();
+            ReaderActions.readerSetOk = jest.fn();
+            MessageActions.showErrorMessage = jest.fn();
+            navigation.navigateToStep = jest.fn();
+
+        })
+        test("checkVersion calls the checkversion of eIDLink", () => {
+            const mockDispatch = jest.fn((val) => { return val })
+            const mockCheckVersion = jest.fn()
+            eIDLinkController.controller.getNewInstance = jest.fn(() => { return { getVersion: mockCheckVersion } })
+
+            checkVersion(false)(mockDispatch)
+            expect(mockCheckVersion).toBeCalledTimes(1)
+        })
+        test("checkVersion creates a requestId", () => {
+            const requestId = 55555
+            RequestIdActions.createRequestId = jest.fn(() => { return requestId })
+
+            const mockDispatch = jest.fn((val) => { return val })
+            const mockCheckVersion = jest.fn()
+            eIDLinkController.controller.getNewInstance = jest.fn(() => { return { getVersion: mockCheckVersion } })
+
+            checkVersion(false)(mockDispatch)
+            expect(RequestIdActions.createRequestId).toBeCalledTimes(1)
+            expect(RequestIdActions.createRequestId).toBeCalledWith(4000, expect.any(Function))
+            expect(mockDispatch).toBeCalledTimes(1)
+            expect(mockCheckVersion).toBeCalledTimes(1)
+        })
+        test("checkVersion uses correct minimum version", () => {
+            const startVersion = "1.0.0"
+            window.configData = { eIDLinkMinimumVersion: startVersion }
+
+            const mockDispatch = jest.fn((val) => { return val })
+            const mockCheckVersion = jest.fn()
+            eIDLinkController.controller.getNewInstance = jest.fn(() => { return { getVersion: mockCheckVersion } })
+
+            checkVersion(false)(mockDispatch)
+
+            expect(mockCheckVersion).toBeCalledTimes(1)
+            expect(mockCheckVersion.mock.calls[0][0]).toEqual(startVersion)
+        })
+        test("checkVersion navigates to FileUpload if version is correct and isErrorCheck is false", () => {
+            const requestId = 55555
+            RequestIdActions.createRequestId = jest.fn(() => { return requestId })
+
+            const mockDispatch = jest.fn((val) => { return val })
+            const mockCheckVersion = jest.fn()
+            eIDLinkController.controller.getNewInstance = jest.fn(() => { return { getVersion: mockCheckVersion } })
+
+            checkVersion(false)(mockDispatch)
+
+            expect(mockCheckVersion).toBeCalledTimes(1)
+            expect(mockDispatch).toBeCalledTimes(1)
+
+            const versionCorrectCallback = mockCheckVersion.mock.calls[0][1]
+
+            versionCorrectCallback()
+            expect(mockDispatch).toBeCalledTimes(5)
+            expect(RequestIdActions.removeRequestId).toBeCalled()
+            expect(RequestIdActions.removeRequestId).toBeCalledWith(requestId)
+            expect(ReaderActions.readerSetCheck).toBeCalled()
+            expect(ReaderActions.readerSetCheck).toBeCalledWith(true)
+            expect(ReaderActions.readerSetOk).toBeCalled()
+            expect(ReaderActions.readerSetOk).toBeCalledWith(true)
+            expect(navigation.navigateToStep).toBeCalled()
+            expect(navigation.navigateToStep).toBeCalledWith(WIZARD_STATE_UPLOAD)
+        })
+        test("checkVersion navigates to default error if version is correct and isErrorCheck is true", () => {
+            const requestId = 55555
+            RequestIdActions.createRequestId = jest.fn(() => { return requestId })
+
+            const mockDispatch = jest.fn((val) => { return val })
+            const mockCheckVersion = jest.fn()
+            eIDLinkController.controller.getNewInstance = jest.fn(() => { return { getVersion: mockCheckVersion } })
+
+            checkVersion(true)(mockDispatch)
+
+            expect(mockCheckVersion).toBeCalledTimes(1)
+            expect(mockDispatch).toBeCalledTimes(1)
+
+            const versionCorrectCallback = mockCheckVersion.mock.calls[0][1]
+
+            versionCorrectCallback()
+            expect(mockDispatch).toBeCalledTimes(5)
+            expect(RequestIdActions.removeRequestId).toBeCalled()
+            expect(RequestIdActions.removeRequestId).toBeCalledWith(requestId)
+            expect(ReaderActions.readerSetCheck).toBeCalled()
+            expect(ReaderActions.readerSetCheck).toBeCalledWith(true)
+            expect(ReaderActions.readerSetOk).toBeCalled()
+            expect(ReaderActions.readerSetOk).toBeCalledWith(true)
+            expect(navigation.navigateToStep).not.toBeCalled()
+
+            expect(MessageActions.showErrorMessage).toBeCalled()
+            expect(MessageActions.showErrorMessage).toBeCalledWith(ErrorGeneral)
+        })
+        test("checkVersion navigates to eIDLink install if eIDLink native host is not active", () => {
+            const requestId = 55555
+            RequestIdActions.createRequestId = jest.fn(() => { return requestId })
+
+            const mockDispatch = jest.fn((val) => { return val })
+            const mockCheckVersion = jest.fn()
+            eIDLinkController.controller.getNewInstance = jest.fn(() => { return { getVersion: mockCheckVersion } })
+
+            checkVersion(false)(mockDispatch)
+
+            expect(mockCheckVersion).toBeCalledTimes(1)
+            expect(mockDispatch).toBeCalledTimes(1)
+
+            const versionCorrectCallback = mockCheckVersion.mock.calls[0][2]
+
+            versionCorrectCallback()
+            expect(mockDispatch).toBeCalledTimes(5)
+            expect(RequestIdActions.removeRequestId).toBeCalled()
+            expect(RequestIdActions.removeRequestId).toBeCalledWith(requestId)
+            expect(ReaderActions.readerSetCheck).toBeCalled()
+            expect(ReaderActions.readerSetCheck).toBeCalledWith(true)
+            expect(ReaderActions.readerSetOk).toBeCalled()
+            expect(ReaderActions.readerSetOk).toBeCalledWith(false)
+            expect(navigation.navigateToStep).toBeCalled()
+            expect(navigation.navigateToStep).toBeCalledWith(WIZARD_STATE_VERSION_CHECK_INSTALL)
+        })
+        test("checkVersion navigates to eIDLink update if eIDLink native host is outdated", () => {
+            const requestId = 55555
+            RequestIdActions.createRequestId = jest.fn(() => { return requestId })
+
+            const mockDispatch = jest.fn((val) => { return val })
+            const mockCheckVersion = jest.fn()
+            eIDLinkController.controller.getNewInstance = jest.fn(() => { return { getVersion: mockCheckVersion } })
+
+            checkVersion(false)(mockDispatch)
+
+            expect(mockCheckVersion).toBeCalledTimes(1)
+            expect(mockDispatch).toBeCalledTimes(1)
+
+            const versionCorrectCallback = mockCheckVersion.mock.calls[0][3]
+
+            versionCorrectCallback()
+            expect(mockDispatch).toBeCalledTimes(5)
+            expect(RequestIdActions.removeRequestId).toBeCalled()
+            expect(RequestIdActions.removeRequestId).toBeCalledWith(requestId)
+            expect(ReaderActions.readerSetCheck).toBeCalled()
+            expect(ReaderActions.readerSetCheck).toBeCalledWith(true)
+            expect(ReaderActions.readerSetOk).toBeCalled()
+            expect(ReaderActions.readerSetOk).toBeCalledWith(false)
+            expect(navigation.navigateToStep).toBeCalled()
+            expect(navigation.navigateToStep).toBeCalledWith(WIZARD_STATE_VERSION_CHECK_UPDATE)
+        })
+        test("checkVersion navigates to eIDLink extention install if eIDLink Extention is not found", () => {
+            const requestId = 55555
+            RequestIdActions.createRequestId = jest.fn(() => { return requestId })
+
+            const mockDispatch = jest.fn((val) => { return val })
+            const mockCheckVersion = jest.fn()
+            eIDLinkController.controller.getNewInstance = jest.fn(() => { return { getVersion: mockCheckVersion } })
+
+            checkVersion(false)(mockDispatch)
+
+            expect(mockCheckVersion).toBeCalledTimes(1)
+            expect(mockDispatch).toBeCalledTimes(1)
+
+            const versionCorrectCallback = mockCheckVersion.mock.calls[0][4]
+
+            versionCorrectCallback()
+            expect(mockDispatch).toBeCalledTimes(5)
+            expect(RequestIdActions.removeRequestId).toBeCalled()
+            expect(RequestIdActions.removeRequestId).toBeCalledWith(requestId)
+            expect(ReaderActions.readerSetCheck).toBeCalled()
+            expect(ReaderActions.readerSetCheck).toBeCalledWith(true)
+            expect(ReaderActions.readerSetOk).toBeCalled()
+            expect(ReaderActions.readerSetOk).toBeCalledWith(false)
+            expect(navigation.navigateToStep).toBeCalled()
+            expect(navigation.navigateToStep).toBeCalledWith(WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENSION)
+        })
+
+        afterEach(() => {
+            eIDLinkController.controller = ORIGINAL_controller
+            RequestIdActions.createRequestId = ORIGINAL_createRequestId
+            RequestIdActions.removeRequestId = ORIGINAL_removeRequestId
+            ReaderActions.readerSetCheck = ORIGINAL_readerSetCheck
+            ReaderActions.readerSetOk = ORIGINAL_readerSetOk
+            MessageActions.showErrorMessage = ORIGINAL_showErrorMessage
+            navigation.navigateToStep = ORIGINAL_navigateToStep
+        })
     })
 
     describe("getCertificates", () => {

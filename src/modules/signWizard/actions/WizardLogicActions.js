@@ -95,13 +95,13 @@ export const getCertificatesFromResponse = (response) => {
 }
 
 
-const requestTimeoutFunction = (dispatch, getStore) => {
+export const requestTimeoutFunction = (dispatch, getStore) => {
     let eIDLink = controller.getInstance()
     eIDLink.stop()
     dispatch(checkVersion(true))
 }
 
-const requestTimeOutFunctionChecVersion = (dispatch, getStore) => {
+export const requestTimeOutFunctionChecVersion = (dispatch, getStore) => {
     let eIDLink = controller.getInstance()
     eIDLink.stop()
 
@@ -128,7 +128,7 @@ export const checkVersion = (isErrorCheck) => (dispatch, getStore) => {
     let eIDLink = controller.getNewInstance()
 
     const requestId = dispatch(createRequestId(4000, requestTimeOutFunctionChecVersion))
-
+   
     eIDLink.getVersion(window.configData.eIDLinkMinimumVersion,
         () => {
             dispatch(removeRequestId(requestId))
