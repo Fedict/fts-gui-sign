@@ -23,6 +23,35 @@ import { showErrorMessage } from "../../message/actions/MessageActions"
 import * as MessageActions from "../../message/actions/MessageActions"
 import { ErrorGeneral } from "../../message/MessageConstants"
 
+import { handleFlowIdError } from "../../controlIds/flowId/FlowIdHelpers"
+import * as FlowIdHelpers from "../../controlIds/flowId/FlowIdHelpers"
+import { handleRequestIdError } from "../../controlIds/requestId/RequestIdHelpers"
+import * as RequestIdHelpers from "../../controlIds/requestId/RequestIdHelpers"
+
+import { saveCertificateList, selectCertificate } from "./CertificateActions"
+import * as CertificateActions from "./CertificateActions"
+
+import { handleErrorEID, handlePinErrorEID } from "./SignErrorHandleActions"
+import * as SignErrorHandleActions from "./SignErrorHandleActions"
+
+import { validateCertificatesAPI, getDataToSignAPI, signDocumentAPI } from "../../communication/communication"
+import * as communication from "../../communication/communication"
+
+import { setDigest } from "./DigestActions"
+import * as DigestActions from "./DigestActions"
+
+import { setSignature } from "./SignatureActions"
+import * as SignatureActions from "./SignatureActions"
+
+import { setDownloadFile } from "../../fileUpload/actions/UploadFileActions"
+import * as UploadFileActions from "../../fileUpload/actions/UploadFileActions"
+
+import { resetStore } from "../../../store/storeActions"
+import * as storeActions from "../../../store/storeActions"
+
+import { setNewFlowId } from "../../controlIds/flowId/FlowIdActions"
+import * as FlowIdActions from "../../controlIds/flowId/FlowIdActions"
+
 const ORIGINAL_controller = controller
 const ORIGINAL_navigateToStep = navigateToStep
 const ORIGINAL_window = { ...window }
@@ -31,6 +60,23 @@ const ORIGINAL_removeRequestId = removeRequestId
 const ORIGINAL_readerSetCheck = readerSetCheck
 const ORIGINAL_readerSetOk = readerSetOk
 const ORIGINAL_showErrorMessage = showErrorMessage
+const ORIGINAL_handleFlowIdError = handleFlowIdError
+const ORIGINAL_handleRequestIdError = handleRequestIdError
+const ORIGINAL_saveCertificateList = saveCertificateList
+const ORIGINAL_handleErrorEID = handleErrorEID
+
+const ORIGINAL_validateCertificatesAPI = validateCertificatesAPI
+const ORIGINAL_selectCertificate = selectCertificate
+
+const ORIGINAL_getDataToSignAPI = getDataToSignAPI
+const ORIGINAL_setDigest = setDigest
+const ORIGINAL_setSignature = setSignature
+const ORIGINAL_handlePinErrorEID = handlePinErrorEID
+const ORIGINAL_signDocumentAPI = signDocumentAPI
+const ORIGINAL_setDownloadFile = setDownloadFile
+const ORIGINAL_resetStore = resetStore
+const ORIGINAL_setNewFlowId = setNewFlowId
+
 
 describe("Pinpad support", () => {
 
@@ -526,6 +572,17 @@ describe("WizardLogicActions", () => {
     })
 
     describe("getCertificates", () => {
+        beforeEach(() => {
+            eIDLinkController.controller.getInstance = jest.fn(() => { })
+            RequestIdActions.createRequestId = jest.fn(() => { return 55555 })
+            RequestIdActions.removeRequestId = jest.fn()
+            FlowIdHelpers.handleFlowIdError = jest.fn()
+            RequestIdHelpers.handleRequestIdError = jest.fn()
+            CertificateActions.saveCertificateList = jest.fn()
+            MessageActions.showErrorMessage = jest.fn();
+            navigation.navigateToStep = jest.fn();
+            SignErrorHandleActions.handleErrorEID = jest.fn();
+        })
         test("getCertificates calls getCertificate of eIDLink", () => { })
         test("checkVersion creates a requestId", () => { })
         test("checkVersion succes saves respons in store", () => { })
@@ -534,9 +591,28 @@ describe("WizardLogicActions", () => {
         test("checkVersion error shows message", () => { })
         test("checkVersion error INCORECT_REQUEST_ID does nothing", () => { })
         test("checkVersion error INCORECT_FLOW_ID does nothing", () => { })
+        afterEach(() => {
+            eIDLinkController.controller = ORIGINAL_controller
+            RequestIdActions.createRequestId = ORIGINAL_createRequestId
+            RequestIdActions.removeRequestId = ORIGINAL_removeRequestId
+            FlowIdHelpers.handleFlowIdError = ORIGINAL_handleFlowIdError
+            RequestIdHelpers.handleRequestIdError = ORIGINAL_handleRequestIdError
+            CertificateActions.saveCertificateList = ORIGINAL_saveCertificateList
+            MessageActions.showErrorMessage = ORIGINAL_showErrorMessage
+            navigation.navigateToStep = ORIGINAL_navigateToStep
+            SignErrorHandleActions.handleErrorEID = ORIGINAL_handleErrorEID
+        })
     })
 
     describe("validateCertificates", () => {
+        beforeEach(() => {
+            communication.validateCertificatesAPI = jest.fn()
+            FlowIdHelpers.handleFlowIdError = jest.fn()
+            CertificateActions.saveCertificateList = jest.fn()
+            MessageActions.showErrorMessage = jest.fn();
+            CertificateActions.selectCertificate = jest.fn()
+            navigation.navigateToStep = jest.fn()
+        })
         test("validateCertificates calls validateCertificatesAPI with the correct body ", () => { })
         test("validateCertificates doesn't call validateCertificatesAPI if there are no certificates ", () => { })
         test("validateCertificates succes saves only valid certificates ", () => { })
@@ -545,9 +621,25 @@ describe("WizardLogicActions", () => {
         test("validateCertificates succes valid certificates list.length > 1 navigates to WIZARD_STATE_CERTIFICATES_CHOOSE ", () => { })
         test("validateCertificates error shows message", () => { })
         test("validateCertificates error INCORECT_FLOW_ID does nothing", () => { })
+        afterEach(() => {
+            communication.validateCertificatesAPI = ORIGINAL_validateCertificatesAPI
+            FlowIdHelpers.handleFlowIdError = ORIGINAL_handleFlowIdError
+            CertificateActions.saveCertificateList = ORIGINAL_saveCertificateList
+            MessageActions.showErrorMessage = ORIGINAL_showErrorMessage
+            CertificateActions.selectCertificate = ORIGINAL_selectCertificate
+            navigation.navigateToStep = ORIGINAL_navigateToStep
+        })
     })
 
     describe("validateCertificateChain", () => {
+        beforeEach(() => {
+            eIDLinkController.controller.getInstance = jest.fn(() => { })
+            RequestIdActions.createRequestId = jest.fn(() => { return 55555 })
+            FlowIdHelpers.handleFlowIdError = jest.fn()
+            RequestIdHelpers.handleRequestIdError = jest.fn()
+            RequestIdActions.removeRequestId = jest.fn()
+            SignErrorHandleActions.handleErrorEID = jest.fn();
+        })
         test("validateCertificateChain doesn't call eIDLink getCertificateChain if there is no selectedCertificate", () => { })
         test("validateCertificateChain calls getCertificateChain", () => { })
         test("validateCertificateChain creates a requestId of 10000ms", () => { })
@@ -557,18 +649,47 @@ describe("WizardLogicActions", () => {
         test("validateCertificateChain error shows message", () => { })
         test("validateCertificateChain error INCORECT_REQUEST_ID does nothing", () => { })
         test("validateCertificateChain error INCORECT_FLOW_ID does nothing", () => { })
+
+        afterEach(() => {
+            eIDLinkController.controller = ORIGINAL_controller
+            RequestIdActions.createRequestId = ORIGINAL_createRequestId
+            FlowIdHelpers.handleFlowIdError = ORIGINAL_handleFlowIdError
+            RequestIdHelpers.handleRequestIdError = ORIGINAL_handleRequestIdError
+            RequestIdActions.removeRequestId = ORIGINAL_removeRequestId
+            SignErrorHandleActions.handleErrorEID = ORIGINAL_handleErrorEID
+        })
     })
 
     describe("validateCertificate", () => {
+        beforeEach(() => {
+            communication.validateCertificatesAPI = jest.fn()
+            FlowIdHelpers.handleFlowIdError = jest.fn()
+            CertificateActions.selectCertificate = jest.fn()
+            navigation.navigateToStep = jest.fn()
+            MessageActions.showErrorMessage = jest.fn();
+        })
         test("validateCertificates calls validateCertificatesAPI with the correct body ", () => { })
         test("validateCertificates succes saves only valid certificates ", () => { })
         test("validateCertificates succes certificate valid selects certificate and navigates to WIZARD_STATE_DIGEST_LOADING ", () => { })
         test("validateCertificates succes certificate not valid shows MessageCertificatesNotFound", () => { })
         test("validateCertificates error shows MessageCertificatesNotFound", () => { })
         test("validateCertificates error INCORECT_FLOW_ID does nothing", () => { })
+        afterEach(()=>{
+            communication.validateCertificatesAPI = ORIGINAL_validateCertificatesAPI
+            FlowIdHelpers.handleFlowIdError = ORIGINAL_handleFlowIdError
+            CertificateActions.selectCertificate = ORIGINAL_selectCertificate
+            navigation.navigateToStep = ORIGINAL_navigateToStep
+            MessageActions.showErrorMessage = ORIGINAL_showErrorMessage
+        })
     })
 
     describe("getDigest", () => {
+        beforeEach(() => {
+            communication.getDataToSignAPI = jest.fn()
+            FlowIdHelpers.handleFlowIdError = jest.fn()
+            DigestActions.setDigest = jest.fn()
+            MessageActions.showErrorMessage = jest.fn();
+        })
         test("getDigest doesn't call getDataToSignAPI when no selected certificate", () => { })
         test("getDigest calls getDataToSignAPI", () => { })
         test("getDigest succes calls handleFlowIdError", () => { })
@@ -576,21 +697,53 @@ describe("WizardLogicActions", () => {
         test("getDigest succes navigates to sign", () => { })
         test("getDigest error shows message", () => { })
         test("getDigest error INCORECT_FLOW_ID does nothing", () => { })
+        afterEach(()=>{
+            communication.getDataToSignAPI =  ORIGINAL_getDataToSignAPI
+            FlowIdHelpers.handleFlowIdError =  ORIGINAL_handleFlowIdError
+            DigestActions.setDigest =  ORIGINAL_setDigest
+            MessageActions.showErrorMessage =  ORIGINAL_showErrorMessage
+        })
     })
 
     describe("navigateToSign", () => {
+        beforeEach(() => {
+            navigation.navigateToStep = jest.fn()
+            MessageActions.showErrorMessage = jest.fn();
+        })
         test("navigateToSign shows ErrorGeneral if no certificateSelected", () => { })
         test("navigateToSign pinpad reader navigates to WIZARD_STATE_SIGNING_PRESIGN_LOADING and calls sign(null)", () => { })
         test("navigateToSign no pinpad reader navigates to WIZARD_STATE_PIN_INPUT", () => { })
+        afterEach(()=>{
+            navigation.navigateToStep = ORIGINAL_navigateToStep
+            MessageActions.showErrorMessage = ORIGINAL_showErrorMessage;
+        })
     })
 
     describe("navigateToPinError", () => {
+        beforeEach(() => {
+            navigation.navigateToStep = jest.fn()
+            MessageActions.showErrorMessage = jest.fn();
+        })
         test("navigateToPinError shows ErrorGeneral if no certificateSelected", () => { })
         test("navigateToPinError pinpad navigates to WIZARD_STATE_PINPAD_ERROR", () => { })
         test("navigateToPinError no pinpad navigates to WIZARD_STATE_PIN_INPUT", () => { })
+        afterEach(()=>{
+            navigation.navigateToStep = ORIGINAL_navigateToStep
+            MessageActions.showErrorMessage = ORIGINAL_showErrorMessage;
+        })
     })
 
     describe("sign", () => {
+        beforeEach(() => {
+            eIDLinkController.controller.getInstance = jest.fn(() => { })
+            RequestIdActions.createRequestId = jest.fn(() => { return 55555 })
+            FlowIdHelpers.handleFlowIdError = jest.fn()
+            RequestIdHelpers.handleRequestIdError = jest.fn()
+            SignatureActions.setSignature = jest.fn()
+            RequestIdActions.removeRequestId = jest.fn()
+            SignErrorHandleActions.handlePinErrorEID = jest.fn()
+            MessageActions.showErrorMessage = jest.fn();
+        })
         test("sign shows ErrorGeneral when no selected certificate or digest", () => { })
         test("sign pinpad creates a requestId of 30000ms", () => { })
         test("sign no pinpad creates a requestId of 10000ms", () => { })
@@ -602,9 +755,27 @@ describe("WizardLogicActions", () => {
         test("sign error shows message", () => { })
         test("sign error INCORECT_REQUEST_ID does nothing", () => { })
         test("sign error INCORECT_FLOW_ID does nothing", () => { })
+
+        afterEach(() => {
+            eIDLinkController.controller= ORIGINAL_controller
+            RequestIdActions.createRequestId = ORIGINAL_createRequestId
+            FlowIdHelpers.handleFlowIdError = ORIGINAL_handleFlowIdError
+            RequestIdHelpers.handleRequestIdError = ORIGINAL_handleRequestIdError
+            SignatureActions.setSignature = ORIGINAL_setSignature
+            RequestIdActions.removeRequestId = ORIGINAL_removeRequestId
+            SignErrorHandleActions.handlePinErrorEID = ORIGINAL_handlePinErrorEID
+            MessageActions.showErrorMessage = ORIGINAL_showErrorMessage
+        })
     })
 
     describe("signDocument", () => {
+        beforeEach(() => {
+            navigation.navigateToStep = jest.fn()
+            communication.signDocumentAPI = jest.fn()
+            FlowIdHelpers.handleFlowIdError = jest.fn()
+            UploadFileActions.setDownloadFile = jest.fn()
+            MessageActions.showErrorMessage = jest.fn();
+        })
         test("signDocument shows ErrorGeneral when not all data is present", () => { })
         test("signDocument navigates to WIZARD_STATE_SIGNING_LOADING", () => { })
         test("signDocument calls signDocumentAPI", () => { })
@@ -614,11 +785,30 @@ describe("WizardLogicActions", () => {
         test("signDocument succes shows ErrorGeneral when not all data is present ", () => { })
         test("signDocument error shows message", () => { })
         test("signDocument error INCORECT_FLOW_ID does nothing", () => { })
+        afterEach(() => {
+            navigation.navigateToStep = ORIGINAL_navigateToStep
+            communication.signDocumentAPI = ORIGINAL_signDocumentAPI
+            FlowIdHelpers.handleFlowIdError = ORIGINAL_handleFlowIdError
+            UploadFileActions.setDownloadFile = ORIGINAL_setDownloadFile
+            MessageActions.showErrorMessage = ORIGINAL_showErrorMessage
+        })
     })
 
     describe("resetWizard", () => {
+        beforeEach(() => {
+            eIDLinkController.controller.getInstance = jest.fn(() => { })
+            storeActions.resetStore = jest.fn(() => { })
+            FlowIdActions.setNewFlowId = jest.fn(() => { })
+            navigation.navigateToStep = jest.fn()
+        })
         test("resetWizard resetStore and creates new flowId", () => { })
         test("resetWizard reader ok navigates to WIZARD_STATE_UPLOAD", () => { })
         test("resetWizard reader not ok navigates to WIZARD_STATE_VERSION_CHECK_LOADING", () => { })
+        afterEach(()=>{
+            eIDLinkController.controller = ORIGINAL_controller
+            storeActions.resetStore = ORIGINAL_resetStore
+            FlowIdActions.setNewFlowId = ORIGINAL_setNewFlowId
+            navigation.navigateToStep = ORIGINAL_navigateToStep
+        })
     })
 })
