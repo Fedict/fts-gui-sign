@@ -128,7 +128,7 @@ export const checkVersion = (isErrorCheck) => (dispatch, getStore) => {
     let eIDLink = controller.getNewInstance()
 
     const requestId = dispatch(createRequestId(4000, requestTimeOutFunctionChecVersion))
-   
+
     eIDLink.getVersion(window.configData.eIDLinkMinimumVersion,
         () => {
             dispatch(removeRequestId(requestId))
@@ -258,6 +258,9 @@ export const validateCertificates = () => (dispatch, getStore) => {
 
             })
 
+    }
+    else {
+        dispatch(showErrorMessage(MessageCertificatesNotFound))
     }
 }
 

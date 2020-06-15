@@ -6,9 +6,11 @@ import {
     createCertificateObject,
     getCertificatesFromResponse,
     requestTimeoutFunction,
-    requestTimeOutFunctionChecVersion
+    requestTimeOutFunctionChecVersion,
+    getCertificates,
+    validateCertificates
 } from "./WizardLogicActions"
-import { WIZARD_STATE_PIN_INPUT, WIZARD_STATE_SIGNING_PRESIGN_LOADING, WIZARD_STATE_UPLOAD, WIZARD_STATE_VERSION_CHECK_INSTALL, WIZARD_STATE_VERSION_CHECK_UPDATE, WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENSION } from "../../wizard/WizardConstants"
+import { WIZARD_STATE_PIN_INPUT, WIZARD_STATE_SIGNING_PRESIGN_LOADING, WIZARD_STATE_UPLOAD, WIZARD_STATE_VERSION_CHECK_INSTALL, WIZARD_STATE_VERSION_CHECK_UPDATE, WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENSION, WIZARD_STATE_VALIDATE_LOADING, WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN, WIZARD_STATE_CERTIFICATES_CHOOSE } from "../../wizard/WizardConstants"
 
 import { controller } from "../../eIdLink/controller"
 import * as eIDLinkController from "../../eIdLink/controller"
@@ -23,9 +25,10 @@ import { showErrorMessage } from "../../message/actions/MessageActions"
 import * as MessageActions from "../../message/actions/MessageActions"
 import { ErrorGeneral } from "../../message/MessageConstants"
 
-import { handleFlowIdError } from "../../controlIds/flowId/FlowIdHelpers"
+import { handleFlowIdError, INCORECT_FLOW_ID } from "../../controlIds/flowId/FlowIdHelpers"
 import * as FlowIdHelpers from "../../controlIds/flowId/FlowIdHelpers"
-import { handleRequestIdError } from "../../controlIds/requestId/RequestIdHelpers"
+
+import { handleRequestIdError, INCORECT_REQUEST_ID } from "../../controlIds/requestId/RequestIdHelpers"
 import * as RequestIdHelpers from "../../controlIds/requestId/RequestIdHelpers"
 
 import { saveCertificateList, selectCertificate } from "./CertificateActions"
@@ -51,6 +54,7 @@ import * as storeActions from "../../../store/storeActions"
 
 import { setNewFlowId } from "../../controlIds/flowId/FlowIdActions"
 import * as FlowIdActions from "../../controlIds/flowId/FlowIdActions"
+import { MessageCertificatesNotFound } from "../messages/MessageCertificatesNotFound"
 
 const ORIGINAL_controller = controller
 const ORIGINAL_navigateToStep = navigateToStep
@@ -77,6 +81,10 @@ const ORIGINAL_setDownloadFile = setDownloadFile
 const ORIGINAL_resetStore = resetStore
 const ORIGINAL_setNewFlowId = setNewFlowId
 
+
+function flushPromises() {
+    return new Promise(resolve => setImmediate(resolve));
+}
 
 describe("Pinpad support", () => {
 
@@ -583,14 +591,199 @@ describe("WizardLogicActions", () => {
             navigation.navigateToStep = jest.fn();
             SignErrorHandleActions.handleErrorEID = jest.fn();
         })
-        test("getCertificates calls getCertificate of eIDLink", () => { })
-        test("checkVersion creates a requestId", () => { })
-        test("checkVersion succes saves respons in store", () => { })
-        test("checkVersion succes certificateList.length = 0 shows a MessageCertificatesNotFound error", () => { })
-        test("checkVersion succes certificateList.length > 0 navigates to certificate validation page", () => { })
-        test("checkVersion error shows message", () => { })
-        test("checkVersion error INCORECT_REQUEST_ID does nothing", () => { })
-        test("checkVersion error INCORECT_FLOW_ID does nothing", () => { })
+        test("getCertificates calls getCertificate of eIDLink", () => {
+            const mockgetCertificates = jest.fn(() => { return Promise.resolve() })
+            eIDLinkController.controller.getInstance = jest.fn(() => { return { getCertificate: mockgetCertificates } })
+
+            const mockDispatch = jest.fn()
+            const mockGetStore = jest.fn(() => { return { controlId: { flowId: 20 } } })
+            getCertificates()(mockDispatch, mockGetStore)
+
+            expect(mockgetCertificates).toBeCalledTimes(1)
+
+        })
+        test("getCertificates creates a requestId", () => {
+            const mockgetCertificates = jest.fn(() => { return Promise.resolve() })
+            eIDLinkController.controller.getInstance = jest.fn(() => { return { getCertificate: mockgetCertificates } })
+
+            const mockDispatch = jest.fn()
+            const mockGetStore = jest.fn(() => { return { controlId: { flowId: 20 } } })
+            getCertificates()(mockDispatch, mockGetStore)
+
+            expect(mockDispatch).toBeCalledTimes(1)
+            expect(RequestIdActions.createRequestId).toBeCalledTimes(1)
+            expect(RequestIdActions.createRequestId).toBeCalledWith(10000, expect.any(Function))
+        })
+        test("getCertificates succes saves respons in store", async () => {
+
+            const resultGetCertificates = {
+                "Readers":
+                    [{
+                        "ReaderName": "readerName",
+                        "ReaderType": "standard",
+                        "cardType": "BEID",
+                        "certificates": [
+                            "certificate string 1",
+                            "certificate string 2"]
+                    }],
+                "result": "OK",
+                "correlationId": "5690e32f-0956-4e6e-f2c2-4ce523723ec2",
+                "src": "background.js",
+                "extensionVersion": "0.0.4"
+            }
+            const mockgetCertificates = jest.fn(() => { return Promise.resolve(resultGetCertificates) })
+            eIDLinkController.controller.getInstance = jest.fn(() => { return { getCertificate: mockgetCertificates } })
+
+            const mockDispatch = jest.fn()
+            const mockGetStore = jest.fn(() => { return { controlId: { flowId: 20 } } })
+
+            FlowIdHelpers.handleFlowIdError = jest.fn(() => (value) => { return value })
+            RequestIdHelpers.handleRequestIdError = jest.fn(() => (value) => { return value })
+
+            const expectedResult = getCertificatesFromResponse(resultGetCertificates)
+            getCertificates()(mockDispatch, mockGetStore)
+
+            await flushPromises();
+
+            expect(mockDispatch).toBeCalledTimes(3)
+            expect(CertificateActions.saveCertificateList).toBeCalledTimes(1)
+            expect(CertificateActions.saveCertificateList).toBeCalledWith(expectedResult)
+        })
+        test("getCertificates succes certificateList.length = 0 shows a MessageCertificatesNotFound error", async () => {
+            const resultGetCertificates = {
+                "Readers": [],
+                "result": "OK",
+                "correlationId": "5690e32f-0956-4e6e-f2c2-4ce523723ec2",
+                "src": "background.js",
+                "extensionVersion": "0.0.4"
+            }
+            const mockgetCertificates = jest.fn(() => { return Promise.resolve(resultGetCertificates) })
+            eIDLinkController.controller.getInstance = jest.fn(() => { return { getCertificate: mockgetCertificates } })
+
+            const mockDispatch = jest.fn()
+            const mockGetStore = jest.fn(() => { return { controlId: { flowId: 20 } } })
+
+            FlowIdHelpers.handleFlowIdError = jest.fn(() => (value) => { return value })
+            RequestIdHelpers.handleRequestIdError = jest.fn(() => (value) => { return value })
+
+            const expectedResult = getCertificatesFromResponse(resultGetCertificates)
+            getCertificates()(mockDispatch, mockGetStore)
+
+            await flushPromises();
+
+            expect(mockDispatch).toBeCalledTimes(3)
+            expect(CertificateActions.saveCertificateList).toBeCalledTimes(1)
+            expect(CertificateActions.saveCertificateList).toBeCalledWith(expectedResult)
+            expect(MessageActions.showErrorMessage).toBeCalledTimes(1)
+            expect(MessageActions.showErrorMessage).toBeCalledWith(MessageCertificatesNotFound)
+
+        })
+        test("getCertificates succes certificateList.length > 0 navigates to certificate validation page", async () => {
+
+            const resultGetCertificates = {
+                "Readers":
+                    [{
+                        "ReaderName": "readerName",
+                        "ReaderType": "standard",
+                        "cardType": "BEID",
+                        "certificates": [
+                            "certificate string 1",
+                            "certificate string 2"]
+                    }],
+                "result": "OK",
+                "correlationId": "5690e32f-0956-4e6e-f2c2-4ce523723ec2",
+                "src": "background.js",
+                "extensionVersion": "0.0.4"
+            }
+            const mockgetCertificates = jest.fn(() => { return Promise.resolve(resultGetCertificates) })
+            eIDLinkController.controller.getInstance = jest.fn(() => { return { getCertificate: mockgetCertificates } })
+
+            const mockDispatch = jest.fn()
+            const mockGetStore = jest.fn(() => { return { controlId: { flowId: 20 } } })
+
+            FlowIdHelpers.handleFlowIdError = jest.fn(() => (value) => { return value })
+            RequestIdHelpers.handleRequestIdError = jest.fn(() => (value) => { return value })
+
+            const expectedResult = getCertificatesFromResponse(resultGetCertificates)
+            getCertificates()(mockDispatch, mockGetStore)
+
+            await flushPromises();
+
+            expect(mockDispatch).toBeCalledTimes(3)
+            expect(CertificateActions.saveCertificateList).toBeCalledTimes(1)
+            expect(CertificateActions.saveCertificateList).toBeCalledWith(expectedResult)
+
+            expect(MessageActions.showErrorMessage).not.toBeCalled()
+
+            expect(navigation.navigateToStep).toBeCalledTimes(1)
+            expect(navigation.navigateToStep).toBeCalledWith(WIZARD_STATE_VALIDATE_LOADING)
+
+        })
+        test("getCertificates error shows message", async () => {
+            const requestId = 55555
+            RequestIdActions.createRequestId = jest.fn(() => { return requestId })
+            const errorValue = "errorValue"
+            const mockgetCertificates = jest.fn(() => { return Promise.reject(errorValue) })
+            eIDLinkController.controller.getInstance = jest.fn(() => { return { getCertificate: mockgetCertificates } })
+
+            const mockDispatch = jest.fn((val) => { return val })
+            const mockGetStore = jest.fn(() => { return { controlId: { flowId: 20 } } })
+
+            getCertificates()(mockDispatch, mockGetStore)
+
+            await flushPromises();
+
+            expect(mockDispatch).toBeCalledTimes(3)
+            expect(RequestIdActions.removeRequestId).toBeCalled()
+            expect(RequestIdActions.removeRequestId).toBeCalledTimes(1)
+            expect(RequestIdActions.removeRequestId).toBeCalledWith(requestId)
+            expect(SignErrorHandleActions.handleErrorEID).toBeCalledTimes(1)
+            expect(SignErrorHandleActions.handleErrorEID).toBeCalledWith(errorValue)
+            expect(CertificateActions.saveCertificateList).toBeCalledTimes(0)
+            expect(MessageActions.showErrorMessage).toBeCalledTimes(0)
+
+        })
+        test("getCertificates error INCORECT_REQUEST_ID does nothing", async () => {
+
+            const mockgetCertificates = jest.fn(() => { return Promise.resolve() })
+            eIDLinkController.controller.getInstance = jest.fn(() => { return { getCertificate: mockgetCertificates } })
+
+            const mockDispatch = jest.fn((val) => { return val })
+            const mockGetStore = jest.fn(() => { return { controlId: { flowId: 20 } } })
+
+            FlowIdHelpers.handleFlowIdError = jest.fn(() => (value) => { return value })
+            RequestIdHelpers.handleRequestIdError = jest.fn(() => () => { throw INCORECT_REQUEST_ID })
+
+            getCertificates()(mockDispatch, mockGetStore)
+
+            await flushPromises();
+
+            expect(mockDispatch).toBeCalledTimes(1)
+            expect(RequestIdActions.removeRequestId).toBeCalledTimes(0)
+            expect(SignErrorHandleActions.handleErrorEID).toBeCalledTimes(0)
+            expect(CertificateActions.saveCertificateList).toBeCalledTimes(0)
+            expect(MessageActions.showErrorMessage).toBeCalledTimes(0)
+        })
+        test("getCertificates error INCORECT_FLOW_ID does nothing", async () => {
+            const mockgetCertificates = jest.fn(() => { return Promise.resolve() })
+            eIDLinkController.controller.getInstance = jest.fn(() => { return { getCertificate: mockgetCertificates } })
+
+            const mockDispatch = jest.fn((val) => { return val })
+            const mockGetStore = jest.fn(() => { return { controlId: { flowId: 20 } } })
+
+            FlowIdHelpers.handleFlowIdError = jest.fn(() => () => { throw INCORECT_FLOW_ID })
+            RequestIdHelpers.handleRequestIdError = jest.fn(() => (value) => { return value })
+
+            getCertificates()(mockDispatch, mockGetStore)
+
+            await flushPromises();
+
+            expect(mockDispatch).toBeCalledTimes(1)
+            expect(RequestIdActions.removeRequestId).toBeCalledTimes(0)
+            expect(SignErrorHandleActions.handleErrorEID).toBeCalledTimes(0)
+            expect(CertificateActions.saveCertificateList).toBeCalledTimes(0)
+            expect(MessageActions.showErrorMessage).toBeCalledTimes(0)
+        })
         afterEach(() => {
             eIDLinkController.controller = ORIGINAL_controller
             RequestIdActions.createRequestId = ORIGINAL_createRequestId
@@ -613,14 +806,448 @@ describe("WizardLogicActions", () => {
             CertificateActions.selectCertificate = jest.fn()
             navigation.navigateToStep = jest.fn()
         })
-        test("validateCertificates calls validateCertificatesAPI with the correct body ", () => { })
-        test("validateCertificates doesn't call validateCertificatesAPI if there are no certificates ", () => { })
-        test("validateCertificates succes saves only valid certificates ", () => { })
-        test("validateCertificates succes valid certificates list.length == 0 shows error MessageCertificatesNotFound ", () => { })
-        test("validateCertificates succes valid certificates list.length == 1 selects certificate and navigates to WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN ", () => { })
-        test("validateCertificates succes valid certificates list.length > 1 navigates to WIZARD_STATE_CERTIFICATES_CHOOSE ", () => { })
-        test("validateCertificates error shows message", () => { })
-        test("validateCertificates error INCORECT_FLOW_ID does nothing", () => { })
+        test("validateCertificates calls validateCertificatesAPI with the correct body ", () => {
+            communication.validateCertificatesAPI = jest.fn(() => { return Promise.resolve() })
+            const certificateList = [{
+                readerName: 'readerName',
+                readerType: 'standard',
+                cardType: 'BEID',
+                certificate: 'certificate string',
+                APIBody: {
+                    certificate: {
+                        encodedCertificate: 'certificate string'
+                    }
+                }
+            }]
+
+            const expectedCertificateList = certificateList.map(val => {
+                return {
+                    ...val.APIBody,
+                    "expectedKeyUsage": "NON_REPUDIATION"
+                }
+            })
+            const mockDispatch = jest.fn()
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: 88888,
+                    certificate: {
+                        certificateList: certificateList
+                    }
+                }
+            })
+            validateCertificates()(mockDispatch, mockGetStore)
+
+            expect(communication.validateCertificatesAPI).toBeCalledTimes(1)
+            expect(communication.validateCertificatesAPI).toBeCalledWith(expectedCertificateList)
+        })
+        test("validateCertificates doesn't call validateCertificatesAPI if there are no certificates and shows a error message", () => {
+            communication.validateCertificatesAPI = jest.fn(() => { return Promise.resolve() })
+
+            const mockDispatch = jest.fn()
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: 88888,
+                    certificate: {
+                        certificateList: undefined
+                    }
+                }
+            })
+            validateCertificates()(mockDispatch, mockGetStore)
+
+            expect(communication.validateCertificatesAPI).toBeCalledTimes(0)
+            expect(MessageActions.showErrorMessage).toBeCalledWith(MessageCertificatesNotFound)
+
+        })
+        test("validateCertificates succes saves only valid certificates ", async () => {
+
+            const certificateList = [{
+                readerName: 'readerName',
+                readerType: 'standard',
+                cardType: 'BEID',
+                certificate: 'certificate string',
+                APIBody: {
+                    certificate: {
+                        encodedCertificate: 'certificate string'
+                    }
+                }
+            }, {
+                readerName: 'readerName',
+                readerType: 'standard',
+                cardType: 'BEID',
+                certificate: 'certificate string',
+                APIBody: {
+                    certificate: {
+                        encodedCertificate: 'certificate string'
+                    }
+                }
+            }]
+
+            const certificateResponse = {
+                "indications": [{
+                    "commonName": "name (Signature)",
+                    "indication": "PASSED",
+                    "subIndication": null,
+                    "keyUsageCheckOk": true
+                }, {
+                    "commonName": "name (Authentication)",
+                    "indication": "PASSED",
+                    "subIndication": null,
+                    "keyUsageCheckOk": false
+                }]
+            }
+
+            communication.validateCertificatesAPI = jest.fn(() => { return Promise.resolve(certificateResponse) })
+            const expectedCertificateList = certificateList.map(val => {
+                return {
+                    ...val.APIBody,
+                    "expectedKeyUsage": "NON_REPUDIATION"
+                }
+            })
+            const mockDispatch = jest.fn()
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: 88888,
+                    certificate: {
+                        certificateList: certificateList
+                    }
+                }
+            })
+            FlowIdHelpers.handleFlowIdError = jest.fn(() => (value) => { return value })
+
+
+            validateCertificates()(mockDispatch, mockGetStore)
+            await flushPromises();
+            expect(communication.validateCertificatesAPI).toBeCalledTimes(1)
+            expect(communication.validateCertificatesAPI).toBeCalledWith(expectedCertificateList)
+            expect(CertificateActions.saveCertificateList).toBeCalledTimes(1)
+            const callParametersCertifictateList = CertificateActions.saveCertificateList.mock.calls[0][0]
+            const callParametersCertifictateListPased = callParametersCertifictateList.filter((val) => { return val.keyUsageCheckOk })
+            expect(callParametersCertifictateListPased.length).toEqual(1)
+        })
+        test("validateCertificates succes valid certificates list.length == 0 shows error MessageCertificatesNotFound ", async () => {
+            const certificateList = [{
+                readerName: 'readerName',
+                readerType: 'standard',
+                cardType: 'BEID',
+                certificate: 'certificate string',
+                APIBody: {
+                    certificate: {
+                        encodedCertificate: 'certificate string'
+                    }
+                }
+            }, {
+                readerName: 'readerName',
+                readerType: 'standard',
+                cardType: 'BEID',
+                certificate: 'certificate string',
+                APIBody: {
+                    certificate: {
+                        encodedCertificate: 'certificate string'
+                    }
+                }
+            }]
+
+            const certificateResponse = {
+                "indications": [{
+                    "commonName": "name (Signature)",
+                    "indication": "PASSED",
+                    "subIndication": null,
+                    "keyUsageCheckOk": false
+                }, {
+                    "commonName": "name (Authentication)",
+                    "indication": "PASSED",
+                    "subIndication": null,
+                    "keyUsageCheckOk": false
+                }]
+            }
+
+            communication.validateCertificatesAPI = jest.fn(() => { return Promise.resolve(certificateResponse) })
+            const expectedCertificateList = certificateList.map(val => {
+                return {
+                    ...val.APIBody,
+                    "expectedKeyUsage": "NON_REPUDIATION"
+                }
+            })
+            const mockDispatch = jest.fn()
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: 88888,
+                    certificate: {
+                        certificateList: certificateList
+                    }
+                }
+            })
+            FlowIdHelpers.handleFlowIdError = jest.fn(() => (value) => { return value })
+
+
+            validateCertificates()(mockDispatch, mockGetStore)
+            await flushPromises();
+            expect(communication.validateCertificatesAPI).toBeCalledTimes(1)
+            expect(communication.validateCertificatesAPI).toBeCalledWith(expectedCertificateList)
+            expect(CertificateActions.saveCertificateList).toBeCalledTimes(1)
+            const callParametersCertifictateList = CertificateActions.saveCertificateList.mock.calls[0][0]
+            const callParametersCertifictateListPased = callParametersCertifictateList.filter((val) => { return val.keyUsageCheckOk })
+            expect(callParametersCertifictateListPased.length).toEqual(0)
+
+            expect(MessageActions.showErrorMessage).toBeCalledTimes(1)
+            expect(MessageActions.showErrorMessage).toBeCalledWith(MessageCertificatesNotFound)
+
+        })
+        test("validateCertificates succes valid certificates list.length == 1 selects certificate and navigates to WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN ", async () => {
+            const certificateList = [{
+                readerName: 'readerName',
+                readerType: 'standard',
+                cardType: 'BEID',
+                certificate: 'certificate string',
+                APIBody: {
+                    certificate: {
+                        encodedCertificate: 'certificate string'
+                    }
+                }
+            }, {
+                readerName: 'readerName',
+                readerType: 'standard',
+                cardType: 'BEID',
+                certificate: 'certificate string',
+                APIBody: {
+                    certificate: {
+                        encodedCertificate: 'certificate string'
+                    }
+                }
+            }]
+
+            const certificateResponse = {
+                "indications": [{
+                    "commonName": "name (Signature)",
+                    "indication": "PASSED",
+                    "subIndication": null,
+                    "keyUsageCheckOk": true
+                }, {
+                    "commonName": "name (Authentication)",
+                    "indication": "PASSED",
+                    "subIndication": null,
+                    "keyUsageCheckOk": false
+                }]
+            }
+
+            communication.validateCertificatesAPI = jest.fn(() => { return Promise.resolve(certificateResponse) })
+            const expectedCertificateList = certificateList.map(val => {
+                return {
+                    ...val.APIBody,
+                    "expectedKeyUsage": "NON_REPUDIATION"
+                }
+            })
+            const mockDispatch = jest.fn()
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: 88888,
+                    certificate: {
+                        certificateList: certificateList
+                    }
+                }
+            })
+            FlowIdHelpers.handleFlowIdError = jest.fn(() => (value) => { return value })
+
+
+            validateCertificates()(mockDispatch, mockGetStore)
+            await flushPromises();
+            expect(communication.validateCertificatesAPI).toBeCalledTimes(1)
+            expect(communication.validateCertificatesAPI).toBeCalledWith(expectedCertificateList)
+            expect(CertificateActions.saveCertificateList).toBeCalledTimes(1)
+            const callParametersCertifictateList = CertificateActions.saveCertificateList.mock.calls[0][0]
+            const callParametersCertifictateListPased = callParametersCertifictateList.filter((val) => { return val.keyUsageCheckOk })
+            expect(callParametersCertifictateListPased.length).toEqual(1)
+
+            expect(CertificateActions.selectCertificate).toBeCalledTimes(1)
+            expect(CertificateActions.selectCertificate).toBeCalledWith(callParametersCertifictateListPased[0])
+
+            expect(navigation.navigateToStep).toBeCalledTimes(1)
+            expect(navigation.navigateToStep).toBeCalledWith(WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN)
+
+
+        })
+        test("validateCertificates succes valid certificates list.length > 1 navigates to WIZARD_STATE_CERTIFICATES_CHOOSE ", async () => {
+            const certificateList = [{
+                readerName: 'readerName',
+                readerType: 'standard',
+                cardType: 'BEID',
+                certificate: 'certificate string',
+                APIBody: {
+                    certificate: {
+                        encodedCertificate: 'certificate string'
+                    }
+                }
+            }, {
+                readerName: 'readerName',
+                readerType: 'standard',
+                cardType: 'BEID',
+                certificate: 'certificate string',
+                APIBody: {
+                    certificate: {
+                        encodedCertificate: 'certificate string'
+                    }
+                }
+            }]
+
+            const certificateResponse = {
+                "indications": [{
+                    "commonName": "name (Signature)",
+                    "indication": "PASSED",
+                    "subIndication": null,
+                    "keyUsageCheckOk": true
+                }, {
+                    "commonName": "name (Authentication)",
+                    "indication": "PASSED",
+                    "subIndication": null,
+                    "keyUsageCheckOk": true
+                }]
+            }
+
+            communication.validateCertificatesAPI = jest.fn(() => { return Promise.resolve(certificateResponse) })
+            const expectedCertificateList = certificateList.map(val => {
+                return {
+                    ...val.APIBody,
+                    "expectedKeyUsage": "NON_REPUDIATION"
+                }
+            })
+            const mockDispatch = jest.fn()
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: 88888,
+                    certificate: {
+                        certificateList: certificateList
+                    }
+                }
+            })
+            FlowIdHelpers.handleFlowIdError = jest.fn(() => (value) => { return value })
+
+
+            validateCertificates()(mockDispatch, mockGetStore)
+            await flushPromises();
+            expect(communication.validateCertificatesAPI).toBeCalledTimes(1)
+            expect(communication.validateCertificatesAPI).toBeCalledWith(expectedCertificateList)
+            expect(CertificateActions.saveCertificateList).toBeCalledTimes(1)
+            const callParametersCertifictateList = CertificateActions.saveCertificateList.mock.calls[0][0]
+            const callParametersCertifictateListPased = callParametersCertifictateList.filter((val) => { return val.keyUsageCheckOk })
+            expect(callParametersCertifictateListPased.length).toEqual(2)
+
+            expect(CertificateActions.selectCertificate).not.toBeCalled()
+            expect(CertificateActions.selectCertificate).not.toBeCalledWith(callParametersCertifictateListPased[0])
+
+            expect(navigation.navigateToStep).toBeCalledTimes(1)
+            expect(navigation.navigateToStep).toBeCalledWith(WIZARD_STATE_CERTIFICATES_CHOOSE)
+        })
+        test("validateCertificates error shows message", async () => {
+            const certificateList = [{
+                readerName: 'readerName',
+                readerType: 'standard',
+                cardType: 'BEID',
+                certificate: 'certificate string',
+                APIBody: {
+                    certificate: {
+                        encodedCertificate: 'certificate string'
+                    }
+                }
+            }, {
+                readerName: 'readerName',
+                readerType: 'standard',
+                cardType: 'BEID',
+                certificate: 'certificate string',
+                APIBody: {
+                    certificate: {
+                        encodedCertificate: 'certificate string'
+                    }
+                }
+            }]
+
+            communication.validateCertificatesAPI = jest.fn(() => { return Promise.reject() })
+            const expectedCertificateList = certificateList.map(val => {
+                return {
+                    ...val.APIBody,
+                    "expectedKeyUsage": "NON_REPUDIATION"
+                }
+            })
+            const mockDispatch = jest.fn()
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: 88888,
+                    certificate: {
+                        certificateList: certificateList
+                    }
+                }
+            })
+            FlowIdHelpers.handleFlowIdError = jest.fn(() => (value) => { return value })
+
+
+            validateCertificates()(mockDispatch, mockGetStore)
+            await flushPromises();
+            expect(communication.validateCertificatesAPI).toBeCalledTimes(1)
+            expect(communication.validateCertificatesAPI).toBeCalledWith(expectedCertificateList)
+
+            expect(MessageActions.showErrorMessage).toBeCalledWith(MessageCertificatesNotFound)
+
+
+        })
+        test("validateCertificates error INCORECT_FLOW_ID does nothing", async () => { 
+            const certificateList = [{
+                readerName: 'readerName',
+                readerType: 'standard',
+                cardType: 'BEID',
+                certificate: 'certificate string',
+                APIBody: {
+                    certificate: {
+                        encodedCertificate: 'certificate string'
+                    }
+                }
+            }, {
+                readerName: 'readerName',
+                readerType: 'standard',
+                cardType: 'BEID',
+                certificate: 'certificate string',
+                APIBody: {
+                    certificate: {
+                        encodedCertificate: 'certificate string'
+                    }
+                }
+            }]
+
+            const certificateResponse = {
+                "indications": [{
+                    "commonName": "name (Signature)",
+                    "indication": "PASSED",
+                    "subIndication": null,
+                    "keyUsageCheckOk": true
+                }, {
+                    "commonName": "name (Authentication)",
+                    "indication": "PASSED",
+                    "subIndication": null,
+                    "keyUsageCheckOk": true
+                }]
+            }
+
+            communication.validateCertificatesAPI = jest.fn(() => { return Promise.resolve(certificateResponse) })
+           
+            const mockDispatch = jest.fn()
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: 88888,
+                    certificate: {
+                        certificateList: certificateList
+                    }
+                }
+            })
+            FlowIdHelpers.handleFlowIdError = jest.fn(() => () => {throw INCORECT_FLOW_ID})
+
+            validateCertificates()(mockDispatch, mockGetStore)
+
+            await flushPromises();
+
+            expect(communication.validateCertificatesAPI).toBeCalledTimes(1)
+            expect(CertificateActions.saveCertificateList).not.toBeCalled()
+            expect(CertificateActions.selectCertificate).not.toBeCalled()
+            expect(navigation.navigateToStep).not.toBeCalled()
+          
+        })
         afterEach(() => {
             communication.validateCertificatesAPI = ORIGINAL_validateCertificatesAPI
             FlowIdHelpers.handleFlowIdError = ORIGINAL_handleFlowIdError
@@ -674,7 +1301,7 @@ describe("WizardLogicActions", () => {
         test("validateCertificates succes certificate not valid shows MessageCertificatesNotFound", () => { })
         test("validateCertificates error shows MessageCertificatesNotFound", () => { })
         test("validateCertificates error INCORECT_FLOW_ID does nothing", () => { })
-        afterEach(()=>{
+        afterEach(() => {
             communication.validateCertificatesAPI = ORIGINAL_validateCertificatesAPI
             FlowIdHelpers.handleFlowIdError = ORIGINAL_handleFlowIdError
             CertificateActions.selectCertificate = ORIGINAL_selectCertificate
@@ -697,11 +1324,11 @@ describe("WizardLogicActions", () => {
         test("getDigest succes navigates to sign", () => { })
         test("getDigest error shows message", () => { })
         test("getDigest error INCORECT_FLOW_ID does nothing", () => { })
-        afterEach(()=>{
-            communication.getDataToSignAPI =  ORIGINAL_getDataToSignAPI
-            FlowIdHelpers.handleFlowIdError =  ORIGINAL_handleFlowIdError
-            DigestActions.setDigest =  ORIGINAL_setDigest
-            MessageActions.showErrorMessage =  ORIGINAL_showErrorMessage
+        afterEach(() => {
+            communication.getDataToSignAPI = ORIGINAL_getDataToSignAPI
+            FlowIdHelpers.handleFlowIdError = ORIGINAL_handleFlowIdError
+            DigestActions.setDigest = ORIGINAL_setDigest
+            MessageActions.showErrorMessage = ORIGINAL_showErrorMessage
         })
     })
 
@@ -713,7 +1340,7 @@ describe("WizardLogicActions", () => {
         test("navigateToSign shows ErrorGeneral if no certificateSelected", () => { })
         test("navigateToSign pinpad reader navigates to WIZARD_STATE_SIGNING_PRESIGN_LOADING and calls sign(null)", () => { })
         test("navigateToSign no pinpad reader navigates to WIZARD_STATE_PIN_INPUT", () => { })
-        afterEach(()=>{
+        afterEach(() => {
             navigation.navigateToStep = ORIGINAL_navigateToStep
             MessageActions.showErrorMessage = ORIGINAL_showErrorMessage;
         })
@@ -727,7 +1354,7 @@ describe("WizardLogicActions", () => {
         test("navigateToPinError shows ErrorGeneral if no certificateSelected", () => { })
         test("navigateToPinError pinpad navigates to WIZARD_STATE_PINPAD_ERROR", () => { })
         test("navigateToPinError no pinpad navigates to WIZARD_STATE_PIN_INPUT", () => { })
-        afterEach(()=>{
+        afterEach(() => {
             navigation.navigateToStep = ORIGINAL_navigateToStep
             MessageActions.showErrorMessage = ORIGINAL_showErrorMessage;
         })
@@ -757,7 +1384,7 @@ describe("WizardLogicActions", () => {
         test("sign error INCORECT_FLOW_ID does nothing", () => { })
 
         afterEach(() => {
-            eIDLinkController.controller= ORIGINAL_controller
+            eIDLinkController.controller = ORIGINAL_controller
             RequestIdActions.createRequestId = ORIGINAL_createRequestId
             FlowIdHelpers.handleFlowIdError = ORIGINAL_handleFlowIdError
             RequestIdHelpers.handleRequestIdError = ORIGINAL_handleRequestIdError
@@ -804,7 +1431,7 @@ describe("WizardLogicActions", () => {
         test("resetWizard resetStore and creates new flowId", () => { })
         test("resetWizard reader ok navigates to WIZARD_STATE_UPLOAD", () => { })
         test("resetWizard reader not ok navigates to WIZARD_STATE_VERSION_CHECK_LOADING", () => { })
-        afterEach(()=>{
+        afterEach(() => {
             eIDLinkController.controller = ORIGINAL_controller
             storeActions.resetStore = ORIGINAL_resetStore
             FlowIdActions.setNewFlowId = ORIGINAL_setNewFlowId
