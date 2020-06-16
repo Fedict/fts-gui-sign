@@ -285,6 +285,7 @@ export const validateCertificateChain = () => (dispatch, getStore) => {
             .then(handleFlowIdError(flowId, getStore))
             .then(handleRequestIdError(requestId, dispatch, getStore))
             .then((resp) => {
+                console.log("validateCertificateChain", JSON.stringify(resp))
                 const newCertificate = {
                     ...certificate.certificateSelected,
                     APIBody: createCertificateObject(usedCertificate, resp.certificateChain),

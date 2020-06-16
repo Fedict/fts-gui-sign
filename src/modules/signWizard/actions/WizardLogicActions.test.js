@@ -8,9 +8,11 @@ import {
     requestTimeoutFunction,
     requestTimeOutFunctionChecVersion,
     getCertificates,
-    validateCertificates
+    validateCertificates,
+    validateCertificateChain,
+    validateCertificate
 } from "./WizardLogicActions"
-import { WIZARD_STATE_PIN_INPUT, WIZARD_STATE_SIGNING_PRESIGN_LOADING, WIZARD_STATE_UPLOAD, WIZARD_STATE_VERSION_CHECK_INSTALL, WIZARD_STATE_VERSION_CHECK_UPDATE, WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENSION, WIZARD_STATE_VALIDATE_LOADING, WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN, WIZARD_STATE_CERTIFICATES_CHOOSE } from "../../wizard/WizardConstants"
+import { WIZARD_STATE_PIN_INPUT, WIZARD_STATE_SIGNING_PRESIGN_LOADING, WIZARD_STATE_UPLOAD, WIZARD_STATE_VERSION_CHECK_INSTALL, WIZARD_STATE_VERSION_CHECK_UPDATE, WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENSION, WIZARD_STATE_VALIDATE_LOADING, WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN, WIZARD_STATE_CERTIFICATES_CHOOSE, WIZARD_STATE_DIGEST_LOADING } from "../../wizard/WizardConstants"
 
 import { controller } from "../../eIdLink/controller"
 import * as eIDLinkController from "../../eIdLink/controller"
@@ -55,6 +57,7 @@ import * as storeActions from "../../../store/storeActions"
 import { setNewFlowId } from "../../controlIds/flowId/FlowIdActions"
 import * as FlowIdActions from "../../controlIds/flowId/FlowIdActions"
 import { MessageCertificatesNotFound } from "../messages/MessageCertificatesNotFound"
+
 
 const ORIGINAL_controller = controller
 const ORIGINAL_navigateToStep = navigateToStep
@@ -1188,7 +1191,7 @@ describe("WizardLogicActions", () => {
 
 
         })
-        test("validateCertificates error INCORECT_FLOW_ID does nothing", async () => { 
+        test("validateCertificates error INCORECT_FLOW_ID does nothing", async () => {
             const certificateList = [{
                 readerName: 'readerName',
                 readerType: 'standard',
@@ -1226,7 +1229,7 @@ describe("WizardLogicActions", () => {
             }
 
             communication.validateCertificatesAPI = jest.fn(() => { return Promise.resolve(certificateResponse) })
-           
+
             const mockDispatch = jest.fn()
             const mockGetStore = jest.fn(() => {
                 return {
@@ -1236,7 +1239,7 @@ describe("WizardLogicActions", () => {
                     }
                 }
             })
-            FlowIdHelpers.handleFlowIdError = jest.fn(() => () => {throw INCORECT_FLOW_ID})
+            FlowIdHelpers.handleFlowIdError = jest.fn(() => () => { throw INCORECT_FLOW_ID })
 
             validateCertificates()(mockDispatch, mockGetStore)
 
@@ -1246,7 +1249,7 @@ describe("WizardLogicActions", () => {
             expect(CertificateActions.saveCertificateList).not.toBeCalled()
             expect(CertificateActions.selectCertificate).not.toBeCalled()
             expect(navigation.navigateToStep).not.toBeCalled()
-          
+
         })
         afterEach(() => {
             communication.validateCertificatesAPI = ORIGINAL_validateCertificatesAPI
@@ -1262,20 +1265,252 @@ describe("WizardLogicActions", () => {
         beforeEach(() => {
             eIDLinkController.controller.getInstance = jest.fn(() => { })
             RequestIdActions.createRequestId = jest.fn(() => { return 55555 })
-            FlowIdHelpers.handleFlowIdError = jest.fn()
-            RequestIdHelpers.handleRequestIdError = jest.fn()
+            FlowIdHelpers.handleFlowIdError = jest.fn((val) => { return val })
+            RequestIdHelpers.handleRequestIdError = jest.fn((val) => { return val })
             RequestIdActions.removeRequestId = jest.fn()
             SignErrorHandleActions.handleErrorEID = jest.fn();
+            communication.validateCertificatesAPI = jest.fn(() => { return Promise.resolve() });
         })
-        test("validateCertificateChain doesn't call eIDLink getCertificateChain if there is no selectedCertificate", () => { })
-        test("validateCertificateChain calls getCertificateChain", () => { })
-        test("validateCertificateChain creates a requestId of 10000ms", () => { })
-        test("validateCertificateChain succes calls handleFlowIdError", () => { })
-        test("validateCertificateChain succes calls handleRequestIdError", () => { })
-        test("validateCertificateChain succes calls validateCertificate with certificate chain", () => { })
-        test("validateCertificateChain error shows message", () => { })
-        test("validateCertificateChain error INCORECT_REQUEST_ID does nothing", () => { })
-        test("validateCertificateChain error INCORECT_FLOW_ID does nothing", () => { })
+        test("validateCertificateChain doesn't call eIDLink getCertificateChain if there is no selectedCertificate",
+            async () => {
+                const mockvalidateCertificateChain = jest.fn(() => { return Promise.resolve() })
+                eIDLinkController.controller.getInstance = jest.fn(() => ({ getCertificateChain: mockvalidateCertificateChain }))
+                const mockDispatch = jest.fn()
+                const mockGetStore = jest.fn(() => {
+                    return {
+                        controlId: 88888,
+                        certificate: undefined
+                    }
+                })
+                validateCertificateChain()(mockDispatch, mockGetStore)
+                await flushPromises();
+
+                expect(mockvalidateCertificateChain).not.toBeCalled()
+
+            })
+        test("validateCertificateChain calls getCertificateChain", async () => {
+            const mockvalidateCertificateChain = jest.fn(() => { return Promise.resolve() })
+            eIDLinkController.controller.getInstance = jest.fn(() => ({ getCertificateChain: mockvalidateCertificateChain }))
+
+            const certificateString = "certificate string"
+            const mockDispatch = jest.fn()
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: 88888,
+                    certificate: {
+                        certificateSelected:
+                            { certificate: certificateString }
+                    }
+                }
+            })
+            validateCertificateChain()(mockDispatch, mockGetStore)
+            await flushPromises()
+            expect(mockvalidateCertificateChain).toBeCalledTimes(1)
+            expect(mockvalidateCertificateChain).toBeCalledWith(expect.any(String), expect.any(String), certificateString)
+        })
+        test("validateCertificateChain creates a requestId of 10000ms", async () => {
+            const mockvalidateCertificateChain = jest.fn(() => { return Promise.resolve() })
+            eIDLinkController.controller.getInstance = jest.fn(() => ({ getCertificateChain: mockvalidateCertificateChain }))
+
+            const certificateString = "certificate string"
+            const mockDispatch = jest.fn()
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: 88888,
+                    certificate: {
+                        certificateSelected:
+                            { certificate: certificateString }
+                    }
+                }
+            })
+            validateCertificateChain()(mockDispatch, mockGetStore)
+            await flushPromises()
+            expect(RequestIdActions.createRequestId).toBeCalledTimes(1)
+            expect(RequestIdActions.createRequestId).toBeCalledWith(10000, requestTimeoutFunction)
+        })
+        test("validateCertificateChain succes calls handleFlowIdError", async () => {
+            const flowId = 88888
+            const mockvalidateCertificateChain = jest.fn(() => { return Promise.resolve() })
+            eIDLinkController.controller.getInstance = jest.fn(() => ({ getCertificateChain: mockvalidateCertificateChain }))
+
+            const certificateString = "certificate string"
+            const mockDispatch = jest.fn()
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: {
+                        flowId: flowId,
+                        requestId: []
+                    },
+                    certificate: {
+                        certificateSelected:
+                            { certificate: certificateString }
+                    }
+                }
+            })
+
+            FlowIdHelpers.handleFlowIdError = jest.fn(() => (val) => { return val })
+            validateCertificateChain()(mockDispatch, mockGetStore)
+            await flushPromises()
+            expect(FlowIdHelpers.handleFlowIdError).toBeCalledTimes(1)
+            expect(FlowIdHelpers.handleFlowIdError).toBeCalledWith(flowId, expect.any(Function))
+
+        })
+        test("validateCertificateChain succes calls handleRequestIdError", async () => {
+            const requestId = 88888
+            RequestIdActions.createRequestId = jest.fn(() => { return requestId })
+            const mockvalidateCertificateChain = jest.fn(() => { return Promise.resolve() })
+            eIDLinkController.controller.getInstance = jest.fn(() => ({ getCertificateChain: mockvalidateCertificateChain }))
+
+            const certificateString = "certificate string"
+            const mockDispatch = jest.fn((val) => { return val })
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: {
+                        flowId: 88888,
+                        requestId: []
+                    },
+                    certificate: {
+                        certificateSelected:
+                            { certificate: certificateString }
+                    }
+                }
+            })
+
+            FlowIdHelpers.handleFlowIdError = jest.fn(() => (val) => { return val })
+            RequestIdHelpers.handleRequestIdError = jest.fn(() => (val) => { return val })
+            validateCertificateChain()(mockDispatch, mockGetStore)
+            await flushPromises()
+            expect(RequestIdHelpers.handleRequestIdError).toBeCalledTimes(1)
+            expect(RequestIdHelpers.handleRequestIdError).toBeCalledWith(requestId, expect.any(Function), expect.any(Function))
+        })
+        test("validateCertificateChain succes calls validateCertificate with certificate chain", async () => {
+
+            const mockvalidateCertificateChainResponse = {
+                "certificateChain": {
+                    "rootCA": "rootCa string",
+                    "subCA": ["subCa string"]
+                },
+                "cardType": "BEID",
+                "result": "OK",
+                "correlationId": "6d51287a-fddf-bf63-59a9-da55debe3baf",
+                "src": "background.js",
+                "extensionVersion": "0.0.4"
+            }
+            const mockvalidateCertificateChain = jest.fn(() => { return Promise.resolve(mockvalidateCertificateChainResponse) })
+            eIDLinkController.controller.getInstance = jest.fn(() => ({ getCertificateChain: mockvalidateCertificateChain }))
+
+
+            const certificateString = "certificate string"
+            const mockDispatch = jest.fn()
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: {
+                        flowId: 77777,
+                        requestId: []
+                    },
+                    certificate: {
+                        certificateSelected:
+                            { certificate: certificateString }
+                    }
+                }
+            })
+            const expectedValue = [{
+                ...createCertificateObject(certificateString, mockvalidateCertificateChainResponse.certificateChain),
+                "expectedKeyUsage": "NON_REPUDIATION"
+            }]
+
+            FlowIdHelpers.handleFlowIdError = jest.fn(() => (val) => { return val })
+            RequestIdHelpers.handleRequestIdError = jest.fn(() => (val) => { return val })
+            validateCertificateChain()(mockDispatch, mockGetStore)
+            await flushPromises()
+            mockDispatch.mock.calls[1][0](jest.fn(), jest.fn(() => ({ controlId: { flowId: 77777 } })))
+            expect(communication.validateCertificatesAPI).toBeCalled()
+            expect(communication.validateCertificatesAPI).toBeCalledWith(expectedValue)
+
+
+        })
+        test("validateCertificateChain error shows message", async () => {
+
+            const mockvalidateCertificateChain = jest.fn(() => { return Promise.reject() })
+            eIDLinkController.controller.getInstance = jest.fn(() => ({ getCertificateChain: mockvalidateCertificateChain }))
+
+
+            const mockDispatch = jest.fn()
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: {
+                        flowId: 77777,
+                        requestId: []
+                    },
+                    certificate: {
+                        certificateSelected:
+                            { certificate: "certificate string" }
+                    }
+                }
+            })
+
+
+            FlowIdHelpers.handleFlowIdError = jest.fn(() => (val) => { return val })
+            RequestIdHelpers.handleRequestIdError = jest.fn(() => (val) => { return val })
+            validateCertificateChain()(mockDispatch, mockGetStore)
+            await flushPromises()
+            expect(RequestIdActions.removeRequestId).toBeCalledTimes(1)
+            expect(SignErrorHandleActions.handleErrorEID).toBeCalledTimes(1)
+        })
+        test("validateCertificateChain error INCORECT_FLOW_ID  does nothing", async () => {
+            const mockvalidateCertificateChain = jest.fn(() => { return Promise.resolve() })
+            eIDLinkController.controller.getInstance = jest.fn(() => ({ getCertificateChain: mockvalidateCertificateChain }))
+
+
+            const mockDispatch = jest.fn()
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: {
+                        flowId: 88888,
+                        requestId: []
+                    },
+                    certificate: {
+                        certificateSelected:
+                            { certificate: "certificatestring" }
+                    }
+                }
+            })
+
+
+            FlowIdHelpers.handleFlowIdError = jest.fn(() => (val) => { throw INCORECT_FLOW_ID })
+            RequestIdHelpers.handleRequestIdError = jest.fn(() => (val) => { return val })
+            validateCertificateChain()(mockDispatch, mockGetStore)
+            await flushPromises()
+            expect(RequestIdActions.removeRequestId).not.toBeCalled()
+            expect(SignErrorHandleActions.handleErrorEID).not.toBeCalled()
+        })
+        test("validateCertificateChain error INCORECT_FLOW_ID does nothing", async () => {
+            const mockvalidateCertificateChain = jest.fn(() => { return Promise.resolve() })
+            eIDLinkController.controller.getInstance = jest.fn(() => ({ getCertificateChain: mockvalidateCertificateChain }))
+
+
+            const mockDispatch = jest.fn()
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: {
+                        flowId: 88888,
+                        requestId: []
+                    },
+                    certificate: {
+                        certificateSelected:
+                            { certificate: "certificatestring" }
+                    }
+                }
+            })
+
+
+            FlowIdHelpers.handleFlowIdError = jest.fn(() => (val) => { return val })
+            RequestIdHelpers.handleRequestIdError = jest.fn(() => (val) => { throw INCORECT_REQUEST_ID })
+            validateCertificateChain()(mockDispatch, mockGetStore)
+            await flushPromises()
+            expect(RequestIdActions.removeRequestId).not.toBeCalled()
+            expect(SignErrorHandleActions.handleErrorEID).not.toBeCalled()
+        })
 
         afterEach(() => {
             eIDLinkController.controller = ORIGINAL_controller
@@ -1284,23 +1519,193 @@ describe("WizardLogicActions", () => {
             RequestIdHelpers.handleRequestIdError = ORIGINAL_handleRequestIdError
             RequestIdActions.removeRequestId = ORIGINAL_removeRequestId
             SignErrorHandleActions.handleErrorEID = ORIGINAL_handleErrorEID
+            communication.validateCertificatesAPI = ORIGINAL_validateCertificatesAPI
         })
     })
 
     describe("validateCertificate", () => {
         beforeEach(() => {
-            communication.validateCertificatesAPI = jest.fn()
-            FlowIdHelpers.handleFlowIdError = jest.fn()
+            communication.validateCertificatesAPI = jest.fn(() => { return Promise.resolve() })
+            FlowIdHelpers.handleFlowIdError = jest.fn(() => (val) => { return val })
             CertificateActions.selectCertificate = jest.fn()
             navigation.navigateToStep = jest.fn()
             MessageActions.showErrorMessage = jest.fn();
         })
-        test("validateCertificates calls validateCertificatesAPI with the correct body ", () => { })
-        test("validateCertificates succes saves only valid certificates ", () => { })
-        test("validateCertificates succes certificate valid selects certificate and navigates to WIZARD_STATE_DIGEST_LOADING ", () => { })
-        test("validateCertificates succes certificate not valid shows MessageCertificatesNotFound", () => { })
-        test("validateCertificates error shows MessageCertificatesNotFound", () => { })
-        test("validateCertificates error INCORECT_FLOW_ID does nothing", () => { })
+        test("validateCertificates calls validateCertificatesAPI with the correct body ", async () => {
+            const startValue = {
+                APIBody: {
+                    certificate: {
+                        encodedCertificate: 'certificateString'
+                    },
+                    certificateChain: [
+                        { encodedCertificate: 'certificate chain string 1' },
+                        { encodedCertificate: 'certificate chain string 2' }
+                    ]
+                }
+            }
+            const expectedResult = [{
+                ...startValue.APIBody,
+                "expectedKeyUsage": "NON_REPUDIATION"
+            }]
+
+            const mockDispatch = jest.fn()
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: {
+                        flowId: 88888,
+                        requestId: []
+                    }
+                }
+            })
+            validateCertificate(startValue)(mockDispatch, mockGetStore)
+            await flushPromises()
+            expect(communication.validateCertificatesAPI).toBeCalledTimes(1)
+            expect(communication.validateCertificatesAPI).toBeCalledWith(expectedResult)
+        })
+        test("validateCertificates succes certificate valid selects certificate and navigates to WIZARD_STATE_DIGEST_LOADING ", async () => {
+            const startValue = {
+                APIBody: {
+                    certificate: {
+                        encodedCertificate: 'certificateString'
+                    },
+                    certificateChain: [
+                        { encodedCertificate: 'certificate chain string 1' },
+                        { encodedCertificate: 'certificate chain string 2' }
+                    ]
+                }
+            }
+
+
+            const mockvalidateCertificateChainresponse = {
+                "indications": [{
+                    "commonName": "name(Signature)",
+                    "indication": "PASSED",
+                    "subIndication": null,
+                    "keyUsageCheckOk": true
+                }]
+            }
+            communication.validateCertificatesAPI = jest.fn(() => { return Promise.resolve(mockvalidateCertificateChainresponse) })
+
+            const expectedResult = {
+                ...startValue,
+                indication: mockvalidateCertificateChainresponse.indications[0].indication,
+                keyUsageCheckOk: mockvalidateCertificateChainresponse.indications[0].keyUsageCheckOk,
+                commonName: mockvalidateCertificateChainresponse.indications[0].commonName
+            }
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: {
+                        flowId: 88888,
+                        requestId: []
+                    }
+                }
+            })
+            validateCertificate(startValue)(mockDispatch, mockGetStore)
+            await flushPromises()
+            expect(CertificateActions.selectCertificate).toBeCalledTimes(1)
+            expect(CertificateActions.selectCertificate.mock.calls[0][0]).toMatchObject(expectedResult)
+            expect(navigation.navigateToStep).toBeCalledWith(WIZARD_STATE_DIGEST_LOADING)
+        })
+        test("validateCertificates succes certificate not valid shows MessageCertificatesNotFound", async () => {
+            const startValue = {
+                APIBody: {
+                    certificate: {
+                        encodedCertificate: 'certificateString'
+                    },
+                    certificateChain: [
+                        { encodedCertificate: 'certificate chain string 1' },
+                        { encodedCertificate: 'certificate chain string 2' }
+                    ]
+                }
+            }
+
+
+            const mockvalidateCertificateChainresponse = {
+                "indications": [{
+                    "commonName": "name(Signature)",
+                    "indication": "FAILED",
+                    "subIndication": null,
+                    "keyUsageCheckOk": true
+                }]
+            }
+            communication.validateCertificatesAPI = jest.fn(() => { return Promise.resolve(mockvalidateCertificateChainresponse) })
+
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: {
+                        flowId: 88888,
+                        requestId: []
+                    }
+                }
+            })
+            validateCertificate(startValue)(mockDispatch, mockGetStore)
+            await flushPromises()
+            expect(CertificateActions.selectCertificate).toBeCalledTimes(0)
+            expect(MessageActions.showErrorMessage).toBeCalledWith(MessageCertificatesNotFound)
+        })
+
+        test("validateCertificates error shows MessageCertificatesNotFound", async () => {
+            const startValue = {
+                APIBody: {
+                    certificate: {
+                        encodedCertificate: 'certificateString'
+                    },
+                    certificateChain: [
+                        { encodedCertificate: 'certificate chain string 1' },
+                        { encodedCertificate: 'certificate chain string 2' }
+                    ]
+                }
+            }
+
+
+            communication.validateCertificatesAPI = jest.fn(() => { return Promise.reject() })
+
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: {
+                        flowId: 88888,
+                        requestId: []
+                    }
+                }
+            })
+            validateCertificate(startValue)(mockDispatch, mockGetStore)
+            await flushPromises()
+            expect(MessageActions.showErrorMessage).toBeCalledWith(MessageCertificatesNotFound)
+        })
+        test("validateCertificates error INCORECT_FLOW_ID does nothing", async () => {
+            const startValue = {
+                APIBody: {
+                    certificate: {
+                        encodedCertificate: 'certificateString'
+                    },
+                    certificateChain: [
+                        { encodedCertificate: 'certificate chain string 1' },
+                        { encodedCertificate: 'certificate chain string 2' }
+                    ]
+                }
+            }
+
+
+            communication.validateCertificatesAPI = jest.fn(() => { return Promise.resolve() })
+
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: {
+                        flowId: 88888,
+                        requestId: []
+                    }
+                }
+            })
+
+            FlowIdHelpers.handleFlowIdError = jest.mock(() => () => { throw INCORECT_FLOW_ID })
+            validateCertificate(startValue)(mockDispatch, mockGetStore)
+            await flushPromises()
+            expect(MessageActions.showErrorMessage).not.toBeCalled()
+        })
         afterEach(() => {
             communication.validateCertificatesAPI = ORIGINAL_validateCertificatesAPI
             FlowIdHelpers.handleFlowIdError = ORIGINAL_handleFlowIdError
@@ -1428,7 +1833,9 @@ describe("WizardLogicActions", () => {
             FlowIdActions.setNewFlowId = jest.fn(() => { })
             navigation.navigateToStep = jest.fn()
         })
-        test("resetWizard resetStore and creates new flowId", () => { })
+        test("resetWizard resetStore and creates new flowId", () => {
+
+        })
         test("resetWizard reader ok navigates to WIZARD_STATE_UPLOAD", () => { })
         test("resetWizard reader not ok navigates to WIZARD_STATE_VERSION_CHECK_LOADING", () => { })
         afterEach(() => {
