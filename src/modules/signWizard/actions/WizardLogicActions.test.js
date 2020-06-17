@@ -10,9 +10,13 @@ import {
     getCertificates,
     validateCertificates,
     validateCertificateChain,
-    validateCertificate
+    validateCertificate,
+    getDigest,
+    navigateToPinError,
+    sign,
+    signDocument
 } from "./WizardLogicActions"
-import { WIZARD_STATE_PIN_INPUT, WIZARD_STATE_SIGNING_PRESIGN_LOADING, WIZARD_STATE_UPLOAD, WIZARD_STATE_VERSION_CHECK_INSTALL, WIZARD_STATE_VERSION_CHECK_UPDATE, WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENSION, WIZARD_STATE_VALIDATE_LOADING, WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN, WIZARD_STATE_CERTIFICATES_CHOOSE, WIZARD_STATE_DIGEST_LOADING } from "../../wizard/WizardConstants"
+import { WIZARD_STATE_PIN_INPUT, WIZARD_STATE_SIGNING_PRESIGN_LOADING, WIZARD_STATE_UPLOAD, WIZARD_STATE_VERSION_CHECK_INSTALL, WIZARD_STATE_VERSION_CHECK_UPDATE, WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENSION, WIZARD_STATE_VALIDATE_LOADING, WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN, WIZARD_STATE_CERTIFICATES_CHOOSE, WIZARD_STATE_DIGEST_LOADING, WIZARD_STATE_PINPAD_ERROR, WIZARD_STATE_SIGNING_LOADING, WIZARD_STATE_SUCCES } from "../../wizard/WizardConstants"
 
 import { controller } from "../../eIdLink/controller"
 import * as eIDLinkController from "../../eIdLink/controller"
@@ -1701,7 +1705,7 @@ describe("WizardLogicActions", () => {
                 }
             })
 
-            FlowIdHelpers.handleFlowIdError = jest.mock(() => () => { throw INCORECT_FLOW_ID })
+            FlowIdHelpers.handleFlowIdError = jest.fn(() => () => { throw INCORECT_FLOW_ID })
             validateCertificate(startValue)(mockDispatch, mockGetStore)
             await flushPromises()
             expect(MessageActions.showErrorMessage).not.toBeCalled()
@@ -1717,18 +1721,248 @@ describe("WizardLogicActions", () => {
 
     describe("getDigest", () => {
         beforeEach(() => {
-            communication.getDataToSignAPI = jest.fn()
+            communication.getDataToSignAPI = jest.fn(() => { return Promise.resolve() })
             FlowIdHelpers.handleFlowIdError = jest.fn()
             DigestActions.setDigest = jest.fn()
             MessageActions.showErrorMessage = jest.fn();
         })
-        test("getDigest doesn't call getDataToSignAPI when no selected certificate", () => { })
-        test("getDigest calls getDataToSignAPI", () => { })
-        test("getDigest succes calls handleFlowIdError", () => { })
-        test("getDigest succes sets digist in store", () => { })
-        test("getDigest succes navigates to sign", () => { })
-        test("getDigest error shows message", () => { })
-        test("getDigest error INCORECT_FLOW_ID does nothing", () => { })
+        test("getDigest doesn't call getDataToSignAPI when no selected certificate", () => {
+
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: {
+                        flowId: 88888,
+                        requestId: []
+                    },
+                    certificate: {
+                        certificateSelected: undefined
+                    },
+                    uploadFile: { file: "test" }
+                }
+            })
+            getDigest()(mockDispatch, mockGetStore)
+            expect(communication.getDataToSignAPI).not.toBeCalled()
+
+
+        })
+        test("getDigest calls getDataToSignAPI", () => {
+            const mockapiBody = {
+                certificate: {
+                    encodedCertificate: 'certString'
+                },
+                certificateChain: [
+                    { encodedCertificate: 'certificate string' },
+                    { encodedCertificate: 'certificate string' }
+                ]
+            }
+            const mockFile = "test"
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: {
+                        flowId: 88888,
+                        requestId: []
+                    },
+                    certificate: {
+                        certificateSelected:
+                        {
+                            APIBody: mockapiBody
+                        }
+
+                    },
+                    uploadFile: { file: mockFile }
+                }
+            })
+            getDigest()(mockDispatch, mockGetStore)
+            expect(communication.getDataToSignAPI).toBeCalledTimes(1)
+            expect(communication.getDataToSignAPI).toBeCalledWith(mockapiBody, mockFile)
+
+        })
+        test("getDigest succes calls handleFlowIdError", async () => {
+            const flowId = 88888
+            const mockapiBody = {
+                certificate: {
+                    encodedCertificate: 'certString'
+                },
+                certificateChain: [
+                    { encodedCertificate: 'certificate string' },
+                    { encodedCertificate: 'certificate string' }
+                ]
+            }
+            const mockFile = "test"
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: {
+                        flowId: flowId,
+                        requestId: []
+                    },
+                    certificate: {
+                        certificateSelected:
+                        {
+                            APIBody: mockapiBody
+                        }
+
+                    },
+                    uploadFile: { file: mockFile }
+                }
+            })
+            getDigest()(mockDispatch, mockGetStore)
+            await flushPromises()
+            expect(FlowIdHelpers.handleFlowIdError).toBeCalledTimes(1)
+            expect(FlowIdHelpers.handleFlowIdError).toBeCalledWith(flowId, mockGetStore)
+        })
+        test("getDigest succes sets digist in store", async () => {
+            const mockapiBody = {
+                certificate: {
+                    encodedCertificate: 'certString'
+                },
+                certificateChain: [
+                    { encodedCertificate: 'certificate string' },
+                    { encodedCertificate: 'certificate string' }
+                ]
+            }
+            const mockFile = "test"
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: {
+                        flowId: 88888,
+                        requestId: []
+                    },
+                    certificate: {
+                        certificateSelected:
+                        {
+                            APIBody: mockapiBody
+                        }
+
+                    },
+                    uploadFile: { file: mockFile }
+                }
+            })
+            const resolvedDigest = {
+                digest: 'digest',
+                digestAlgorithm: 'SHA256'
+            }
+            communication.getDataToSignAPI = jest.fn(() => { return Promise.resolve(resolvedDigest) })
+            getDigest()(mockDispatch, mockGetStore)
+            await flushPromises()
+            expect(DigestActions.setDigest).toBeCalledTimes(1)
+            expect(DigestActions.setDigest).toBeCalledWith(resolvedDigest)
+        })
+        test("getDigest succes navigates to sign", async () => {
+            const mockapiBody = {
+                certificate: {
+                    encodedCertificate: 'certString'
+                },
+                certificateChain: [
+                    { encodedCertificate: 'certificate string' },
+                    { encodedCertificate: 'certificate string' }
+                ]
+            }
+            const mockFile = "test"
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: {
+                        flowId: 88888,
+                        requestId: []
+                    },
+                    certificate: {
+                        certificateSelected:
+                        {
+                            APIBody: mockapiBody
+                        }
+
+                    },
+                    uploadFile: { file: mockFile }
+                }
+            })
+            const resolvedDigest = {
+                digest: 'digest',
+                digestAlgorithm: 'SHA256'
+            }
+            communication.getDataToSignAPI = jest.fn(() => { return Promise.resolve(resolvedDigest) })
+            getDigest()(mockDispatch, mockGetStore)
+            await flushPromises()
+            expect(DigestActions.setDigest).toBeCalledTimes(1)
+            expect(DigestActions.setDigest).toBeCalledWith(resolvedDigest)
+
+
+
+        })
+        test("getDigest error shows message", async () => {
+            const mockapiBody = {
+                certificate: {
+                    encodedCertificate: 'certString'
+                },
+                certificateChain: [
+                    { encodedCertificate: 'certificate string' },
+                    { encodedCertificate: 'certificate string' }
+                ]
+            }
+            const mockFile = "test"
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: {
+                        flowId: 88888,
+                        requestId: []
+                    },
+                    certificate: {
+                        certificateSelected:
+                        {
+                            APIBody: mockapiBody
+                        }
+
+                    },
+                    uploadFile: { file: mockFile }
+                }
+            })
+
+            communication.getDataToSignAPI = jest.fn(() => { return Promise.reject() })
+            getDigest()(mockDispatch, mockGetStore)
+            await flushPromises()
+            expect(showErrorMessage).toBeCalledTimes(1)
+            expect(showErrorMessage).toBeCalledWith(ErrorGeneral)
+
+        })
+        test("getDigest error INCORECT_FLOW_ID does nothing", async () => {
+            const mockapiBody = {
+                certificate: {
+                    encodedCertificate: 'certString'
+                },
+                certificateChain: [
+                    { encodedCertificate: 'certificate string' },
+                    { encodedCertificate: 'certificate string' }
+                ]
+            }
+            const mockFile = "test"
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: {
+                        flowId: 88888,
+                        requestId: []
+                    },
+                    certificate: {
+                        certificateSelected:
+                        {
+                            APIBody: mockapiBody
+                        }
+
+                    },
+                    uploadFile: { file: mockFile }
+                }
+            })
+
+            communication.getDataToSignAPI = jest.fn(() => { return Promise.resolve() })
+            FlowIdHelpers.handleFlowIdError = jest.fn(() => () => { throw INCORECT_FLOW_ID })
+            getDigest()(mockDispatch, mockGetStore)
+            await flushPromises()
+            expect(showErrorMessage).toBeCalledTimes(0)
+        })
         afterEach(() => {
             communication.getDataToSignAPI = ORIGINAL_getDataToSignAPI
             FlowIdHelpers.handleFlowIdError = ORIGINAL_handleFlowIdError
@@ -1742,9 +1976,39 @@ describe("WizardLogicActions", () => {
             navigation.navigateToStep = jest.fn()
             MessageActions.showErrorMessage = jest.fn();
         })
-        test("navigateToSign shows ErrorGeneral if no certificateSelected", () => { })
-        test("navigateToSign pinpad reader navigates to WIZARD_STATE_SIGNING_PRESIGN_LOADING and calls sign(null)", () => { })
-        test("navigateToSign no pinpad reader navigates to WIZARD_STATE_PIN_INPUT", () => { })
+        test("navigateToSign shows ErrorGeneral if no certificateSelected", () => {
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    certificate: undefined
+                }
+            })
+            navigateToSign()(mockDispatch, mockGetStore)
+            expect(mockDispatch).toBeCalledTimes(1)
+            expect(showErrorMessage).toBeCalledWith(ErrorGeneral)
+        })
+        test("navigateToSign pinpad reader navigates to WIZARD_STATE_SIGNING_PRESIGN_LOADING and calls sign(null)", () => {
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    certificate: { certificateSelected: { readerType: "pinpad" } }
+                }
+            })
+            navigateToSign()(mockDispatch, mockGetStore)
+            expect(mockDispatch).toBeCalledTimes(2)
+            expect(navigateToStep).toBeCalledWith(WIZARD_STATE_SIGNING_PRESIGN_LOADING)
+        })
+        test("navigateToSign no pinpad reader navigates to WIZARD_STATE_PIN_INPUT", () => {
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    certificate: { certificateSelected: { readerType: "no-pinpad" } }
+                }
+            })
+            navigateToSign()(mockDispatch, mockGetStore)
+            expect(mockDispatch).toBeCalledTimes(1)
+            expect(navigateToStep).toBeCalledWith(WIZARD_STATE_PIN_INPUT)
+        })
         afterEach(() => {
             navigation.navigateToStep = ORIGINAL_navigateToStep
             MessageActions.showErrorMessage = ORIGINAL_showErrorMessage;
@@ -1756,9 +2020,39 @@ describe("WizardLogicActions", () => {
             navigation.navigateToStep = jest.fn()
             MessageActions.showErrorMessage = jest.fn();
         })
-        test("navigateToPinError shows ErrorGeneral if no certificateSelected", () => { })
-        test("navigateToPinError pinpad navigates to WIZARD_STATE_PINPAD_ERROR", () => { })
-        test("navigateToPinError no pinpad navigates to WIZARD_STATE_PIN_INPUT", () => { })
+        test("navigateToPinError shows ErrorGeneral if no certificateSelected", () => {
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    certificate: undefined
+                }
+            })
+            navigateToPinError()(mockDispatch, mockGetStore)
+            expect(mockDispatch).toBeCalledTimes(1)
+            expect(showErrorMessage).toBeCalledWith(ErrorGeneral)
+        })
+        test("navigateToPinError pinpad navigates to WIZARD_STATE_PINPAD_ERROR", () => {
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    certificate: { certificateSelected: { readerType: "pinpad" } }
+                }
+            })
+            navigateToPinError()(mockDispatch, mockGetStore)
+            expect(mockDispatch).toBeCalledTimes(1)
+            expect(navigateToStep).toBeCalledWith(WIZARD_STATE_PINPAD_ERROR)
+        })
+        test("navigateToPinError no pinpad navigates to WIZARD_STATE_PIN_INPUT", () => {
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    certificate: { certificateSelected: { readerType: "no - pinpad" } }
+                }
+            })
+            navigateToPinError()(mockDispatch, mockGetStore)
+            expect(mockDispatch).toBeCalledTimes(1)
+            expect(navigateToStep).toBeCalledWith(WIZARD_STATE_PIN_INPUT)
+        })
         afterEach(() => {
             navigation.navigateToStep = ORIGINAL_navigateToStep
             MessageActions.showErrorMessage = ORIGINAL_showErrorMessage;
@@ -1767,26 +2061,295 @@ describe("WizardLogicActions", () => {
 
     describe("sign", () => {
         beforeEach(() => {
-            eIDLinkController.controller.getInstance = jest.fn(() => { })
+            eIDLinkController.controller.getInstance = jest.fn(() => { return { sign: jest.fn(() => { return Promise.resolve() }) } })
             RequestIdActions.createRequestId = jest.fn(() => { return 55555 })
-            FlowIdHelpers.handleFlowIdError = jest.fn()
-            RequestIdHelpers.handleRequestIdError = jest.fn()
+            FlowIdHelpers.handleFlowIdError = jest.fn(() => (val) => val)
+            RequestIdHelpers.handleRequestIdError = jest.fn(() => (val) => val)
             SignatureActions.setSignature = jest.fn()
             RequestIdActions.removeRequestId = jest.fn()
             SignErrorHandleActions.handlePinErrorEID = jest.fn()
             MessageActions.showErrorMessage = jest.fn();
         })
-        test("sign shows ErrorGeneral when no selected certificate or digest", () => { })
-        test("sign pinpad creates a requestId of 30000ms", () => { })
-        test("sign no pinpad creates a requestId of 10000ms", () => { })
-        test("sign calls eIDLink sign", () => { })
-        test("sign succes calls handleFlowIdError", () => { })
-        test("sign succes calls handleRequestIdError", () => { })
-        test("sign succes saves signature ", () => { })
-        test("sign succes saves calls signDocument", () => { })
-        test("sign error shows message", () => { })
-        test("sign error INCORECT_REQUEST_ID does nothing", () => { })
-        test("sign error INCORECT_FLOW_ID does nothing", () => { })
+        test("sign shows ErrorGeneral when no selected certificate or digest", () => {
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    certificate: {
+                        certificateSelected: undefined
+                    },
+                }
+            })
+            const pin = 5632
+
+            sign(pin)(mockDispatch, mockGetStore)
+            expect(showErrorMessage).toBeCalledTimes(1)
+            expect(showErrorMessage).toBeCalledWith(ErrorGeneral)
+            expect(mockDispatch).toBeCalledTimes(1)
+
+
+        })
+        test("sign pinpad creates a requestId of 30000ms", () => {
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: { flowId: 55555 },
+                    certificate: {
+                        certificateSelected: {
+                            readerType: "pinpad",
+                            certificate: "certificateString"
+                        }
+                    },
+                    digest: {
+                        digest: "digestString",
+                        digestAlgorithm: "SHA256"
+                    }
+                }
+            })
+
+            const pin = 5632
+
+            sign(pin)(mockDispatch, mockGetStore)
+            expect(createRequestId).toBeCalledWith(30000, expect.any(Function))
+
+        })
+        test("sign no pinpad creates a requestId of 10000ms", () => {
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: { flowId: 55555 },
+                    certificate: {
+                        certificateSelected: {
+                            readerType: "no-pinpad",
+                            certificate: "certificateString"
+                        }
+                    },
+                    digest: {
+                        digest: "digestString",
+                        digestAlgorithm: "SHA256"
+                    }
+                }
+            })
+
+            const pin = 5632
+
+            sign(pin)(mockDispatch, mockGetStore)
+            expect(createRequestId).toBeCalledWith(10000, expect.any(Function))
+        })
+        test("sign calls eIDLink sign", () => {
+            const certificateString = "certificateString"
+            const digestString = 'digestString'
+            const digestAlgorithmString = "SHA256"
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: { flowId: 55555 },
+                    certificate: {
+                        certificateSelected: {
+                            readerType: "no-pinpad",
+                            certificate: certificateString
+                        }
+                    },
+                    digest: {
+                        digest: digestString,
+                        digestAlgorithm: digestAlgorithmString
+                    }
+                }
+            })
+            const mockSign = jest.fn(() => { return Promise.resolve() })
+            eIDLinkController.controller.getInstance = jest.fn(() => { return { sign: mockSign } })
+            const pin = 5632
+
+            sign(pin)(mockDispatch, mockGetStore)
+            expect(mockSign).toBeCalledTimes(1)
+            expect(mockSign).toBeCalledWith(expect.any(String), expect.any(String), certificateString, digestAlgorithmString, digestString, pin)
+        })
+        test("sign succes calls handleFlowIdError", () => {
+            const certificateString = "certificateString"
+            const digestString = 'digestString'
+            const digestAlgorithmString = "SHA256"
+            const flowId = 55555
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: { flowId: flowId },
+                    certificate: {
+                        certificateSelected: {
+                            readerType: "no-pinpad",
+                            certificate: certificateString
+                        }
+                    },
+                    digest: {
+                        digest: digestString,
+                        digestAlgorithm: digestAlgorithmString
+                    }
+                }
+            })
+            const mockSign = jest.fn(() => { return Promise.resolve() })
+            eIDLinkController.controller.getInstance = jest.fn(() => { return { sign: mockSign } })
+            const pin = 5632
+
+            sign(pin)(mockDispatch, mockGetStore)
+            expect(handleFlowIdError).toBeCalledTimes(1)
+            expect(handleFlowIdError).toBeCalledWith(flowId, mockGetStore)
+
+        })
+        test("sign succes calls handleRequestIdError", () => {
+            const certificateString = "certificateString"
+            const digestString = 'digestString'
+            const digestAlgorithmString = "SHA256"
+            const requestId = 55555
+            RequestIdActions.createRequestId = jest.fn(() => requestId)
+
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: { flowId: 88888 },
+                    certificate: {
+                        certificateSelected: {
+                            readerType: "no-pinpad",
+                            certificate: certificateString
+                        }
+                    },
+                    digest: {
+                        digest: digestString,
+                        digestAlgorithm: digestAlgorithmString
+                    }
+                }
+            })
+            const mockSign = jest.fn(() => { return Promise.resolve() })
+            eIDLinkController.controller.getInstance = jest.fn(() => { return { sign: mockSign } })
+            const pin = 5632
+
+            sign(pin)(mockDispatch, mockGetStore)
+            expect(handleRequestIdError).toBeCalledTimes(1)
+            expect(handleRequestIdError).toBeCalledWith(requestId, mockDispatch, mockGetStore)
+        })
+        test("sign succes saves signatur and calls signDocument", async () => {
+            const certificateString = "certificateString"
+            const digestString = 'digestString'
+            const digestAlgorithmString = "SHA256"
+
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: { flowId: 88888 },
+                    certificate: {
+                        certificateSelected: {
+                            readerType: "no-pinpad",
+                            certificate: certificateString
+                        }
+                    },
+                    digest: {
+                        digest: digestString,
+                        digestAlgorithm: digestAlgorithmString
+                    }
+                }
+            })
+            const mockResponse = "response"
+            const mockSign = jest.fn(() => { return Promise.resolve(mockResponse) })
+            eIDLinkController.controller.getInstance = jest.fn(() => { return { sign: mockSign } })
+            const pin = 5632
+
+            sign(pin)(mockDispatch, mockGetStore)
+            await flushPromises()
+            expect(setSignature).toBeCalledTimes(1)
+            expect(setSignature).toBeCalledWith(mockResponse)
+        })
+        test("sign error shows message", async () => {
+            const certificateString = "certificateString"
+            const digestString = 'digestString'
+            const digestAlgorithmString = "SHA256"
+
+            const requestId = 55555
+            RequestIdActions.createRequestId = jest.fn(() => requestId)
+
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: { flowId: 88888 },
+                    certificate: {
+                        certificateSelected: {
+                            readerType: "no-pinpad",
+                            certificate: certificateString
+                        }
+                    },
+                    digest: {
+                        digest: digestString,
+                        digestAlgorithm: digestAlgorithmString
+                    }
+                }
+            })
+            const errorMessage = 'error'
+            const mockSign = jest.fn(() => { return Promise.reject(errorMessage) })
+            eIDLinkController.controller.getInstance = jest.fn(() => { return { sign: mockSign } })
+            const pin = 5632
+
+            sign(pin)(mockDispatch, mockGetStore)
+            await flushPromises()
+            expect(removeRequestId).toBeCalledTimes(1)
+            expect(removeRequestId).toBeCalledWith(requestId)
+            expect(handlePinErrorEID).toBeCalledTimes(1)
+            expect(handlePinErrorEID).toBeCalledWith(errorMessage, true)
+
+        })
+        test("sign error INCORECT_REQUEST_ID does nothing", async () => {
+            const certificateString = "certificateString"
+            const digestString = 'digestString'
+            const digestAlgorithmString = "SHA256"
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: { flowId: 88888 },
+                    certificate: {
+                        certificateSelected: {
+                            readerType: "no-pinpad",
+                            certificate: certificateString
+                        }
+                    },
+                    digest: {
+                        digest: digestString,
+                        digestAlgorithm: digestAlgorithmString
+                    }
+                }
+            })
+
+            RequestIdHelpers.handleRequestIdError = jest.fn(() => () => { throw INCORECT_REQUEST_ID })
+            const pin = 5632
+
+            sign(pin)(mockDispatch, mockGetStore)
+            await flushPromises()
+            expect(removeRequestId).toBeCalledTimes(0)
+            expect(handlePinErrorEID).toBeCalledTimes(0)
+        })
+        test("sign error INCORECT_FLOW_ID does nothing", async () => {
+            const certificateString = "certificateString"
+            const digestString = 'digestString'
+            const digestAlgorithmString = "SHA256"
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: { flowId: 88888 },
+                    certificate: {
+                        certificateSelected: {
+                            readerType: "no-pinpad",
+                            certificate: certificateString
+                        }
+                    },
+                    digest: {
+                        digest: digestString,
+                        digestAlgorithm: digestAlgorithmString
+                    }
+                }
+            })
+
+            FlowIdHelpers.handleFlowIdError = jest.fn(() => () => { throw INCORECT_FLOW_ID })
+            const pin = 5632
+
+            sign(pin)(mockDispatch, mockGetStore)
+            await flushPromises()
+            expect(removeRequestId).toBeCalledTimes(0)
+            expect(handlePinErrorEID).toBeCalledTimes(0)
+        })
 
         afterEach(() => {
             eIDLinkController.controller = ORIGINAL_controller
@@ -1803,20 +2366,221 @@ describe("WizardLogicActions", () => {
     describe("signDocument", () => {
         beforeEach(() => {
             navigation.navigateToStep = jest.fn()
-            communication.signDocumentAPI = jest.fn()
-            FlowIdHelpers.handleFlowIdError = jest.fn()
+            communication.signDocumentAPI = jest.fn(() => { return Promise.resolve() })
+            FlowIdHelpers.handleFlowIdError = jest.fn(() => (val) => val)
             UploadFileActions.setDownloadFile = jest.fn()
             MessageActions.showErrorMessage = jest.fn();
         })
-        test("signDocument shows ErrorGeneral when not all data is present", () => { })
-        test("signDocument navigates to WIZARD_STATE_SIGNING_LOADING", () => { })
-        test("signDocument calls signDocumentAPI", () => { })
-        test("signDocument succes handleFlowIdError", () => { })
-        test("signDocument succes setDownloadFile", () => { })
-        test("signDocument succes navigates to WIZARD_STATE_SUCCES", () => { })
-        test("signDocument succes shows ErrorGeneral when not all data is present ", () => { })
-        test("signDocument error shows message", () => { })
-        test("signDocument error INCORECT_FLOW_ID does nothing", () => { })
+        test("signDocument shows ErrorGeneral when not all data is present", () => {
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: { flowId: 88888 },
+                    certificate: undefined,
+                }
+            })
+            signDocument()(mockDispatch, mockGetStore)
+            expect(showErrorMessage).toBeCalledTimes(1)
+            expect(showErrorMessage).toBeCalledWith(ErrorGeneral)
+        })
+        test("signDocument navigates to WIZARD_STATE_SIGNING_LOADING", () => {
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: { flowId: 88888 },
+                    certificate: {
+                        certificateSelected: {
+                            APIBody: {
+                                certificate: {
+                                    encodedCertificate: 'certificate string'
+                                }
+                            }
+                        }
+                    },
+                    signature: { signature: "signaturestring" },
+                    uploadFile: { file: { test: "string" } }
+                }
+
+            })
+            signDocument()(mockDispatch, mockGetStore)
+            expect(navigateToStep).toBeCalledTimes(1)
+            expect(navigateToStep).toBeCalledWith(WIZARD_STATE_SIGNING_LOADING)
+        })
+        test("signDocument calls signDocumentAPI", () => {
+            const mockApiBody = {
+                certificate: {
+                    encodedCertificate: 'certificate string'
+                }
+            }
+            const mockSignatureString = "signatureString"
+            const mockFile = { test: "string" }
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: { flowId: 88888 },
+                    certificate: {
+                        certificateSelected: {
+                            APIBody: mockApiBody
+                        }
+                    },
+                    signature: { signature: mockSignatureString },
+                    uploadFile: { file: mockFile }
+                }
+
+            })
+            signDocument()(mockDispatch, mockGetStore)
+            expect(signDocumentAPI).toBeCalledTimes(1)
+            expect(signDocumentAPI).toBeCalledWith(mockApiBody, mockFile, mockSignatureString)
+        })
+        test("signDocument succes handleFlowIdError", () => {
+            const flowId = 88888
+            const mockApiBody = {
+                certificate: {
+                    encodedCertificate: 'certificate string'
+                }
+            }
+            const mockSignatureString = "signatureString"
+            const mockFile = { test: "string" }
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: { flowId: flowId },
+                    certificate: {
+                        certificateSelected: {
+                            APIBody: mockApiBody
+                        }
+                    },
+                    signature: { signature: mockSignatureString },
+                    uploadFile: { file: mockFile }
+                }
+
+            })
+            signDocument()(mockDispatch, mockGetStore)
+            expect(handleFlowIdError).toBeCalledTimes(1)
+            expect(handleFlowIdError).toBeCalledWith(flowId, mockGetStore)
+        })
+        test("signDocument succes setDownloadFile", async () => {
+            const response = { name: "filename", bytes: "bytestring" }
+            const mockApiBody = {
+                certificate: {
+                    encodedCertificate: 'certificate string'
+                }
+            }
+            const mockSignatureString = "signatureString"
+            const mockFile = { test: "string" }
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: { flowId: 88888 },
+                    certificate: {
+                        certificateSelected: {
+                            APIBody: mockApiBody
+                        }
+                    },
+                    signature: { signature: mockSignatureString },
+                    uploadFile: { file: mockFile }
+                }
+
+            })
+
+            communication.signDocumentAPI = jest.fn(() => { return Promise.resolve(response) })
+            signDocument()(mockDispatch, mockGetStore)
+
+            await flushPromises()
+            expect(setDownloadFile).toBeCalledTimes(1)
+            expect(setDownloadFile).toBeCalledWith(response)
+            expect(navigateToStep).toHaveBeenLastCalledWith(WIZARD_STATE_SUCCES)
+        })
+        test("signDocument succes shows ErrorGeneral when not all data is present ", async () => {
+
+            const mockApiBody = {
+                certificate: {
+                    encodedCertificate: 'certificate string'
+                }
+            }
+            const mockSignatureString = "signatureString"
+            const mockFile = { test: "string" }
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: { flowId: 88888 },
+                    certificate: {
+                        certificateSelected: {
+                            APIBody: mockApiBody
+                        }
+                    },
+                    signature: { signature: mockSignatureString },
+                    uploadFile: { file: mockFile }
+                }
+
+            })
+
+            communication.signDocumentAPI = jest.fn(() => { return Promise.resolve() })
+            signDocument()(mockDispatch, mockGetStore)
+
+            await flushPromises()
+            expect(setDownloadFile).toBeCalledTimes(0)
+            expect(showErrorMessage).toHaveBeenLastCalledWith(ErrorGeneral)
+        })
+        test("signDocument error shows message", async() => { 
+            const mockApiBody = {
+                certificate: {
+                    encodedCertificate: 'certificate string'
+                }
+            }
+            const mockSignatureString = "signatureString"
+            const mockFile = { test: "string" }
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: { flowId: 88888 },
+                    certificate: {
+                        certificateSelected: {
+                            APIBody: mockApiBody
+                        }
+                    },
+                    signature: { signature: mockSignatureString },
+                    uploadFile: { file: mockFile }
+                }
+
+            })
+
+            communication.signDocumentAPI = jest.fn(() => { return Promise.reject() })
+            signDocument()(mockDispatch, mockGetStore)
+            await flushPromises()
+            
+            expect(showErrorMessage).toHaveBeenLastCalledWith(ErrorGeneral)
+        })
+        test("signDocument error INCORECT_FLOW_ID does nothing", async() => {
+            const mockApiBody = {
+                certificate: {
+                    encodedCertificate: 'certificate string'
+                }
+            }
+            const mockSignatureString = "signatureString"
+            const mockFile = { test: "string" }
+            const mockDispatch = jest.fn((val) => val)
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: { flowId: 88888 },
+                    certificate: {
+                        certificateSelected: {
+                            APIBody: mockApiBody
+                        }
+                    },
+                    signature: { signature: mockSignatureString },
+                    uploadFile: { file: mockFile }
+                }
+
+            })
+
+            communication.signDocumentAPI = jest.fn(() => { return Promise.resolve() })
+            FlowIdHelpers.handleFlowIdError = jest.fn(()=>()=>{throw INCORECT_FLOW_ID})
+            signDocument()(mockDispatch, mockGetStore)
+            await flushPromises()
+            
+            expect(showErrorMessage).not.toBeCalled()
+         })
         afterEach(() => {
             navigation.navigateToStep = ORIGINAL_navigateToStep
             communication.signDocumentAPI = ORIGINAL_signDocumentAPI

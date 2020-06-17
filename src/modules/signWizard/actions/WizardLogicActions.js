@@ -485,7 +485,6 @@ export const signDocument = () => (dispatch, getStore) => {
             .then((resp) => {
 
                 if (resp
-                    && resp
                     && resp.name
                     && resp.bytes) {
                     dispatch(setDownloadFile(resp))
