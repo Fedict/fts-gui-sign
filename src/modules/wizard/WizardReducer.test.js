@@ -1,10 +1,11 @@
-import wizardReducer from "./WizardReducer"
+import wizardReducer, { initialState } from "./WizardReducer"
 import { WIZARD_STATE_START, WIZARD_STATE_DIGEST_LOADING } from "./WizardConstants"
 import { WIZARD_CHANGE_STATE } from "./WizardActions"
+import { STORE_RESET } from "../../store/storeActions"
 
 describe("WizardReducer", () => {
     beforeEach(() => {
-       
+
     })
 
     describe("reducer", () => {
@@ -22,7 +23,16 @@ describe("WizardReducer", () => {
             expect(result.state).toEqual(action.payload)
         })
 
-        test("action with type STORE_RESET changes to initial value", () => { })
+        test("action with type STORE_RESET doent chang state", () => {
+
+            const startState = {
+                state: WIZARD_STATE_DIGEST_LOADING
+            }
+            const action = { type: STORE_RESET }
+            const result = wizardReducer(startState, action)
+
+            expect(result).toEqual(startState)
+        })
     })
 
     afterEach(() => {
