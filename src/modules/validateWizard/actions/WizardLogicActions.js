@@ -6,6 +6,7 @@ import { validationSetIndication, validationSetSubIndication } from "./Validatio
 import { showErrorMessage } from "../../message/actions/MessageActions"
 import { ErrorGeneral } from "../../message/MessageConstants"
 import { setNewFlowId } from "../../controlIds/flowId/FlowIdActions"
+import { handleFlowIdError } from "../../controlIds/flowId/FlowIdHelpers"
 
 const INCORECT_FLOW_ID = "INCORECT_FLOW_ID"
 
@@ -15,16 +16,6 @@ export const resetWizard = () => (dispatch) => {
     dispatch(navigateToStep(WIZARD_STATE_START))
 }
 
-
-const handleFlowIdError = (flowId, getStore) => (resp) => {
-    const flowIdcurrent = getStore().controlId.flowId
-    if (flowIdcurrent === flowId) {
-        return resp
-    }
-    else {
-        throw INCORECT_FLOW_ID
-    }
-}
 
 export const validateDocument = () => (dispatch, getStore) => {
 

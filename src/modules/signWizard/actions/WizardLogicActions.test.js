@@ -14,9 +14,10 @@ import {
     getDigest,
     navigateToPinError,
     sign,
-    signDocument
+    signDocument,
+    resetWizard
 } from "./WizardLogicActions"
-import { WIZARD_STATE_PIN_INPUT, WIZARD_STATE_SIGNING_PRESIGN_LOADING, WIZARD_STATE_UPLOAD, WIZARD_STATE_VERSION_CHECK_INSTALL, WIZARD_STATE_VERSION_CHECK_UPDATE, WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENSION, WIZARD_STATE_VALIDATE_LOADING, WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN, WIZARD_STATE_CERTIFICATES_CHOOSE, WIZARD_STATE_DIGEST_LOADING, WIZARD_STATE_PINPAD_ERROR, WIZARD_STATE_SIGNING_LOADING, WIZARD_STATE_SUCCES } from "../../wizard/WizardConstants"
+import { WIZARD_STATE_PIN_INPUT, WIZARD_STATE_SIGNING_PRESIGN_LOADING, WIZARD_STATE_UPLOAD, WIZARD_STATE_VERSION_CHECK_INSTALL, WIZARD_STATE_VERSION_CHECK_UPDATE, WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENSION, WIZARD_STATE_VALIDATE_LOADING, WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN, WIZARD_STATE_CERTIFICATES_CHOOSE, WIZARD_STATE_DIGEST_LOADING, WIZARD_STATE_PINPAD_ERROR, WIZARD_STATE_SIGNING_LOADING, WIZARD_STATE_SUCCES, WIZARD_STATE_VERSION_CHECK_LOADING } from "../../wizard/WizardConstants"
 
 import { controller } from "../../eIdLink/controller"
 import * as eIDLinkController from "../../eIdLink/controller"
@@ -2522,7 +2523,7 @@ describe("WizardLogicActions", () => {
             expect(setDownloadFile).toBeCalledTimes(0)
             expect(showErrorMessage).toHaveBeenLastCalledWith(ErrorGeneral)
         })
-        test("signDocument error shows message", async() => { 
+        test("signDocument error shows message", async () => {
             const mockApiBody = {
                 certificate: {
                     encodedCertificate: 'certificate string'
@@ -2548,10 +2549,10 @@ describe("WizardLogicActions", () => {
             communication.signDocumentAPI = jest.fn(() => { return Promise.reject() })
             signDocument()(mockDispatch, mockGetStore)
             await flushPromises()
-            
+
             expect(showErrorMessage).toHaveBeenLastCalledWith(ErrorGeneral)
         })
-        test("signDocument error INCORECT_FLOW_ID does nothing", async() => {
+        test("signDocument error INCORECT_FLOW_ID does nothing", async () => {
             const mockApiBody = {
                 certificate: {
                     encodedCertificate: 'certificate string'
@@ -2575,12 +2576,12 @@ describe("WizardLogicActions", () => {
             })
 
             communication.signDocumentAPI = jest.fn(() => { return Promise.resolve() })
-            FlowIdHelpers.handleFlowIdError = jest.fn(()=>()=>{throw INCORECT_FLOW_ID})
+            FlowIdHelpers.handleFlowIdError = jest.fn(() => () => { throw INCORECT_FLOW_ID })
             signDocument()(mockDispatch, mockGetStore)
             await flushPromises()
-            
+
             expect(showErrorMessage).not.toBeCalled()
-         })
+        })
         afterEach(() => {
             navigation.navigateToStep = ORIGINAL_navigateToStep
             communication.signDocumentAPI = ORIGINAL_signDocumentAPI
@@ -2592,16 +2593,53 @@ describe("WizardLogicActions", () => {
 
     describe("resetWizard", () => {
         beforeEach(() => {
-            eIDLinkController.controller.getInstance = jest.fn(() => { })
+            eIDLinkController.controller.getInstance = jest.fn(() => { return { stop: jest.fn() } })
             storeActions.resetStore = jest.fn(() => { })
             FlowIdActions.setNewFlowId = jest.fn(() => { })
             navigation.navigateToStep = jest.fn()
         })
         test("resetWizard resetStore and creates new flowId", () => {
-
+            const mockDispatch = jest.fn((val) => { return val })
+            const mockGetstore = jest.fn(() => {
+                return {
+                    reader: {
+                        isChecked: true,
+                        isOK: true
+                    }
+                }
+            })
+            resetWizard()(mockDispatch, mockGetstore)
+            expect(setNewFlowId).toBeCalledTimes(1)
+            expect(resetStore).toBeCalledTimes(1)
         })
-        test("resetWizard reader ok navigates to WIZARD_STATE_UPLOAD", () => { })
-        test("resetWizard reader not ok navigates to WIZARD_STATE_VERSION_CHECK_LOADING", () => { })
+        test("resetWizard reader ok navigates to WIZARD_STATE_UPLOAD", () => {
+            const mockDispatch = jest.fn((val) => { return val })
+            const mockGetstore = jest.fn(() => {
+                return {
+                    reader: {
+                        isChecked: true,
+                        isOk: true
+                    }
+                }
+            })
+            resetWizard()(mockDispatch, mockGetstore)
+            expect(navigateToStep).toBeCalledTimes(1)
+            expect(navigateToStep).toBeCalledWith(WIZARD_STATE_UPLOAD)
+        })
+        test("resetWizard reader not ok navigates to WIZARD_STATE_VERSION_CHECK_LOADING", () => {
+            const mockDispatch = jest.fn((val) => { return val })
+            const mockGetstore = jest.fn(() => {
+                return {
+                    reader: {
+                        isChecked: true,
+                        isOk: false
+                    }
+                }
+            })
+            resetWizard()(mockDispatch, mockGetstore)
+            expect(navigateToStep).toBeCalledTimes(1)
+            expect(navigateToStep).toBeCalledWith(WIZARD_STATE_VERSION_CHECK_LOADING)
+        })
         afterEach(() => {
             eIDLinkController.controller = ORIGINAL_controller
             storeActions.resetStore = ORIGINAL_resetStore
