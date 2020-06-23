@@ -126,7 +126,7 @@ export const WizardContainer = ({ wizard, reader, resetWizard }) => {
 const mapStateToProps = (state) => {
     return (state) => ({
         wizard: state.wizard,
-        reader: StaticRange.reader
+        reader: state.reader
     })
 }
 const mapDispatchToProps = ({

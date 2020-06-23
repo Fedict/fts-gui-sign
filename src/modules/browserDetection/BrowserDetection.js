@@ -29,6 +29,9 @@ export const getBrowser = () => {
     else if (navigator.userAgent.indexOf("MSIE") !== -1) {
         return (browser.IE)
     }
+    else if (navigator.userAgent.indexOf("Trident/") !== -1) {
+        return (browser.IE)
+    }
     // EDGE
     else if (navigator.userAgent.indexOf("Edge") !== -1) {
         return (browser.EDGE)
@@ -54,12 +57,14 @@ export const getBrowser = () => {
  * @return {boolean} boolean that represents if browser is supported 
  */
 export const browserIsAccepted = () => {
+
     const isMBrowser = isMobileBrowser(navigator.userAgent || navigator.vendor || window.opera)
     const usedBrowser = getBrowser()
+    console.log(usedBrowser)
     if (isMBrowser) {
         return false
     }
-    if (usedBrowser !== browser.EDGE && usedBrowser !== browser.FIREFOX && usedBrowser !== browser.SAFARI && usedBrowser !== browser.CHROME) {
+    if (usedBrowser !== browser.IE && usedBrowser !== browser.EDGE && usedBrowser !== browser.FIREFOX && usedBrowser !== browser.SAFARI && usedBrowser !== browser.CHROME) {
         return false
     }
     return true
