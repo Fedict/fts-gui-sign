@@ -1,0 +1,37 @@
+public/config/config.js
+ - A file that places a configData object in the window.
+ - Can be used to access configuration variables in the application
+ - Change the configuration in this file
+
+ * eIDLinkMinimumVersion
+	- the minimum version of of the eIDLink local messaging host.
+	- used in the getVersion request to the eIDLink extension.
+	- extension checks first to digest to trigger eIDLink update. (x.x)
+
+ * eIDLinkExtensionUrls
+	- object with the urls to the eIDLink extension for different browsers.
+	- used in src\modules\signWizard\pages\VersionCheckInstallContainer.js
+	- firefox url opens with "_self" as target
+	- other urls opens with "_blank" as target
+
+ * eIDLinkUrls
+	- object with the urls to the eIDLink local messaging host for different OS.
+	- used in \src\modules\signWizard\pages\VersionCheckInstallContainer.js 
+	- used in \src\modules\signWizard\pages\VersionCheckUpdateContainer.js
+	
+	*linux
+		- object with the url to the archives and the lists of supported distributions
+		- used in \src\modules\components\EIDLinkLinuxInstall\EIDLinkLinuxInstall.js
+		
+ * defaultSigningProfileId
+	- string of the default profileId
+	- this profileId is used when there is no profile that corresponds to the MINE-Type of the file
+	- used in src\modules\communication\communication.js
+	
+ * signingProfileIds
+	- list of MINE-Type and there corresponding profileIds
+	- used in src\modules\communication\communication.js
+	
+ * BEurl
+	- url to the BE api
+	- used in src\modules\communication\communication.js
