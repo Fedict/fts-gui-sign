@@ -59,11 +59,11 @@ objects:
         - name: guisign-web
           port: 80
           protocol: TCP
-          targetPort: 8080
+          targetPort: 5000
         - name: guisign-web-ssl
           port: 443
           protocol: TCP
-          targetPort: 8080
+          targetPort: 5000
 
   - apiVersion: v1
     kind: Route
