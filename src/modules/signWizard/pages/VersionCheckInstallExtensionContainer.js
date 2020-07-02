@@ -55,7 +55,6 @@ export class VersionCheckInstallExtensionContainer extends React.Component {
             >
                 <p>No eIDLink extension found.</p>
                 <p>Please install the eIDLink extension to use this application.</p>
-                <p>If you click the button, you will be redirected to the install page of the eID extension .</p>
                 <p>After you installed the eIDLink extension you can come back to this page an push the "I have installed eIDLink Extension" button.</p>
 
                 {(usedBrowser === browser.CHROME || usedBrowser === browser.EDGE)
