@@ -30,6 +30,8 @@ export class VersionCheckInstallExtensionContainer extends React.Component {
             }
             if ((UsedBrowser === browser.SAFARI) && window.configData.eIDLinkExtensionUrls.safari) {
                 url = window.configData.eIDLinkExtensionUrls.safari
+                window.open(url + '?dt=' + new Date().getTime(), "_self")
+                url = ""
             }
 
         }
