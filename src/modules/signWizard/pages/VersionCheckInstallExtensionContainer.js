@@ -33,6 +33,11 @@ export class VersionCheckInstallExtensionContainer extends React.Component {
                 window.open(url + '?dt=' + new Date().getTime(), "_self")
                 url = ""
             }
+            if ((UsedBrowser === browser.IE) && window.configData.eIDLinkExtensionUrls.IE) {
+                url = window.configData.eIDLinkExtensionUrls.IE
+                window.open(url + '?dt=' + new Date().getTime(), "_self")
+                url = ""
+            }
 
         }
 
