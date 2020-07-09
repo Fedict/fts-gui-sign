@@ -13,7 +13,8 @@ import {
     WIZARD_STATE_PINPAD_ERROR,
     WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENSION,
     WIZARD_STATE_VERSION_CHECK_LOADING,
-    WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN
+    WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN,
+    WIZARD_STATE_START
 
 } from "../../wizard/WizardConstants"
 import { controller } from "../../eIdLink/controller"
@@ -518,20 +519,11 @@ export const resetWizard = () => (dispatch, getStore) => {
     eIDLink.stop()
     dispatch(resetStore())
     dispatch(setNewFlowId())
-    const store = getStore()
-    const { reader } = store
-
-    if (reader) {
-        if (reader.isChecked && reader.isOk) {
-            dispatch(navigateToStep(WIZARD_STATE_UPLOAD))
-        }
-        else {
-            dispatch(navigateToStep(WIZARD_STATE_VERSION_CHECK_LOADING))
-        }
-    }
-
-
-
-
+    dispatch(navigateToStep(WIZARD_STATE_START))
 
 }
+
+
+
+
+

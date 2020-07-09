@@ -16,4 +16,7 @@ $theme-colors: (
 @import '../node_modules/bootstrap/scss/bootstrap.scss';
 
 
-
+//add style for modules/components/MethodeSelect/MethodeSelectCard.js
+.selectCard:hover {
+  border-color: #11a0ba;
+}

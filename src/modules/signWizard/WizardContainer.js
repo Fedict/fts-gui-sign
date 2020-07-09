@@ -40,6 +40,7 @@ import { ErrorGeneral } from '../message/MessageConstants'
 import { resetWizard } from './actions/WizardLogicActions'
 import DisplayFile from '../fileUpload/components/DisplayFile/DisplayFile'
 import CertificateValidateChainContainer from './pages/CertificateValidateChainContainer'
+import StartPageContainer from './pages/StartPageContainer'
 
 export const WizardContainer = ({ wizard, reader, resetWizard }) => {
 
@@ -47,12 +48,7 @@ export const WizardContainer = ({ wizard, reader, resetWizard }) => {
     let content = null;
     switch (wizard.state) {
         case WIZARD_STATE_START:
-            if (reader && reader.ok) {
-                content = <UploadFileContainer />
-            }
-            else {
-                content = <VersionCheckLoadingContainer />
-            }
+            content = <StartPageContainer />
             break;
         case WIZARD_STATE_UPLOAD:
             content = <UploadFileContainer />;

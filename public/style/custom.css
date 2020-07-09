@@ -7137,3 +7137,6 @@ a.text-dark:hover, a.text-dark:focus {
   .table .thead-dark th {
     color: inherit;
     border-color: #dee2e6; } }
+
+.selectCard:hover {
+  border-color: #11a0ba; }
