@@ -17,7 +17,7 @@ import {
     signDocument,
     resetWizard
 } from "./WizardLogicActions"
-import { WIZARD_STATE_PIN_INPUT, WIZARD_STATE_SIGNING_PRESIGN_LOADING, WIZARD_STATE_UPLOAD, WIZARD_STATE_VERSION_CHECK_INSTALL, WIZARD_STATE_VERSION_CHECK_UPDATE, WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENSION, WIZARD_STATE_VALIDATE_LOADING, WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN, WIZARD_STATE_CERTIFICATES_CHOOSE, WIZARD_STATE_DIGEST_LOADING, WIZARD_STATE_PINPAD_ERROR, WIZARD_STATE_SIGNING_LOADING, WIZARD_STATE_SUCCES, WIZARD_STATE_VERSION_CHECK_LOADING } from "../../wizard/WizardConstants"
+import { WIZARD_STATE_PIN_INPUT, WIZARD_STATE_SIGNING_PRESIGN_LOADING, WIZARD_STATE_UPLOAD, WIZARD_STATE_VERSION_CHECK_INSTALL, WIZARD_STATE_VERSION_CHECK_UPDATE, WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENSION, WIZARD_STATE_VALIDATE_LOADING, WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN, WIZARD_STATE_CERTIFICATES_CHOOSE, WIZARD_STATE_DIGEST_LOADING, WIZARD_STATE_PINPAD_ERROR, WIZARD_STATE_SIGNING_LOADING, WIZARD_STATE_SUCCES, WIZARD_STATE_VERSION_CHECK_LOADING, WIZARD_STATE_START } from "../../wizard/WizardConstants"
 
 import { controller } from "../../eIdLink/controller"
 import * as eIDLinkController from "../../eIdLink/controller"
@@ -2612,21 +2612,7 @@ describe("WizardLogicActions", () => {
             expect(setNewFlowId).toBeCalledTimes(1)
             expect(resetStore).toBeCalledTimes(1)
         })
-        test("resetWizard reader ok navigates to WIZARD_STATE_UPLOAD", () => {
-            const mockDispatch = jest.fn((val) => { return val })
-            const mockGetstore = jest.fn(() => {
-                return {
-                    reader: {
-                        isChecked: true,
-                        isOk: true
-                    }
-                }
-            })
-            resetWizard()(mockDispatch, mockGetstore)
-            expect(navigateToStep).toBeCalledTimes(1)
-            expect(navigateToStep).toBeCalledWith(WIZARD_STATE_UPLOAD)
-        })
-        test("resetWizard reader not ok navigates to WIZARD_STATE_VERSION_CHECK_LOADING", () => {
+        test("resetWizard reader not ok navigates to WIZARD_STATE_START", () => {
             const mockDispatch = jest.fn((val) => { return val })
             const mockGetstore = jest.fn(() => {
                 return {
@@ -2638,7 +2624,7 @@ describe("WizardLogicActions", () => {
             })
             resetWizard()(mockDispatch, mockGetstore)
             expect(navigateToStep).toBeCalledTimes(1)
-            expect(navigateToStep).toBeCalledWith(WIZARD_STATE_VERSION_CHECK_LOADING)
+            expect(navigateToStep).toBeCalledWith(WIZARD_STATE_START)
         })
         afterEach(() => {
             eIDLinkController.controller = ORIGINAL_controller
