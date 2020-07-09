@@ -40,7 +40,7 @@ export const Navbar = ({ location, resetStore, navigateToStep, setNewFlowId }) =
     return (
         <header className="">
             <nav className="navbar navbar-expand navbar-light sticky-top">
-                <a href="/#" className="navbar-brand">
+                <a href="/#" className="navbar-brand" onClick={() => { resetStore(); setNewFlowId(); navigateToStep(WIZARD_STATE_START) }}>
                     <img src="/img/logo-bosa.png" alt="BOSA"
                         style={{ width: "188px", height: "54px" }} />
                 </a>
@@ -61,7 +61,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = ({
     navigateToStep,
     resetStore,
-    setNewFlowId
+    setNewFlowId,
+
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Navbar))
