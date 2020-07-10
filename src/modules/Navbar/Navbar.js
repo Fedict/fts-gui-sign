@@ -10,7 +10,7 @@ import { resetStore } from "../../store/storeActions"
 import { WIZARD_STATE_START } from '../wizard/WizardConstants';
 import { setNewFlowId } from "../controlIds/flowId/FlowIdActions"
 
-export const Navbar = ({ location, resetStore, navigateToStep, setNewFlowId }) => {
+export const Navbar = ({ location, resetStore, navigateToStep, setNewFlowId, history }) => {
 
     const links = [
         {
@@ -40,7 +40,11 @@ export const Navbar = ({ location, resetStore, navigateToStep, setNewFlowId }) =
     return (
         <header className="">
             <nav className="navbar navbar-expand navbar-light sticky-top">
-                <a href="/#" className="navbar-brand" onClick={() => { resetStore(); setNewFlowId(); navigateToStep(WIZARD_STATE_START) }}>
+                <a href="/#" className="navbar-brand" onClick={() => {
+                    resetStore();
+                    setNewFlowId();
+                    history.push("/")
+                }}>
                     <img src="/img/logo-bosa.png" alt="BOSA"
                         style={{ width: "188px", height: "54px" }} />
                 </a>

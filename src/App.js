@@ -13,6 +13,7 @@ import { browserIsAccepted } from './modules/browserDetection/BrowserDetection';
 import { MessageContainer } from './modules/message/MessageContainer';
 import { ErrorNotSupported } from './modules/message/MessageConstants';
 import { Footer } from './modules/footer/Footer';
+import StartPageContainer from './modules/startPage/StartPageContainer';
 
 function App() {
   const browserIsSupported = browserIsAccepted()
@@ -35,7 +36,7 @@ function App() {
             </Route>
             <Route path="/">
 
-              <WizardContainer />
+              <StartPageContainer />
             </Route>
 
           </Switch>)

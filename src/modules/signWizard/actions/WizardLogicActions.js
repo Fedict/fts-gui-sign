@@ -34,6 +34,8 @@ import { handleRequestIdError } from "../../controlIds/requestId/RequestIdHelper
 import { handleFlowIdError } from "../../controlIds/flowId/FlowIdHelpers"
 import { INCORECT_REQUEST_ID } from '../../controlIds/requestId/RequestIdHelpers'
 import { INCORECT_FLOW_ID } from '../../controlIds/flowId/FlowIdHelpers'
+import { browserHistory, useHistory } from 'react-router';
+import { BrowserRouter } from "react-router-dom"
 //----------------------------------
 // helpers                    
 //----------------------------------
@@ -518,7 +520,8 @@ export const resetWizard = () => (dispatch, getStore) => {
     eIDLink.stop()
     dispatch(resetStore())
     dispatch(setNewFlowId())
-    dispatch(navigateToStep(WIZARD_STATE_START))
+
+    window.location.pathname = "/"
 
 }
 
