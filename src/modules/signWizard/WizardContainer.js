@@ -48,7 +48,12 @@ export const WizardContainer = ({ wizard, reader, resetWizard }) => {
     let content = null;
     switch (wizard.state) {
         case WIZARD_STATE_START:
-            content = <StartPageContainer />
+            if (reader && reader.isOk && reader.isChecked) {
+                content = <UploadFileContainer />;
+            }
+            else {
+                content = <VersionCheckLoadingContainer />;
+            }
             break;
         case WIZARD_STATE_UPLOAD:
             content = <UploadFileContainer />;

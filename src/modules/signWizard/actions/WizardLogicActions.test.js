@@ -2623,9 +2623,8 @@ describe("WizardLogicActions", () => {
                 }
             })
             resetWizard()(mockDispatch, mockGetstore)
-            expect(navigateToStep).toBeCalledTimes(1)
-            expect(navigateToStep).toBeCalledWith(WIZARD_STATE_START)
-        })
+            expect(window.location.pathname).toBe("/")
+        }) 
         afterEach(() => {
             eIDLinkController.controller = ORIGINAL_controller
             storeActions.resetStore = ORIGINAL_resetStore
