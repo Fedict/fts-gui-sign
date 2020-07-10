@@ -13,8 +13,6 @@ import {
     WIZARD_STATE_PINPAD_ERROR,
     WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENSION,
     WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN,
-    WIZARD_STATE_START
-
 } from "../../wizard/WizardConstants"
 import { controller } from "../../eIdLink/controller"
 import { showErrorMessage } from "../../message/actions/MessageActions"
@@ -34,8 +32,7 @@ import { handleRequestIdError } from "../../controlIds/requestId/RequestIdHelper
 import { handleFlowIdError } from "../../controlIds/flowId/FlowIdHelpers"
 import { INCORECT_REQUEST_ID } from '../../controlIds/requestId/RequestIdHelpers'
 import { INCORECT_FLOW_ID } from '../../controlIds/flowId/FlowIdHelpers'
-import { browserHistory, useHistory } from 'react-router';
-import { BrowserRouter } from "react-router-dom"
+
 //----------------------------------
 // helpers                    
 //----------------------------------
