@@ -44,5 +44,7 @@
       "not op_mini all"
     ]
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/jest": "^25.1.4"
+  }
 }

@@ -1,5 +1,5 @@
-import { isChromeExtensionDetected } from "./detect";
-import { getEIDLinkExtensionStrategy, getDefaultStrategy } from "./strategies/index.js";
+import { isChromeExtensionDetected, isActiveXControlDetected } from "./detect";
+import { getEIDLinkExtensionStrategy, getDefaultStrategy, getActiveXStrategy } from "./strategies/index.js";
 
 export const controller = (() => {
 
@@ -10,6 +10,9 @@ export const controller = (() => {
         if (isChromeExtensionDetected()) {
             console.log("ChromeExt - Chrome extension detected");
             return getEIDLinkExtensionStrategy();
+        }
+        if (isActiveXControlDetected()) {
+            return getActiveXStrategy()
         }
         return getDefaultStrategy()
     }
