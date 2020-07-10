@@ -27,9 +27,9 @@ export const createActiveXEIDLinkStrategy = () => {
     }
 
 
-    const getCertificateChain = function (language, mac) {
+    const getCertificateChain = function (lang, mac, userCert) {
         console.log("Getting certificate chain");
-        return messagePromise({ operation: 'USERCERTS ', mac: mac });
+        return messagePromise({ operation: 'CERTCHAIN', cert: userCert });
     }
 
     const sign = function (language, mac, cert, algo, digest, pin) {
