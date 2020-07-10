@@ -29,7 +29,7 @@ export const createActiveXEIDLinkStrategy = () => {
 
     const getCertificateChain = function (language, mac) {
         console.log("Getting certificate chain");
-        return messagePromise({ operation: 'CERT', mac: mac });
+        return messagePromise({ operation: 'USERCERTS ', mac: mac });
     }
 
     const sign = function (language, mac, cert, algo, digest, pin) {
@@ -43,10 +43,7 @@ export const createActiveXEIDLinkStrategy = () => {
         return messagePromise({ operation: 'USERCERTS', language: language, mac: mac });
     };
 
-    const getUserCertificateChain = function (language, mac, cert) {
-        console.log("Getting certificate chain for specific cert");
-        return messagePromise({ operation: 'CERTCHAIN', language: language, mac: mac, cert: cert });
-    };
+  
 
 
 
@@ -75,8 +72,7 @@ export const createActiveXEIDLinkStrategy = () => {
                     var obj = document.DemoActiveX;
                     if (obj) {
                         console.log(JSON.stringify(msg))
-                        var response = obj.SayHello(JSON.stringify(msg));
-
+                        const response = obj.SayHello(JSON.stringify(msg));
                         const responseJson = JSON.parse(response)
                         console.log("Processing reply from eazylink : " + JSON.stringify(responseJson));
 
