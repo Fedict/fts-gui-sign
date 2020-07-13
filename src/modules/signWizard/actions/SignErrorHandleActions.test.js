@@ -245,19 +245,128 @@ describe("SignErrorHandleActions", () => {
         })
 
         describe("not pin specific errors", () => {
-            test('handleErrorEID error.message errorStatuses.http_status_0 show error Error_EID_http_status_0 ', () => {
-            
+            beforeEach(() => {
+
+                MessageActions.showErrorMessage = jest.fn()
+                wizardLogicActions.resetWizard = jest.fn()
             })
-            test('handleErrorEID error.message errorStatuses.no_reader isInSession show error Error_EID_no_reader_InSession ', () => { })
-            test('handleErrorEID error.message errorStatuses.no_reader not isInSession show error Error_EID_no_reader_NotInSession ', () => { })
-            test('handleErrorEID error.message errorStatuses.unsupported_reader show error Error_EID_unsupported_reader ', () => { })
-            test('handleErrorEID error.message errorStatuses.no_card isInSession show error Error_EID_no_card_InSession ', () => { })
-            test('handleErrorEID error.message errorStatuses.no_card not isInSession show error Error_EID_no_card_NotInSession ', () => { })
-            test('handleErrorEID error.message errorStatuses.card_error show error Error_EID_card_error ', () => { })
-            test('handleErrorEID error.message errorStatuses.signature_failed show error Error_EID_signature_failed ', () => { })
-            test('handleErrorEID error.message errorStatuses.card_blocked show error Error_EID_card_blocked ', () => { })
-            test('handleErrorEID error.message errorStatuses.cancel resets wizard', () => { })
-            test('handleErrorEID error.message unknown shows no message', () => { })
+            afterEach(() => {
+                MessageActions.showErrorMessage = ORIGINAL_ShowErroressage
+                wizardLogicActions.resetWizard = ORIGINAL_resetWizard
+            })
+            test('handlePinErrorEID error.message errorStatuses.http_status_0 show error Error_EID_http_status_0 ', () => {
+                const startError = { message: errorStatuses.http_status_0 }
+
+                const mockDispatch2 = jest.fn()
+                const mockDispatch1 = jest.fn((val) => { val(mockDispatch2) })
+                handlePinErrorEID(startError)(mockDispatch1)
+
+                expect(mockDispatch2).toBeCalled()
+                expect(showErrorMessage).toBeCalledWith(Error_EID_http_status_0)
+            })
+            test('handlePinErrorEID error.message errorStatuses.no_reader isInSession show error Error_EID_no_reader_InSession ', () => {
+                const startError = { message: errorStatuses.no_reader }
+
+                const mockDispatch2 = jest.fn()
+                const mockDispatch1 = jest.fn((val) => { val(mockDispatch2) })
+                handlePinErrorEID(startError, true)(mockDispatch1)
+
+                expect(mockDispatch2).toBeCalled()
+                expect(showErrorMessage).toBeCalledWith(Error_EID_no_reader_InSession)
+            })
+            test('handlePinErrorEID error.message errorStatuses.no_reader not isInSession show error Error_EID_no_reader_NotInSession ', () => {
+                const startError = { message: errorStatuses.no_reader }
+
+                const mockDispatch2 = jest.fn()
+                const mockDispatch1 = jest.fn((val) => { val(mockDispatch2) })
+                handlePinErrorEID(startError)(mockDispatch1)
+
+                expect(mockDispatch2).toBeCalled()
+                expect(showErrorMessage).toBeCalledWith(Error_EID_no_reader_NotInSession)
+            })
+            test('handlePinErrorEID error.message errorStatuses.unsupported_reader show error Error_EID_unsupported_reader ', () => {
+                const startError = { message: errorStatuses.unsupported_reader }
+
+                const mockDispatch2 = jest.fn()
+                const mockDispatch1 = jest.fn((val) => { val(mockDispatch2) })
+                handlePinErrorEID(startError)(mockDispatch1)
+
+                expect(mockDispatch2).toBeCalled()
+                expect(showErrorMessage).toBeCalledWith(Error_EID_unsupported_reader)
+            })
+            test('handlePinErrorEID error.message errorStatuses.no_card isInSession show error Error_EID_no_card_InSession ', () => {
+                const startError = { message: errorStatuses.no_card }
+
+                const mockDispatch2 = jest.fn()
+                const mockDispatch1 = jest.fn((val) => { val(mockDispatch2) })
+                handlePinErrorEID(startError, true)(mockDispatch1)
+
+                expect(mockDispatch2).toBeCalled()
+                expect(showErrorMessage).toBeCalledWith(Error_EID_no_card_InSession)
+            })
+            test('handlePinErrorEID error.message errorStatuses.no_card not isInSession show error Error_EID_no_card_NotInSession ', () => {
+                const startError = { message: errorStatuses.no_card }
+
+                const mockDispatch2 = jest.fn()
+                const mockDispatch1 = jest.fn((val) => { val(mockDispatch2) })
+                handlePinErrorEID(startError)(mockDispatch1)
+
+                expect(mockDispatch2).toBeCalled()
+                expect(showErrorMessage).toBeCalledWith(Error_EID_no_card_NotInSession)
+            })
+            test('handlePinErrorEID error.message errorStatuses.card_error show error Error_EID_card_error ', () => {
+                const startError = { message: errorStatuses.card_error }
+
+                const mockDispatch2 = jest.fn()
+                const mockDispatch1 = jest.fn((val) => { val(mockDispatch2) })
+                handlePinErrorEID(startError)(mockDispatch1)
+
+                expect(mockDispatch2).toBeCalled()
+                expect(showErrorMessage).toBeCalledWith(Error_EID_card_error)
+            })
+            test('handlePinErrorEID error.message errorStatuses.signature_failed show error Error_EID_signature_failed ', () => {
+                const startError = { message: errorStatuses.signature_failed }
+
+                const mockDispatch2 = jest.fn()
+                const mockDispatch1 = jest.fn((val) => { val(mockDispatch2) })
+                handlePinErrorEID(startError)(mockDispatch1)
+
+                expect(mockDispatch2).toBeCalled()
+                expect(showErrorMessage).toBeCalledWith(Error_EID_signature_failed)
+            })
+            test('handlePinErrorEID error.message errorStatuses.card_blocked show error Error_EID_card_blocked ', () => {
+                const startError = { message: errorStatuses.card_blocked }
+
+                const mockDispatch2 = jest.fn()
+                const mockDispatch1 = jest.fn((val) => { val(mockDispatch2) })
+                handlePinErrorEID(startError)(mockDispatch1)
+
+                expect(mockDispatch2).toBeCalled()
+                expect(showErrorMessage).toBeCalledWith(Error_EID_card_blocked)
+            })
+            test('handlePinErrorEID error.message errorStatuses.cancel resets wizard', () => {
+
+                const startError = { message: errorStatuses.cancel }
+
+                const mockDispatch2 = jest.fn()
+                const mockDispatch1 = jest.fn((val) => { val(mockDispatch2) })
+                handlePinErrorEID(startError)(mockDispatch1)
+
+                expect(mockDispatch2).toBeCalled()
+
+                expect(wizardLogicActions.resetWizard).toBeCalledTimes(1)
+            })
+            test('handlePinErrorEID error.message unknown shows no message', () => {
+                const startError = { message: "unknown message" }
+
+                const mockDispatch2 = jest.fn()
+                const mockDispatch1 = jest.fn((val) => { val(mockDispatch2) })
+                handlePinErrorEID(startError)(mockDispatch1)
+
+                expect(mockDispatch2).not.toBeCalled()
+
+                expect(showErrorMessage).not.toBeCalled()
+            })
         })
     })
 })
