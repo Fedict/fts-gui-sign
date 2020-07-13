@@ -1,4 +1,4 @@
-import { errorStatuses, handleErrorEID, showPinError, PIN_ERROR_SET_ERROR } from "./SignErrorHandleActions"
+import { errorStatuses, handleErrorEID, showPinError, PIN_ERROR_SET_ERROR, handlePinErrorEID, pinErrorText } from "./SignErrorHandleActions"
 import { showErrorMessage } from "../../message/actions/MessageActions"
 import * as  MessageActions from "../../message/actions/MessageActions"
 import { Error_EID_http_status_0, Error_EID_no_reader_InSession, Error_EID_no_reader_NotInSession, Error_EID_unsupported_reader, Error_EID_card_blocked, Error_EID_signature_failed, Error_EID_card_error, Error_EID_no_card_NotInSession, Error_EID_no_card_InSession } from "../messages/ErrorsEIDLink"
@@ -158,17 +158,96 @@ describe("SignErrorHandleActions", () => {
     })
 
     describe("handlePinErrorEID", () => {
-        test('handlePinErrorEID error.message errorStatuses.pin_1_attempt_left show pinerror pinErrorText.pin_1_attempt_left ', () => { })
-        test('handlePinErrorEID error.message errorStatuses.pin_2_attempts_left show pinerror pinErrorText.pin_2_attempts_left ', () => { })
-        test('handlePinErrorEID error.message errorStatuses.pin_3_attempts_left show pinerror pinErrorText.pin_3_attempts_left ', () => { })
-        test('handlePinErrorEID error.message errorStatuses.pin_too_long show pinerror pinErrorText.pin_too_long ', () => { })
-        test('handlePinErrorEID error.message errorStatuses.pin_length show pinerror pinErrorText.pin_length ', () => { })
-        test('handlePinErrorEID error.message errorStatuses.pin_too_short show pinerror pinErrorText.pin_too_short ', () => { })
-        test('handlePinErrorEID error.message errorStatuses.pin_incorrect show pinerror pinErrorText.pin_incorrect ', () => { })
-        test('handlePinErrorEID error.message errorStatuses.pin_timeout show pinerror pinErrorText.pin_timeout ', () => { })
+        beforeEach(() => {
+
+            MessageActions.showErrorMessage = jest.fn()
+            wizardLogicActions.resetWizard = jest.fn()
+        })
+        afterEach(() => {
+            MessageActions.showErrorMessage = ORIGINAL_ShowErroressage
+            wizardLogicActions.resetWizard = ORIGINAL_resetWizard
+        })
+
+        test('handlePinErrorEID error.message errorStatuses.pin_1_attempt_left show pinerror pinErrorText.pin_1_attempt_left ', () => {
+            const mockDispatch2 = jest.fn()
+            const mockDispatch1 = jest.fn(val => { val(mockDispatch2) })
+
+            const errorMessage = { message: errorStatuses.pin_1_attempt_left }
+            handlePinErrorEID(errorMessage)(mockDispatch1)
+
+            expect(mockDispatch2).toBeCalledWith({ type: PIN_ERROR_SET_ERROR, payload: pinErrorText.pin_1_attempt_left })
+        })
+        test('handlePinErrorEID error.message errorStatuses.pin_2_attempts_left show pinerror pinErrorText.pin_2_attempts_left ', () => {
+            const mockDispatch2 = jest.fn()
+            const mockDispatch1 = jest.fn(val => { val(mockDispatch2) })
+
+            const errorMessage = { message: errorStatuses.pin_2_attempts_left }
+            handlePinErrorEID(errorMessage)(mockDispatch1)
+
+            expect(mockDispatch2).toBeCalledWith({ type: PIN_ERROR_SET_ERROR, payload: pinErrorText.pin_2_attempts_left })
+
+        })
+        test('handlePinErrorEID error.message errorStatuses.pin_3_attempts_left show pinerror pinErrorText.pin_3_attempts_left ', () => {
+            const mockDispatch2 = jest.fn()
+            const mockDispatch1 = jest.fn(val => { val(mockDispatch2) })
+
+            const errorMessage = { message: errorStatuses.pin_3_attempts_left }
+            handlePinErrorEID(errorMessage)(mockDispatch1)
+
+            expect(mockDispatch2).toBeCalledWith({ type: PIN_ERROR_SET_ERROR, payload: pinErrorText.pin_3_attempts_left })
+
+        })
+        test('handlePinErrorEID error.message errorStatuses.pin_too_long show pinerror pinErrorText.pin_too_long ', () => {
+            const mockDispatch2 = jest.fn()
+            const mockDispatch1 = jest.fn(val => { val(mockDispatch2) })
+
+            const errorMessage = { message: errorStatuses.pin_too_long }
+            handlePinErrorEID(errorMessage)(mockDispatch1)
+
+            expect(mockDispatch2).toBeCalledWith({ type: PIN_ERROR_SET_ERROR, payload: pinErrorText.pin_too_long })
+
+        })
+        test('handlePinErrorEID error.message errorStatuses.pin_length show pinerror pinErrorText.pin_length ', () => {
+            const mockDispatch2 = jest.fn()
+            const mockDispatch1 = jest.fn(val => { val(mockDispatch2) })
+
+            const errorMessage = { message: errorStatuses.pin_length }
+            handlePinErrorEID(errorMessage)(mockDispatch1)
+
+            expect(mockDispatch2).toBeCalledWith({ type: PIN_ERROR_SET_ERROR, payload: pinErrorText.pin_length })
+        })
+        test('handlePinErrorEID error.message errorStatuses.pin_too_short show pinerror pinErrorText.pin_too_short ', () => {
+            const mockDispatch2 = jest.fn()
+            const mockDispatch1 = jest.fn(val => { val(mockDispatch2) })
+
+            const errorMessage = { message: errorStatuses.pin_too_short }
+            handlePinErrorEID(errorMessage)(mockDispatch1)
+
+            expect(mockDispatch2).toBeCalledWith({ type: PIN_ERROR_SET_ERROR, payload: pinErrorText.pin_too_short })
+        })
+        test('handlePinErrorEID error.message errorStatuses.pin_incorrect show pinerror pinErrorText.pin_incorrect ', () => {
+            const mockDispatch2 = jest.fn()
+            const mockDispatch1 = jest.fn(val => { val(mockDispatch2) })
+
+            const errorMessage = { message: errorStatuses.pin_incorrect }
+            handlePinErrorEID(errorMessage)(mockDispatch1)
+
+            expect(mockDispatch2).toBeCalledWith({ type: PIN_ERROR_SET_ERROR, payload: pinErrorText.pin_incorrect })
+        })
+        test('handlePinErrorEID error.message errorStatuses.pin_timeout show pinerror pinErrorText.pin_timeout ', () => {
+            const mockDispatch2 = jest.fn()
+            const mockDispatch1 = jest.fn(val => { val(mockDispatch2) })
+
+            const errorMessage = { message: errorStatuses.pin_timeout }
+            handlePinErrorEID(errorMessage)(mockDispatch1)
+
+            expect(mockDispatch2).toBeCalledWith({ type: PIN_ERROR_SET_ERROR, payload: pinErrorText.pin_timeout })
+        })
 
         describe("not pin specific errors", () => {
-            test('handleErrorEID error.message errorStatuses.http_status_0 show error Error_EID_http_status_0 ', () => { })
+            test('handleErrorEID error.message errorStatuses.http_status_0 show error Error_EID_http_status_0 ', () => {
+            
+            })
             test('handleErrorEID error.message errorStatuses.no_reader isInSession show error Error_EID_no_reader_InSession ', () => { })
             test('handleErrorEID error.message errorStatuses.no_reader not isInSession show error Error_EID_no_reader_NotInSession ', () => { })
             test('handleErrorEID error.message errorStatuses.unsupported_reader show error Error_EID_unsupported_reader ', () => { })
