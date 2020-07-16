@@ -7,7 +7,6 @@ export const NO_EXTENSION_ACTIVE = "NO_EXTENSION_ACTIVE"
  * function that creates a strategy when no extention is active
  * returns a object with the folowing functions:
  * - getVersion
- * - getInfo
  * - getCertificate
  * - getCertificateChain
  * - sign
@@ -28,12 +27,7 @@ export const createDefaultStrategy = () => {
         if (typeof onNoExtensionInstalled === "function") { onNoExtensionInstalled() }
     }
 
-    /**
-     * function that returns a rejected promise
-     */
-    const getInfo = () => {
-        return Promise.reject(NO_EXTENSION_ACTIVE)
-    }
+   
 
     /**
      *  function that returns a rejected promise
@@ -67,12 +61,25 @@ export const createDefaultStrategy = () => {
         return Promise.reject(NO_EXTENSION_ACTIVE)
     }
 
+    /**
+     * function that returns a rejected promise
+     * @param {string} lang - language of the browser
+     * @param {string} mac - mac
+     * @param {string} cert - certificate that is used to sign the document
+     * @param {string} algo - algorithm of the digest
+     * @param {string} digest - digest that is used to sign the document
+     * @param {string} pin - pincode. should be null for pinpad reader
+     */
+    const auth = (lang, mac, cert, algo, digest, pin) => {
+        return Promise.reject(NO_EXTENSION_ACTIVE)
+    }
+
     return {
         getVersion: getVersion,
-        getInfo: getInfo,
         getCertificate: getCertificate,
         getCertificateChain: getCertificateChain,
         sign: sign,
+        auth: auth,
         stop: () => { }
     }
 }

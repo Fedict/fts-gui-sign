@@ -2,7 +2,6 @@
  * function that creates a strategy when the extention is active
  * returns a object with the folowing functions:
  * - getVersion
- * - getInfo
  * - getCertificate
  * - getCertificateChain
  * - sign
@@ -43,12 +42,7 @@ export const createEIDLinkExtensionStrategy = (api) => {
         );
     }
 
-    /**
-     * function that returns extra info about eIDLink
-     */
-    const getInfo = () => {
-        return api.getInfo()
-    }
+
 
 
     /**
@@ -86,12 +80,25 @@ export const createEIDLinkExtensionStrategy = (api) => {
         return api.sign(lang, mac, cert, algo, digest, pin)
     }
 
+    /**
+     * function to get the signing data 
+     * @param {string} lang - language of the browser
+     * @param {string} mac - mac
+     * @param {string} cert - certificate that is used to sign the document
+     * @param {string} algo - algroritme of the digest
+     * @param {string} digest - digest that is used to sign the document
+     * @param {string} pin - pincode. should be null for pinpad reader
+     */
+    const auth = (lang, mac, cert, algo, digest, pin) => {
+        return api.auth(lang, mac, cert, algo, digest, pin)
+    }
+
     return {
         getVersion: getVersion,
-        getInfo: getInfo,
         getCertificate: getCertificate,
         getCertificateChain: getCertificateChain,
         sign: sign,
+        auth: auth,
 
         stop: () => { }
     }

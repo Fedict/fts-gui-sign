@@ -20,7 +20,6 @@ export const controller = (() => {
     /**
      * function that returns a object with the folowing functions :
     * - getVersion
-    * - getInfo
     * - getCertificate
     * - getCertificateChain
     * - sign

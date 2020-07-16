@@ -16,7 +16,6 @@ describe("controller tests", () => {
         strategy.getEIDLinkExtensionStrategy = jest.fn(() => {
             return {
                 getVersion: () => { },
-                getInfo: () => { },
                 getCertificate: () => { },
                 getCertificateChain: () => { },
                 sign: () => { },
@@ -26,7 +25,6 @@ describe("controller tests", () => {
         strategy.getDefaultStrategy = jest.fn(() => {
             return {
                 getVersion: () => { },
-                getInfo: () => { },
                 getCertificate: () => { },
                 getCertificateChain: () => { },
                 sign: () => { },

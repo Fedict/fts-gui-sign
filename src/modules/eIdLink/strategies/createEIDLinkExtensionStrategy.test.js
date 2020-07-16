@@ -109,18 +109,6 @@ describe("unit tests for createEIDLinExtensionStrategy", () => {
     })
 
 
-    describe("tests for getInfo", () => {
-        let api = { getInfo: () => { } }
-
-        test("createEIDLinkExtensionStrategy returns function getInfo", () => {
-            const result = createEIDLinkExtensionStrategy(api)
-
-            expect(result).toBeTruthy();
-            expect(result.getInfo).toBeTruthy();
-            expect(typeof result.getInfo).toBe("function")
-        })
-
-    })
 
     describe("tests for getCertificate", () => {
         let api = { getUserCertificates: () => { } }

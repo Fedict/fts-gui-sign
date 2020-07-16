@@ -37,13 +37,18 @@ export const createActiveXEIDLinkStrategy = () => {
         return messagePromise({ operation: 'SIGN', cert: cert, algo: algo, digest: digest, pin: pin, language: language, mac: mac });
     }
 
+    const auth = function (language, mac, cert, algo, digest, pin) {
+        console.log(pin ? "Signing with PIN" : "Signing with pinpad");
+        return messagePromise({ operation: 'AUTH', cert: cert, algo: algo, digest: digest, pin: pin, language: language, mac: mac });
+    }
+
 
     const getCertificate = function (language, mac) {
         console.log("Reading user certificates");
         return messagePromise({ operation: 'USERCERTS', language: language, mac: mac });
     };
 
-  
+
 
 
 
@@ -60,7 +65,7 @@ export const createActiveXEIDLinkStrategy = () => {
 
 
     const messagePromise = (msg) => {
-        if(msg) {
+        if (msg) {
             const correlationId = guid()
 
             msg.correlationId = correlationId
@@ -125,7 +130,8 @@ export const createActiveXEIDLinkStrategy = () => {
         getVersion: getVersion,
         getCertificateChain,
         getCertificate,
-        sign
+        sign,
+        auth: auth,
 
     })
 

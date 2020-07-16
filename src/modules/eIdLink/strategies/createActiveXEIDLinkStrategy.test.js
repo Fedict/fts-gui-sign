@@ -32,7 +32,7 @@ describe("unit tests for createActiveXEIDLinkStrategy", () => {
         
     })
 
-    describe("tests for getInfo", () => { })
+   
 
     describe("tests for getCertificate", () => { })
 
