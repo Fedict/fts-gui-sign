@@ -3,6 +3,9 @@
 export const createActiveXEIDLinkStrategy = () => {
     let pendingPromises = {}
 
+    const stop = () => {
+        pendingPromises = {}
+    }
     const isUptodate = (minimumVersion, installedVersion) => {
         var expected = minimumVersion.split(".");
         var actual = installedVersion.split(".");
@@ -127,11 +130,12 @@ export const createActiveXEIDLinkStrategy = () => {
 
 
     return ({
-        getVersion: getVersion,
+        getVersion,
         getCertificateChain,
         getCertificate,
         sign,
-        auth: auth,
+        auth,
+        stop
 
     })
 
