@@ -12,7 +12,7 @@ export const createActiveXEIDLinkStrategy = () => {
         return (actual[0] > expected[0]) || (actual[0] === expected[0] && actual[1] >= expected[1]);
     }
 
-    const getVersion = function (minimumVersion, onSuccess, onNotInstalled, onNeedsUpdate) {
+    const getVersion = (minimumVersion, onSuccess, onNotInstalled, onNeedsUpdate) => {
         messagePromise({ operation: 'VERSION' }).then(
             function (msg) {
                 var installedVersion = msg.version;
@@ -30,23 +30,23 @@ export const createActiveXEIDLinkStrategy = () => {
     }
 
 
-    const getCertificateChain = function (lang, mac, userCert) {
+    const getCertificateChain = (lang, mac, userCert) => {
         console.log("Getting certificate chain");
         return messagePromise({ operation: 'CERTCHAIN', cert: userCert });
     }
 
-    const sign = function (language, mac, cert, algo, digest, pin) {
+    const sign = (language, mac, cert, algo, digest, pin) => {
         console.log(pin ? "Signing with PIN" : "Signing with pinpad");
         return messagePromise({ operation: 'SIGN', cert: cert, algo: algo, digest: digest, pin: pin, language: language, mac: mac });
     }
 
-    const auth = function (language, mac, cert, algo, digest, pin) {
+    const auth = (language, mac, cert, algo, digest, pin) => {
         console.log(pin ? "Signing with PIN" : "Signing with pinpad");
         return messagePromise({ operation: 'AUTH', cert: cert, algo: algo, digest: digest, pin: pin, language: language, mac: mac });
     }
 
 
-    const getCertificate = function (language, mac) {
+    const getCertificate = (language, mac) => {
         console.log("Reading user certificates");
         return messagePromise({ operation: 'USERCERTS', language: language, mac: mac });
     };
@@ -56,7 +56,7 @@ export const createActiveXEIDLinkStrategy = () => {
 
 
 
-    function guid() {
+    const guid = () => {
         function s4() {
             return Math.floor((1 + Math.random()) * 0x10000)
                 .toString(16)
@@ -72,14 +72,13 @@ export const createActiveXEIDLinkStrategy = () => {
             const correlationId = guid()
 
             msg.correlationId = correlationId
-            console.log(JSON.stringify(msg))
             pendingPromises[correlationId] = true
-            const promise = new Promise((resolve, reject) => {
 
+            const promise = new Promise((resolve, reject) => {
                 try {
-                    var obj = document.DemoActiveX;
+                    const obj = document.DemoActiveX;
                     if (obj) {
-                        console.log(JSON.stringify(msg))
+    
                         const response = obj.SayHello(JSON.stringify(msg));
                         const responseJson = JSON.parse(response)
                         console.log("Processing reply from eazylink : " + JSON.stringify(responseJson));
@@ -97,14 +96,7 @@ export const createActiveXEIDLinkStrategy = () => {
                             if (responseJson.result === "OK") {
                                 resolve(responseJson);
                             }
-                            // else if (typeof cardTypeRequested !== undefined && msg.cardtype !== undefined && cardTypeRequested !== msg.cardtype) {
-                            //     reject(
-                            //         {
-                            //             message: "wrong_card_type",
-                            //             report: responseJson.report
-                            //         }
-                            //     );
-                            // } 
+
                             else {
                                 reject(
                                     {
@@ -118,7 +110,6 @@ export const createActiveXEIDLinkStrategy = () => {
                         }
                     }
                 } catch (err) {
-                    var report = "Received '" + err + "' from eaZyLink for operation " + msg.operation + "; responseText was '"
                     reject({ result: "http_status_", correlationId: msg.correlationId, report: "Received '" + err + "'; response was '" });
                 }
 
