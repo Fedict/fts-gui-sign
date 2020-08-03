@@ -513,12 +513,13 @@ export const signDocument = () => (dispatch, getStore) => {
 
 export const resetWizard = () => (dispatch, getStore) => {
 
+    window.location.pathname = "/"
     let eIDLink = controller.getInstance()
     eIDLink.stop()
     dispatch(resetStore())
     dispatch(setNewFlowId())
 
-    window.location.pathname = "/"
+   
 
 }
 

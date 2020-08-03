@@ -45,7 +45,7 @@ export const Navbar = ({ location, resetStore, navigateToStep, setNewFlowId, his
                     setNewFlowId();
                     history.push("/")
                 }}>
-                    <img src="/img/logo-bosa.png" alt="BOSA"
+                    <img src="/img/logo.png" alt="BOSA"
                         style={{ width: "188px", height: "54px" }} />
                 </a>
                 <div className="navbar-nav">
