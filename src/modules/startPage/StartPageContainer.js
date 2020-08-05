@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { WIZARD_STATE_UPLOAD, WIZARD_STATE_VERSION_CHECK_LOADING } from '../wizard/WizardConstants'
 import { CardContainer } from '../components/Card/CardContainer'
 import { MethodeSelectCard } from '../components/MethodSelect/MethodSelectCard'
 

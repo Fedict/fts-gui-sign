@@ -40,7 +40,6 @@ import { ErrorGeneral } from '../message/MessageConstants'
 import { resetWizard } from './actions/WizardLogicActions'
 import DisplayFile from '../fileUpload/components/DisplayFile/DisplayFile'
 import CertificateValidateChainContainer from './pages/CertificateValidateChainContainer'
-import StartPageContainer from './pages/StartPageContainer'
 
 export const WizardContainer = ({ wizard, reader, resetWizard }) => {
 
