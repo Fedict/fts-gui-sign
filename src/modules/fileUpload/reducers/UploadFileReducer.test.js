@@ -1,5 +1,5 @@
 import UploadFileReducer, { getDisplayFileData, removeURL, initialState } from "./UploadFileReducer";
-import { FILE_UPLOAD_CHANGE_FILE, FILE_SET_DOWNLOAD_FILE, FILE_DISPLAY_FILE, FILE_DISPLAY_XML_CONTENT } from "../actions/UploadFileActions";
+import { FILE_UPLOAD_CHANGE_FILE, FILE_SET_DOWNLOAD_FILE, FILE_DISPLAY_FILE } from "../actions/UploadFileActions";
 import { STORE_RESET } from "../../../store/storeActions";
 let ORIGINAL_URL = { ...URL }
 describe(("UploadFileReducer"), () => {
@@ -212,27 +212,9 @@ describe(("UploadFileReducer"), () => {
             })
         })
 
-        describe("FILE_DISPLAY_XML_CONTENT", () => {
-            test('action with type FILE_DISPLAY_XML_CONTENT changes displayFile.xmlContent object', () => {
-                const startState = {
-                    displayFile: {
-                        isPdf: false,
-                        isXml: true,
-                        url: "",
-                        name: "test.xml"
-                    }
-                }
-                const payloadObject = "this is the content of the xml file"
-                const startAction = { type: FILE_DISPLAY_XML_CONTENT, payload: payloadObject }
+       
 
-                const result = UploadFileReducer(startState, startAction)
-
-                expect(result).not.toEqual(startState)
-                expect(result.displayFile.xmlContent).toEqual(payloadObject)
-            })
-        })
-
-        describe("FILE_DISPLAY_XML_CONTENT", () => {
+        describe("STORE_RESET", () => {
             beforeEach(() => {
                 URL.revokeObjectURL = jest.fn()
             })

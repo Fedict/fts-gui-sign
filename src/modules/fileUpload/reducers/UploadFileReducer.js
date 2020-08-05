@@ -1,4 +1,4 @@
-import { FILE_UPLOAD_CHANGE_FILE, FILE_SET_DOWNLOAD_FILE, FILE_DISPLAY_FILE, FILE_DISPLAY_XML_CONTENT } from "../actions/UploadFileActions"
+import { FILE_UPLOAD_CHANGE_FILE, FILE_SET_DOWNLOAD_FILE, FILE_DISPLAY_FILE } from "../actions/UploadFileActions"
 import { STORE_RESET } from "../../../store/storeActions"
 
 export const initialState = {
@@ -12,7 +12,7 @@ export const initialState = {
         isXml: false, //boolean to see if file is a xml
         url: "", //object url to the file
         name: "", // name of the file
-        xmlContent: "" //content of the xml file
+      
     }
 }
 
@@ -94,14 +94,7 @@ const UploadFileReducer = (state = initialState, action) => {
                 displayFile: getDisplayFileData(action.payload)
             }
         }
-        case FILE_DISPLAY_XML_CONTENT:
-            return {
-                ...state,
-                displayFile: {
-                    ...state.displayFile,
-                    xmlContent: action.payload
-                }
-            }
+        
         case STORE_RESET:
             if (state.displayFile.url) {
                 removeURL(state.displayFile.url)

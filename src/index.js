@@ -10,7 +10,7 @@ import { Provider } from 'react-redux';
 const store = configureStore();
 const app = (
     <Provider store={store} >
-        <object id="DemoActiveX" style={{display: "none"}} classid="clsid:1284638E-66C3-4586-823A-5B89A0301920" codebase="DemoCSharpActiveX.cab" height="0" width="0"></object>
+        <object id="DemoActiveX" style={{display: "none"}} classID="clsid:1284638E-66C3-4586-823A-5B89A0301920" codebase="DemoCSharpActiveX.cab" height="0" width="0"></object>
         <App />
     </Provider>)
 ReactDOM.render(app, document.getElementById('root'));
