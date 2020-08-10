@@ -33,7 +33,7 @@ describe("controller tests", () => {
         });
 
     })
-    test("controller returns correct funtions", () => {
+    test("controller returns correct functions", () => {
         const result = controller
         expect(result.instance).toBeFalsy();
         expect(result.getInstance).toBeTruthy();

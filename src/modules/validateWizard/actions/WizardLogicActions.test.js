@@ -13,8 +13,8 @@ describe("WizardLogicActions", () => {
     describe("validateDocument", () => {
         test("validateDocument calls validateSignatureAPI", () => { })
         test("validateDocument calls handleFlowIdError", () => { })
-        test("validateDocument succes set validation Indications", () => { })
-        test("validateDocument succes navigates to WIZARD_STATE_RESULT", () => { })
+        test("validateDocument success set validation Indications", () => { })
+        test("validateDocument success navigates to WIZARD_STATE_RESULT", () => { })
         test("signDocument error shows ErrorGeneral", () => { })
         test("signDocument error INCORECT_FLOW_ID does nothing", () => { })
     })

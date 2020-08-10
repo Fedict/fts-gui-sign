@@ -62,9 +62,8 @@ export const removeURL = (url) => {
     URL.revokeObjectURL(url)
 }
 
-
 /**
- * reducer for the fileHandeling
+ * reducer for the file handling
  */
 const UploadFileReducer = (state = initialState, action) => {
 
@@ -106,4 +105,3 @@ const UploadFileReducer = (state = initialState, action) => {
 }
 
 export default UploadFileReducer
-

@@ -2,10 +2,9 @@ import { MESSAGE_SET_INFO, MESSAGE_SET_ERROR } from "../actions/MessageActions"
 import { messageTypes } from "../MessageConstants"
 import { STORE_RESET } from "../../../store/storeActions"
 
-
 export const initialState = {
     type: "", //ERROR, INFO 
-    title: "", //CardTitle
+    title: "", //title of the card
     message: "", //message in a highlighted body
     body: "", //body under highlighted part
     nextButton: {
@@ -18,7 +17,7 @@ export const initialState = {
 }
 
 /**
- * reducer for the messageHandeling
+ * reducer for the messageHandling
  */
 const MessageReducer = (state = initialState, action) => {
     switch (action.type) {

@@ -93,7 +93,6 @@ export const getCertificatesFromResponse = (response) => {
     return certificateList
 }
 
-
 export const requestTimeoutFunction = (dispatch, getStore) => {
     let eIDLink = controller.getInstance()
     eIDLink.stop()
@@ -116,13 +115,11 @@ export const requestTimeOutFunctionChecVersion = (dispatch, getStore) => {
 
 
 
-
 //----------------------------------
 //logic
 //----------------------------------
 
 export const checkVersion = (isErrorCheck) => (dispatch, getStore) => {
-    //TODO implement browserchecks
 
     let eIDLink = controller.getNewInstance()
 
@@ -165,7 +162,6 @@ export const checkVersion = (isErrorCheck) => (dispatch, getStore) => {
 
 export const getCertificates = () => (dispatch, getStore) => {
 
-
     let eIDLink = controller.getInstance()
 
     const requestId = dispatch(createRequestId(10000, requestTimeoutFunction))
@@ -198,7 +194,6 @@ export const getCertificates = () => (dispatch, getStore) => {
         })
 
 }
-
 
 export const validateCertificates = () => (dispatch, getStore) => {
 
@@ -251,7 +246,7 @@ export const validateCertificates = () => (dispatch, getStore) => {
             })
             .catch((err) => {
                 if (err !== INCORECT_FLOW_ID) {
-                    //TODO API ERROR handling
+
                     dispatch(showErrorMessage(MessageCertificatesNotFound))
                 }
 
@@ -324,7 +319,6 @@ export const validateCertificate = (certificateObject) => (dispatch, getStore) =
                 selectedObject.keyUsageCheckOk = indication.keyUsageCheckOk;
                 selectedObject.commonName = indication.commonName;
 
-
                 if (indication.indication === "PASSED" && indication.keyUsageCheckOk) {
                     dispatch(selectCertificate(selectedObject))
                     dispatch(navigateToStep(WIZARD_STATE_DIGEST_LOADING))
@@ -335,7 +329,6 @@ export const validateCertificate = (certificateObject) => (dispatch, getStore) =
             })
             .catch((err) => {
                 if (err !== INCORECT_FLOW_ID) {
-                    //TODO API ERROR handling
                     dispatch(showErrorMessage(MessageCertificatesNotFound))
                 }
 
@@ -349,7 +342,6 @@ export const getDigest = () => (dispatch, getStore) => {
     const { certificate } = store
     const { uploadFile } = store
 
-
     if (certificate
         && certificate.certificateSelected
         && certificate.certificateSelected.APIBody) {
@@ -361,7 +353,6 @@ export const getDigest = () => (dispatch, getStore) => {
                 dispatch(navigateToSign())
             })
             .catch((err) => {
-                //TODO API ERROR handling
                 if (err !== INCORECT_FLOW_ID) {
                     dispatch(showErrorMessage(ErrorGeneral))
                 }
@@ -409,9 +400,7 @@ export const navigateToPinError = () => (dispatch, getStore) => {
 }
 
 export const sign = (pin) => (dispatch, getStore) => {
-    //TODO navigate to spinner
     const { certificate, digest } = getStore()
-
 
     if (certificate
         && certificate.certificateSelected
@@ -423,7 +412,7 @@ export const sign = (pin) => (dispatch, getStore) => {
 
         let eIDLink = controller.getInstance()
 
-        const lang = 'en' //TODO connect to store and translations
+        const lang = 'en'
         const mac = "0123456789ABCDEF0123456789ABCDEF"
         const u_cert = certificate.certificateSelected.certificate
         const u_digest = digest.digest
@@ -458,7 +447,6 @@ export const sign = (pin) => (dispatch, getStore) => {
     else {
         dispatch(showErrorMessage(ErrorGeneral))
     }
-
 
 }
 
@@ -496,7 +484,6 @@ export const signDocument = () => (dispatch, getStore) => {
             })
             .catch((err) => {
 
-                //TODO API ERROR handling
                 if (err !== INCORECT_FLOW_ID) {
                     dispatch(showErrorMessage(ErrorGeneral))
                 }
@@ -510,7 +497,6 @@ export const signDocument = () => (dispatch, getStore) => {
 }
 
 
-
 export const resetWizard = () => (dispatch, getStore) => {
 
     window.location.pathname = "/"
@@ -519,11 +505,4 @@ export const resetWizard = () => (dispatch, getStore) => {
     dispatch(resetStore())
     dispatch(setNewFlowId())
 
-   
-
 }
-
-
-
-
-

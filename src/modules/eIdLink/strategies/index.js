@@ -3,7 +3,7 @@ import { createDefaultStrategy } from "./createDefaultStrategy";
 import { createActiveXEIDLinkStrategy } from "./createActiveXEIDLinkStrategy";
 
 /**
- * function to get the strategy when eIDLink extention is active
+ * function to get the strategy when eIDLink extension is active
  */
 export const getEIDLinkExtensionStrategy = () => {
 
@@ -17,7 +17,7 @@ export const getEIDLinkExtensionStrategy = () => {
 }
 
 /**
- * function to get the strategy when eIDLink extention is not active
+ * function to get the strategy when eIDLink extension is not active
  * - getVersion
  * - getCertificate
  * - getCertificateChain
@@ -29,7 +29,7 @@ export const getDefaultStrategy = () => {
     return strategy
 }
 /**
- * function to get the strategy when eIDLink extention is not active
+ * function to get the strategy when eIDLink extension is not active
  * - getVersion
  * - getCertificate
  * - getCertificateChain

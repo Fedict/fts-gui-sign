@@ -32,7 +32,6 @@ export const errorStatuses = {
     signature_failed: "signature_failed"
 }
 
-
 export const handleErrorEID = (error, isInSession) => (dispatch) => {
 
     switch (error.message) {
@@ -68,7 +67,6 @@ export const handleErrorEID = (error, isInSession) => (dispatch) => {
 
         case errorStatuses.signature_failed:
             dispatch(showErrorMessage(Error_EID_signature_failed))
-            //TODO create error message
             break
 
         case errorStatuses.pin_1_attempt_left:
@@ -93,7 +91,6 @@ export const handleErrorEID = (error, isInSession) => (dispatch) => {
         default: break;
     }
 }
-
 
 export const PIN_ERROR_SET_ERROR = "PIN_ERROR_SET_ERROR"
 export const showPinError = (message) => (dispatch, getStore) => {

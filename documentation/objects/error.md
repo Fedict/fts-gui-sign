@@ -6,7 +6,7 @@
 + unsupported_reader: `unsupported_reader` (string) - unsupported reader found
 + no_card: `no_card` (string) - no card found
 + card_error: `card_error` (string) - error on the card
-+ pin_incorrect: `pin_incorrect` (string) - incorrect pin enterd
++ pin_incorrect: `pin_incorrect` (string) - incorrect pin entered
 + pin_too_short: `pin_too_short` (string) - entered pin is too short
 + pin_length: `pin_length` (string) - entered pin hase a incorect length 
 + pin_too_long: `pin_too_long` (string) - entered pin is too long
@@ -27,4 +27,3 @@
 + pin_2_attempts_left: `PIN is incorrect : 2 attempts remaining` (string) - text show when there are 2 pin attempts left
 + pin_1_attempt_left: `PIN is incorrect : 1 attempt remaining` (string) - text show when there is 1 pin attempt left
 + pin_timeout: `entering the PIN took too long.` (string) - text show when entering the PIN took too long
-

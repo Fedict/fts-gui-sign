@@ -1,7 +1,7 @@
 import React from 'react'
 
 /**
- * Select componnent for selecting a certificate
+ * Select component for selecting a certificate
  * Props
  * - {[object]} certificates - array of certificates
  * - {object} certificates[].readerName - name of the eID card reader

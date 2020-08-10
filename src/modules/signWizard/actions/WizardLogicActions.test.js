@@ -549,7 +549,7 @@ describe("WizardLogicActions", () => {
             expect(navigation.navigateToStep).toBeCalled()
             expect(navigation.navigateToStep).toBeCalledWith(WIZARD_STATE_VERSION_CHECK_UPDATE)
         })
-        test("checkVersion navigates to eIDLink extention install if eIDLink Extention is not found", () => {
+        test("checkVersion navigates to eIDLink extension install if eIDLink Extension is not found", () => {
             const requestId = 55555
             RequestIdActions.createRequestId = jest.fn(() => { return requestId })
 
@@ -622,7 +622,7 @@ describe("WizardLogicActions", () => {
             expect(RequestIdActions.createRequestId).toBeCalledTimes(1)
             expect(RequestIdActions.createRequestId).toBeCalledWith(10000, expect.any(Function))
         })
-        test("getCertificates succes saves respons in store", async () => {
+        test("getCertificates success saves respons in store", async () => {
 
             const resultGetCertificates = {
                 "Readers":
@@ -657,7 +657,7 @@ describe("WizardLogicActions", () => {
             expect(CertificateActions.saveCertificateList).toBeCalledTimes(1)
             expect(CertificateActions.saveCertificateList).toBeCalledWith(expectedResult)
         })
-        test("getCertificates succes certificateList.length = 0 shows a MessageCertificatesNotFound error", async () => {
+        test("getCertificates success certificateList.length = 0 shows a MessageCertificatesNotFound error", async () => {
             const resultGetCertificates = {
                 "Readers": [],
                 "result": "OK",
@@ -686,7 +686,7 @@ describe("WizardLogicActions", () => {
             expect(MessageActions.showErrorMessage).toBeCalledWith(MessageCertificatesNotFound)
 
         })
-        test("getCertificates succes certificateList.length > 0 navigates to certificate validation page", async () => {
+        test("getCertificates success certificateList.length > 0 navigates to certificate validation page", async () => {
 
             const resultGetCertificates = {
                 "Readers":
@@ -866,7 +866,7 @@ describe("WizardLogicActions", () => {
             expect(MessageActions.showErrorMessage).toBeCalledWith(MessageCertificatesNotFound)
 
         })
-        test("validateCertificates succes saves only valid certificates ", async () => {
+        test("validateCertificates success saves only valid certificates ", async () => {
 
             const certificateList = [{
                 readerName: 'readerName',
@@ -932,7 +932,7 @@ describe("WizardLogicActions", () => {
             const callParametersCertifictateListPased = callParametersCertifictateList.filter((val) => { return val.keyUsageCheckOk })
             expect(callParametersCertifictateListPased.length).toEqual(1)
         })
-        test("validateCertificates succes valid certificates list.length == 0 shows error MessageCertificatesNotFound ", async () => {
+        test("validateCertificates success valid certificates list.length == 0 shows error MessageCertificatesNotFound ", async () => {
             const certificateList = [{
                 readerName: 'readerName',
                 readerType: 'standard',
@@ -1001,7 +1001,7 @@ describe("WizardLogicActions", () => {
             expect(MessageActions.showErrorMessage).toBeCalledWith(MessageCertificatesNotFound)
 
         })
-        test("validateCertificates succes valid certificates list.length == 1 selects certificate and navigates to WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN ", async () => {
+        test("validateCertificates success valid certificates list.length == 1 selects certificate and navigates to WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN ", async () => {
             const certificateList = [{
                 readerName: 'readerName',
                 readerType: 'standard',
@@ -1074,7 +1074,7 @@ describe("WizardLogicActions", () => {
 
 
         })
-        test("validateCertificates succes valid certificates list.length > 1 navigates to WIZARD_STATE_CERTIFICATES_CHOOSE ", async () => {
+        test("validateCertificates success valid certificates list.length > 1 navigates to WIZARD_STATE_CERTIFICATES_CHOOSE ", async () => {
             const certificateList = [{
                 readerName: 'readerName',
                 readerType: 'standard',
@@ -1333,7 +1333,7 @@ describe("WizardLogicActions", () => {
             expect(RequestIdActions.createRequestId).toBeCalledTimes(1)
             expect(RequestIdActions.createRequestId).toBeCalledWith(10000, requestTimeoutFunction)
         })
-        test("validateCertificateChain succes calls handleFlowIdError", async () => {
+        test("validateCertificateChain success calls handleFlowIdError", async () => {
             const flowId = 88888
             const mockvalidateCertificateChain = jest.fn(() => { return Promise.resolve() })
             eIDLinkController.controller.getInstance = jest.fn(() => ({ getCertificateChain: mockvalidateCertificateChain }))
@@ -1360,7 +1360,7 @@ describe("WizardLogicActions", () => {
             expect(FlowIdHelpers.handleFlowIdError).toBeCalledWith(flowId, expect.any(Function))
 
         })
-        test("validateCertificateChain succes calls handleRequestIdError", async () => {
+        test("validateCertificateChain success calls handleRequestIdError", async () => {
             const requestId = 88888
             RequestIdActions.createRequestId = jest.fn(() => { return requestId })
             const mockvalidateCertificateChain = jest.fn(() => { return Promise.resolve() })
@@ -1388,7 +1388,7 @@ describe("WizardLogicActions", () => {
             expect(RequestIdHelpers.handleRequestIdError).toBeCalledTimes(1)
             expect(RequestIdHelpers.handleRequestIdError).toBeCalledWith(requestId, expect.any(Function), expect.any(Function))
         })
-        test("validateCertificateChain succes calls validateCertificate with certificate chain", async () => {
+        test("validateCertificateChain success calls validateCertificate with certificate chain", async () => {
 
             const mockvalidateCertificateChainResponse = {
                 "certificateChain": {
@@ -1567,7 +1567,7 @@ describe("WizardLogicActions", () => {
             expect(communication.validateCertificatesAPI).toBeCalledTimes(1)
             expect(communication.validateCertificatesAPI).toBeCalledWith(expectedResult)
         })
-        test("validateCertificates succes certificate valid selects certificate and navigates to WIZARD_STATE_DIGEST_LOADING ", async () => {
+        test("validateCertificates success certificate valid selects certificate and navigates to WIZARD_STATE_DIGEST_LOADING ", async () => {
             const startValue = {
                 APIBody: {
                     certificate: {
@@ -1612,7 +1612,7 @@ describe("WizardLogicActions", () => {
             expect(CertificateActions.selectCertificate.mock.calls[0][0]).toMatchObject(expectedResult)
             expect(navigation.navigateToStep).toBeCalledWith(WIZARD_STATE_DIGEST_LOADING)
         })
-        test("validateCertificates succes certificate not valid shows MessageCertificatesNotFound", async () => {
+        test("validateCertificates success certificate not valid shows MessageCertificatesNotFound", async () => {
             const startValue = {
                 APIBody: {
                     certificate: {
@@ -1780,7 +1780,7 @@ describe("WizardLogicActions", () => {
             expect(communication.getDataToSignAPI).toBeCalledWith(mockapiBody, mockFile)
 
         })
-        test("getDigest succes calls handleFlowIdError", async () => {
+        test("getDigest success calls handleFlowIdError", async () => {
             const flowId = 88888
             const mockapiBody = {
                 certificate: {
@@ -1814,7 +1814,7 @@ describe("WizardLogicActions", () => {
             expect(FlowIdHelpers.handleFlowIdError).toBeCalledTimes(1)
             expect(FlowIdHelpers.handleFlowIdError).toBeCalledWith(flowId, mockGetStore)
         })
-        test("getDigest succes sets digist in store", async () => {
+        test("getDigest success sets digist in store", async () => {
             const mockapiBody = {
                 certificate: {
                     encodedCertificate: 'certString'
@@ -1852,7 +1852,7 @@ describe("WizardLogicActions", () => {
             expect(DigestActions.setDigest).toBeCalledTimes(1)
             expect(DigestActions.setDigest).toBeCalledWith(resolvedDigest)
         })
-        test("getDigest succes navigates to sign", async () => {
+        test("getDigest success navigates to sign", async () => {
             const mockapiBody = {
                 certificate: {
                     encodedCertificate: 'certString'
@@ -2164,7 +2164,7 @@ describe("WizardLogicActions", () => {
             expect(mockSign).toBeCalledTimes(1)
             expect(mockSign).toBeCalledWith(expect.any(String), expect.any(String), certificateString, digestAlgorithmString, digestString, pin)
         })
-        test("sign succes calls handleFlowIdError", () => {
+        test("sign success calls handleFlowIdError", () => {
             const certificateString = "certificateString"
             const digestString = 'digestString'
             const digestAlgorithmString = "SHA256"
@@ -2194,7 +2194,7 @@ describe("WizardLogicActions", () => {
             expect(handleFlowIdError).toBeCalledWith(flowId, mockGetStore)
 
         })
-        test("sign succes calls handleRequestIdError", () => {
+        test("sign success calls handleRequestIdError", () => {
             const certificateString = "certificateString"
             const digestString = 'digestString'
             const digestAlgorithmString = "SHA256"
@@ -2225,7 +2225,7 @@ describe("WizardLogicActions", () => {
             expect(handleRequestIdError).toBeCalledTimes(1)
             expect(handleRequestIdError).toBeCalledWith(requestId, mockDispatch, mockGetStore)
         })
-        test("sign succes saves signatur and calls signDocument", async () => {
+        test("sign success saves signatur and calls signDocument", async () => {
             const certificateString = "certificateString"
             const digestString = 'digestString'
             const digestAlgorithmString = "SHA256"
@@ -2433,7 +2433,7 @@ describe("WizardLogicActions", () => {
             expect(signDocumentAPI).toBeCalledTimes(1)
             expect(signDocumentAPI).toBeCalledWith(mockApiBody, mockFile, mockSignatureString)
         })
-        test("signDocument succes handleFlowIdError", () => {
+        test("signDocument success handleFlowIdError", () => {
             const flowId = 88888
             const mockApiBody = {
                 certificate: {
@@ -2460,7 +2460,7 @@ describe("WizardLogicActions", () => {
             expect(handleFlowIdError).toBeCalledTimes(1)
             expect(handleFlowIdError).toBeCalledWith(flowId, mockGetStore)
         })
-        test("signDocument succes setDownloadFile", async () => {
+        test("signDocument success setDownloadFile", async () => {
             const response = { name: "filename", bytes: "bytestring" }
             const mockApiBody = {
                 certificate: {
@@ -2492,7 +2492,7 @@ describe("WizardLogicActions", () => {
             expect(setDownloadFile).toBeCalledWith(response)
             expect(navigateToStep).toHaveBeenLastCalledWith(WIZARD_STATE_SUCCES)
         })
-        test("signDocument succes shows ErrorGeneral when not all data is present ", async () => {
+        test("signDocument success shows ErrorGeneral when not all data is present ", async () => {
 
             const mockApiBody = {
                 certificate: {

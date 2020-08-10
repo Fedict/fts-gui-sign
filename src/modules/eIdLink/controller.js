@@ -5,7 +5,6 @@ export const controller = (() => {
 
     let strategy
 
-
     const initSignStrategy = () => {
         if (isChromeExtensionDetected()) {
             console.log("ChromeExt - Chrome extension detected");
@@ -45,3 +44,4 @@ export const controller = (() => {
         getNewInstance
     }
 })()
+

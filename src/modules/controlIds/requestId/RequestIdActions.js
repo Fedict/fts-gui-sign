@@ -24,9 +24,6 @@ export const createRequestId = (timeout, timeoutCallbackAction) => (dispatch, ge
         if (requestIds.includes(requestId)) {
             dispatch(timeoutCallbackAction)
         }
-        else {
-            //nothing wrong
-        }
     }, timeout)
     return requestId
 }

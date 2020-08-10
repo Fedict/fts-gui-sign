@@ -50,7 +50,6 @@ export const getBrowser = () => {
     }
 };
 
-
 /**
  * Function to test if the browser is compatible
  * 
@@ -70,9 +69,8 @@ export const browserIsAccepted = () => {
     return true
 }
 
-
 /**
- * Function to test if the browser is  moblile based
+ * Function to test if the browser is  mobile based
  * Check is based on http://detectmobilebrowsers.com/
  * @param {*} navigator value of the browser (navigator.userAgent || navigator.vendor || window.opera)
  * @returns  {boolean} boolean that represents if browser is a moblile version 

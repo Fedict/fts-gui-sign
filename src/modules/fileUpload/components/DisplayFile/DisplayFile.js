@@ -1,10 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-
 /**
- * Componnent to display a file
- * if no file is pressent a picture is shown
+ * Component to display a file
+ * if no file is present a picture is shown
  * @param {object} props  
  * @param {object} props.uploadFile - upload file object from the redux store 
  * @param {object} props.uploadFile.displayFile - file that is shown 
@@ -19,7 +18,6 @@ export const DisplayFile = ({ uploadFile }) => {
         if (data) {
             if (data.isPdf) {
                 return (
-
 
                     <object style={{ height: "85vh", width: "100%" }} type="application/pdf" data={data.url}>
                         <p>PDF cannot be shown</p>

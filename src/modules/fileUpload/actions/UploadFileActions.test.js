@@ -2,13 +2,12 @@ import { FILE_DISPLAY_FILE, FILE_UPLOAD_CHANGE_FILE, FILE_SET_DOWNLOAD_FILE, dis
 import * as fileHelper from '../helpers/FileHelper'
 import { getContentData } from '../helpers/FileHelper'
 
-
 const ORIGINAL_getContentData = getContentData;
 const RESOLVE_FILECONTENT = "file_content"
 describe("UploadFileActions", () => {
 
     describe("action type constants", () => {
-        test("all constanst are unique in the file", () => {
+        test("all constants are unique in the file", () => {
             const listOfConst = [
                 FILE_DISPLAY_FILE,
                 FILE_UPLOAD_CHANGE_FILE,

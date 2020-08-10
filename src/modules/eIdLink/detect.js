@@ -6,7 +6,7 @@ export const isChromeExtensionDetected = () => {
 }
 
 /** 
- * function that checks if the activeX extention is active
+ * function that checks if the activeX extension is active
  */
 export const isActiveXControlDetected = () => {
     console.log("activeX", document.DemoActiveX)

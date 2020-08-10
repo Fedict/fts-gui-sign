@@ -21,7 +21,6 @@ describe('controlIdHelper', () => {
             expect(result).toEqual(expectedResult)
             expect(Math.random).toBeCalledTimes(3)
 
-
         })
         afterEach(() => {
             Math = ORIGINAL_MATH
@@ -32,8 +31,7 @@ describe('controlIdHelper', () => {
             Math.random = jest.fn()
         })
 
-
-        test("generateId creates a other new unique id", () => {
+        test("generateId creates new unique id", () => {
             const expectedResult = 55555
             const startID = 88888
             Math.random = jest.fn()
@@ -47,7 +45,6 @@ describe('controlIdHelper', () => {
         afterEach(() => {
             Math = ORIGINAL_MATH
         })
-
 
     })
 })

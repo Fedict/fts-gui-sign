@@ -4,12 +4,12 @@ import { getBase64Data } from "../fileUpload/helpers/FileHelper"
 //-----------------------------------------
 
 /**
- * @const {string} - API url: can be configerd in config.js
+ * @const {string} - API url: can be configured in config.js
  */
 const url = (window && window.configData) ? window.configData.BEurl : ""
 
 /**
- * @const {string} - key to retun when the api request fails
+ * @const {string} - key to return when the api request fails
  */
 const REQUEST_FAILED = "REQUEST_FAILED"
 
@@ -19,7 +19,7 @@ const REQUEST_FAILED = "REQUEST_FAILED"
 
 /**
  * Function to get the signingProfileId from window.configData based on the MIME-type of the document. 
- * SigningProfileId can be configuerd in config.js.
+ * SigningProfileId can be configured in config.js.
  * If no signingprofile is configuerd for the MIME-type the configuerd signingProfileId will be returend
  * @param {string} documentType - MIME-type of the document
  * @returns {string} SigningProfileId based on the MIME-type of the document or the default SigningProfileId
@@ -105,7 +105,6 @@ export const validateCertificatesAPI = (certificateBody) => {
         })
 }
 
-
 /**
  * API request to get the DataToSign
  * @param {Object} certificateBody - object that represents the certificate
@@ -144,7 +143,6 @@ export const getDataToSignAPI = async (certificateBody, document) => {
         })
 
 }
-
 
 /**
  * API request to sign a document

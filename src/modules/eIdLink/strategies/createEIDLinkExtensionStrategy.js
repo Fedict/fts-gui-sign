@@ -1,6 +1,6 @@
 /**
- * function that creates a strategy when the extention is active
- * returns a object with the folowing functions:
+ * function that creates a strategy when the extension is active
+ * returns a object with the following functions:
  * - getVersion
  * - getCertificate
  * - getCertificateChain
@@ -44,7 +44,6 @@ export const createEIDLinkExtensionStrategy = (api) => {
 
 
 
-
     /**
      * function that returns a promise that resolves in a list of certificates and readers
      * @param {string} lang - language of the browser
@@ -72,7 +71,7 @@ export const createEIDLinkExtensionStrategy = (api) => {
      * @param {string} lang - language of the browser
      * @param {string} mac - mac
      * @param {string} cert - certificate that is used to sign the document
-     * @param {string} algo - algroritme of the digest
+     * @param {string} algo - algorithm of the digest
      * @param {string} digest - digest that is used to sign the document
      * @param {string} pin - pincode. should be null for pinpad reader
      */
@@ -85,7 +84,7 @@ export const createEIDLinkExtensionStrategy = (api) => {
      * @param {string} lang - language of the browser
      * @param {string} mac - mac
      * @param {string} cert - certificate that is used to sign the document
-     * @param {string} algo - algroritme of the digest
+     * @param {string} algo - algorithm of the digest
      * @param {string} digest - digest that is used to sign the document
      * @param {string} pin - pincode. should be null for pinpad reader
      */

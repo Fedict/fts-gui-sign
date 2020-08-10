@@ -4,7 +4,7 @@ public/config/config.js
  - Change the configuration in this file
 
  * eIDLinkMinimumVersion
-	- the minimum version of of the eIDLink local messaging host.
+	- the minimum version of the eIDLink local messaging host.
 	- used in the getVersion request to the eIDLink extension.
 	- extension checks first to digest to trigger eIDLink update. (x.x)
 

@@ -4,8 +4,8 @@
 export const NO_EXTENSION_ACTIVE = "NO_EXTENSION_ACTIVE"
 
 /**
- * function that creates a strategy when no extention is active
- * returns a object with the folowing functions:
+ * function that creates a strategy when no extension is active
+ * returns a object with the following functions:
  * - getVersion
  * - getCertificate
  * - getCertificateChain

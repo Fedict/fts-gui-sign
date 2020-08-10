@@ -3,7 +3,7 @@
 ## eIDLink sign response (operation : SIGN)
 + signature (string) - signatureString
 + correlationId (string) - correlation id 
-+ extensionVersion (string) - version of the extention
++ extensionVersion (string) - version of the extension
 + result (string) - resultstatus
 + src (string) - resultsrc 
 
