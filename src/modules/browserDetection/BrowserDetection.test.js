@@ -9,6 +9,7 @@ describe("tests of BrowserDetection", () => {
             set(v) { value = v; }
         }))(window.navigator["userAgent"]));
     })
+
     test("detects chrome based on navigator.userAgent string", () => {
         const navigatorUserAgentString = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36"
 
@@ -26,6 +27,7 @@ describe("tests of BrowserDetection", () => {
 
         expect(result).toEqual(browser.FIREFOX)
     })
+    
     test("detects safari based on navigator.userAgent string", () => {
         const navigatorUserAgentString = "Mozilla/5.0 (iPhone; CPU iPhone OS 11_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.0 Mobile/15E148 Safari/604.1 980x1306"
 

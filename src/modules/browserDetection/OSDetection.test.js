@@ -8,6 +8,7 @@ describe("tests of BrowserDetection", () => {
             set(v) { value = v; }
         }))(window.navigator["appVersion"]));
     })
+    
     test("detects Windows based on navigator.appVersion string", () => {
         const navigatorappVersionString = "Windows"
 

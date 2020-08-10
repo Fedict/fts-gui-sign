@@ -152,7 +152,6 @@ export const getDataToSignAPI = async (certificateBody, document) => {
  * @param {Object} document - document to be signed
  * @param {string} signature - signature value used to sign th document
  */
-
 export const signDocumentAPI = async (certificateBody, document, signature) => {
     const documentB64 = await getBase64Data(document)
 
