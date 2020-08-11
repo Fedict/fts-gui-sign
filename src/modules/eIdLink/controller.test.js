@@ -31,8 +31,8 @@ describe("controller tests", () => {
                 stop: () => { }
             }
         });
-
     })
+
     test("controller returns correct functions", () => {
         const result = controller
         expect(result.instance).toBeFalsy();
@@ -41,6 +41,7 @@ describe("controller tests", () => {
         expect(result.getNewInstance).toBeTruthy();
         expect(typeof result.getNewInstance).toEqual('function');
     })
+
     test("controller getInstance returns EIDlinkStrategy when isChromeExtensionDetected is true ", () => {
         detect.isChromeExtensionDetected = jest.fn(() => true);
         const result = controller;
@@ -48,6 +49,7 @@ describe("controller tests", () => {
         expect(strategy.getEIDLinkExtensionStrategy).toBeCalledTimes(1)
         expect(strategy.getDefaultStrategy).toBeCalledTimes(0)
     })
+
     test("controller getInstance returns DefaultStrategy when isChromeExtensionDetected is false ", () => {
         detect.isChromeExtensionDetected = jest.fn(() => false);
         const result = controller;
@@ -55,6 +57,7 @@ describe("controller tests", () => {
         expect(strategy.getEIDLinkExtensionStrategy).toBeCalledTimes(0)
         expect(strategy.getDefaultStrategy).toBeCalledTimes(1)
     })
+
     test("controller getInstance doen't create new instance of object ", () => {
         detect.isChromeExtensionDetected = jest.fn(() => true);
         const result = controller;
@@ -64,6 +67,7 @@ describe("controller tests", () => {
         expect(resultStrategy2).toBe(resultStrategy1)
         expect(strategy.getEIDLinkExtensionStrategy).toBeCalledTimes(1)
     })
+    
     test("controller getNewInstance create new instance of object ", () => {
         detect.isChromeExtensionDetected = jest.fn(() => true);
         const result = controller;

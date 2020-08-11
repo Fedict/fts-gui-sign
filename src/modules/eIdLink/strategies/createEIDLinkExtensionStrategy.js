@@ -5,6 +5,7 @@
  * - getCertificate
  * - getCertificateChain
  * - sign
+ * - auth
  * - stop
  * @returns {object} returns a object with functions.
  */
@@ -42,8 +43,6 @@ export const createEIDLinkExtensionStrategy = (api) => {
         );
     }
 
-
-
     /**
      * function that returns a promise that resolves in a list of certificates and readers
      * @param {string} lang - language of the browser
@@ -80,7 +79,7 @@ export const createEIDLinkExtensionStrategy = (api) => {
     }
 
     /**
-     * function to get the signing data 
+     * function to get the auth data 
      * @param {string} lang - language of the browser
      * @param {string} mac - mac
      * @param {string} cert - certificate that is used to sign the document
@@ -98,7 +97,6 @@ export const createEIDLinkExtensionStrategy = (api) => {
         getCertificateChain: getCertificateChain,
         sign: sign,
         auth: auth,
-
         stop: () => { }
     }
 }

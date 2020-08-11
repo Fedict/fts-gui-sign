@@ -12,7 +12,9 @@ describe("unit tests for createActiveXEIDLinkStrategy", () => {
             })
         }
     })
+
     describe("tests for getVersion", () => {
+
         test('getVersion calls DemoActiveX.SayHello with opperation VERSION', () => {
             const eIDLink = createActiveXEIDLinkStrategy()
             eIDLink.getVersion("0.0.0", () => { }, () => { }, () => { })
@@ -23,6 +25,7 @@ describe("unit tests for createActiveXEIDLinkStrategy", () => {
             expect(callMassage.operation).toEqual('VERSION')
             expect(callMassage.correlationId).toBeTruthy()
         })
+
         test('getVersion calls onSuccess if the minimum version is smaller than the returned version', async () => {
             document.DemoActiveX = {
                 SayHello: jest.fn((msg) => {
@@ -43,6 +46,7 @@ describe("unit tests for createActiveXEIDLinkStrategy", () => {
             await flushPromises()
             expect(mockOnSucces).toBeCalledTimes(1)
         })
+
         test('getVersion calls onNotInstalled if there is a error', async () => {
             document.DemoActiveX = {
                 SayHello: jest.fn((msg) => {
@@ -62,6 +66,7 @@ describe("unit tests for createActiveXEIDLinkStrategy", () => {
             await flushPromises()
             expect(mockOnInstall).toBeCalledTimes(1)
         })
+
         test('getVersion calls onNeedsUpdate if the minimum version is bigger than the returned version', async () => {
             document.DemoActiveX = {
                 SayHello: jest.fn((msg) => {
@@ -82,12 +87,10 @@ describe("unit tests for createActiveXEIDLinkStrategy", () => {
             await flushPromises()
             expect(mockOnUpdate).toBeCalledTimes(1)
         })
-
     })
 
-
-
     describe("tests for getCertificateChain", () => {
+
         test("getCertificateChain calls DemoActiveX.SayHello with opperation CERTCHAIN and certificate", async () => {
             const eIDLink = createActiveXEIDLinkStrategy()
 
@@ -105,6 +108,7 @@ describe("unit tests for createActiveXEIDLinkStrategy", () => {
     })
 
     describe("tests for sign", () => {
+
         test("sign calls DemoActiveX.SayHello with opperation SIGN and correct params", async () => {
             const eIDLink = createActiveXEIDLinkStrategy()
 
@@ -128,11 +132,11 @@ describe("unit tests for createActiveXEIDLinkStrategy", () => {
             expect(callMassage.pin).toEqual(startPin)
             expect(callMassage.language).toEqual(startLanguage)
             expect(callMassage.mac).toEqual(startMac)
-
-
         })
     })
+
     describe("tests for auth", () => {
+
         test("sign calls DemoActiveX.SayHello with opperation AUTH and correct params", async () => {
             const eIDLink = createActiveXEIDLinkStrategy()
 
@@ -158,7 +162,9 @@ describe("unit tests for createActiveXEIDLinkStrategy", () => {
             expect(callMassage.mac).toEqual(startMac)
         })
     })
+
     describe("tests for getCertificate", () => {
+
         test("sign calls DemoActiveX.SayHello with opperation USERCERTS ", async () => {
             const eIDLink = createActiveXEIDLinkStrategy()
 
@@ -171,10 +177,6 @@ describe("unit tests for createActiveXEIDLinkStrategy", () => {
             const callMassage = JSON.parse(document.DemoActiveX.SayHello.mock.calls[0][0])
             expect(callMassage.operation).toEqual('USERCERTS')
             expect(callMassage.correlationId).toBeTruthy()
-
-
         })
     })
-
-
 })

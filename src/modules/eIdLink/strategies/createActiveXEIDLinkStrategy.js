@@ -1,11 +1,11 @@
-
-
 export const createActiveXEIDLinkStrategy = () => {
+
     let pendingPromises = {}
 
     const stop = () => {
         pendingPromises = {}
     }
+
     const isUptodate = (minimumVersion, installedVersion) => {
         var expected = minimumVersion.split(".");
         var actual = installedVersion.split(".");
@@ -29,7 +29,6 @@ export const createActiveXEIDLinkStrategy = () => {
             });
     }
 
-
     const getCertificateChain = (lang, mac, userCert) => {
         console.log("Getting certificate chain");
         return messagePromise({ operation: 'CERTCHAIN', cert: userCert });
@@ -45,16 +44,10 @@ export const createActiveXEIDLinkStrategy = () => {
         return messagePromise({ operation: 'AUTH', cert: cert, algo: algo, digest: digest, pin: pin, language: language, mac: mac });
     }
 
-
     const getCertificate = (language, mac) => {
         console.log("Reading user certificates");
         return messagePromise({ operation: 'USERCERTS', language: language, mac: mac });
     };
-
-
-
-
-
 
     const guid = () => {
         function s4() {
@@ -65,7 +58,6 @@ export const createActiveXEIDLinkStrategy = () => {
         return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
             s4() + '-' + s4() + s4() + s4();
     }
-
 
     const messagePromise = (msg) => {
         if (msg) {
@@ -112,13 +104,11 @@ export const createActiveXEIDLinkStrategy = () => {
                 } catch (err) {
                     reject({ result: "http_status_", correlationId: msg.correlationId, report: "Received '" + err + "'; response was '" });
                 }
-
             })
 
             return promise
         }
     }
-
 
     return ({
         getVersion,
@@ -127,8 +117,5 @@ export const createActiveXEIDLinkStrategy = () => {
         sign,
         auth,
         stop
-
     })
-
-
 }

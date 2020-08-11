@@ -27,8 +27,6 @@ export const createDefaultStrategy = () => {
         if (typeof onNoExtensionInstalled === "function") { onNoExtensionInstalled() }
     }
 
-   
-
     /**
      *  function that returns a rejected promise
      * @param {string} lang - language of the browser

@@ -39,9 +39,11 @@ export const controller = (() => {
         strategy = initSignStrategy()
         return strategy
     }
+
     return {
         getInstance,
         getNewInstance
     }
+    
 })()
 

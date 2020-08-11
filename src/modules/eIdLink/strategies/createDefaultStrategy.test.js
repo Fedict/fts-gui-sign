@@ -37,16 +37,10 @@ describe("unit tests for createDefaultStrategy", () => {
                 strategy.getVersion(null, null, null, null, onMock3)
 
             })
-
-
         })
     })
 
-
-
-
     describe("tests for getCertificate", () => {
-
 
         test("createDefaultStrategy returns function getCertificate", () => {
             const result = createDefaultStrategy()
@@ -65,10 +59,7 @@ describe("unit tests for createDefaultStrategy", () => {
         })
     })
 
-
-
     describe("tests for getCertificateChain", () => {
-
 
         test("createDefaultStrategy returns function getCertificateChain", () => {
             const result = createDefaultStrategy()
@@ -91,11 +82,9 @@ describe("unit tests for createDefaultStrategy", () => {
 
             })
         })
-
     })
 
     describe("tests for sign", () => {
-
 
         test("createDefaultStrategy returns function sign", () => {
             const result = createDefaultStrategy()
@@ -118,6 +107,5 @@ describe("unit tests for createDefaultStrategy", () => {
 
             })
         })
-
     })
 })
