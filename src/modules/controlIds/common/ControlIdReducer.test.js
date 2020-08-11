@@ -1,4 +1,3 @@
-
 import ControlIdReducer from './ControlIdReducer'
 import { WIZARD_RESET_FLOW_ID } from '../flowId/FlowIdActions'
 import { WIZARD_STATE_START } from '../../wizard/WizardConstants'
@@ -10,12 +9,15 @@ import * as ControlIdHelper from './ControlIdHelper'
 const ORIGINAL_generateId = generateId
 
 describe('controlIdReducer', () => {
+
     describe("reducer", () => {
 
         describe("WIZARD_RESET_FLOW_ID", () => {
+
             beforeEach(() => {
                 ControlIdHelper.generateId = jest.fn()
             })
+
             test("action with type WIZARD_RESET_FLOW_ID changes the flowId object", () => {
                 const startState = {
                     flowId: 55555,
@@ -33,12 +35,14 @@ describe('controlIdReducer', () => {
                 expect(result.flowId).toEqual(expectedFlowId)
                 expect(ControlIdHelper.generateId).toBeCalledTimes(1)
             })
+
             afterEach(() => {
                 ControlIdHelper.generateId = ORIGINAL_generateId
             })
         })
 
         describe("WIZARD_REQUEST_ID_ADD", () => {
+
             test("action with type WIZARD_REQUEST_ID_ADD changes the requestIds object", () => {
                 const startState = {
                     state: WIZARD_STATE_START,
@@ -56,6 +60,7 @@ describe('controlIdReducer', () => {
         })
 
         describe("WIZARD_REQUEST_ID_REMOVE", () => {
+
             test("action with type WIZARD_REQUEST_ID_REMOVE changes the requestIds object", () => {
                 const actionNumber = 55545
                 const startState = {
@@ -73,9 +78,11 @@ describe('controlIdReducer', () => {
         })
 
         describe("STORE_RESET", () => {
+
             beforeEach(() => {
                 ControlIdHelper.generateId = jest.fn()
             })
+
             test("action with type STORE_RESET changes to initial value", () => {
                 const startState = {
                     flowId: 55555,
@@ -93,12 +100,11 @@ describe('controlIdReducer', () => {
                 expect(ControlIdHelper.generateId).toBeCalledTimes(1)
 
             })
+
             afterEach(() => {
                 ControlIdHelper.generateId = ORIGINAL_generateId
             })
-        })
-
-       
+        })       
     })
 })
 

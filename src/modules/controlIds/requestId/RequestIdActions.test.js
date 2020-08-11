@@ -7,8 +7,11 @@ import * as ControlIdHelper from "../common/ControlIdHelper"
 
 const ORIGINAL_getRequestIds = getRequestIds
 const ORIGINAL_generateIdFromArray = generateIdFromArray
+
 describe("RequestIdActions", () => {
+
     describe("addRequestId", () => {
+
         test("addRequestId returns a action with type WIZARD_REQUEST_ID_ADD and payload id", () => {
             const payload = 12356
             const result = addRequestId(payload)
@@ -17,7 +20,9 @@ describe("RequestIdActions", () => {
             expect(result.payload).toEqual(payload)
         })
     })
+
     describe("removeRequestId", () => {
+
         test("removeRequestId returns a action with type WIZARD_REQUEST_ID_REMOVE and payload id", () => {
             const payload = 12356
             const result = removeRequestId(payload)
@@ -26,12 +31,15 @@ describe("RequestIdActions", () => {
             expect(result.payload).toEqual(payload)
         })
     })
+
     describe("createRequestId", () => {
+
         beforeEach(() => {
             RequestIdHelpers.getRequestIds = jest.fn()
             ControlIdHelper.generateIdFromArray = jest.fn()
             jest.useFakeTimers();
         })
+
         test("createRequestId return a new request ID", () => {
             RequestIdHelpers.getRequestIds = jest.fn(() => { return [88888, 77777] })
             ControlIdHelper.generateIdFromArray = jest.fn(() => { return 55555 })
@@ -42,8 +50,8 @@ describe("RequestIdActions", () => {
             createRequestId(startTimeout, startTimeoutCallBackAction)(dispatch, getStore)
 
             expect(dispatch).toBeCalledWith(addRequestId(55555))
-
         })
+
         test("createRequestId creates a setTimeout with correct interval", () => {
             RequestIdHelpers.getRequestIds = jest.fn(() => { return [88888, 77777] })
             ControlIdHelper.generateIdFromArray = jest.fn(() => { return 55555 })
@@ -57,6 +65,7 @@ describe("RequestIdActions", () => {
             expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), startTimeout)
             expect(dispatch).toBeCalledWith(addRequestId(55555))
         })
+
         test("createRequestId timeOut triggers requestId in Store dispatch timeoutCallbackAction", () => {
             RequestIdHelpers.getRequestIds = jest.fn(() => { return [88888, 77777] })
             ControlIdHelper.generateIdFromArray = jest.fn(() => { return 55555 })
@@ -72,6 +81,7 @@ describe("RequestIdActions", () => {
             expect(dispatch).toBeCalledTimes(1)
             expect(dispatch).toBeCalledWith(addRequestId(55555))
         })
+        
         test("createRequestId timeOut triggess requestId not in store does nothing ", () => {
             RequestIdHelpers.getRequestIds = jest.fn(() => { return [88888, 77777] })
             ControlIdHelper.generateIdFromArray = jest.fn(() => { return 55555 })

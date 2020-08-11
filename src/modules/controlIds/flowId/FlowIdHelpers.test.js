@@ -1,6 +1,7 @@
 import { handleFlowIdError, INCORECT_FLOW_ID } from "./FlowIdHelpers"
 
 describe('FlowIdHelpers', () => {
+
     test('handleFlowIdError returns response when flowId is in store', () => {
         const startId = 11111
         const getStore = jest.fn(() => { return { controlId: { flowId: startId } } })
@@ -9,6 +10,7 @@ describe('FlowIdHelpers', () => {
 
         expect(result).toEqual(expectedResult)
     })
+
     test('handleFlowIdError throws error when flowId is not in store', () => {
         const startId = 11111
         const getStore = jest.fn(() => { return { controlId: { flowId: 88888 } } })
@@ -17,6 +19,5 @@ describe('FlowIdHelpers', () => {
         const responsFunction = () => { handleFlowIdError(startId, getStore)(expectedResult) }
 
         expect(responsFunction).toThrowError(INCORECT_FLOW_ID)
-
     })
 })

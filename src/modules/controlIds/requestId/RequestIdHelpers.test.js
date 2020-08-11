@@ -2,7 +2,9 @@ import { getRequestIds, handleRequestIdError, INCORECT_REQUEST_ID } from "./Requ
 import { removeRequestId } from "./RequestIdActions"
 
 describe("RequestIdHelpers", () => {
+
     describe("getRequestIds", () => {
+
         test("getRequestIds retuns corract value out of the store", () => {
             const expectedResult = [55555, 88888]
             const getStoreMockResult = { controlId: { requestIds: expectedResult } }
@@ -14,7 +16,9 @@ describe("RequestIdHelpers", () => {
 
         })
     })
+
     describe("handleRequestIdError", () => {
+
         test("handleRequestIdError removes the id from the store", () => {
             const startId = 88888
             const getStoreMockResult = { controlId: { requestIds: [55555, startId] } }
@@ -25,6 +29,7 @@ describe("RequestIdHelpers", () => {
 
             expect(dispatchMock).toHaveBeenCalledWith(removeRequestId(startId))
         })
+
         test("handleRequestIdError returns the response if the id is in the store", () => {
             const startId = 88888
             const getStoreMockResult = { controlId: { requestIds: [55555, startId] } }
@@ -36,6 +41,7 @@ describe("RequestIdHelpers", () => {
             expect(result).toEqual(expectedResult)
 
         })
+        
         test("handleRequestIdError throws error if the id is not in the store", () => {
             const startId = 88888
             const getStoreMockResult = { controlId: { requestIds: [55555] } }

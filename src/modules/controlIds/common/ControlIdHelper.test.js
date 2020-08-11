@@ -5,9 +5,11 @@ const ORIGINAL_MATH = Math
 describe('controlIdHelper', () => {
 
     describe("generateIdFromArray", () => {
+
         beforeEach(() => {
             Math.random = jest.fn()
         })
+
         test("generateIdFromArray generates a id not in the array", () => {
             const expectedResult = 55555
             const startIDs = [88888, 77777]
@@ -22,11 +24,15 @@ describe('controlIdHelper', () => {
             expect(Math.random).toBeCalledTimes(3)
 
         })
+
         afterEach(() => {
             Math = ORIGINAL_MATH
         })
+
     })
+
     describe("generateId", () => {
+
         beforeEach(() => {
             Math.random = jest.fn()
         })
@@ -42,9 +48,9 @@ describe('controlIdHelper', () => {
             expect(result).toEqual(expectedResult)
             expect(Math.random).toBeCalledTimes(2)
         })
+
         afterEach(() => {
             Math = ORIGINAL_MATH
         })
-
     })
 })

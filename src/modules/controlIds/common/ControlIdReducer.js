@@ -1,8 +1,10 @@
 import { WIZARD_RESET_FLOW_ID } from "../flowId/FlowIdActions"
 import { STORE_RESET } from "../../../store/storeActions"
 import { generateId } from "./ControlIdHelper"
-import { WIZARD_REQUEST_ID_ADD, WIZARD_REQUEST_ID_REMOVE } from "../requestId/RequestIdActions"
-
+import {
+    WIZARD_REQUEST_ID_ADD,
+    WIZARD_REQUEST_ID_REMOVE
+} from "../requestId/RequestIdActions"
 
 export const initialState = {
     flowId: generateId(""),
@@ -10,6 +12,7 @@ export const initialState = {
 }
 
 const ControlIdReducer = (state = initialState, action) => {
+
     switch (action.type) {
         case WIZARD_RESET_FLOW_ID: {
             return {
@@ -29,7 +32,6 @@ const ControlIdReducer = (state = initialState, action) => {
                 requestIds: state.requestIds.filter(val => val !== action.payload)
             }
         }
-
         case STORE_RESET: {
             return {
                 ...state,
@@ -43,4 +45,3 @@ const ControlIdReducer = (state = initialState, action) => {
 }
 
 export default ControlIdReducer
-
