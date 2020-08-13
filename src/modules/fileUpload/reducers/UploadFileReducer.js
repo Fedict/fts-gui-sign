@@ -12,7 +12,7 @@ export const initialState = {
         isXml: false, //boolean to see if file is a xml
         url: "", //object url to the file
         name: "", // name of the file
-      
+
     }
 }
 
@@ -93,7 +93,6 @@ const UploadFileReducer = (state = initialState, action) => {
                 displayFile: getDisplayFileData(action.payload)
             }
         }
-        
         case STORE_RESET:
             if (state.displayFile.url) {
                 removeURL(state.displayFile.url)

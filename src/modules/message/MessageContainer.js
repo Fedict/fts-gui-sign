@@ -52,7 +52,6 @@ export const MessageContainer = ({ message, navigateToStep, onCancel }) => {
     }
 
     return (
-
         <Container
             title={shownMessage.title}
             hasCancelButton={shownMessage.hasCancleButton}
@@ -70,16 +69,15 @@ export const MessageContainer = ({ message, navigateToStep, onCancel }) => {
         >
             {shownMessage.body}
         </Container>
-
     )
-
-
 }
+
 const mapStateToProps = (state) => {
     return (state) => ({
         message: state.message
     })
 }
+
 const mapDispatchToProps = ({
     navigateToStep,
     resetWizard,

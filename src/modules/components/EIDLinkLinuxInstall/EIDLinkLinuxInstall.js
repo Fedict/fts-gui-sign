@@ -10,12 +10,13 @@ import { NumberdText } from '../NumberedText/NumberdText'
  * @param {string} props.linuxDistributions[].url - url to the archive download
  */
 export const EIDLinkLinuxInstall = ({ linuxDistributions }) => {
+    
     const list = linuxDistributions.map((val, index) => {
         return <EIDLinkLinuxInstallDistributionListItem {...val} index={index} key={index} />
     })
+
     return (
         <div>
-
             <div className="col">
                 <h2>Install eIDLink on Linux</h2>
                 <NumberdText number={"1"}>Install the 'eID-archive' so the "eID" pakket repository becomes available</NumberdText>

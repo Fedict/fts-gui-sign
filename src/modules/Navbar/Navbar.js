@@ -4,7 +4,6 @@ import {
     withRouter
 } from "react-router-dom";
 import { connect } from 'react-redux';
-
 import { navigateToStep } from "../wizard/WizardActions"
 import { resetStore } from "../../store/storeActions"
 import { WIZARD_STATE_START } from '../wizard/WizardConstants';
@@ -37,6 +36,7 @@ export const Navbar = ({ location, resetStore, navigateToStep, setNewFlowId, his
             </Link>
         )
     })
+
     return (
         <header className="">
             <nav className="navbar navbar-expand navbar-light sticky-top">
@@ -51,7 +51,6 @@ export const Navbar = ({ location, resetStore, navigateToStep, setNewFlowId, his
                 <div className="navbar-nav">
                     {links}
                 </div>
-
             </nav>
         </header>
     )
@@ -62,6 +61,7 @@ const mapStateToProps = (state) => {
 
     })
 }
+
 const mapDispatchToProps = ({
     navigateToStep,
     resetStore,

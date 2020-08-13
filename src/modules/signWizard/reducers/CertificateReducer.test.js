@@ -3,8 +3,11 @@ import { CERTIFICATE_SAVE_LIST, CERTIFICATE_SELECT_CERTIFICATE } from "../action
 import { STORE_RESET } from "../../../store/storeActions"
 
 describe("CertificateReducer", () => {
+
     describe("reducer", () => {
+
         describe("CERTIFICATE_SAVE_LIST", () => {
+
             test("action with type CERTIFICATE_SAVE_LIST changes certificateList object", () => {
                 const startState = { ...initialState }
                 const action = {
@@ -31,6 +34,7 @@ describe("CertificateReducer", () => {
         })
 
         describe("CERTIFICATE_SELECT_CERTIFICATE", () => {
+
             test("action with type CERTIFICATE_SELECT_CERTIFICATE changes certificateSelected object", () => {
                 const startState = { ...initialState }
                 const action = {
@@ -65,8 +69,8 @@ describe("CertificateReducer", () => {
         })
 
         describe("STORE_RESET", () => {
-            test("action with type STORE_RESET resets store to initial value", () => {
 
+            test("action with type STORE_RESET resets store to initial value", () => {
                 const startState = {
                     certificate: {
                         certificateList: [
@@ -112,11 +116,8 @@ describe("CertificateReducer", () => {
                 const action = { type: STORE_RESET }
                 const result = CertificateReducer(startState, action)
 
-
                 expect(result).toEqual({ ...initialState })
             })
         })
-
-
     })
 })

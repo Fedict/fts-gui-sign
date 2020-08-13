@@ -3,8 +3,11 @@ import PinErrorReducer, { initialState } from "./PinErrorReducer"
 import { STORE_RESET } from "../../../store/storeActions"
 
 describe("PinErrorReducer", () => {
+
     describe("reducer", () => {
+
         describe("PIN_ERROR_SET_ERROR", () => {
+
             test("action with type PIN_ERROR_SET_ERROR changes message object", () => {
                 const startState = { ...initialState }
                 const payload = "teststring"
@@ -18,6 +21,7 @@ describe("PinErrorReducer", () => {
         })
 
         describe("STORE_RESET", () => {
+
             test("action with type STORE_RESET resets store to initial value", () => {
                 const startState = { message: "teststring" }
 
@@ -28,7 +32,5 @@ describe("PinErrorReducer", () => {
                 expect(result).toEqual({ ...initialState })
             })
         })
-
-
     })
 })

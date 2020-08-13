@@ -1,6 +1,5 @@
 import React from 'react'
 
-
 export const MethodeSelectCard = ({ index, id, name, onClick, url, imgSrc }) => {
     return (
         <div key={index}
@@ -18,7 +17,6 @@ export const MethodeSelectCard = ({ index, id, name, onClick, url, imgSrc }) => 
                 <div className={"col-3 align-self-center text-center"}>
                     <img src={imgSrc} height={50} width={50} alt={"icon for " + name} />
                 </div>
-
                 <div className={"col px-0"} >
                     <h5 className="">sign</h5>
                     <p className="mb-0 btn-link">with {name}</p>

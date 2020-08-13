@@ -1,8 +1,6 @@
 import { WIZARD_STATE_CERTIFICATES_LOADING } from "../../wizard/WizardConstants";
 import { ErrorGeneral } from "../../message/MessageConstants";
 
-
-
 const createError = (title, message) => {
     return {
         title: title,

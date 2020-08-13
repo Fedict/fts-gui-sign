@@ -40,8 +40,4 @@ describe("tests of BrowserDetection", () => {
     afterAll(() => {
         window = ORIGINAL_window
     })
-
-
-
-
 })

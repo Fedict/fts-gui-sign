@@ -3,8 +3,11 @@ import { READER_SET_CHECK, READER_SET_OK } from "../actions/ReaderActions"
 import { STORE_RESET } from "../../../store/storeActions"
 
 describe("ReaderReducer", () => {
+
     describe("reducer", () => {
+
         describe("READER_SET_CHECK", () => {
+
             test("action with type READER_SET_CHECK changes isChecked object", () => {
                 const startState = { ...initialState }
                 const payload = true
@@ -16,7 +19,9 @@ describe("ReaderReducer", () => {
                 expect(result).toEqual({ ...initialState, isChecked: action.payload })
             })
         })
+
         describe("READER_SET_OK", () => {
+
             test("action with type READER_SET_OK changes isOk object", () => {
                 const startState = { ...initialState }
                 const payload = true
@@ -30,6 +35,7 @@ describe("ReaderReducer", () => {
         })
 
         describe("STORE_RESET", () => {
+
             test("action with type STORE_RESET resets store to initial value", () => {
 
                 const startState = {
@@ -40,12 +46,8 @@ describe("ReaderReducer", () => {
                 const action = { type: STORE_RESET }
                 const result = ReaderReducer(startState, action)
 
-
                 expect(result).toEqual({ ...initialState })
-
             })
         })
-
-
     })
 })

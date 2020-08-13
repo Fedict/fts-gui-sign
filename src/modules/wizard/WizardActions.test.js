@@ -5,7 +5,9 @@ import {
 
 
 describe("WizardActions", () => {
+    
     describe("navigateToStep", () => {
+
         test("navigateToStep returns a action with type WIZARD_CHANGE_STATE and payload action", () => {
             const payload = "wizard step string"
             const result = navigateToStep(payload)
@@ -14,7 +16,4 @@ describe("WizardActions", () => {
             expect(result.payload).toEqual(payload)
         })
     })
-   
-    
-    
 })

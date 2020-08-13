@@ -3,8 +3,11 @@ import SignatureReducer, { initialState } from "./SignatureReducer"
 import { STORE_RESET } from "../../../store/storeActions"
 
 describe("SignatureReducer", () => {
+
     describe("reducer", () => {
+
         describe("READER_SET_CHECK", () => {
+
             test("action with type SIGNATURE_SET_SIGNATURE changes signature object", () => {
                 const startState = { ...initialState }
                 const payload = "teststring"
@@ -16,7 +19,9 @@ describe("SignatureReducer", () => {
                 expect(result).toEqual({ ...initialState, signature: action.payload })
             })
         })
+
         describe("STORE_RESET", () => {
+
             test("action with type STORE_RESET resets store to initial value", () => {
                 const startState = {
                     signature: "testString"
@@ -29,7 +34,5 @@ describe("SignatureReducer", () => {
                 expect(result).toEqual({ ...initialState })
             })
         })
-
-
     })
 })

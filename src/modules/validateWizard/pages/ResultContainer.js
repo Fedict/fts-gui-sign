@@ -6,12 +6,10 @@ import { indication, indicationKeys, subIndication, subIndicationKeys } from '..
 import { MessageContainer } from '../../message/MessageContainer';
 import { ErrorGeneral } from '../../message/MessageConstants';
 
-
 export class ResultContainer extends React.Component {
 
     render() {
         const { validation, resetWizard } = this.props
-
 
         let subIndicationResult = "";
 
@@ -28,8 +26,6 @@ export class ResultContainer extends React.Component {
         }
 
         let result = <MessageContainer message={ErrorGeneral} onCancel={() => { resetWizard() }} />
-
-
 
         if (indicationKeys.includes(validation.indication)) {
             const indicationUsed = indication[validation.indication]
@@ -48,10 +44,9 @@ export class ResultContainer extends React.Component {
                     </div>
                     {subIndicationResult}
                 </CardContainer>
-
-
             )
         }
+
         return (
             <div>{result}</div>
 
@@ -64,10 +59,9 @@ const mapStateToProps = (state) => {
         validation: state.validation
     })
 }
+
 const mapDispatchToProps = ({
     resetWizard
-
-
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ResultContainer)

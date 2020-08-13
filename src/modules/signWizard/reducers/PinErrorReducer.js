@@ -1,4 +1,3 @@
-
 import { PIN_ERROR_SET_ERROR } from "../actions/SignErrorHandleActions"
 import { STORE_RESET } from "../../../store/storeActions"
 
@@ -12,7 +11,6 @@ const PinErrorReducer = (state = initialState, action) => {
             return {
                 ...state,
                 message: action.payload
-
             }
         }
         case STORE_RESET:

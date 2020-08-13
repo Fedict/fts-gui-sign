@@ -10,13 +10,11 @@ export const displayFile = (file) => async (dispatch) => {
     dispatch({ type: FILE_DISPLAY_FILE, payload: file })
 }
 
-
 /**
  * action to save a file in the store
  * @param {file} file - file that needs to be saves/signed
  */
 export const uploadFile = (file) => { return { type: FILE_UPLOAD_CHANGE_FILE, payload: file } }
-
 
 /**
  * action to save the download file.

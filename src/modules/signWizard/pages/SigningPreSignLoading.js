@@ -3,40 +3,32 @@ import { CardLoading } from "../../components/Card/CardLoading"
 import { resetWizard } from "../actions/WizardLogicActions"
 import { connect } from "react-redux"
 
-export class SigningPreSignLoading extends React.Component {
+export const SigningPreSignLoading = ({certificate, resetWizard}) => {
 
-    render() {
+    const isPinPadReader = (certificate
+        && certificate.certificateSelected
+        && certificate.certificateSelected.readerType
+        && certificate.certificateSelected.readerType === "pinpad")
 
-        const { certificate, resetWizard} = this.props
-
-        const isPinPadReader = (certificate
-            && certificate.certificateSelected
-            && certificate.certificateSelected.readerType
-            && certificate.certificateSelected.readerType === "pinpad")
-
-        return (
-            
-                <CardLoading title={"Sign document"}
-                    hasCancelButton
-                    cancelButtonText="Cancel"
-                    onClickCancel={() => { resetWizard() }}
-                >
-
-                    {(isPinPadReader)
-                        ? (
-                            <div>
-                                <div className="alert alert-info">
-                                   Please enter your PIN when prompted
+    return (
+        <CardLoading title={"Sign document"}
+            hasCancelButton
+            cancelButtonText="Cancel"
+            onClickCancel={() => { resetWizard() }}
+        >
+            {(isPinPadReader)
+                ? (
+                    <div>
+                        <div className="alert alert-info">
+                            Please enter your PIN when prompted
                                 </div>
-                            </div>
-                        )
-                        : null}
-                </CardLoading>
-          
-        )
-
-    }
+                    </div>
+                )
+                : null}
+        </CardLoading>
+    )
 }
+
 
 const mapStateToProps = (state) => {
     return (state) => ({
@@ -44,6 +36,7 @@ const mapStateToProps = (state) => {
         pinError: state.pinError
     })
 }
+
 const mapDispatchToProps = ({
     resetWizard
 })

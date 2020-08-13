@@ -5,7 +5,6 @@ import { navigateToStep } from "../../wizard/WizardActions"
 import { resetWizard } from '../actions/WizardLogicActions'
 import { getBrowser, browser } from '../../browserDetection/BrowserDetection'
 
-
 export class VersionCheckInstallExtensionContainer extends React.Component {
 
     handleButtonNextClick() {
@@ -24,7 +23,6 @@ export class VersionCheckInstallExtensionContainer extends React.Component {
             }
             if ((UsedBrowser === browser.FIREFOX) && window.configData.eIDLinkExtensionUrls.firefox) {
                 url = window.configData.eIDLinkExtensionUrls.firefox
-                //TODO remove this when firefox url links to store page
                 window.open(url + '?dt=' + new Date().getTime(), "_self")
                 url = ""
             }
@@ -44,14 +42,13 @@ export class VersionCheckInstallExtensionContainer extends React.Component {
         if (url) {
             window.open(url + '?dt=' + new Date().getTime(), "_blank")
         }
-        //return correct link for browser
     }
+
     render() {
         const usedBrowser = getBrowser()
         const { resetWizard } = this.props
 
         return (
-
             <CardContainer title={"Install eIDLink extension"}
                 onClickCancel={() => { resetWizard() }}
                 hasNextButton
@@ -75,9 +72,7 @@ export class VersionCheckInstallExtensionContainer extends React.Component {
 
                             "Install eIDLink extension"}
                     </button>)}
-
             </CardContainer>
-
         )
     }
 }

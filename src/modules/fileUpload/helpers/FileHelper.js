@@ -40,23 +40,28 @@ export const getContentData = (document) => {
     })
 }
 
-
-export const getBlobFromBase64 = (base64, contentType='', sliceSize=512) => {
+/**
+ * funtion to create a blob from a base64 string
+ * @param {*} base64 - base64 string
+ * @param {*} contentType 
+ * @param {*} sliceSize 
+ */
+export const getBlobFromBase64 = (base64, contentType = '', sliceSize = 512) => {
     const byteCharacters = atob(base64);
     const byteArrays = [];
-  
+
     for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-      const slice = byteCharacters.slice(offset, offset + sliceSize);
-  
-      const byteNumbers = new Array(slice.length);
-      for (let i = 0; i < slice.length; i++) {
-        byteNumbers[i] = slice.charCodeAt(i);
-      }
-  
-      const byteArray = new Uint8Array(byteNumbers);
-      byteArrays.push(byteArray);
+        const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+        const byteNumbers = new Array(slice.length);
+        for (let i = 0; i < slice.length; i++) {
+            byteNumbers[i] = slice.charCodeAt(i);
+        }
+
+        const byteArray = new Uint8Array(byteNumbers);
+        byteArrays.push(byteArray);
     }
-  
-    const blob = new Blob(byteArrays, {type: contentType});
+
+    const blob = new Blob(byteArrays, { type: contentType });
     return blob;
-  }
+}

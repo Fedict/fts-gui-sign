@@ -26,7 +26,6 @@ export class CertificateChooseContainer extends React.Component {
         const { certificate, resetWizard } = this.props
         if (certificate) {
             return (
-
                 <CardContainer
                     title="Select a certificate"
                     hasCancelButton
@@ -43,11 +42,9 @@ export class CertificateChooseContainer extends React.Component {
                         onChange={(cert) => { this.onChange(cert) }}
                         certificates={certificate.certificateList} />
                 </CardContainer>
-
             )
         }
         else {
-
             return null
         }
     }

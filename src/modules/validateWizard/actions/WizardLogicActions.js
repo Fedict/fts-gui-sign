@@ -16,9 +16,7 @@ export const resetWizard = () => (dispatch) => {
     dispatch(navigateToStep(WIZARD_STATE_START))
 }
 
-
 export const validateDocument = () => (dispatch, getStore) => {
-
     const { uploadFile } = getStore()
     const flowId = getStore().controlId.flowId
     validateSignatureAPI(uploadFile.file)
@@ -33,5 +31,4 @@ export const validateDocument = () => (dispatch, getStore) => {
                 dispatch(showErrorMessage(ErrorGeneral))
             }
         })
-
 }

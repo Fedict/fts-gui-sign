@@ -1,7 +1,10 @@
 import thunk from "redux-thunk";
-import { compose, applyMiddleware, combineReducers, createStore } from "redux";
-
-
+import {
+    compose,
+    applyMiddleware,
+    combineReducers,
+    createStore
+} from "redux";
 import wizardReducer from '../modules/wizard/WizardReducer'
 import UploadFileReducer from "../modules/fileUpload/reducers/UploadFileReducer";
 import MessageReducer from "../modules/message/reducers/MessageReducer";
@@ -24,8 +27,6 @@ export default function configureStore(initialState = {}) {
     const enhancer = composeEnhancers(applyMiddleware(...middleware))
 
     const rootReducer = combineReducers({
-        // i18n: i18nReducer,
-        // content : contentReducer,
         wizard: wizardReducer,
         uploadFile: UploadFileReducer,
         message: MessageReducer,
@@ -34,10 +35,9 @@ export default function configureStore(initialState = {}) {
         signature: SignatureReducer,
         pinError: PinErrorReducer,
         reader: ReaderReducer,
-        validation : ValidationReducer,
-        controlId : ControlIdReducer
+        validation: ValidationReducer,
+        controlId: ControlIdReducer
     })
 
     return createStore(rootReducer, initialState, enhancer)
-
 }

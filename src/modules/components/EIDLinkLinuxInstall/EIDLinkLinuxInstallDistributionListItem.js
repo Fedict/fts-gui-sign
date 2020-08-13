@@ -12,7 +12,6 @@ export const EIDLinkLinuxInstallDistributionListItem = ({ url, distributions }) 
         if (url) {
             window.open(url + '?dt=' + new Date().getTime())
         }
-
     }
 
     const distributionDisplayList = distributions.map((val, index) => { return (<li key={index}>{val}</li>) })
@@ -27,8 +26,6 @@ export const EIDLinkLinuxInstallDistributionListItem = ({ url, distributions }) 
             <td className='col-4'>
                 <button className="btn btn-primary " onClick={() => { handelClick() }}>Download archive</button>
             </td>
-
         </tr>
-
     )
 }

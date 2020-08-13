@@ -2,7 +2,9 @@ const { VALIDATION_SET_INDICATION, VALIDATION_SET_SUBINDICATION } = require("../
 const { default: ValidationReducer } = require("./ValidationReducer")
 
 describe("ValidationReducer", () => {
+
     describe("VALIDATION_SET_INDICATION", () => {
+
         test("action with type VALIDATION_SET_INDICATION changes indication object", () => {
             const payload = 'indication'
             const startStore = {
@@ -14,7 +16,9 @@ describe("ValidationReducer", () => {
             expect(result.indication).toBe(payload)
          })
      })
+
     describe("VALIDATION_SET_SUBINDICATION", () => { 
+        
         test("action with type VALIDATION_SET_SUBINDICATION changes subIndication object", () => {
             const payload = 'sub-indication'
             const startStore = {

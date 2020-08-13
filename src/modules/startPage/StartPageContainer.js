@@ -1,18 +1,14 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { CardContainer } from '../components/Card/CardContainer'
 import { MethodeSelectCard } from '../components/MethodSelect/MethodSelectCard'
 
-
 export class StartPageContainer extends React.Component {
 
     render() {
-
         const { history } = this.props
 
         return (
-
             <div className={"container"}>
                 <CardContainer
                     title="Select the method to sign"
@@ -33,15 +29,10 @@ export class StartPageContainer extends React.Component {
             </div>
         )
     }
-
-
 }
-const mapStateToProps = (state) => {
-    return (state) => ({
-        reader: state.reader
-    })
-}
-const mapDispatchToProps = ({
-})
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(StartPageContainer))
+
+
+
+
+export default withRouter((StartPageContainer))

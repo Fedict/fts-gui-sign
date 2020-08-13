@@ -1,8 +1,6 @@
 import React from 'react';
-
 import Navbar from './modules/Navbar/Navbar';
 import WizardContainer from './modules/signWizard/WizardContainer';
-
 import {
   BrowserRouter as Router,
   Switch,
@@ -48,11 +46,9 @@ function App() {
             </div>
           )
         }
-
         <Footer />
       </div>
     </Router>
-
   );
 }
 

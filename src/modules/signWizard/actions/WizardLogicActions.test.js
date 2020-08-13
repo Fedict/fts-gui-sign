@@ -89,7 +89,6 @@ const ORIGINAL_setDownloadFile = setDownloadFile
 const ORIGINAL_resetStore = resetStore
 const ORIGINAL_setNewFlowId = setNewFlowId
 
-
 function flushPromises() {
     return new Promise(resolve => setImmediate(resolve));
 }
@@ -102,6 +101,7 @@ describe("Pinpad support", () => {
         // Object.defineProperty(window, 'configData', {BEurl: ""})
         global.window.configData = { BEurl: "" }
     })
+
     test("navigateToSign : navigation to pinpad page", () => {
         const store = {
             certificate: {
@@ -149,7 +149,9 @@ describe("Pinpad support", () => {
 
 
 describe("WizardLogicActions", () => {
+
     describe("createCertificateObject", () => {
+
         test("createCertificateObject creates correct object", () => {
             const certificate = "certificateString"
             const certificateChain = {
@@ -164,6 +166,7 @@ describe("WizardLogicActions", () => {
             expect(result.certificateChain).toContainEqual({ encodedCertificate: certificateChain.subCA[1] })
             expect(result.certificateChain.length).toBe(3)
         })
+
         test("createCertificateObject creates correct object without certificate", () => {
             const certificate = undefined
             const certificateChain = {
@@ -177,6 +180,7 @@ describe("WizardLogicActions", () => {
             expect(result.certificateChain).toContainEqual({ encodedCertificate: certificateChain.subCA[0] })
             expect(result.certificateChain).toContainEqual({ encodedCertificate: certificateChain.subCA[1] })
         })
+
         test("createCertificateObject creates correct object without certificete chain", () => {
             const certificate = "certificateString"
             const certificateChain = undefined
@@ -185,6 +189,7 @@ describe("WizardLogicActions", () => {
             expect(result.certificate).toEqual({ encodedCertificate: certificate })
             expect(result.certificateChain).toBeUndefined()
         })
+
         test("createCertificateObject creates correct object without rootCA", () => {
             const certificate = "certificateString"
             const certificateChain = {
@@ -198,6 +203,7 @@ describe("WizardLogicActions", () => {
             expect(result.certificateChain).toContainEqual({ encodedCertificate: certificateChain.subCA[1] })
             expect(result.certificateChain.length).toBe(2)
         })
+
         test("createCertificateObject creates correct object without subCA", () => {
             const certificate = "certificateString"
             const certificateChain = {
@@ -210,6 +216,7 @@ describe("WizardLogicActions", () => {
             expect(result.certificateChain).toContainEqual({ encodedCertificate: certificateChain.rootCA })
             expect(result.certificateChain.length).toBe(1)
         })
+
         test("createCertificateObject creates correct object with 1 subCA", () => {
             const certificate = "certificateString"
             const certificateChain = {
@@ -223,6 +230,7 @@ describe("WizardLogicActions", () => {
             expect(result.certificateChain).toContainEqual({ encodedCertificate: certificateChain.subCA[0] })
             expect(result.certificateChain.length).toBe(2)
         })
+
         test("createCertificateObject creates correct object without certificateChain object", () => {
             const certificate = "certificateString"
             const certificateChain = undefined
@@ -234,16 +242,19 @@ describe("WizardLogicActions", () => {
     })
 
     describe("getCertificatesFromResponse", () => {
+
         test("getCertificatesFromResponse creates correct object without response", () => {
             const result = getCertificatesFromResponse()
             expect(result).toEqual([])
         })
+
         test("getCertificatesFromResponse creates correct object without response.Readers", () => {
             const response = {}
             const result = getCertificatesFromResponse(response)
 
             expect(result).toEqual([])
         })
+
         test("getCertificatesFromResponse creates correct object with response.Readers is empty array", () => {
             const response = {
                 Readers: []
@@ -252,6 +263,7 @@ describe("WizardLogicActions", () => {
 
             expect(result).toEqual([])
         })
+
         test("getCertificatesFromResponse creates correct object with response.Readers with 1 item without certificate array", () => {
             const response = {
                 Readers: [{}]
@@ -260,6 +272,7 @@ describe("WizardLogicActions", () => {
 
             expect(result).toEqual([])
         })
+
         test("getCertificatesFromResponse creates correct object with response.Readers with 1 item with 1 certificate", () => {
             const response = {
                 Readers: [{
@@ -281,6 +294,7 @@ describe("WizardLogicActions", () => {
             expect(result).toHaveLength(1)
             expect(result[0]).toEqual(expected)
         })
+
         test("getCertificatesFromResponse creates correct object with response.Readers with 1 item with multiple certificates", () => {
             const response = {
                 Readers: [{
@@ -310,6 +324,7 @@ describe("WizardLogicActions", () => {
             expect(result).toContainEqual(expected1)
             expect(result).toContainEqual(expected2)
         })
+
         test("getCertificatesFromResponse creates correct object with response.Readers with multiple item with 1 certificate", () => {
             const response = {
                 Readers: [{
@@ -346,11 +361,12 @@ describe("WizardLogicActions", () => {
         })
     })
 
-
     describe("requestTimeoutFunction", () => {
+
         beforeEach(() => {
             eIDLinkController.controller.getInstance = jest.fn()
         })
+
         test('requestTimeoutFunction stops eIDLink and checks version of eIDLink', () => {
             const mockDispatch = jest.fn()
             const mockGetStore = jest.fn()
@@ -364,15 +380,18 @@ describe("WizardLogicActions", () => {
             expect(mockDispatch).toBeCalledWith(expect.any(Function))
 
         })
+
         afterEach(() => {
             eIDLinkController.controller = ORIGINAL_controller
         })
     })
     describe("requestTimeOutFunctionChecVersion", () => {
+
         beforeEach(() => {
             eIDLinkController.controller.getInstance = jest.fn()
             window.location.reload = jest.fn()
         })
+
         test('requestTimeOutFunctionChecVersion stops eIDLink and reloads the page', () => {
             const mockDispatch = jest.fn()
             const mockGetStore = jest.fn()
@@ -385,17 +404,15 @@ describe("WizardLogicActions", () => {
             expect(window.location.reload).toBeCalledTimes(1)
 
         })
+
         afterEach(() => {
             eIDLinkController.controller = ORIGINAL_controller
             window = ORIGINAL_window
         })
     })
 
-
-
-
-
     describe("checkVersion", () => {
+
         beforeEach(() => {
             const requestId = 55555
             eIDLinkController.controller.getNewInstance = jest.fn(() => { })
@@ -408,6 +425,7 @@ describe("WizardLogicActions", () => {
             navigation.navigateToStep = jest.fn();
 
         })
+
         test("checkVersion calls the checkversion of eIDLink", () => {
             const mockDispatch = jest.fn((val) => { return val })
             const mockCheckVersion = jest.fn()
@@ -416,6 +434,7 @@ describe("WizardLogicActions", () => {
             checkVersion(false)(mockDispatch)
             expect(mockCheckVersion).toBeCalledTimes(1)
         })
+
         test("checkVersion creates a requestId", () => {
             const requestId = 55555
             RequestIdActions.createRequestId = jest.fn(() => { return requestId })
@@ -430,6 +449,7 @@ describe("WizardLogicActions", () => {
             expect(mockDispatch).toBeCalledTimes(1)
             expect(mockCheckVersion).toBeCalledTimes(1)
         })
+
         test("checkVersion uses correct minimum version", () => {
             const startVersion = "1.0.0"
             window.configData = { eIDLinkMinimumVersion: startVersion }
@@ -443,6 +463,7 @@ describe("WizardLogicActions", () => {
             expect(mockCheckVersion).toBeCalledTimes(1)
             expect(mockCheckVersion.mock.calls[0][0]).toEqual(startVersion)
         })
+
         test("checkVersion navigates to FileUpload if version is correct and isErrorCheck is false", () => {
             const requestId = 55555
             RequestIdActions.createRequestId = jest.fn(() => { return requestId })
@@ -469,6 +490,7 @@ describe("WizardLogicActions", () => {
             expect(navigation.navigateToStep).toBeCalled()
             expect(navigation.navigateToStep).toBeCalledWith(WIZARD_STATE_UPLOAD)
         })
+
         test("checkVersion navigates to default error if version is correct and isErrorCheck is true", () => {
             const requestId = 55555
             RequestIdActions.createRequestId = jest.fn(() => { return requestId })
@@ -497,6 +519,7 @@ describe("WizardLogicActions", () => {
             expect(MessageActions.showErrorMessage).toBeCalled()
             expect(MessageActions.showErrorMessage).toBeCalledWith(ErrorGeneral)
         })
+
         test("checkVersion navigates to eIDLink install if eIDLink native host is not active", () => {
             const requestId = 55555
             RequestIdActions.createRequestId = jest.fn(() => { return requestId })
@@ -523,6 +546,7 @@ describe("WizardLogicActions", () => {
             expect(navigation.navigateToStep).toBeCalled()
             expect(navigation.navigateToStep).toBeCalledWith(WIZARD_STATE_VERSION_CHECK_INSTALL)
         })
+
         test("checkVersion navigates to eIDLink update if eIDLink native host is outdated", () => {
             const requestId = 55555
             RequestIdActions.createRequestId = jest.fn(() => { return requestId })
@@ -549,6 +573,7 @@ describe("WizardLogicActions", () => {
             expect(navigation.navigateToStep).toBeCalled()
             expect(navigation.navigateToStep).toBeCalledWith(WIZARD_STATE_VERSION_CHECK_UPDATE)
         })
+
         test("checkVersion navigates to eIDLink extension install if eIDLink Extension is not found", () => {
             const requestId = 55555
             RequestIdActions.createRequestId = jest.fn(() => { return requestId })
@@ -588,6 +613,7 @@ describe("WizardLogicActions", () => {
     })
 
     describe("getCertificates", () => {
+
         beforeEach(() => {
             eIDLinkController.controller.getInstance = jest.fn(() => { })
             RequestIdActions.createRequestId = jest.fn(() => { return 55555 })
@@ -599,6 +625,7 @@ describe("WizardLogicActions", () => {
             navigation.navigateToStep = jest.fn();
             SignErrorHandleActions.handleErrorEID = jest.fn();
         })
+
         test("getCertificates calls getCertificate of eIDLink", () => {
             const mockgetCertificates = jest.fn(() => { return Promise.resolve() })
             eIDLinkController.controller.getInstance = jest.fn(() => { return { getCertificate: mockgetCertificates } })
@@ -610,6 +637,7 @@ describe("WizardLogicActions", () => {
             expect(mockgetCertificates).toBeCalledTimes(1)
 
         })
+
         test("getCertificates creates a requestId", () => {
             const mockgetCertificates = jest.fn(() => { return Promise.resolve() })
             eIDLinkController.controller.getInstance = jest.fn(() => { return { getCertificate: mockgetCertificates } })
@@ -622,6 +650,7 @@ describe("WizardLogicActions", () => {
             expect(RequestIdActions.createRequestId).toBeCalledTimes(1)
             expect(RequestIdActions.createRequestId).toBeCalledWith(10000, expect.any(Function))
         })
+
         test("getCertificates success saves respons in store", async () => {
 
             const resultGetCertificates = {
@@ -657,6 +686,7 @@ describe("WizardLogicActions", () => {
             expect(CertificateActions.saveCertificateList).toBeCalledTimes(1)
             expect(CertificateActions.saveCertificateList).toBeCalledWith(expectedResult)
         })
+
         test("getCertificates success certificateList.length = 0 shows a MessageCertificatesNotFound error", async () => {
             const resultGetCertificates = {
                 "Readers": [],
@@ -684,8 +714,8 @@ describe("WizardLogicActions", () => {
             expect(CertificateActions.saveCertificateList).toBeCalledWith(expectedResult)
             expect(MessageActions.showErrorMessage).toBeCalledTimes(1)
             expect(MessageActions.showErrorMessage).toBeCalledWith(MessageCertificatesNotFound)
-
         })
+
         test("getCertificates success certificateList.length > 0 navigates to certificate validation page", async () => {
 
             const resultGetCertificates = {
@@ -727,6 +757,7 @@ describe("WizardLogicActions", () => {
             expect(navigation.navigateToStep).toBeCalledWith(WIZARD_STATE_VALIDATE_LOADING)
 
         })
+
         test("getCertificates error shows message", async () => {
             const requestId = 55555
             RequestIdActions.createRequestId = jest.fn(() => { return requestId })
@@ -751,6 +782,7 @@ describe("WizardLogicActions", () => {
             expect(MessageActions.showErrorMessage).toBeCalledTimes(0)
 
         })
+
         test("getCertificates error INCORECT_REQUEST_ID does nothing", async () => {
 
             const mockgetCertificates = jest.fn(() => { return Promise.resolve() })
@@ -772,6 +804,7 @@ describe("WizardLogicActions", () => {
             expect(CertificateActions.saveCertificateList).toBeCalledTimes(0)
             expect(MessageActions.showErrorMessage).toBeCalledTimes(0)
         })
+
         test("getCertificates error INCORECT_FLOW_ID does nothing", async () => {
             const mockgetCertificates = jest.fn(() => { return Promise.resolve() })
             eIDLinkController.controller.getInstance = jest.fn(() => { return { getCertificate: mockgetCertificates } })
@@ -792,6 +825,7 @@ describe("WizardLogicActions", () => {
             expect(CertificateActions.saveCertificateList).toBeCalledTimes(0)
             expect(MessageActions.showErrorMessage).toBeCalledTimes(0)
         })
+
         afterEach(() => {
             eIDLinkController.controller = ORIGINAL_controller
             RequestIdActions.createRequestId = ORIGINAL_createRequestId
@@ -806,6 +840,7 @@ describe("WizardLogicActions", () => {
     })
 
     describe("validateCertificates", () => {
+
         beforeEach(() => {
             communication.validateCertificatesAPI = jest.fn()
             FlowIdHelpers.handleFlowIdError = jest.fn()
@@ -814,6 +849,7 @@ describe("WizardLogicActions", () => {
             CertificateActions.selectCertificate = jest.fn()
             navigation.navigateToStep = jest.fn()
         })
+
         test("validateCertificates calls validateCertificatesAPI with the correct body ", () => {
             communication.validateCertificatesAPI = jest.fn(() => { return Promise.resolve() })
             const certificateList = [{
@@ -848,6 +884,7 @@ describe("WizardLogicActions", () => {
             expect(communication.validateCertificatesAPI).toBeCalledTimes(1)
             expect(communication.validateCertificatesAPI).toBeCalledWith(expectedCertificateList)
         })
+
         test("validateCertificates doesn't call validateCertificatesAPI if there are no certificates and shows a error message", () => {
             communication.validateCertificatesAPI = jest.fn(() => { return Promise.resolve() })
 
@@ -866,6 +903,7 @@ describe("WizardLogicActions", () => {
             expect(MessageActions.showErrorMessage).toBeCalledWith(MessageCertificatesNotFound)
 
         })
+
         test("validateCertificates success saves only valid certificates ", async () => {
 
             const certificateList = [{
@@ -932,6 +970,7 @@ describe("WizardLogicActions", () => {
             const callParametersCertifictateListPased = callParametersCertifictateList.filter((val) => { return val.keyUsageCheckOk })
             expect(callParametersCertifictateListPased.length).toEqual(1)
         })
+
         test("validateCertificates success valid certificates list.length == 0 shows error MessageCertificatesNotFound ", async () => {
             const certificateList = [{
                 readerName: 'readerName',
@@ -1001,6 +1040,7 @@ describe("WizardLogicActions", () => {
             expect(MessageActions.showErrorMessage).toBeCalledWith(MessageCertificatesNotFound)
 
         })
+
         test("validateCertificates success valid certificates list.length == 1 selects certificate and navigates to WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN ", async () => {
             const certificateList = [{
                 readerName: 'readerName',
@@ -1071,9 +1111,8 @@ describe("WizardLogicActions", () => {
 
             expect(navigation.navigateToStep).toBeCalledTimes(1)
             expect(navigation.navigateToStep).toBeCalledWith(WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN)
-
-
         })
+
         test("validateCertificates success valid certificates list.length > 1 navigates to WIZARD_STATE_CERTIFICATES_CHOOSE ", async () => {
             const certificateList = [{
                 readerName: 'readerName',
@@ -1145,6 +1184,7 @@ describe("WizardLogicActions", () => {
             expect(navigation.navigateToStep).toBeCalledTimes(1)
             expect(navigation.navigateToStep).toBeCalledWith(WIZARD_STATE_CERTIFICATES_CHOOSE)
         })
+
         test("validateCertificates error shows message", async () => {
             const certificateList = [{
                 readerName: 'readerName',
@@ -1196,6 +1236,7 @@ describe("WizardLogicActions", () => {
 
 
         })
+
         test("validateCertificates error INCORECT_FLOW_ID does nothing", async () => {
             const certificateList = [{
                 readerName: 'readerName',
@@ -1256,6 +1297,7 @@ describe("WizardLogicActions", () => {
             expect(navigation.navigateToStep).not.toBeCalled()
 
         })
+
         afterEach(() => {
             communication.validateCertificatesAPI = ORIGINAL_validateCertificatesAPI
             FlowIdHelpers.handleFlowIdError = ORIGINAL_handleFlowIdError
@@ -1267,6 +1309,7 @@ describe("WizardLogicActions", () => {
     })
 
     describe("validateCertificateChain", () => {
+
         beforeEach(() => {
             eIDLinkController.controller.getInstance = jest.fn(() => { })
             RequestIdActions.createRequestId = jest.fn(() => { return 55555 })
@@ -1276,6 +1319,7 @@ describe("WizardLogicActions", () => {
             SignErrorHandleActions.handleErrorEID = jest.fn();
             communication.validateCertificatesAPI = jest.fn(() => { return Promise.resolve() });
         })
+
         test("validateCertificateChain doesn't call eIDLink getCertificateChain if there is no selectedCertificate",
             async () => {
                 const mockvalidateCertificateChain = jest.fn(() => { return Promise.resolve() })
@@ -1293,6 +1337,7 @@ describe("WizardLogicActions", () => {
                 expect(mockvalidateCertificateChain).not.toBeCalled()
 
             })
+
         test("validateCertificateChain calls getCertificateChain", async () => {
             const mockvalidateCertificateChain = jest.fn(() => { return Promise.resolve() })
             eIDLinkController.controller.getInstance = jest.fn(() => ({ getCertificateChain: mockvalidateCertificateChain }))
@@ -1313,6 +1358,7 @@ describe("WizardLogicActions", () => {
             expect(mockvalidateCertificateChain).toBeCalledTimes(1)
             expect(mockvalidateCertificateChain).toBeCalledWith(expect.any(String), expect.any(String), certificateString)
         })
+
         test("validateCertificateChain creates a requestId of 10000ms", async () => {
             const mockvalidateCertificateChain = jest.fn(() => { return Promise.resolve() })
             eIDLinkController.controller.getInstance = jest.fn(() => ({ getCertificateChain: mockvalidateCertificateChain }))
@@ -1333,6 +1379,7 @@ describe("WizardLogicActions", () => {
             expect(RequestIdActions.createRequestId).toBeCalledTimes(1)
             expect(RequestIdActions.createRequestId).toBeCalledWith(10000, requestTimeoutFunction)
         })
+
         test("validateCertificateChain success calls handleFlowIdError", async () => {
             const flowId = 88888
             const mockvalidateCertificateChain = jest.fn(() => { return Promise.resolve() })
@@ -1358,8 +1405,8 @@ describe("WizardLogicActions", () => {
             await flushPromises()
             expect(FlowIdHelpers.handleFlowIdError).toBeCalledTimes(1)
             expect(FlowIdHelpers.handleFlowIdError).toBeCalledWith(flowId, expect.any(Function))
-
         })
+
         test("validateCertificateChain success calls handleRequestIdError", async () => {
             const requestId = 88888
             RequestIdActions.createRequestId = jest.fn(() => { return requestId })
@@ -1388,6 +1435,7 @@ describe("WizardLogicActions", () => {
             expect(RequestIdHelpers.handleRequestIdError).toBeCalledTimes(1)
             expect(RequestIdHelpers.handleRequestIdError).toBeCalledWith(requestId, expect.any(Function), expect.any(Function))
         })
+
         test("validateCertificateChain success calls validateCertificate with certificate chain", async () => {
 
             const mockvalidateCertificateChainResponse = {
@@ -1431,14 +1479,12 @@ describe("WizardLogicActions", () => {
             mockDispatch.mock.calls[1][0](jest.fn(), jest.fn(() => ({ controlId: { flowId: 77777 } })))
             expect(communication.validateCertificatesAPI).toBeCalled()
             expect(communication.validateCertificatesAPI).toBeCalledWith(expectedValue)
-
-
         })
+
         test("validateCertificateChain error shows message", async () => {
 
             const mockvalidateCertificateChain = jest.fn(() => { return Promise.reject() })
             eIDLinkController.controller.getInstance = jest.fn(() => ({ getCertificateChain: mockvalidateCertificateChain }))
-
 
             const mockDispatch = jest.fn()
             const mockGetStore = jest.fn(() => {
@@ -1454,7 +1500,6 @@ describe("WizardLogicActions", () => {
                 }
             })
 
-
             FlowIdHelpers.handleFlowIdError = jest.fn(() => (val) => { return val })
             RequestIdHelpers.handleRequestIdError = jest.fn(() => (val) => { return val })
             validateCertificateChain()(mockDispatch, mockGetStore)
@@ -1462,10 +1507,10 @@ describe("WizardLogicActions", () => {
             expect(RequestIdActions.removeRequestId).toBeCalledTimes(1)
             expect(SignErrorHandleActions.handleErrorEID).toBeCalledTimes(1)
         })
+
         test("validateCertificateChain error INCORECT_FLOW_ID  does nothing", async () => {
             const mockvalidateCertificateChain = jest.fn(() => { return Promise.resolve() })
             eIDLinkController.controller.getInstance = jest.fn(() => ({ getCertificateChain: mockvalidateCertificateChain }))
-
 
             const mockDispatch = jest.fn()
             const mockGetStore = jest.fn(() => {
@@ -1480,7 +1525,6 @@ describe("WizardLogicActions", () => {
                     }
                 }
             })
-
 
             FlowIdHelpers.handleFlowIdError = jest.fn(() => (val) => { throw INCORECT_FLOW_ID })
             RequestIdHelpers.handleRequestIdError = jest.fn(() => (val) => { return val })
@@ -1489,10 +1533,10 @@ describe("WizardLogicActions", () => {
             expect(RequestIdActions.removeRequestId).not.toBeCalled()
             expect(SignErrorHandleActions.handleErrorEID).not.toBeCalled()
         })
+
         test("validateCertificateChain error INCORECT_FLOW_ID does nothing", async () => {
             const mockvalidateCertificateChain = jest.fn(() => { return Promise.resolve() })
             eIDLinkController.controller.getInstance = jest.fn(() => ({ getCertificateChain: mockvalidateCertificateChain }))
-
 
             const mockDispatch = jest.fn()
             const mockGetStore = jest.fn(() => {
@@ -1508,10 +1552,10 @@ describe("WizardLogicActions", () => {
                 }
             })
 
-
             FlowIdHelpers.handleFlowIdError = jest.fn(() => (val) => { return val })
             RequestIdHelpers.handleRequestIdError = jest.fn(() => (val) => { throw INCORECT_REQUEST_ID })
             validateCertificateChain()(mockDispatch, mockGetStore)
+
             await flushPromises()
             expect(RequestIdActions.removeRequestId).not.toBeCalled()
             expect(SignErrorHandleActions.handleErrorEID).not.toBeCalled()
@@ -1529,6 +1573,7 @@ describe("WizardLogicActions", () => {
     })
 
     describe("validateCertificate", () => {
+
         beforeEach(() => {
             communication.validateCertificatesAPI = jest.fn(() => { return Promise.resolve() })
             FlowIdHelpers.handleFlowIdError = jest.fn(() => (val) => { return val })
@@ -1536,6 +1581,7 @@ describe("WizardLogicActions", () => {
             navigation.navigateToStep = jest.fn()
             MessageActions.showErrorMessage = jest.fn();
         })
+
         test("validateCertificates calls validateCertificatesAPI with the correct body ", async () => {
             const startValue = {
                 APIBody: {
@@ -1567,6 +1613,7 @@ describe("WizardLogicActions", () => {
             expect(communication.validateCertificatesAPI).toBeCalledTimes(1)
             expect(communication.validateCertificatesAPI).toBeCalledWith(expectedResult)
         })
+
         test("validateCertificates success certificate valid selects certificate and navigates to WIZARD_STATE_DIGEST_LOADING ", async () => {
             const startValue = {
                 APIBody: {
@@ -1579,7 +1626,6 @@ describe("WizardLogicActions", () => {
                     ]
                 }
             }
-
 
             const mockvalidateCertificateChainresponse = {
                 "indications": [{
@@ -1612,6 +1658,7 @@ describe("WizardLogicActions", () => {
             expect(CertificateActions.selectCertificate.mock.calls[0][0]).toMatchObject(expectedResult)
             expect(navigation.navigateToStep).toBeCalledWith(WIZARD_STATE_DIGEST_LOADING)
         })
+
         test("validateCertificates success certificate not valid shows MessageCertificatesNotFound", async () => {
             const startValue = {
                 APIBody: {
@@ -1624,7 +1671,6 @@ describe("WizardLogicActions", () => {
                     ]
                 }
             }
-
 
             const mockvalidateCertificateChainresponse = {
                 "indications": [{
@@ -1680,6 +1726,7 @@ describe("WizardLogicActions", () => {
             await flushPromises()
             expect(MessageActions.showErrorMessage).toBeCalledWith(MessageCertificatesNotFound)
         })
+
         test("validateCertificates error INCORECT_FLOW_ID does nothing", async () => {
             const startValue = {
                 APIBody: {
@@ -1711,6 +1758,7 @@ describe("WizardLogicActions", () => {
             await flushPromises()
             expect(MessageActions.showErrorMessage).not.toBeCalled()
         })
+
         afterEach(() => {
             communication.validateCertificatesAPI = ORIGINAL_validateCertificatesAPI
             FlowIdHelpers.handleFlowIdError = ORIGINAL_handleFlowIdError
@@ -1721,12 +1769,14 @@ describe("WizardLogicActions", () => {
     })
 
     describe("getDigest", () => {
+
         beforeEach(() => {
             communication.getDataToSignAPI = jest.fn(() => { return Promise.resolve() })
             FlowIdHelpers.handleFlowIdError = jest.fn()
             DigestActions.setDigest = jest.fn()
             MessageActions.showErrorMessage = jest.fn();
         })
+
         test("getDigest doesn't call getDataToSignAPI when no selected certificate", () => {
 
             const mockDispatch = jest.fn((val) => val)
@@ -1747,6 +1797,7 @@ describe("WizardLogicActions", () => {
 
 
         })
+
         test("getDigest calls getDataToSignAPI", () => {
             const mockapiBody = {
                 certificate: {
@@ -1780,6 +1831,7 @@ describe("WizardLogicActions", () => {
             expect(communication.getDataToSignAPI).toBeCalledWith(mockapiBody, mockFile)
 
         })
+
         test("getDigest success calls handleFlowIdError", async () => {
             const flowId = 88888
             const mockapiBody = {
@@ -1814,6 +1866,7 @@ describe("WizardLogicActions", () => {
             expect(FlowIdHelpers.handleFlowIdError).toBeCalledTimes(1)
             expect(FlowIdHelpers.handleFlowIdError).toBeCalledWith(flowId, mockGetStore)
         })
+
         test("getDigest success sets digist in store", async () => {
             const mockapiBody = {
                 certificate: {
@@ -1837,7 +1890,6 @@ describe("WizardLogicActions", () => {
                         {
                             APIBody: mockapiBody
                         }
-
                     },
                     uploadFile: { file: mockFile }
                 }
@@ -1852,6 +1904,7 @@ describe("WizardLogicActions", () => {
             expect(DigestActions.setDigest).toBeCalledTimes(1)
             expect(DigestActions.setDigest).toBeCalledWith(resolvedDigest)
         })
+
         test("getDigest success navigates to sign", async () => {
             const mockapiBody = {
                 certificate: {
@@ -1875,7 +1928,6 @@ describe("WizardLogicActions", () => {
                         {
                             APIBody: mockapiBody
                         }
-
                     },
                     uploadFile: { file: mockFile }
                 }
@@ -1889,10 +1941,8 @@ describe("WizardLogicActions", () => {
             await flushPromises()
             expect(DigestActions.setDigest).toBeCalledTimes(1)
             expect(DigestActions.setDigest).toBeCalledWith(resolvedDigest)
-
-
-
         })
+
         test("getDigest error shows message", async () => {
             const mockapiBody = {
                 certificate: {
@@ -1916,7 +1966,6 @@ describe("WizardLogicActions", () => {
                         {
                             APIBody: mockapiBody
                         }
-
                     },
                     uploadFile: { file: mockFile }
                 }
@@ -1929,6 +1978,7 @@ describe("WizardLogicActions", () => {
             expect(showErrorMessage).toBeCalledWith(ErrorGeneral)
 
         })
+
         test("getDigest error INCORECT_FLOW_ID does nothing", async () => {
             const mockapiBody = {
                 certificate: {
@@ -1964,6 +2014,7 @@ describe("WizardLogicActions", () => {
             await flushPromises()
             expect(showErrorMessage).toBeCalledTimes(0)
         })
+
         afterEach(() => {
             communication.getDataToSignAPI = ORIGINAL_getDataToSignAPI
             FlowIdHelpers.handleFlowIdError = ORIGINAL_handleFlowIdError
@@ -1973,10 +2024,12 @@ describe("WizardLogicActions", () => {
     })
 
     describe("navigateToSign", () => {
+
         beforeEach(() => {
             navigation.navigateToStep = jest.fn()
             MessageActions.showErrorMessage = jest.fn();
         })
+
         test("navigateToSign shows ErrorGeneral if no certificateSelected", () => {
             const mockDispatch = jest.fn((val) => val)
             const mockGetStore = jest.fn(() => {
@@ -1988,6 +2041,7 @@ describe("WizardLogicActions", () => {
             expect(mockDispatch).toBeCalledTimes(1)
             expect(showErrorMessage).toBeCalledWith(ErrorGeneral)
         })
+
         test("navigateToSign pinpad reader navigates to WIZARD_STATE_SIGNING_PRESIGN_LOADING and calls sign(null)", () => {
             const mockDispatch = jest.fn((val) => val)
             const mockGetStore = jest.fn(() => {
@@ -1999,6 +2053,7 @@ describe("WizardLogicActions", () => {
             expect(mockDispatch).toBeCalledTimes(2)
             expect(navigateToStep).toBeCalledWith(WIZARD_STATE_SIGNING_PRESIGN_LOADING)
         })
+
         test("navigateToSign no pinpad reader navigates to WIZARD_STATE_PIN_INPUT", () => {
             const mockDispatch = jest.fn((val) => val)
             const mockGetStore = jest.fn(() => {
@@ -2010,6 +2065,7 @@ describe("WizardLogicActions", () => {
             expect(mockDispatch).toBeCalledTimes(1)
             expect(navigateToStep).toBeCalledWith(WIZARD_STATE_PIN_INPUT)
         })
+
         afterEach(() => {
             navigation.navigateToStep = ORIGINAL_navigateToStep
             MessageActions.showErrorMessage = ORIGINAL_showErrorMessage;
@@ -2017,10 +2073,12 @@ describe("WizardLogicActions", () => {
     })
 
     describe("navigateToPinError", () => {
+
         beforeEach(() => {
             navigation.navigateToStep = jest.fn()
             MessageActions.showErrorMessage = jest.fn();
         })
+
         test("navigateToPinError shows ErrorGeneral if no certificateSelected", () => {
             const mockDispatch = jest.fn((val) => val)
             const mockGetStore = jest.fn(() => {
@@ -2032,6 +2090,7 @@ describe("WizardLogicActions", () => {
             expect(mockDispatch).toBeCalledTimes(1)
             expect(showErrorMessage).toBeCalledWith(ErrorGeneral)
         })
+
         test("navigateToPinError pinpad navigates to WIZARD_STATE_PINPAD_ERROR", () => {
             const mockDispatch = jest.fn((val) => val)
             const mockGetStore = jest.fn(() => {
@@ -2043,6 +2102,7 @@ describe("WizardLogicActions", () => {
             expect(mockDispatch).toBeCalledTimes(1)
             expect(navigateToStep).toBeCalledWith(WIZARD_STATE_PINPAD_ERROR)
         })
+
         test("navigateToPinError no pinpad navigates to WIZARD_STATE_PIN_INPUT", () => {
             const mockDispatch = jest.fn((val) => val)
             const mockGetStore = jest.fn(() => {
@@ -2054,6 +2114,7 @@ describe("WizardLogicActions", () => {
             expect(mockDispatch).toBeCalledTimes(1)
             expect(navigateToStep).toBeCalledWith(WIZARD_STATE_PIN_INPUT)
         })
+
         afterEach(() => {
             navigation.navigateToStep = ORIGINAL_navigateToStep
             MessageActions.showErrorMessage = ORIGINAL_showErrorMessage;
@@ -2061,6 +2122,7 @@ describe("WizardLogicActions", () => {
     })
 
     describe("sign", () => {
+
         beforeEach(() => {
             eIDLinkController.controller.getInstance = jest.fn(() => { return { sign: jest.fn(() => { return Promise.resolve() }) } })
             RequestIdActions.createRequestId = jest.fn(() => { return 55555 })
@@ -2071,6 +2133,7 @@ describe("WizardLogicActions", () => {
             SignErrorHandleActions.handlePinErrorEID = jest.fn()
             MessageActions.showErrorMessage = jest.fn();
         })
+
         test("sign shows ErrorGeneral when no selected certificate or digest", () => {
             const mockDispatch = jest.fn((val) => val)
             const mockGetStore = jest.fn(() => {
@@ -2086,9 +2149,8 @@ describe("WizardLogicActions", () => {
             expect(showErrorMessage).toBeCalledTimes(1)
             expect(showErrorMessage).toBeCalledWith(ErrorGeneral)
             expect(mockDispatch).toBeCalledTimes(1)
-
-
         })
+
         test("sign pinpad creates a requestId of 30000ms", () => {
             const mockDispatch = jest.fn((val) => val)
             const mockGetStore = jest.fn(() => {
@@ -2113,6 +2175,7 @@ describe("WizardLogicActions", () => {
             expect(createRequestId).toBeCalledWith(30000, expect.any(Function))
 
         })
+
         test("sign no pinpad creates a requestId of 10000ms", () => {
             const mockDispatch = jest.fn((val) => val)
             const mockGetStore = jest.fn(() => {
@@ -2136,6 +2199,7 @@ describe("WizardLogicActions", () => {
             sign(pin)(mockDispatch, mockGetStore)
             expect(createRequestId).toBeCalledWith(10000, expect.any(Function))
         })
+
         test("sign calls eIDLink sign", () => {
             const certificateString = "certificateString"
             const digestString = 'digestString'
@@ -2164,6 +2228,7 @@ describe("WizardLogicActions", () => {
             expect(mockSign).toBeCalledTimes(1)
             expect(mockSign).toBeCalledWith(expect.any(String), expect.any(String), certificateString, digestAlgorithmString, digestString, pin)
         })
+
         test("sign success calls handleFlowIdError", () => {
             const certificateString = "certificateString"
             const digestString = 'digestString'
@@ -2192,8 +2257,8 @@ describe("WizardLogicActions", () => {
             sign(pin)(mockDispatch, mockGetStore)
             expect(handleFlowIdError).toBeCalledTimes(1)
             expect(handleFlowIdError).toBeCalledWith(flowId, mockGetStore)
-
         })
+
         test("sign success calls handleRequestIdError", () => {
             const certificateString = "certificateString"
             const digestString = 'digestString'
@@ -2225,6 +2290,7 @@ describe("WizardLogicActions", () => {
             expect(handleRequestIdError).toBeCalledTimes(1)
             expect(handleRequestIdError).toBeCalledWith(requestId, mockDispatch, mockGetStore)
         })
+
         test("sign success saves signatur and calls signDocument", async () => {
             const certificateString = "certificateString"
             const digestString = 'digestString'
@@ -2256,6 +2322,7 @@ describe("WizardLogicActions", () => {
             expect(setSignature).toBeCalledTimes(1)
             expect(setSignature).toBeCalledWith(mockResponse)
         })
+
         test("sign error shows message", async () => {
             const certificateString = "certificateString"
             const digestString = 'digestString'
@@ -2291,8 +2358,8 @@ describe("WizardLogicActions", () => {
             expect(removeRequestId).toBeCalledWith(requestId)
             expect(handlePinErrorEID).toBeCalledTimes(1)
             expect(handlePinErrorEID).toBeCalledWith(errorMessage, true)
-
         })
+
         test("sign error INCORECT_REQUEST_ID does nothing", async () => {
             const certificateString = "certificateString"
             const digestString = 'digestString'
@@ -2322,6 +2389,7 @@ describe("WizardLogicActions", () => {
             expect(removeRequestId).toBeCalledTimes(0)
             expect(handlePinErrorEID).toBeCalledTimes(0)
         })
+
         test("sign error INCORECT_FLOW_ID does nothing", async () => {
             const certificateString = "certificateString"
             const digestString = 'digestString'
@@ -2365,6 +2433,7 @@ describe("WizardLogicActions", () => {
     })
 
     describe("signDocument", () => {
+
         beforeEach(() => {
             navigation.navigateToStep = jest.fn()
             communication.signDocumentAPI = jest.fn(() => { return Promise.resolve() })
@@ -2372,6 +2441,7 @@ describe("WizardLogicActions", () => {
             UploadFileActions.setDownloadFile = jest.fn()
             MessageActions.showErrorMessage = jest.fn();
         })
+
         test("signDocument shows ErrorGeneral when not all data is present", () => {
             const mockDispatch = jest.fn((val) => val)
             const mockGetStore = jest.fn(() => {
@@ -2384,6 +2454,7 @@ describe("WizardLogicActions", () => {
             expect(showErrorMessage).toBeCalledTimes(1)
             expect(showErrorMessage).toBeCalledWith(ErrorGeneral)
         })
+
         test("signDocument navigates to WIZARD_STATE_SIGNING_LOADING", () => {
             const mockDispatch = jest.fn((val) => val)
             const mockGetStore = jest.fn(() => {
@@ -2407,6 +2478,7 @@ describe("WizardLogicActions", () => {
             expect(navigateToStep).toBeCalledTimes(1)
             expect(navigateToStep).toBeCalledWith(WIZARD_STATE_SIGNING_LOADING)
         })
+
         test("signDocument calls signDocumentAPI", () => {
             const mockApiBody = {
                 certificate: {
@@ -2433,6 +2505,7 @@ describe("WizardLogicActions", () => {
             expect(signDocumentAPI).toBeCalledTimes(1)
             expect(signDocumentAPI).toBeCalledWith(mockApiBody, mockFile, mockSignatureString)
         })
+
         test("signDocument success handleFlowIdError", () => {
             const flowId = 88888
             const mockApiBody = {
@@ -2460,6 +2533,7 @@ describe("WizardLogicActions", () => {
             expect(handleFlowIdError).toBeCalledTimes(1)
             expect(handleFlowIdError).toBeCalledWith(flowId, mockGetStore)
         })
+
         test("signDocument success setDownloadFile", async () => {
             const response = { name: "filename", bytes: "bytestring" }
             const mockApiBody = {
@@ -2492,6 +2566,7 @@ describe("WizardLogicActions", () => {
             expect(setDownloadFile).toBeCalledWith(response)
             expect(navigateToStep).toHaveBeenLastCalledWith(WIZARD_STATE_SUCCES)
         })
+
         test("signDocument success shows ErrorGeneral when not all data is present ", async () => {
 
             const mockApiBody = {
@@ -2523,6 +2598,7 @@ describe("WizardLogicActions", () => {
             expect(setDownloadFile).toBeCalledTimes(0)
             expect(showErrorMessage).toHaveBeenLastCalledWith(ErrorGeneral)
         })
+
         test("signDocument error shows message", async () => {
             const mockApiBody = {
                 certificate: {
@@ -2552,6 +2628,7 @@ describe("WizardLogicActions", () => {
 
             expect(showErrorMessage).toHaveBeenLastCalledWith(ErrorGeneral)
         })
+
         test("signDocument error INCORECT_FLOW_ID does nothing", async () => {
             const mockApiBody = {
                 certificate: {
@@ -2582,6 +2659,7 @@ describe("WizardLogicActions", () => {
 
             expect(showErrorMessage).not.toBeCalled()
         })
+
         afterEach(() => {
             navigation.navigateToStep = ORIGINAL_navigateToStep
             communication.signDocumentAPI = ORIGINAL_signDocumentAPI
@@ -2592,12 +2670,14 @@ describe("WizardLogicActions", () => {
     })
 
     describe("resetWizard", () => {
+
         beforeEach(() => {
             eIDLinkController.controller.getInstance = jest.fn(() => { return { stop: jest.fn() } })
             storeActions.resetStore = jest.fn(() => { })
             FlowIdActions.setNewFlowId = jest.fn(() => { })
             navigation.navigateToStep = jest.fn()
         })
+
         test("resetWizard resetStore and creates new flowId", () => {
             const mockDispatch = jest.fn((val) => { return val })
             const mockGetstore = jest.fn(() => {
@@ -2612,6 +2692,7 @@ describe("WizardLogicActions", () => {
             expect(setNewFlowId).toBeCalledTimes(1)
             expect(resetStore).toBeCalledTimes(1)
         })
+
         test("resetWizard reader not ok navigates to WIZARD_STATE_START", () => {
             const mockDispatch = jest.fn((val) => { return val })
             const mockGetstore = jest.fn(() => {
@@ -2625,6 +2706,7 @@ describe("WizardLogicActions", () => {
             resetWizard()(mockDispatch, mockGetstore)
             expect(window.location.pathname).toBe("/")
         }) 
+        
         afterEach(() => {
             eIDLinkController.controller = ORIGINAL_controller
             storeActions.resetStore = ORIGINAL_resetStore

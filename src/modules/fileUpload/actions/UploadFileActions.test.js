@@ -7,6 +7,7 @@ const RESOLVE_FILECONTENT = "file_content"
 describe("UploadFileActions", () => {
 
     describe("action type constants", () => {
+        
         test("all constants are unique in the file", () => {
             const listOfConst = [
                 FILE_DISPLAY_FILE,
@@ -19,6 +20,7 @@ describe("UploadFileActions", () => {
             expect(listOfConst.length).toEqual(setOfConst.size)
         })
     })
+
     describe("displayFile", () => {
 
         beforeEach(() => {
@@ -36,9 +38,6 @@ describe("UploadFileActions", () => {
             expect(mockDispatch.mock.calls[0][0].payload).toEqual(startFile)
         })
        
-      
-       
-
         afterEach(() => {
             fileHelper.getContentData = ORIGINAL_getContentData
         })

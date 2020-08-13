@@ -12,8 +12,8 @@ export class PinPadError extends React.Component {
     onClickNext() {
         this.props.navigateToSign()
     }
+    
     render() {
-
         const { pinError } = this.props
         if (pinError && pinError.message) {
             return (
@@ -26,13 +26,10 @@ export class PinPadError extends React.Component {
                     nextButtonText={'Try again'}
                     onClickNext={() => { this.onClickNext() }}
                     text={pinError.message}
-                >
-
-                </CardError>
+               />
             )
         }
         else {
-            //todo create general error
             return null
         }
 

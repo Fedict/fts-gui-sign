@@ -12,11 +12,8 @@ const wizardReducer = (state = initialState, action) => {
             return {
                 ...state,
                 "state": action.payload,
-
             }
         }
-
-
         case STORE_RESET: {
             return {
                 ...state,
@@ -28,4 +25,3 @@ const wizardReducer = (state = initialState, action) => {
 }
 
 export default wizardReducer
-

@@ -18,6 +18,7 @@ export class CertificateSelect extends React.Component {
             selectedIndex: null
         }
     }
+
     onSelect(index) {
         const { certificates, onChange } = this.props;
 
@@ -28,6 +29,7 @@ export class CertificateSelect extends React.Component {
             onChange(selectedCertificate)
         }
     }
+    
     render() {
         const { certificates, id } = this.props
         const { selectedIndex } = this.state

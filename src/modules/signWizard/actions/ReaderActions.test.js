@@ -1,7 +1,9 @@
 import { readerSetCheck, READER_SET_CHECK, readerSetOk, READER_SET_OK } from "./ReaderActions"
 
 describe("ReaderActions", () => {
+
     describe("readerSetCheck", () => {
+
         test("readerSetCheck returns a action with type READER_SET_CHECK and payload state ", () => { 
             const payload = true
             const result = readerSetCheck(payload)
@@ -13,6 +15,7 @@ describe("ReaderActions", () => {
     })
 
     describe("readerSetOk", () => {
+        
         test("readerSetOk returns a action with type READER_SET_CHECK and payload state ", () => {
             const payload = true
             const result = readerSetOk(payload)

@@ -9,30 +9,21 @@ export class DigestLoadingContainer extends React.Component {
     }
 
     render() {
-
         const { resetWizard } = this.props
         return (
-            
                 <CardLoading
                     title={"Signing document"}
                     hasCancelButton
                     cancelButtonText="Cancel"
                     onClickCancel={() => { resetWizard() }}
-                >
-
-                </CardLoading>
-            
+                />
         )
     }
 }
-const mapStateToProps = (state) => {
-    return (state) => ({
 
-    })
-}
 const mapDispatchToProps = ({
     getDigest,
     resetWizard
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(DigestLoadingContainer)
+export default connect(null, mapDispatchToProps)(DigestLoadingContainer)

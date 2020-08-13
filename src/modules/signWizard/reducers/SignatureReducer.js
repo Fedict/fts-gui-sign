@@ -5,7 +5,6 @@ export const initialState = {
     signature: ""
 }
 
-
 const SignatureReducer = (state = initialState, action) => {
     switch (action.type) {
         case SIGNATURE_SET_SIGNATURE:

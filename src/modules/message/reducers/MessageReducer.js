@@ -13,7 +13,6 @@ export const initialState = {
         nextPage: ""//the name of the page where the butons navigates to
     },
     hasCancleButton: "" //the button is visible
-
 }
 
 /**

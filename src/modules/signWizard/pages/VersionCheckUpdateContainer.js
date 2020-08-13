@@ -23,6 +23,7 @@ export class VersionCheckUpdateContainer extends React.Component {
         }, 5000);
         this.setState({ intervalId: id })
     }
+
     componentWillUnmount() {
         const id = this.state.intervalId
         if (id) {
@@ -30,7 +31,6 @@ export class VersionCheckUpdateContainer extends React.Component {
         }
     }
 
-    //TODO loop to check if correct version is installed
     handleButtonNextClick() {
         this.props.navigateToStep(WIZARD_STATE_VERSION_CHECK_LOADING)
     }
@@ -39,23 +39,20 @@ export class VersionCheckUpdateContainer extends React.Component {
         const usedOs = getOS()
         if (usedOs === OS.WINDOWS && window.configData && window.configData.eIDLinkUrls && window.configData.eIDLinkUrls.windows) {
             window.open(window.configData.eIDLinkUrls.windows + '?dt=' + new Date().getTime(), "_blank")
-
         }
         if (usedOs === OS.MACOS && window.configData && window.configData.eIDLinkUrls && window.configData.eIDLinkUrls.macOs) {
             window.open(window.configData.eIDLinkUrls.macOs + '?dt=' + new Date().getTime(), "_blank")
-
         }
         if (usedOs === OS.LINUX && window.configData && window.configData.eIDLinkUrls && window.configData.eIDLinkUrls.linux) {
             window.open(window.configData.eIDLinkUrls.linux + '?dt=' + new Date().getTime(), "_blank")
-
         }
     }
-    render() {
 
+    render() {
         const { resetWizard } = this.props
         const usedOs = getOS()
-        return (
 
+        return (
             <CardContainer title={"Update eIDLink"}
                 onClickCancel={() => { resetWizard() }}
                 hasNextButton
@@ -64,16 +61,13 @@ export class VersionCheckUpdateContainer extends React.Component {
             >
                 <p>The installed version of eIDLink is not up to date.</p>
                 <p>Please install the latest version of eIDLink to use this aplication </p>
-
                 {
                     (usedOs === OS.LINUX)
                         ? <EIDLinkLinuxInstall linuxDistributions={linuxDistributions} />
                         :  <button className="btn btn-primary" id="button_install_eID" onClick={() => { this.handleOnClick() }}>Download and install eIDLink</button>
                 }
                
-
             </CardContainer>
-
         )
     }
 }
@@ -86,7 +80,6 @@ const hasLinuxUrls = (window.configData
 const linuxDistributions = (hasLinuxUrls)
     ? Object.values(window.configData.eIDLinkUrls.linux)
     : [];
-
 
 const mapDispatchToProps = ({
     navigateToStep,

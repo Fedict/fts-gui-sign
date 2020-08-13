@@ -25,9 +25,6 @@ export const DisplayFile = ({ uploadFile }) => {
 
                 )
             }
-            // if (data.isXml) {
-            //     return <p>xml</p>
-            // }
         }
     }
     return (
@@ -41,9 +38,7 @@ export const DisplayFile = ({ uploadFile }) => {
             backgroundSize: "cover"
         }}>
         </div>
-
     )
-
 }
 
 const mapStateToProps = (state) => {

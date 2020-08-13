@@ -4,20 +4,16 @@ import { WIZARD_CHANGE_STATE } from "./WizardActions"
 import { STORE_RESET } from "../../store/storeActions"
 
 describe("WizardReducer", () => {
-    beforeEach(() => {
-
-    })
-
+    
     describe("reducer", () => {
+
         test("action with type WIZARD_CHANGE_STATE changes the state object", () => {
             const startState = {
                 state: WIZARD_STATE_START,
             }
 
-
             const action = { type: WIZARD_CHANGE_STATE, payload: WIZARD_STATE_DIGEST_LOADING }
             const result = wizardReducer(startState, action)
-
 
             expect(result).not.toBe(startState)
             expect(result.state).toEqual(action.payload)
@@ -33,8 +29,5 @@ describe("WizardReducer", () => {
 
             expect(result).toEqual(startState)
         })
-    })
-
-    afterEach(() => {
     })
 })
