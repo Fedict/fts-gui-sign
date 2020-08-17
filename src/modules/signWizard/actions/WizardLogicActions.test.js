@@ -98,7 +98,7 @@ describe("Pinpad support", () => {
     beforeEach(() => {
         navigation.navigateToStep = jest.fn()
 
-        // Object.defineProperty(window, 'configData', {BEurl: ""})
+        
         global.window.configData = { BEurl: "" }
     })
 
