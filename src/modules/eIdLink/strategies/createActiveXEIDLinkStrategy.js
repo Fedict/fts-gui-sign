@@ -71,7 +71,7 @@ export const createActiveXEIDLinkStrategy = () => {
                     const obj = document.DemoActiveX;
                     if (obj) {
     
-                        const response = obj.SayHello(JSON.stringify(msg));
+                        const response = obj.sendNativeMessage(JSON.stringify(msg));
                         const responseJson = JSON.parse(response)
                         console.log("Processing reply from eIDLink : " + JSON.stringify(responseJson));
 

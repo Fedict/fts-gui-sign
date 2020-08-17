@@ -6,7 +6,7 @@ describe("unit tests for createActiveXEIDLinkStrategy", () => {
 
     beforeEach(() => {
         document.DemoActiveX = {
-            SayHello: jest.fn((msg) => {
+            sendNativeMessage: jest.fn((msg) => {
                 const message = JSON.parse(msg)
                 return JSON.stringify({ version: "0.0.0", correlationId: message.correlationId, result: "OK" })
             })
@@ -15,20 +15,20 @@ describe("unit tests for createActiveXEIDLinkStrategy", () => {
 
     describe("tests for getVersion", () => {
 
-        test('getVersion calls DemoActiveX.SayHello with opperation VERSION', () => {
+        test('getVersion calls DemoActiveX.sendNativeMessage with opperation VERSION', () => {
             const eIDLink = createActiveXEIDLinkStrategy()
             eIDLink.getVersion("0.0.0", () => { }, () => { }, () => { })
 
-            expect(document.DemoActiveX.SayHello).toBeCalledTimes(1)
-            expect(typeof document.DemoActiveX.SayHello.mock.calls[0][0]).toEqual("string")
-            const callMassage = JSON.parse(document.DemoActiveX.SayHello.mock.calls[0][0])
+            expect(document.DemoActiveX.sendNativeMessage).toBeCalledTimes(1)
+            expect(typeof document.DemoActiveX.sendNativeMessage.mock.calls[0][0]).toEqual("string")
+            const callMassage = JSON.parse(document.DemoActiveX.sendNativeMessage.mock.calls[0][0])
             expect(callMassage.operation).toEqual('VERSION')
             expect(callMassage.correlationId).toBeTruthy()
         })
 
         test('getVersion calls onSuccess if the minimum version is smaller than the returned version', async () => {
             document.DemoActiveX = {
-                SayHello: jest.fn((msg) => {
+                sendNativeMessage: jest.fn((msg) => {
                     const message = JSON.parse(msg)
                     const returnValue = {
                         version: "5.5.0",
@@ -49,7 +49,7 @@ describe("unit tests for createActiveXEIDLinkStrategy", () => {
 
         test('getVersion calls onNotInstalled if there is a error', async () => {
             document.DemoActiveX = {
-                SayHello: jest.fn((msg) => {
+                sendNativeMessage: jest.fn((msg) => {
                     const message = JSON.parse(msg)
                     const returnValue = {
                         result: 'NOTOK',
@@ -69,7 +69,7 @@ describe("unit tests for createActiveXEIDLinkStrategy", () => {
 
         test('getVersion calls onNeedsUpdate if the minimum version is bigger than the returned version', async () => {
             document.DemoActiveX = {
-                SayHello: jest.fn((msg) => {
+                sendNativeMessage: jest.fn((msg) => {
                     const message = JSON.parse(msg)
                     const returnValue = {
                         version: "0.5.0",
@@ -91,16 +91,16 @@ describe("unit tests for createActiveXEIDLinkStrategy", () => {
 
     describe("tests for getCertificateChain", () => {
 
-        test("getCertificateChain calls DemoActiveX.SayHello with opperation CERTCHAIN and certificate", async () => {
+        test("getCertificateChain calls DemoActiveX.sendNativeMessage with opperation CERTCHAIN and certificate", async () => {
             const eIDLink = createActiveXEIDLinkStrategy()
 
             const startCert = "certificateString"
             await eIDLink.getCertificateChain(null, null, startCert)
             await flushPromises()
 
-            expect(document.DemoActiveX.SayHello).toBeCalledTimes(1)
-            expect(typeof document.DemoActiveX.SayHello.mock.calls[0][0]).toEqual("string")
-            const callMassage = JSON.parse(document.DemoActiveX.SayHello.mock.calls[0][0])
+            expect(document.DemoActiveX.sendNativeMessage).toBeCalledTimes(1)
+            expect(typeof document.DemoActiveX.sendNativeMessage.mock.calls[0][0]).toEqual("string")
+            const callMassage = JSON.parse(document.DemoActiveX.sendNativeMessage.mock.calls[0][0])
             expect(callMassage.operation).toEqual('CERTCHAIN')
             expect(callMassage.correlationId).toBeTruthy()
             expect(callMassage.cert).toEqual(startCert)
@@ -109,7 +109,7 @@ describe("unit tests for createActiveXEIDLinkStrategy", () => {
 
     describe("tests for sign", () => {
 
-        test("sign calls DemoActiveX.SayHello with opperation SIGN and correct params", async () => {
+        test("sign calls DemoActiveX.sendNativeMessage with opperation SIGN and correct params", async () => {
             const eIDLink = createActiveXEIDLinkStrategy()
 
             const startLanguage = "en"
@@ -121,9 +121,9 @@ describe("unit tests for createActiveXEIDLinkStrategy", () => {
             await eIDLink.sign(startLanguage, startMac, startCert, startAlgo, startDigest, startPin)
             await flushPromises()
 
-            expect(document.DemoActiveX.SayHello).toBeCalledTimes(1)
-            expect(typeof document.DemoActiveX.SayHello.mock.calls[0][0]).toEqual("string")
-            const callMassage = JSON.parse(document.DemoActiveX.SayHello.mock.calls[0][0])
+            expect(document.DemoActiveX.sendNativeMessage).toBeCalledTimes(1)
+            expect(typeof document.DemoActiveX.sendNativeMessage.mock.calls[0][0]).toEqual("string")
+            const callMassage = JSON.parse(document.DemoActiveX.sendNativeMessage.mock.calls[0][0])
             expect(callMassage.operation).toEqual('SIGN')
             expect(callMassage.correlationId).toBeTruthy()
             expect(callMassage.cert).toEqual(startCert)
@@ -137,7 +137,7 @@ describe("unit tests for createActiveXEIDLinkStrategy", () => {
 
     describe("tests for auth", () => {
 
-        test("sign calls DemoActiveX.SayHello with opperation AUTH and correct params", async () => {
+        test("sign calls DemoActiveX.sendNativeMessage with opperation AUTH and correct params", async () => {
             const eIDLink = createActiveXEIDLinkStrategy()
 
             const startLanguage = "en"
@@ -149,9 +149,9 @@ describe("unit tests for createActiveXEIDLinkStrategy", () => {
             await eIDLink.auth(startLanguage, startMac, startCert, startAlgo, startDigest, startPin)
             await flushPromises()
 
-            expect(document.DemoActiveX.SayHello).toBeCalledTimes(1)
-            expect(typeof document.DemoActiveX.SayHello.mock.calls[0][0]).toEqual("string")
-            const callMassage = JSON.parse(document.DemoActiveX.SayHello.mock.calls[0][0])
+            expect(document.DemoActiveX.sendNativeMessage).toBeCalledTimes(1)
+            expect(typeof document.DemoActiveX.sendNativeMessage.mock.calls[0][0]).toEqual("string")
+            const callMassage = JSON.parse(document.DemoActiveX.sendNativeMessage.mock.calls[0][0])
             expect(callMassage.operation).toEqual('AUTH')
             expect(callMassage.correlationId).toBeTruthy()
             expect(callMassage.cert).toEqual(startCert)
@@ -165,16 +165,16 @@ describe("unit tests for createActiveXEIDLinkStrategy", () => {
 
     describe("tests for getCertificate", () => {
 
-        test("sign calls DemoActiveX.SayHello with opperation USERCERTS ", async () => {
+        test("sign calls DemoActiveX.sendNativeMessage with opperation USERCERTS ", async () => {
             const eIDLink = createActiveXEIDLinkStrategy()
 
             const startCert = "certificateString"
             await eIDLink.getCertificate(null, null, startCert)
             await flushPromises()
 
-            expect(document.DemoActiveX.SayHello).toBeCalledTimes(1)
-            expect(typeof document.DemoActiveX.SayHello.mock.calls[0][0]).toEqual("string")
-            const callMassage = JSON.parse(document.DemoActiveX.SayHello.mock.calls[0][0])
+            expect(document.DemoActiveX.sendNativeMessage).toBeCalledTimes(1)
+            expect(typeof document.DemoActiveX.sendNativeMessage.mock.calls[0][0]).toEqual("string")
+            const callMassage = JSON.parse(document.DemoActiveX.sendNativeMessage.mock.calls[0][0])
             expect(callMassage.operation).toEqual('USERCERTS')
             expect(callMassage.correlationId).toBeTruthy()
         })
