@@ -17,7 +17,7 @@ export const isActiveXControlDetected = () => {
             return obj.IsPresent();
         }
     } catch (ex) {
-        console.log("eaZyLink ActiveX control not in window");
+        console.log("eIDLink ActiveX control not in window");
     }
     return false;
 }

@@ -16,7 +16,7 @@ export const createActiveXEIDLinkStrategy = () => {
         messagePromise({ operation: 'VERSION' }).then(
             function (msg) {
                 var installedVersion = msg.version;
-                console.log("eaZyLink version is " + installedVersion);
+                console.log("eIDLink version is " + installedVersion);
 
                 if (isUptodate(minimumVersion, installedVersion)) {
                     onSuccess(installedVersion);
@@ -73,13 +73,13 @@ export const createActiveXEIDLinkStrategy = () => {
     
                         const response = obj.SayHello(JSON.stringify(msg));
                         const responseJson = JSON.parse(response)
-                        console.log("Processing reply from eazylink : " + JSON.stringify(responseJson));
+                        console.log("Processing reply from eIDLink : " + JSON.stringify(responseJson));
 
                         if (responseJson.correlationId) {
 
                             var p = pendingPromises[msg.correlationId];
                             if (!p) {
-                                console.log("No pending promise found, ignoring eaZyLink reply");
+                                console.log("No pending promise found, ignoring eIDLink reply");
                                 return;
                             }
 
