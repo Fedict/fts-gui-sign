@@ -13,7 +13,7 @@ export const browser = {
 
 /**
  * Function to determine the used browser based on navigator.userAgent string.
- * 
+ * will see a chromium version of opera as chrome
  * @return {string} Returns a string with a value out of browser enum
  */
 export const getBrowser = () => {
@@ -63,7 +63,11 @@ export const browserIsAccepted = () => {
     if (isMBrowser) {
         return false
     }
-    if (usedBrowser !== browser.IE && usedBrowser !== browser.EDGE && usedBrowser !== browser.FIREFOX && usedBrowser !== browser.SAFARI && usedBrowser !== browser.CHROME) {
+    if (usedBrowser !== browser.IE
+        && usedBrowser !== browser.EDGE
+        && usedBrowser !== browser.FIREFOX
+        && usedBrowser !== browser.SAFARI
+        && usedBrowser !== browser.CHROME) {
         return false
     }
     return true
