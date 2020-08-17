@@ -18,7 +18,6 @@ const app = (
                     id="DemoActiveX"
                     style={{ display: "none" }}
                     classID="clsid:B08A638E-66C3-4586-823A-5B89A0301920"
-                    codebase="DemoCSharpActiveX.cab"
                     height="0"
                     width="0"
                     role='none'
