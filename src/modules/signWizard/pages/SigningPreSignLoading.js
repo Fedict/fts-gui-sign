@@ -3,7 +3,7 @@ import { CardLoading } from "../../components/Card/CardLoading"
 import { resetWizard } from "../actions/WizardLogicActions"
 import { connect } from "react-redux"
 
-export const SigningPreSignLoading = ({certificate, resetWizard}) => {
+export const SigningPreSignLoading = ({ certificate, resetWizard }) => {
 
     const isPinPadReader = (certificate
         && certificate.certificateSelected
@@ -13,7 +13,7 @@ export const SigningPreSignLoading = ({certificate, resetWizard}) => {
     const certificateName = (certificate
         && certificate.certificateSelected
         && certificate.certificateSelected.commonName)
-        ? " for" + certificate.certificateSelected.commonName + " "
+        ? " for " + certificate.certificateSelected.commonName + " "
         : ""
     return (
         <CardLoading title={"Sign document"}
