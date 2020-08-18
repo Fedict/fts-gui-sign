@@ -10,6 +10,11 @@ export const SigningPreSignLoading = ({certificate, resetWizard}) => {
         && certificate.certificateSelected.readerType
         && certificate.certificateSelected.readerType === "pinpad")
 
+    const certificateName = (certificate
+        && certificate.certificateSelected
+        && certificate.certificateSelected.commonName)
+        ? " for" + certificate.certificateSelected.commonName + " "
+        : ""
     return (
         <CardLoading title={"Sign document"}
             hasCancelButton
@@ -20,7 +25,7 @@ export const SigningPreSignLoading = ({certificate, resetWizard}) => {
                 ? (
                     <div>
                         <div className="alert alert-info">
-                            Please enter your PIN when prompted
+                            Please enter the PIN {certificateName} when prompted
                                 </div>
                     </div>
                 )

@@ -63,7 +63,7 @@ export class PinInputContainer extends React.Component {
     }
 
     render() {
-        const { resetWizard, pinError } = this.props
+        const { resetWizard, pinError, certificate } = this.props
         const { pin } = this.state
         const pinstring = "*".repeat(pin.length)
         return (
@@ -79,7 +79,11 @@ export class PinInputContainer extends React.Component {
                 nextButtonIsDisabled={pin.length < 4}>
 
                 <div className="form-group">
-                    <p>Geef uw pincode in</p>
+                    <p>Enter the PIN
+                        {(certificate && certificate.certificateSelected && certificate.certificateSelected.commonName)
+                            ? " for " + certificate.certificateSelected.commonName
+                            : ""}
+                    </p>
                     {(pinError && pinError.message)
                         ? (
                             <div className="text-center">
@@ -105,7 +109,8 @@ export class PinInputContainer extends React.Component {
 
 const mapStateToProps = (state) => {
     return (state) => ({
-        pinError: state.pinError
+        pinError: state.pinError,
+        certificate: state.certificate
     })
 }
 
