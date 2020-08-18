@@ -21,6 +21,5 @@ export const generateIdFromArray = (idList) => {
  * @returns {number} newId - a new id that is equel to the old id
  */
 export const generateId = (oldId) => {
-
     return generateIdFromArray([oldId])
 }

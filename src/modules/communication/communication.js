@@ -1,4 +1,5 @@
 import { getBase64Data } from "../fileUpload/helpers/FileHelper"
+
 //-----------------------------------------
 //--- constants                         ---
 //-----------------------------------------
@@ -21,7 +22,7 @@ const REQUEST_FAILED = "REQUEST_FAILED"
 /**
  * Function to get the signingProfileId from window.configData based on the MIME-type of the document. 
  * SigningProfileId can be configured in config.js.
- * If no signingprofile is configuerd for the MIME-type the configuerd signingProfileId will be returend
+ * If no signingprofile is configuerd for the MIME-type, the configuerd signingProfileId will be returend
  * @param {string} documentType - MIME-type of the document
  * @returns {string} SigningProfileId based on the MIME-type of the document or the default SigningProfileId
  */
@@ -50,11 +51,6 @@ export const createBody = (certificateBody, documentName, documentBase64, docume
         "clientSignatureParameters": {
             "certificateChain": certificateBody.certificateChain,
             "detachedContents": [
-                // {
-                //     "bytes": "string",
-                //     "digestAlgorithm": "SHA1",
-                //     "name": "string"
-                // }
             ],
             "signingCertificate": certificateBody.certificate,
             "signingDate": "2020-04-06T09:45:44"
@@ -106,7 +102,7 @@ export const validateCertificatesAPI = (certificateBody) => {
  * @param {Object} certificateBody - object that represents the certificate
  * @param {Object} document - document to be signed
  * 
- * @returns {Promise} Promis that resolves the result of the API request
+ * @returns {Promise} Promise that resolves the result of the API request
  */
 export const getDataToSignAPI = async (certificateBody, document) => {
 
@@ -179,7 +175,6 @@ export const validateSignatureAPI = async (document) => {
     const body = {
         "signedDocument": {
             "bytes": documentB64,
-            // "digestAlgorithm": "SHA256",
             "name": document.name
         }
     }

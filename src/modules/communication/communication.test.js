@@ -3,7 +3,8 @@ import {
     createBody,
     validateCertificatesAPI,
     getDataToSignAPI,
-    signDocumentAPI
+    signDocumentAPI,
+    validateSignatureAPI
 } from "./communication";
 import { getBase64Data } from "../fileUpload/helpers/FileHelper"
 import * as filehelper from "../fileUpload/helpers/FileHelper"
@@ -367,7 +368,7 @@ describe('signDocumentAPI', () => {
         expect(result).toEqual(resultJson)
     })
 
-    test("validateCertificatesAPI can return text", async () => {
+    test("signDocumentAPI can return text", async () => {
 
         //start var
         const startDocument = { name: "documentName", type: "application/xml" }
@@ -410,7 +411,7 @@ describe('signDocumentAPI', () => {
         expect(result).toEqual(resultString)
     })
 
-    test("validateCertificatesAPI can throw error", async () => {
+    test("signDocumentAPI can throw error", async () => {
         expect.assertions(7)
         //start var
         const startDocument = { name: "documentName", type: "application/xml" }
@@ -442,6 +443,131 @@ describe('signDocumentAPI', () => {
             expect(e.message).toBe(REQUEST_FAILED)
             expect(global.fetch).toHaveBeenCalledTimes(1)
             expect(global.fetch.mock.calls[0][0]).toEqual("/signing/signDocument")
+            expect(global.fetch.mock.calls[0][1].body).toEqual(JSON.stringify(expectedBody))
+            expect(global.fetch.mock.calls[0][1].method).toEqual('POST')
+
+            expect(mockResponse.json).toBeCalledTimes(0)
+            expect(mockResponse.text).toBeCalledTimes(0)
+        }
+    })
+
+    afterEach(() => {
+        window.fetch = ORIGINAL_Fetch
+        filehelper.getBase64Data = ORIGINAL_getBase64Data
+    })
+})
+
+
+
+describe('validateSignatureAPI', () => {
+
+    beforeEach(() => {
+        filehelper.getBase64Data = jest.fn(() => { return Promise.resolve(BASE64STRING) })
+    })
+
+    test("validateSignatureAPI does correct fetch request", async () => {
+        //start var
+        const startDocument = { name: "documentName", type: "application/xml" }
+
+        //expected
+        const expectedBody = {
+            "signedDocument": {
+                "bytes": BASE64STRING,
+                "name": startDocument.name
+            }
+        }
+
+        //mocking
+        const resultJson = { result: "result" }
+        const mockResponse = {
+            ok: true,
+            json: jest.fn(() => { return resultJson }),
+            text: jest.fn()
+        }
+
+        global.fetch = jest.fn().mockImplementation(() => Promise.resolve(mockResponse));
+
+        //result
+        const result = await validateSignatureAPI(startDocument)
+
+        //assertions
+        expect(global.fetch).toHaveBeenCalledTimes(1)
+        expect(global.fetch.mock.calls[0][0]).toEqual("/validation/validateSignature")
+        expect(global.fetch.mock.calls[0][1].body).toEqual(JSON.stringify(expectedBody))
+        expect(global.fetch.mock.calls[0][1].method).toEqual('POST')
+
+        expect(mockResponse.json).toBeCalledTimes(1)
+        expect(mockResponse.text).toBeCalledTimes(0)
+        expect(result).toEqual(resultJson)
+    })
+
+    test("signDocumentAPI can return text", async () => {
+
+        //start var
+        const startDocument = { name: "documentName", type: "application/xml" }
+
+        //expected
+        const expectedBody = {
+            "signedDocument": {
+                "bytes": BASE64STRING,
+                "name": startDocument.name
+            }
+        }
+
+        //mocking
+        const resultString = "text"
+        const mockResponse = {
+            ok: true,
+            json: jest.fn(() => { throw 'error' }),
+            text: jest.fn(() => { return resultString })
+        }
+
+        const mockPromiseFunction = jest.fn(() => Promise.resolve(mockResponse))
+
+        global.fetch = jest.fn().mockImplementation(mockPromiseFunction);
+
+        //result
+        const result = await validateSignatureAPI(startDocument)
+
+        //assertions
+        expect(global.fetch).toHaveBeenCalledTimes(1)
+        expect(global.fetch.mock.calls[0][0]).toEqual("/validation/validateSignature")
+        expect(global.fetch.mock.calls[0][1].body).toEqual(JSON.stringify(expectedBody))
+        expect(global.fetch.mock.calls[0][1].method).toEqual('POST')
+
+        expect(mockResponse.json).toBeCalledTimes(1)
+        expect(mockResponse.text).toBeCalledTimes(1)
+        expect(result).toEqual(resultString)
+    })
+
+    test("signDocumentAPI can throw error", async () => {
+        expect.assertions(7)
+         //start var
+         const startDocument = { name: "documentName", type: "application/xml" }
+
+         //expected
+         const expectedBody = {
+             "signedDocument": {
+                 "bytes": BASE64STRING,
+                 "name": startDocument.name
+             }
+         }
+
+        //mocking
+        const mockResponse = {
+            ok: false,
+            json: jest.fn(),
+            text: jest.fn()
+        }
+        global.fetch = jest.fn().mockImplementation(() => Promise.resolve(mockResponse));
+
+        try {
+            await validateSignatureAPI(startDocument)
+        }
+        catch (e) {
+            expect(e.message).toBe(REQUEST_FAILED)
+            expect(global.fetch).toHaveBeenCalledTimes(1)
+            expect(global.fetch.mock.calls[0][0]).toEqual("/validation/validateSignature")
             expect(global.fetch.mock.calls[0][1].body).toEqual(JSON.stringify(expectedBody))
             expect(global.fetch.mock.calls[0][1].method).toEqual('POST')
 

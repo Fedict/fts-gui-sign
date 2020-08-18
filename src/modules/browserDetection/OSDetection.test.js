@@ -35,4 +35,5 @@ describe("tests of BrowserDetection", () => {
 
         expect(result).toEqual(OS.LINUX)
     })
+
 })
