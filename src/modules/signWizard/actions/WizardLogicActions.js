@@ -326,7 +326,7 @@ export const validateCertificateChain = () => (dispatch, getStore) => {
                 const newCertificate = {
                     ...certificate.certificateSelected,
                     // eIDlink 1.4 + returns readerType in response
-                    readerType: resp.readerType || certificate.certificateSelected.readerType,
+                    readerType: resp.ReaderType || certificate.certificateSelected.readerType,
                     APIBody: createCertificateObject(usedCertificate, resp.certificateChain),
                 }
                 dispatch(validateCertificate(newCertificate))
