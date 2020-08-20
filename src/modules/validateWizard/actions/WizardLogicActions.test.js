@@ -4,13 +4,30 @@ import { setNewFlowId } from "../../controlIds/flowId/FlowIdActions";
 import * as flowIdActions from "../../controlIds/flowId/FlowIdActions";
 import { navigateToStep } from "../../wizard/WizardActions";
 import * as wizardActions from "../../wizard/WizardActions";
-import { resetWizard } from "./WizardLogicActions";
-import { WIZARD_STATE_START } from "../../wizard/WizardConstants";
-
+import { resetWizard, validateDocument } from "./WizardLogicActions";
+import { WIZARD_STATE_START, WIZARD_STATE_RESULT } from "../../wizard/WizardConstants";
+import { validateSignatureAPI } from "../../communication/communication";
+import * as communication from "../../communication/communication";
+import { handleFlowIdError, INCORECT_FLOW_ID } from "../../controlIds/flowId/FlowIdHelpers";
+import * as FlowIdHelpers from "../../controlIds/flowId/FlowIdHelpers";
+import { validationSetIndication, validationSetSubIndication } from "./ValidationActions";
+import * as ValidationActions from "./ValidationActions";
+import { showErrorMessage } from "../../message/actions/MessageActions";
+import * as  MessageActions from "../../message/actions/MessageActions";
+import { ErrorGeneral } from "../../message/MessageConstants";
 
 const ORIGINAL_resetStore = resetStore
 const ORIGINAL_setNewFlowId = setNewFlowId
 const ORIGINAL_navigateToStep = navigateToStep
+const ORIGINAL_validateSignatureAPI = validateSignatureAPI
+const ORIGINAL_handleFlowIdError = handleFlowIdError
+const ORIGINAL_validationSetIndication = validationSetIndication
+const ORIGINAL_validationSetSubIndication = validationSetSubIndication
+const ORIGINAL_showErrorMessage = showErrorMessage
+
+function flushPromises() {
+    return new Promise(resolve => setImmediate(resolve));
+}
 
 describe("WizardLogicActions", () => {
     describe("resetWizard", () => {
@@ -51,12 +68,148 @@ describe("WizardLogicActions", () => {
     })
 
     describe("validateDocument", () => {
-        test("validateDocument calls validateSignatureAPI", () => { })
-        test("validateDocument calls handleFlowIdError", () => { })
-        test("validateDocument success set validation Indications", () => { })
-        test("validateDocument success navigates to WIZARD_STATE_RESULT", () => { })
-        test("signDocument error shows ErrorGeneral", () => { })
-        test("signDocument error INCORECT_FLOW_ID does nothing", () => { })
+        beforeEach(() => {
+            communication.validateSignatureAPI = jest.fn()
+            FlowIdHelpers.handleFlowIdError = jest.fn()
+            ValidationActions.validationSetIndication = jest.fn()
+            ValidationActions.validationSetSubIndication = jest.fn()
+            wizardActions.navigateToStep = jest.fn()
+            MessageActions.showErrorMessage = jest.fn()
+        })
+        afterEach(() => {
+            communication.validateSignatureAPI = ORIGINAL_validateSignatureAPI
+            FlowIdHelpers.handleFlowIdError = ORIGINAL_handleFlowIdError
+            ValidationActions.validationSetIndication = ORIGINAL_validationSetIndication
+            ValidationActions.validationSetSubIndication = ORIGINAL_validationSetSubIndication
+            wizardActions.navigateToStep = ORIGINAL_navigateToStep
+            MessageActions.showErrorMessage = ORIGINAL_showErrorMessage
+        })
+        test("validateDocument calls validateSignatureAPI", async () => {
+
+            communication.validateSignatureAPI = jest.fn(() => { return Promise.resolve() })
+
+            const uploadFile = { file: { type: "xml", name: "filename" } }
+            const controlId = { flowId: 5555 }
+            const startStore = { uploadFile: uploadFile, controlId: controlId }
+
+            const mockDispatch = jest.fn()
+            const mockGetStore = jest.fn(() => { return startStore })
+
+            FlowIdHelpers.handleFlowIdError = jest.fn(() => (val) => { return val })
+
+            validateDocument()(mockDispatch, mockGetStore)
+            await flushPromises()
+
+            expect(communication.validateSignatureAPI).toBeCalledTimes(1)
+            expect(communication.validateSignatureAPI).toHaveBeenCalledWith(uploadFile.file)
+
+        })
+        test("validateDocument calls handleFlowIdError", async () => {
+            communication.validateSignatureAPI = jest.fn(() => { return Promise.resolve() })
+
+            const uploadFile = { file: { type: "xml", name: "filename" } }
+            const controlId = { flowId: 5555 }
+            const startStore = { uploadFile: uploadFile, controlId: controlId }
+
+            const mockDispatch = jest.fn()
+            const mockGetStore = jest.fn(() => { return startStore })
+
+            FlowIdHelpers.handleFlowIdError = jest.fn(() => (val) => { return val })
+
+            validateDocument()(mockDispatch, mockGetStore)
+            await flushPromises()
+
+            expect(FlowIdHelpers.handleFlowIdError).toBeCalledTimes(1)
+            expect(FlowIdHelpers.handleFlowIdError).toHaveBeenCalledWith(controlId.flowId, mockGetStore)
+        })
+        test("validateDocument success set validation Indications", async () => {
+            const response = {
+                indication: "testvalue",
+                subIndication: "testValue"
+            }
+            communication.validateSignatureAPI = jest.fn(() => { return Promise.resolve(response) })
+
+            const uploadFile = { file: { type: "xml", name: "filename" } }
+            const controlId = { flowId: 5555 }
+            const startStore = { uploadFile: uploadFile, controlId: controlId }
+
+            const mockDispatch = jest.fn()
+            const mockGetStore = jest.fn(() => { return startStore })
+
+            FlowIdHelpers.handleFlowIdError = jest.fn(() => (val) => { return val })
+
+            validateDocument()(mockDispatch, mockGetStore)
+            await flushPromises()
+
+            expect(ValidationActions.validationSetIndication).toBeCalledTimes(1)
+            expect(ValidationActions.validationSetIndication).toHaveBeenCalledWith(response.indication)
+            expect(ValidationActions.validationSetSubIndication).toBeCalledTimes(1)
+            expect(ValidationActions.validationSetSubIndication).toHaveBeenCalledWith(response.subIndication)
+        })
+        test("validateDocument success navigates to WIZARD_STATE_RESULT", async () => {
+            const response = {
+                indication: "testvalue",
+                subIndication: "testValue"
+            }
+            communication.validateSignatureAPI = jest.fn(() => { return Promise.resolve(response) })
+
+            const uploadFile = { file: { type: "xml", name: "filename" } }
+            const controlId = { flowId: 5555 }
+            const startStore = { uploadFile: uploadFile, controlId: controlId }
+
+            const mockDispatch = jest.fn()
+            const mockGetStore = jest.fn(() => { return startStore })
+
+            FlowIdHelpers.handleFlowIdError = jest.fn(() => (val) => { return val })
+
+            validateDocument()(mockDispatch, mockGetStore)
+            await flushPromises()
+
+            expect(wizardActions.navigateToStep).toBeCalledTimes(1)
+            expect(wizardActions.navigateToStep).toHaveBeenCalledWith(WIZARD_STATE_RESULT)
+
+        })
+        test("signDocument error shows ErrorGeneral", async () => {
+
+            communication.validateSignatureAPI = jest.fn(() => { return Promise.reject() })
+
+            const uploadFile = { file: { type: "xml", name: "filename" } }
+            const controlId = { flowId: 5555 }
+            const startStore = { uploadFile: uploadFile, controlId: controlId }
+
+            const mockDispatch = jest.fn()
+            const mockGetStore = jest.fn(() => { return startStore })
+
+            FlowIdHelpers.handleFlowIdError = jest.fn(() => (val) => { return val })
+
+            validateDocument()(mockDispatch, mockGetStore)
+            await flushPromises()
+
+            expect(MessageActions.showErrorMessage).toBeCalledTimes(1)
+            expect(MessageActions.showErrorMessage).toHaveBeenCalledWith(ErrorGeneral)
+            expect(ValidationActions.validationSetIndication).toBeCalledTimes(0)
+            expect(ValidationActions.validationSetSubIndication).toBeCalledTimes(0)
+
+        })
+        test("signDocument error INCORECT_FLOW_ID does nothing", async () => {
+            communication.validateSignatureAPI = jest.fn(() => { return Promise.resolve() })
+
+            const uploadFile = { file: { type: "xml", name: "filename" } }
+            const controlId = { flowId: 5555 }
+            const startStore = { uploadFile: uploadFile, controlId: controlId }
+
+            const mockDispatch = jest.fn()
+            const mockGetStore = jest.fn(() => { return startStore })
+
+            FlowIdHelpers.handleFlowIdError = jest.fn(() => (val) => { return Promise.reject(INCORECT_FLOW_ID) })
+
+            validateDocument()(mockDispatch, mockGetStore)
+            await flushPromises()
+
+            expect(MessageActions.showErrorMessage).toBeCalledTimes(0)
+            expect(ValidationActions.validationSetIndication).toBeCalledTimes(0)
+            expect(ValidationActions.validationSetSubIndication).toBeCalledTimes(0)
+         })
     })
 
 })
