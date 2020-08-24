@@ -5,7 +5,6 @@ import {
     WIZARD_STATE_VERSION_CHECK_UPDATE,
     WIZARD_STATE_VERSION_CHECK_INSTALL,
     WIZARD_STATE_CERTIFICATES_LOADING,
-
     WIZARD_STATE_CERTIFICATES_CHOOSE,
     WIZARD_STATE_VALIDATE_LOADING,
     WIZARD_STATE_DIGEST_LOADING,
@@ -42,16 +41,14 @@ import DisplayFile from '../fileUpload/components/DisplayFile/DisplayFile'
 import CertificateValidateChainContainer from './pages/CertificateValidateChainContainer'
 
 export const WizardContainer = ({ wizard, reader, resetWizard }) => {
-
-
     let content = null;
     switch (wizard.state) {
         case WIZARD_STATE_START:
-            if (reader && reader.ok) {
-                content = <UploadFileContainer />
+            if (reader && reader.isOk && reader.isChecked) {
+                content = <UploadFileContainer />;
             }
             else {
-                content = <VersionCheckLoadingContainer />
+                content = <VersionCheckLoadingContainer />;
             }
             break;
         case WIZARD_STATE_UPLOAD:
@@ -107,7 +104,6 @@ export const WizardContainer = ({ wizard, reader, resetWizard }) => {
             break;
     }
 
-
     return (
         <div >
             <div className={"row mx-5 mt-3"}>
@@ -119,16 +115,15 @@ export const WizardContainer = ({ wizard, reader, resetWizard }) => {
                 </div>
             </div>
         </div >)
-
 }
-
 
 const mapStateToProps = (state) => {
     return (state) => ({
         wizard: state.wizard,
-        reader: StaticRange.reader
+        reader: state.reader
     })
 }
+
 const mapDispatchToProps = ({
     resetWizard
 })

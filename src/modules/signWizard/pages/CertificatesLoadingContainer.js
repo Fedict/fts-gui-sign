@@ -13,18 +13,13 @@ export class CertificatesLoadingContainer extends React.Component {
     render() {
         const { resetWizard } = this.props
         return (
-           
                 <CardLoading title={"Retrieving certificates"}
                     hasCancelButton
                     cancelButtonText="Cancel"
                     onClickCancel={() => { resetWizard() }}
-                >
-
-                </CardLoading>
-            
+                />
         )
     }
-
 }
 
 const mapDispatchToProps = ({

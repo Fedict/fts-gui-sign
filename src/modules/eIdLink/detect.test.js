@@ -10,7 +10,7 @@ describe("isChromeExtensionDetected ", () => {
         expect(result).toBe(false)
     })
 
-    test('isChromeExtensionDetected fails', () => {
+    test('isChromeExtensionDetected success', () => {
         Object.defineProperty(window, "EIDChromeExt", ((value) => ({
             get() { return value; },
             set(v) { value = v; }

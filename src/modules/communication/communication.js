@@ -1,17 +1,19 @@
 import { getBase64Data } from "../fileUpload/helpers/FileHelper"
+
 //-----------------------------------------
 //--- constants                         ---
 //-----------------------------------------
 
 /**
- * @const {string} - API url: can be configerd in config.js
+ * @const {string} - API url: can be configured in config.js
  */
 const url = (window && window.configData) ? window.configData.BEurl : ""
 
 /**
- * @const {string} - key to retun when the api request fails
+ * @const {string} - key to return when the api request fails
  */
 const REQUEST_FAILED = "REQUEST_FAILED"
+
 
 //-----------------------------------------
 //--- helpers                           ---
@@ -19,8 +21,8 @@ const REQUEST_FAILED = "REQUEST_FAILED"
 
 /**
  * Function to get the signingProfileId from window.configData based on the MIME-type of the document. 
- * SigningProfileId can be configuerd in config.js.
- * If no signingprofile is configuerd for the MIME-type the configuerd signingProfileId will be returend
+ * SigningProfileId can be configured in config.js.
+ * If no signingprofile is configuerd for the MIME-type, the configuerd signingProfileId will be returend
  * @param {string} documentType - MIME-type of the document
  * @returns {string} SigningProfileId based on the MIME-type of the document or the default SigningProfileId
  */
@@ -28,7 +30,6 @@ export const getsigningProfileId = (documentType) => {
     if (window && window.configData && window.configData.signingProfileIds && window.configData.signingProfileIds[documentType]) {
         return window.configData.signingProfileIds[documentType]
     }
-
     return (window && window.configData) ? window.configData.defaultSigningProfileId : ""
 }
 
@@ -50,11 +51,6 @@ export const createBody = (certificateBody, documentName, documentBase64, docume
         "clientSignatureParameters": {
             "certificateChain": certificateBody.certificateChain,
             "detachedContents": [
-                // {
-                //     "bytes": "string",
-                //     "digestAlgorithm": "SHA1",
-                //     "name": "string"
-                // }
             ],
             "signingCertificate": certificateBody.certificate,
             "signingDate": "2020-04-06T09:45:44"
@@ -62,10 +58,8 @@ export const createBody = (certificateBody, documentName, documentBase64, docume
         "signingProfileId": getsigningProfileId(documentType),
         "toSignDocument": {
             "bytes": documentBase64,
-            // "digestAlgorithm": "SHA256",
             "name": documentName
         }
-
     }
 }
 
@@ -87,7 +81,6 @@ export const validateCertificatesAPI = (certificateBody) => {
             body: JSON.stringify(certificateBody),
             headers: {
                 'Content-Type': 'application/json'
-
             },
         }
     )
@@ -101,17 +94,15 @@ export const validateCertificatesAPI = (certificateBody) => {
             catch{
                 return response.text()
             }
-
         })
 }
-
 
 /**
  * API request to get the DataToSign
  * @param {Object} certificateBody - object that represents the certificate
  * @param {Object} document - document to be signed
  * 
- * @returns {Promise} Promis that resolves the result of the API request
+ * @returns {Promise} Promise that resolves the result of the API request
  */
 export const getDataToSignAPI = async (certificateBody, document) => {
 
@@ -125,7 +116,6 @@ export const getDataToSignAPI = async (certificateBody, document) => {
             body: JSON.stringify(body),
             headers: {
                 'Content-Type': 'application/json'
-
             },
         }
     )
@@ -133,18 +123,14 @@ export const getDataToSignAPI = async (certificateBody, document) => {
             if (!response.ok) {
                 throw new Error(REQUEST_FAILED)
             }
-
             try {
                 return response.json()
             }
             catch{
                 return response.text()
             }
-
         })
-
 }
-
 
 /**
  * API request to sign a document
@@ -152,7 +138,6 @@ export const getDataToSignAPI = async (certificateBody, document) => {
  * @param {Object} document - document to be signed
  * @param {string} signature - signature value used to sign th document
  */
-
 export const signDocumentAPI = async (certificateBody, document, signature) => {
     const documentB64 = await getBase64Data(document)
 
@@ -166,23 +151,19 @@ export const signDocumentAPI = async (certificateBody, document, signature) => {
         body: JSON.stringify(body),
         headers: {
             'Content-Type': 'application/json'
-
         },
     })
         .then((response) => {
             if (!response.ok) {
                 throw new Error(REQUEST_FAILED)
             }
-
             try {
                 return response.json()
             }
             catch{
                 return response.text()
             }
-
         })
-
 }
 
 /**
@@ -193,11 +174,8 @@ export const validateSignatureAPI = async (document) => {
     const documentB64 = await getBase64Data(document)
     const body = {
         "signedDocument": {
-
             "bytes": documentB64,
-            // "digestAlgorithm": "SHA256",
             "name": document.name
-
         }
     }
 
@@ -213,14 +191,12 @@ export const validateSignatureAPI = async (document) => {
             if (!response.ok) {
                 throw new Error(REQUEST_FAILED)
             }
-
             try {
                 return response.json()
             }
             catch{
                 return response.text()
             }
-
         })
 }
 

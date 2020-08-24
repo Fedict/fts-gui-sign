@@ -37,40 +37,10 @@ describe("unit tests for createDefaultStrategy", () => {
                 strategy.getVersion(null, null, null, null, onMock3)
 
             })
-
-
         })
-    })
-
-
-    describe("tests for getInfo", () => {
-        
-        test("createDefaultStrategy returns function getInfo", () => {
-            const result = createDefaultStrategy()
-
-            expect(result).toBeTruthy();
-            expect(result.getInfo).toBeTruthy();
-            expect(typeof result.getInfo).toBe("function")
-        })
-
-        test("getInfo returns rejected promise", async () => {
-            expect.assertions(4)
-            const result = createDefaultStrategy()
-
-            expect(result).toBeTruthy();
-            expect(result.getInfo).toBeTruthy();
-            expect(typeof result.getInfo).toBe("function")
-
-            await result.getInfo().catch(e =>{
-               expect(e).toBe("NO_EXTENSION_ACTIVE")
-                
-            })
-        })
-
     })
 
     describe("tests for getCertificate", () => {
-     
 
         test("createDefaultStrategy returns function getCertificate", () => {
             const result = createDefaultStrategy()
@@ -81,23 +51,15 @@ describe("unit tests for createDefaultStrategy", () => {
         })
 
         test("getCertificate returns rejected promise", async () => {
-            expect.assertions(4)
+            expect.assertions(1)
             const result = createDefaultStrategy()
 
             expect(result).toBeTruthy();
-            expect(result.getInfo).toBeTruthy();
-            expect(typeof result.getInfo).toBe("function")
 
-            await result.getInfo().catch(e =>{
-               expect(e).toBe("NO_EXTENSION_ACTIVE")
-                
-            })
         })
-
     })
 
     describe("tests for getCertificateChain", () => {
-        
 
         test("createDefaultStrategy returns function getCertificateChain", () => {
             const result = createDefaultStrategy()
@@ -115,16 +77,14 @@ describe("unit tests for createDefaultStrategy", () => {
             expect(result.getCertificateChain).toBeTruthy();
             expect(typeof result.getCertificateChain).toBe("function")
 
-            await result.getCertificateChain().catch(e =>{
-               expect(e).toBe("NO_EXTENSION_ACTIVE")
-                
+            await result.getCertificateChain().catch(e => {
+                expect(e).toBe("NO_EXTENSION_ACTIVE")
+
             })
         })
-
     })
 
     describe("tests for sign", () => {
-        
 
         test("createDefaultStrategy returns function sign", () => {
             const result = createDefaultStrategy()
@@ -142,11 +102,10 @@ describe("unit tests for createDefaultStrategy", () => {
             expect(result.sign).toBeTruthy();
             expect(typeof result.sign).toBe("function")
 
-            await result.sign().catch(e =>{
-               expect(e).toBe("NO_EXTENSION_ACTIVE")
-                
+            await result.sign().catch(e => {
+                expect(e).toBe("NO_EXTENSION_ACTIVE")
+
             })
         })
-
     })
 })

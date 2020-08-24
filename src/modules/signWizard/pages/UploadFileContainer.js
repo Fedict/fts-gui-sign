@@ -29,7 +29,6 @@ export class UploadFileContainer extends React.Component {
 
     render() {
         return (
-
             <CardContainer
                 title={"Digital sign a document"}
                 hasNextButton
@@ -79,21 +78,15 @@ export class UploadFileContainer extends React.Component {
                     </div>
                 </div>
             </CardContainer>
-
-
         )
     }
 }
 
-const mapStateToProps = (state) => {
-    return (state) => ({
-        wizard: state.wizard
-    })
-}
+
 const mapDispatchToProps = ({
     uploadFile,
     navigateToStep,
     displayFile
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(UploadFileContainer)
+export default connect(null, mapDispatchToProps)(UploadFileContainer)

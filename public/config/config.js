@@ -1,10 +1,11 @@
 window.configData = {
     eIDLinkMinimumVersion: "1.1",
     eIDLinkExtensionUrls: {
-        chrome: "https://chrome.google.com/webstore/detail/eazylink/pencgnkbgaekikmiahiaakjdgaibiipp",
-        edge: "https://chrome.google.com/webstore/detail/eazylink/pencgnkbgaekikmiahiaakjdgaibiipp",
+        chrome: "https://chrome.google.com/webstore/detail/eidlink/pencgnkbgaekikmiahiaakjdgaibiipp",
+        edge: "https://chrome.google.com/webstore/detail/eidlink/pencgnkbgaekikmiahiaakjdgaibiipp",
         firefox: "https://eid.static.bosa.fgov.be/eidlink-fx.xpi",
-        safari: ""
+        safari: "https://eid.static.bosa.fgov.be/Bosa%20eID%20App%20Extension.dmg",
+        IE: "https://eid.static.bosa.fgov.be/eidlink.msi"
     },
 
     eIDLinkUrls: {

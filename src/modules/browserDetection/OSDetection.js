@@ -10,7 +10,7 @@ export const OS = {
 }
 
 /**
- * Function to determine the used os based on navigator.appVersion string.
+ * Function to determine the used OS based on navigator.appVersion string.
  * 
  * @return {string} Returns a string with a value out of os enum
  */
@@ -30,15 +30,3 @@ export const getOS = () => {
     return OS.OTHER
 }
 
-/**
- * Function to test if the os is compatible
- * 
- * @return {boolean} boolean that represents if os is supported 
- */
-export const OSIsAccepted = () => {
-    const usedOS = getOS;
-    if (usedOS === OS.OTHER) {
-        return false
-    }
-    return true
-}

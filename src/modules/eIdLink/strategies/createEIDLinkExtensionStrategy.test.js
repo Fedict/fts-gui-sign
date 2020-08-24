@@ -41,8 +41,6 @@ describe("unit tests for createEIDLinExtensionStrategy", () => {
                 strategy.getVersion(null, onMock3, null, null)
 
             })
-
-
         })
 
         describe("onNotInstalled", () => {
@@ -72,8 +70,6 @@ describe("unit tests for createEIDLinExtensionStrategy", () => {
                 strategy.getVersion(null, null, onMock3, null)
 
             })
-
-
         })
 
         describe("onNeedsUpdate", () => {
@@ -103,23 +99,7 @@ describe("unit tests for createEIDLinExtensionStrategy", () => {
                 strategy.getVersion(null, null, null, onMock3)
 
             })
-
-
         })
-    })
-
-
-    describe("tests for getInfo", () => {
-        let api = { getInfo: () => { } }
-
-        test("createEIDLinkExtensionStrategy returns function getInfo", () => {
-            const result = createEIDLinkExtensionStrategy(api)
-
-            expect(result).toBeTruthy();
-            expect(result.getInfo).toBeTruthy();
-            expect(typeof result.getInfo).toBe("function")
-        })
-
     })
 
     describe("tests for getCertificate", () => {
@@ -132,7 +112,6 @@ describe("unit tests for createEIDLinExtensionStrategy", () => {
             expect(result.getCertificate).toBeTruthy();
             expect(typeof result.getCertificate).toBe("function")
         })
-
     })
 
     describe("tests for getCertificateChain", () => {
@@ -145,7 +124,6 @@ describe("unit tests for createEIDLinExtensionStrategy", () => {
             expect(result.getCertificateChain).toBeTruthy();
             expect(typeof result.getCertificateChain).toBe("function")
         })
-
     })
 
     describe("tests for sign", () => {
@@ -158,6 +136,5 @@ describe("unit tests for createEIDLinExtensionStrategy", () => {
             expect(result.sign).toBeTruthy();
             expect(typeof result.sign).toBe("function")
         })
-
     })
 })

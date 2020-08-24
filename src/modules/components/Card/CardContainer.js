@@ -1,7 +1,6 @@
 import React from "react"
 import PropTypes from 'prop-types';
 
-
 /**
  * Basic card with buttons
  * @param {object} props 
@@ -28,7 +27,6 @@ export const CardContainer = (
         nextButtonIsDisabled
     }
 ) => {
-
     return (
         <div className="col col-12 mx-auto align-middle">
             <div className="card " >

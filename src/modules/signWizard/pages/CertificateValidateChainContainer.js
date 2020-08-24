@@ -9,18 +9,13 @@ export class CertificateValidateChainContainer extends React.Component {
     }
 
     render() {
-
         const { resetWizard } = this.props
         return (
-           
                 <CardLoading title={"Validating certificates"}
                     hasCancelButton
                     cancelButtonText="Cancel"
                     onClickCancel={() => { resetWizard() }}
-                >
-
-                </CardLoading>
-          
+                />
         )
     }
 }

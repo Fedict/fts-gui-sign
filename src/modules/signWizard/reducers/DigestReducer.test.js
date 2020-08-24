@@ -3,8 +3,11 @@ import { DIGEST_SET_DIGEST } from "../actions/DigestActions"
 import { STORE_RESET } from "../../../store/storeActions"
 
 describe("DigestReducer", () => {
+
     describe("reducer", () => {
+
         describe("DIGEST_SET_DIGEST", () => {
+
             test("action with type DIGEST_SET_DIGEST changes digest object", () => {
                 const startState = { ...initialState }
                 const payload = {
@@ -21,6 +24,7 @@ describe("DigestReducer", () => {
         })
 
         describe("STORE_RESET", () => {
+
             test("action with type STORE_RESET resets store to initial value", () => {
                 const startState = {
                     digest: "teststring",
@@ -33,7 +37,5 @@ describe("DigestReducer", () => {
                 expect(result).toEqual(initialState)
              })
         })
-
-
     })
 })

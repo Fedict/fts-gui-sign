@@ -1,13 +1,36 @@
+import 'react-app-polyfill/ie9';
+import 'react-app-polyfill/stable'
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import configureStore from './store/store';
 import { Provider } from 'react-redux';
+import { getBrowser, browser } from './modules/browserDetection/BrowserDetection';
 
 const store = configureStore();
+const browsertype = getBrowser()
+const app = (
+    <Provider store={store} >
+        {
+            (browsertype && browsertype === browser.IE) ?
+                <object
+                    id="DemoActiveX"
+                    style={{ display: "none" }}
+                    classID="clsid:B08A638E-66C3-4586-823A-5B89A0301920"
+                    height="0"
+                    width="0"
+                    role='none'
+                >
+                     
+                </object>
 
-ReactDOM.render(<Provider store={store} ><App /></Provider>, document.getElementById('root'));
+                : null
+        }
+
+        <App />
+    </Provider>)
+ReactDOM.render(app, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

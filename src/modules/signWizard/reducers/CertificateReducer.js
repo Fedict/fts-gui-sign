@@ -5,12 +5,10 @@ import {
 } from "../actions/CertificateActions"
 import { STORE_RESET } from "../../../store/storeActions"
 
-
 export const initialState = {
     certificateList: [],
     certificateSelected: null,
 }
-
 
 const CertificateReducer = (state = initialState, action) => {
     switch (action.type) {

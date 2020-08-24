@@ -12,26 +12,18 @@ export class ValidateLoadingContainer extends React.Component {
 
         const { resetWizard } = this.props
         return (
-          
                 <CardLoading title={"Validating document"}
                     hasCancelButton
                     cancelButtonText="Cancel"
                     onClickCancel={() => { resetWizard() }}
-                >
-
-                </CardLoading>
-        
+               />
         )
     }
 }
-const mapStateToProps = (state) => {
-    return (state) => ({
 
-    })
-}
 const mapDispatchToProps = ({
     validateDocument,
      resetWizard
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(ValidateLoadingContainer)
+export default connect(null, mapDispatchToProps)(ValidateLoadingContainer)

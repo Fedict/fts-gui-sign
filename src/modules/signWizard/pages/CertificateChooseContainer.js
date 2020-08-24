@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { CardContainer } from '../../components/Card/CardContainer'
 import { CertificateSelect } from '../../components/CertificateSelect/CertificateSelect'
-import {  WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN } from '../../wizard/WizardConstants'
+import { WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN } from '../../wizard/WizardConstants'
 import { navigateToStep } from '../../wizard/WizardActions'
 import { selectCertificate } from "../actions/CertificateActions"
 import { resetWizard } from '../actions/WizardLogicActions'
@@ -20,34 +20,31 @@ export class CertificateChooseContainer extends React.Component {
         const { navigateToStep } = this.props
         if (navigateToStep) { navigateToStep(WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN) }
     }
-    
+
     render() {
 
         const { certificate, resetWizard } = this.props
         if (certificate) {
             return (
-                
-                    <CardContainer
-                        title="Select a certificate"
-                        hasCancelButton
-                        cancelButtonText="Cancel"
-                        onClickCancel={() => { resetWizard() }}
-                        hasNextButton
-                        nextButtonText="Select"
-                        onClickNext={() => { this.navigateToNextStep() }}
-                        nextButtonIsDisabled={(certificate && !certificate.certificateSelected)}
-                    >
-                        <p>Multiple valid certificates are found. Please select the certificate you want to use.</p>
-                        <CertificateSelect
-                            id="certificate_select"
-                            onChange={(cert) => { this.onChange(cert) }}
-                            certificates={certificate.certificateList} />
-                    </CardContainer>
-                
+                <CardContainer
+                    title="Select a certificate"
+                    hasCancelButton
+                    cancelButtonText="Cancel"
+                    onClickCancel={() => { resetWizard() }}
+                    hasNextButton
+                    nextButtonText="Select"
+                    onClickNext={() => { this.navigateToNextStep() }}
+                    nextButtonIsDisabled={(certificate && !certificate.certificateSelected)}
+                >
+                    <p>Multiple valid certificates are found. Please select the certificate you want to use.</p>
+                    <CertificateSelect
+                        id="certificate_select"
+                        onChange={(cert) => { this.onChange(cert) }}
+                        certificates={certificate.certificateList} />
+                </CardContainer>
             )
         }
         else {
-            //TODO return error message
             return null
         }
     }

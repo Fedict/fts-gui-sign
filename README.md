@@ -33,7 +33,7 @@ window.configData = {
     BEurl: "https://validate.ta.fts.bosa.belgium.be/signandvalidation", // URL to the backend
 
     eIDLinkExtensionUrls: { //list of url of the instalation files for the eIDlink extension
-        chrome: "https://chrome.google.com/webstore/detail/eazylink/pencgnkbgaekikmiahiaakjdgaibiipp",
+        chrome: "https://chrome.google.com/webstore/detail/eidlink/pencgnkbgaekikmiahiaakjdgaibiipp",
         edge: "",
         firefox: "",
         safari: ""

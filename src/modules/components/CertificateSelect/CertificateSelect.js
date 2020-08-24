@@ -1,7 +1,7 @@
 import React from 'react'
 
 /**
- * Select componnent for selecting a certificate
+ * Select component for selecting a certificate
  * Props
  * - {[object]} certificates - array of certificates
  * - {object} certificates[].readerName - name of the eID card reader
@@ -18,6 +18,7 @@ export class CertificateSelect extends React.Component {
             selectedIndex: null
         }
     }
+
     onSelect(index) {
         const { certificates, onChange } = this.props;
 
@@ -28,6 +29,7 @@ export class CertificateSelect extends React.Component {
             onChange(selectedCertificate)
         }
     }
+    
     render() {
         const { certificates, id } = this.props
         const { selectedIndex } = this.state

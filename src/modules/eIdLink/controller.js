@@ -1,15 +1,17 @@
-import { isChromeExtensionDetected } from "./detect";
-import { getEIDLinkExtensionStrategy, getDefaultStrategy } from "./strategies/index.js";
+import { isChromeExtensionDetected, isActiveXControlDetected } from "./detect";
+import { getEIDLinkExtensionStrategy, getDefaultStrategy, getActiveXStrategy } from "./strategies/index.js";
 
 export const controller = (() => {
 
     let strategy
 
-
     const initSignStrategy = () => {
         if (isChromeExtensionDetected()) {
             console.log("ChromeExt - Chrome extension detected");
             return getEIDLinkExtensionStrategy();
+        }
+        if (isActiveXControlDetected()) {
+            return getActiveXStrategy()
         }
         return getDefaultStrategy()
     }
@@ -17,7 +19,6 @@ export const controller = (() => {
     /**
      * function that returns a object with the folowing functions :
     * - getVersion
-    * - getInfo
     * - getCertificate
     * - getCertificateChain
     * - sign
@@ -38,8 +39,11 @@ export const controller = (() => {
         strategy = initSignStrategy()
         return strategy
     }
+
     return {
         getInstance,
         getNewInstance
     }
+    
 })()
+

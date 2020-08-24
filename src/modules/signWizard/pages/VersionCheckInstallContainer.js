@@ -6,6 +6,7 @@ import { WIZARD_STATE_VERSION_CHECK_LOADING } from '../../wizard/WizardConstants
 import { resetWizard, checkVersion } from '../actions/WizardLogicActions'
 import { OS, getOS } from "../../browserDetection/OSDetection"
 import { EIDLinkLinuxInstall } from '../../components/EIDLinkLinuxInstall/EIDLinkLinuxInstall'
+
 export class VersionCheckInstallContainer extends React.Component {
 
     constructor(props) {
@@ -23,36 +24,32 @@ export class VersionCheckInstallContainer extends React.Component {
         }, 5000);
         this.setState({ intervalId: id })
     }
+
     componentWillUnmount() {
         const id = this.state.intervalId
         if (id) {
             clearInterval(id)
         }
     }
-    //TODO loop to check if correct version is installed
+
     handleButtonNextClick() {
         this.props.navigateToStep(WIZARD_STATE_VERSION_CHECK_LOADING)
     }
-
 
     handleOnClick() {
         const usedOs = getOS()
         if (usedOs === OS.WINDOWS && window.configData && window.configData.eIDLinkUrls && window.configData.eIDLinkUrls.windows) {
             window.open(window.configData.eIDLinkUrls.windows + '?dt=' + new Date().getTime(), "_blank")
-
         }
         if (usedOs === OS.MACOS && window.configData && window.configData.eIDLinkUrls && window.configData.eIDLinkUrls.macOs) {
             window.open(window.configData.eIDLinkUrls.macOs + '?dt=' + new Date().getTime(), "_blank")
-
         }
-
     }
 
     render() {
         const { resetWizard } = this.props
         const usedOs = getOS()
         return (
-
             <CardContainer title={"Install eIDLink"}
                 onClickCancel={() => { resetWizard() }}
                 hasNextButton
@@ -67,10 +64,7 @@ export class VersionCheckInstallContainer extends React.Component {
                         ? <EIDLinkLinuxInstall linuxDistributions={linuxDistributions} />
                         : <button className="btn btn-primary" id="button_install_eID" onClick={() => { this.handleOnClick() }}>Download and install eIDLink</button>
                 }
-
-
             </CardContainer>
-
         )
     }
 }

@@ -5,7 +5,6 @@ import { navigateToStep } from "../../wizard/WizardActions"
 import { resetWizard } from '../actions/WizardLogicActions'
 import { getBrowser, browser } from '../../browserDetection/BrowserDetection'
 
-
 export class VersionCheckInstallExtensionContainer extends React.Component {
 
     handleButtonNextClick() {
@@ -24,12 +23,18 @@ export class VersionCheckInstallExtensionContainer extends React.Component {
             }
             if ((UsedBrowser === browser.FIREFOX) && window.configData.eIDLinkExtensionUrls.firefox) {
                 url = window.configData.eIDLinkExtensionUrls.firefox
-                //TODO remove this when firefox url links to store page
                 window.open(url + '?dt=' + new Date().getTime(), "_self")
                 url = ""
             }
             if ((UsedBrowser === browser.SAFARI) && window.configData.eIDLinkExtensionUrls.safari) {
                 url = window.configData.eIDLinkExtensionUrls.safari
+                window.open(url + '?dt=' + new Date().getTime(), "_self")
+                url = ""
+            }
+            if ((UsedBrowser === browser.IE) && window.configData.eIDLinkExtensionUrls.IE) {
+                url = window.configData.eIDLinkExtensionUrls.IE
+                window.open(url + '?dt=' + new Date().getTime(), "_self")
+                url = ""
             }
 
         }
@@ -37,14 +42,13 @@ export class VersionCheckInstallExtensionContainer extends React.Component {
         if (url) {
             window.open(url + '?dt=' + new Date().getTime(), "_blank")
         }
-        //return correct link for browser
     }
+
     render() {
         const usedBrowser = getBrowser()
         const { resetWizard } = this.props
 
         return (
-
             <CardContainer title={"Install eIDLink extension"}
                 onClickCancel={() => { resetWizard() }}
                 hasNextButton
@@ -53,7 +57,6 @@ export class VersionCheckInstallExtensionContainer extends React.Component {
             >
                 <p>No eIDLink extension found.</p>
                 <p>Please install the eIDLink extension to use this application.</p>
-                <p>If you click the button, you will be redirected to the install page of the eID extension .</p>
                 <p>After you installed the eIDLink extension you can come back to this page an push the "I have installed eIDLink Extension" button.</p>
 
                 {(usedBrowser === browser.CHROME || usedBrowser === browser.EDGE)
@@ -69,9 +72,7 @@ export class VersionCheckInstallExtensionContainer extends React.Component {
 
                             "Install eIDLink extension"}
                     </button>)}
-
             </CardContainer>
-
         )
     }
 }

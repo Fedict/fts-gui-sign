@@ -4,13 +4,12 @@ import {
     withRouter
 } from "react-router-dom";
 import { connect } from 'react-redux';
-
-import { navigateToStep, setNewFlowId } from "../wizard/WizardActions"
+import { navigateToStep } from "../wizard/WizardActions"
 import { resetStore } from "../../store/storeActions"
 import { WIZARD_STATE_START } from '../wizard/WizardConstants';
+import { setNewFlowId } from "../controlIds/flowId/FlowIdActions"
 
-
-export const Navbar = ({ location, resetStore, navigateToStep, setNewFlowId }) => {
+export const Navbar = ({ location, resetStore, navigateToStep, setNewFlowId, history }) => {
 
     const links = [
         {
@@ -37,17 +36,21 @@ export const Navbar = ({ location, resetStore, navigateToStep, setNewFlowId }) =
             </Link>
         )
     })
+
     return (
         <header className="">
             <nav className="navbar navbar-expand navbar-light sticky-top">
-                <a href="/#" className="navbar-brand">
-                    <img src="/img/logo-bosa.png" alt="BOSA"
+                <a href="/#" className="navbar-brand" onClick={() => {
+                    resetStore();
+                    setNewFlowId();
+                    history.push("/")
+                }}>
+                    <img src="/img/logo.png" alt="BOSA"
                         style={{ width: "188px", height: "54px" }} />
                 </a>
                 <div className="navbar-nav">
                     {links}
                 </div>
-
             </nav>
         </header>
     )
@@ -58,10 +61,12 @@ const mapStateToProps = (state) => {
 
     })
 }
+
 const mapDispatchToProps = ({
     navigateToStep,
     resetStore,
-    setNewFlowId
+    setNewFlowId,
+
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Navbar))

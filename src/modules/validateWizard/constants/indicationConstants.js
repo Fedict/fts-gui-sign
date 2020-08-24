@@ -15,11 +15,6 @@ export const indication = {
         className: "alert-warning",
         message: "There was insufficient information to determine if the electronic signature is valid"
     },
-
-    //    PASSED: {},
-    //    FAILED: {},
-    //    NO_SIGNATURE_FOUND: {}
-
 }
 
 export const indicationKeys = Object.keys(indication)

@@ -1,12 +1,10 @@
 import { VALIDATION_SET_INDICATION, VALIDATION_SET_SUBINDICATION } from "../actions/ValidationActions"
-
-//TODO reset Store
+import { STORE_RESET } from "../../../store/storeActions"
 
 const initialState = {
     indication: "",
     subIndication: ""
 }
-
 
 const ValidationReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -20,6 +18,8 @@ const ValidationReducer = (state = initialState, action) => {
                 ...state,
                 subIndication: action.payload
             }
+        case STORE_RESET:
+            return initialState
         default:
             return state
     }

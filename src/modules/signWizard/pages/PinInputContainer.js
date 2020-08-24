@@ -5,6 +5,7 @@ import { CardContainer } from '../../components/Card/CardContainer';
 import { sign, resetWizard } from '../actions/WizardLogicActions'
 import { navigateToStep } from '../../wizard/WizardActions';
 import { WIZARD_STATE_SIGNING_PRESIGN_LOADING } from '../../wizard/WizardConstants';
+
 export class PinInputContainer extends React.Component {
 
     constructor(props) {
@@ -17,11 +18,11 @@ export class PinInputContainer extends React.Component {
         this.onKeyUp = this.onKeyUp.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
     }
-    componentDidMount() {
-        // document.getElementById('input_code').focus()
-        document.addEventListener("keyup", this.onKeyUp)
 
+    componentDidMount() {
+        document.addEventListener("keyup", this.onKeyUp)
     }
+
     componentWillUnmount() {
         document.removeEventListener("keyup", this.onKeyUp)
     }
@@ -32,7 +33,6 @@ export class PinInputContainer extends React.Component {
             if (pincode.length >= 4) {
                 this.handleSubmit()
             }
-
         }
         else {
             if (e.key === 'Backspace') {
@@ -45,13 +45,12 @@ export class PinInputContainer extends React.Component {
                     pincode = pincode + e.key
                     this.setState({ pin: pincode })
                 }
-
             }
             else {
             }
         }
-
     }
+
     onchange(e) {
         const pin = e.target.value
         this.setState({ pin: pin })
@@ -64,7 +63,7 @@ export class PinInputContainer extends React.Component {
     }
 
     render() {
-        const { resetWizard, pinError } = this.props
+        const { resetWizard, pinError, certificate } = this.props
         const { pin } = this.state
         const pinstring = "*".repeat(pin.length)
         return (
@@ -80,7 +79,11 @@ export class PinInputContainer extends React.Component {
                 nextButtonIsDisabled={pin.length < 4}>
 
                 <div className="form-group">
-                    <p>Geef uw pincode in</p>
+                    <p>Enter the PIN
+                        {(certificate && certificate.certificateSelected && certificate.certificateSelected.commonName)
+                            ? " for " + certificate.certificateSelected.commonName
+                            : ""}
+                    </p>
                     {(pinError && pinError.message)
                         ? (
                             <div className="text-center">
@@ -100,23 +103,21 @@ export class PinInputContainer extends React.Component {
                     </div>
                 </div>
             </CardContainer>
-
-
         )
     }
 }
 
 const mapStateToProps = (state) => {
     return (state) => ({
-        pinError: state.pinError
+        pinError: state.pinError,
+        certificate: state.certificate
     })
 }
+
 const mapDispatchToProps = ({
     sign,
     resetWizard,
     navigateToStep
-
-
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(PinInputContainer)

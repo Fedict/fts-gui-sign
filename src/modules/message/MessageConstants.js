@@ -38,6 +38,7 @@ export const ErrorNotSupported = {
                     <li>Chrome</li>
                     <li>Edge (based on Chromium)</li>
                     <li>Firefox</li>
+                    <li>Opera (based on Chromium)</li>
                 </ul>
             </div>
         </div>),
