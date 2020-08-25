@@ -31,7 +31,7 @@ export class ResultContainer extends React.Component {
             const indicationUsed = indication[validation.indication]
             result = (
                 <CardContainer
-                    title={"result of the validation"}
+                    title={"Result of the validation"}
                     hasNextButton
                     nextButtonText="Validate next document"
                     onClickNext={() => { resetWizard() }}
