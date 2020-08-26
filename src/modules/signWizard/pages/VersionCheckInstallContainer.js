@@ -20,6 +20,7 @@ export class VersionCheckInstallContainer extends React.Component {
     componentDidMount() {
         const { checkVersion } = this.props
         const id = setInterval(() => {
+            
             checkVersion()
         }, 5000);
         this.setState({ intervalId: id })

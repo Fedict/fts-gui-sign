@@ -6,6 +6,7 @@ export const browser = {
     FIREFOX: "FIREFOX",
     IE: "INTERNET EXPLORER",
     EDGE: "EDGE",
+    CHROMIUMEDGE: "CHROMIUMEDGE",
     SAFARI: "SAFARI",
     OPERA: "OPERA",
     OTHERS: "OTHERS"
@@ -17,12 +18,9 @@ export const browser = {
  * @return {string} Returns a string with a value out of browser enum
  */
 export const getBrowser = () => {
-    // CHROME
-    if (navigator.userAgent.indexOf("Chrome") !== -1) {
-        return (browser.CHROME)
-    }
+
     // FIREFOX
-    else if (navigator.userAgent.indexOf("Firefox") !== -1) {
+    if (navigator.userAgent.indexOf("Firefox") !== -1) {
         return (browser.FIREFOX)
     }
     // INTERNET EXPLORER
@@ -36,14 +34,24 @@ export const getBrowser = () => {
     else if (navigator.userAgent.indexOf("Edge") !== -1) {
         return (browser.EDGE)
     }
+    else if (navigator.userAgent.indexOf("edg") !== -1) {
+        return (browser.CHROMIUMEDGE)
+    }
+    // CHROME
+    else if (navigator.userAgent.indexOf("Chrome") !== -1) {
+        return (browser.CHROME)
+    }
+
     // SAFARI
     else if (navigator.userAgent.indexOf("Safari") !== -1) {
         return (browser.SAFARI)
     }
+
     // OPERA
     else if (navigator.userAgent.indexOf("Opera") !== -1) {
         return (browser.OPERA)
     }
+
     // OTHERS
     else {
         return (browser.OTHERS)
@@ -59,8 +67,9 @@ export const browserIsAccepted = () => {
 
     const usedBrowser = getBrowser()
 
+    console.log(usedBrowser)
     if (usedBrowser !== browser.IE
-        && usedBrowser !== browser.EDGE
+        && usedBrowser !== browser.CHROMIUMEDGE
         && usedBrowser !== browser.FIREFOX
         && usedBrowser !== browser.SAFARI
         && usedBrowser !== browser.CHROME) {
