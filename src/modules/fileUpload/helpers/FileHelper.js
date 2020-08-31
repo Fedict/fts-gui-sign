@@ -65,3 +65,29 @@ export const getBlobFromBase64 = (base64, contentType = '', sliceSize = 512) => 
     const blob = new Blob(byteArrays, { type: contentType });
     return blob;
 }
+
+export const GetDataUrlFromFile = (document) => {
+    return new Promise((resolve, reject) => {
+        let reader = new FileReader();
+
+        reader.onloadend = () => {
+            resolve(reader.result)
+        }
+
+        reader.onerror = () => {
+            reject()
+        }
+
+        reader.readAsDataURL(document)
+    })
+}
+
+export const getBinaryFromDataURI = (dataURI) => {
+    console.log(dataURI)
+    if (dataURI) {
+        var base64Index = dataURI.indexOf(';base64,') + ';base64,'.length;
+        var base64 = dataURI.substring(base64Index);
+        var raw = window.atob(base64);
+        return raw
+    }
+}
