@@ -107,3 +107,22 @@ For the Latest versions of the npm dependencies, reference the package.json
 
 ## pdf viewer in IE
  pdf viewer in IE is made by using pdf.js (https://github.com/mozilla/pdf.js).
+
+## react dev tools disabled
+there is a code block in public/index.html that deactivates the react devtools 
+
+```HTML
+ <script>
+    //block react dev tools
+    if (typeof window.__REACT_DEVTOOLS_GLOBAL_HOOK__ === 'object') {
+      __REACT_DEVTOOLS_GLOBAL_HOOK__.inject = function () { };
+    }
+  </script>
+```
+
+## redux dev tools 
+redux dev tools are enabled in dev and disabled in production. 
+configuration of the devtools are found in /src/store/store.js
+``` JS
+ const composeEnhancers = (process.env.NODE_ENV !== "production") ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose : compose
+```
