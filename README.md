@@ -7,14 +7,23 @@ There are two separate commands for building the application. One builds the dev
 ```BASH
 npm run build
 ```
+### Running build locally without install
+
+```BASH
+npx serve build -l 3000
+```
 
 ## Running appication in developer mode
 
 There is a command to run the application on a development server. This server runs on default localhost:3000. 
+To test codechanges in live dev environment
 
 ```BASH
 npm run start
 ```
+
+
+
 ## Unit Tests
 
 It is possible to activate the unit tests using the following command
