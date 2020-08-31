@@ -83,7 +83,6 @@ export const GetDataUrlFromFile = (document) => {
 }
 
 export const getBinaryFromDataURI = (dataURI) => {
-    console.log(dataURI)
     if (dataURI) {
         var base64Index = dataURI.indexOf(';base64,') + ';base64,'.length;
         var base64 = dataURI.substring(base64Index);

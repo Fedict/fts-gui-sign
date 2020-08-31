@@ -322,7 +322,6 @@ export const validateCertificateChain = () => (dispatch, getStore) => {
             .then(handleFlowIdError(flowId, getStore))
             .then(handleRequestIdError(requestId, dispatch, getStore))
             .then((resp) => {
-                console.log("validateCertificateChain", JSON.stringify(resp))
                 const newCertificate = {
                     ...certificate.certificateSelected,
                     // eIDlink 1.4 + returns readerType in response

@@ -24,11 +24,10 @@ export class PDFViewerInternetExplorer extends React.Component {
         const data = uploadFile.displayFile
 
         this.backend.init(data.displayUrl, element, pageCounter)
-        // pdfjsLib.getDocument(fileData).promise.then(pdf => {
-        //     const pdfInstance = pdf;
-        //     const totalPagesCount = pdf.numPages;
-        //     console.log("pages", totalPagesCount)
-        // });
+    }
+
+    componentWillUnmount() {
+        this.backend.remove()
     }
 
     handleOnClickNext() {
@@ -42,12 +41,12 @@ export class PDFViewerInternetExplorer extends React.Component {
     render() {
         return (
             <div>
-                <div id="viewercontroles " className="row mx-auto justify-content-center">
+                <div id="viewercontroles " className="row mx-auto justify-content-center mb-1">
                     <button className="btn btn-primary mr-1 " onClick={this.handleOnClickPrev}>prev</button>
                     <div id='pageCounter' ref={this.pageCounterRef} className="input-group col-3"></div>
                     <button className="btn btn-primary ml-1" onClick={this.handleOnClickNext}>next</button>
                 </div>
-                <div ref={this.viewerRef} className="row" id='viewer' style={{ width: '100%', height: '100%', backgroundColor: "gray" }}></div>
+                <div ref={this.viewerRef} className="row" id='viewer' style={{ width: '100%', height: '100%', backgroundColor: "gray", paddingTop: "5px", paddingBottom: "5px" }}></div>
             </div>
         )
     }

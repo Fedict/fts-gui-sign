@@ -104,3 +104,6 @@ For the Latest versions of the npm dependencies, reference the package.json
 
 ### dev dependencies
     -"@types/jest": "^25.1.4"
+
+## pdf viewer in IE
+ pdf viewer in IE is made by using pdf.js (https://github.com/mozilla/pdf.js).

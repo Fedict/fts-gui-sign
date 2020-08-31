@@ -77,7 +77,6 @@ export default class PDFJs {
                 var scale = desiredWidth / helperViewport.width;
 
                 var viewport = page.getViewport({ scale: scale });
-                console.log(viewport)
                 const context = me.canvas.getContext('2d');
                 me.canvas.height = viewport.height;
                 me.canvas.width = viewport.width;
