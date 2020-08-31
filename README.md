@@ -7,14 +7,23 @@ There are two separate commands for building the application. One builds the dev
 ```BASH
 npm run build
 ```
+### Running build locally without install
+
+```BASH
+npx serve build -l 3000
+```
 
 ## Running appication in developer mode
 
 There is a command to run the application on a development server. This server runs on default localhost:3000. 
+To test codechanges in live dev environment
 
 ```BASH
 npm run start
 ```
+
+
+
 ## Unit Tests
 
 It is possible to activate the unit tests using the following command
@@ -104,3 +113,25 @@ For the Latest versions of the npm dependencies, reference the package.json
 
 ### dev dependencies
     -"@types/jest": "^25.1.4"
+
+## pdf viewer in IE
+ pdf viewer in IE is made by using pdf.js (https://github.com/mozilla/pdf.js).
+
+## react dev tools disabled
+there is a code block in public/index.html that deactivates the react devtools 
+
+```HTML
+ <script>
+    //block react dev tools
+    if (typeof window.__REACT_DEVTOOLS_GLOBAL_HOOK__ === 'object') {
+      __REACT_DEVTOOLS_GLOBAL_HOOK__.inject = function () { };
+    }
+  </script>
+```
+
+## redux dev tools 
+redux dev tools are enabled in dev and disabled in production. 
+configuration of the devtools are found in /src/store/store.js
+``` JS
+ const composeEnhancers = (process.env.NODE_ENV !== "production") ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose : compose
+```

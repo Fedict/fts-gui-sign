@@ -90,7 +90,7 @@ const UploadFileReducer = (state = initialState, action) => {
             }
             return {
                 ...state,
-                displayFile: getDisplayFileData(action.payload)
+                displayFile: { ...getDisplayFileData(action.payload), displayUrl: action.url }
             }
         }
         case STORE_RESET:

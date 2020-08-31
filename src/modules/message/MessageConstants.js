@@ -33,8 +33,8 @@ export const ErrorNotSupported = {
     message: (
         <div>
             <p>Your browser is not supported. Please use one of the following browsers:</p>
-            <div class="col col-10 mx-auto" >
-                <ul class="text-left">
+            <div className="col col-10 mx-auto" >
+                <ul className="text-left">
                     <li>Chrome</li>
                     <li>Edge (based on Chromium)</li>
                     <li>Firefox</li>

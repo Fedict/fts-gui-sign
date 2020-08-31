@@ -1,3 +1,6 @@
+import { GetDataUrlFromFile } from "../helpers/FileHelper"
+import { getBrowser, browser } from "../../browserDetection/BrowserDetection"
+
 export const FILE_DISPLAY_FILE = "FILE_DISPLAY_FILE"
 export const FILE_UPLOAD_CHANGE_FILE = "FILE_UPLOAD_CHANGE_FILE"
 export const FILE_SET_DOWNLOAD_FILE = "FILE_SET_DOWNLOAD_FILE"
@@ -7,7 +10,11 @@ export const FILE_SET_DOWNLOAD_FILE = "FILE_SET_DOWNLOAD_FILE"
  * @param {file} file - file object of the file that has to be displayed
  */
 export const displayFile = (file) => async (dispatch) => {
-    dispatch({ type: FILE_DISPLAY_FILE, payload: file })
+    let url = ""
+    if (getBrowser() === browser.IE) {
+        url = await GetDataUrlFromFile(file)
+    }
+    dispatch({ type: FILE_DISPLAY_FILE, payload: file, url: url })
 }
 
 /**
