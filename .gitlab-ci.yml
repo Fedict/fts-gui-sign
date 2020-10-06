@@ -31,7 +31,7 @@ package:
   stage: package
   script:
     - echo "Building the docker Image"
-    - docker build --build-arg http_proxy=http://dc-proxy.names.belgium.be:3128 --build-arg https_proxy=http://dc-proxy.names.belgium.be:3128 -t $CI_REGISTRY/eidas/gui-sign:latest . -t docker-registry.axonet.be/bosadt/eidas/gui-sign:latest .
+    - docker build --build-arg http_proxy=http://dc-proxy.names.belgium.be:3128 --build-arg https_proxy=http://dc-proxy.names.belgium.be:3128 -t $CI_REGISTRY/eidas/gui-sign:latest -t docker-registry.axonet.be/bosadt/eidas/gui-sign:latest .
   except:
     - master
 
