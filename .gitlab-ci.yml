@@ -8,7 +8,7 @@ stages:
 before_script:
   - echo "Logging into the docker repo"
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-  - docker login -u bosadt -p pxc^F%3GmtfVp https://docker-registry.axonet.be
+  - docker login -u $AXONET_REGISTRY_USERNAME -p $AXONET_REGISTRY_PASS https://docker-registry.axonet.be
 
 cache:
   key: "$CI_PIPELINE_ID"
