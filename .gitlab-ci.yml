@@ -31,7 +31,7 @@ package:
   stage: package
   script:
     - echo "Building the docker Image"
-    - docker build --build-arg http_proxy=http://dc-proxy.names.belgium.be:3128 --build-arg https_proxy=http://dc-proxy.names.belgium.be:3128 -t $CI_REGISTRY/eidas/gui-sign:latest . -t https://docker-registry.axonet.be/bosadt/eidas/gui-sign:latest .
+    - docker build --build-arg http_proxy=http://dc-proxy.names.belgium.be:3128 --build-arg https_proxy=http://dc-proxy.names.belgium.be:3128 -t $CI_REGISTRY/eidas/gui-sign:latest . -t docker-registry.axonet.be/bosadt/eidas/gui-sign:latest .
   except:
     - master
 
@@ -48,7 +48,7 @@ deploy:
   script:
     - echo "Pushing the image to the docker hub"
     - docker push $CI_REGISTRY/eidas/gui-sign:latest
-    - docker push https://docker-registry.axonet.be/bosadt/eidas/gui-sign:latest
+    - docker push docker-registry.axonet.be/bosadt/eidas/gui-sign:latest
     - export HTTPS_PROXY="$HTTPS_PROXY_SERVER"
     - oc login https://$OPENSHIFT_SERVER --token=$OPENSHIFT_TOKEN_TEST
     - oc rollout latest dc/$OPENSHIFT_POD -n $OPENSHIFT_PROJECT_TEST
