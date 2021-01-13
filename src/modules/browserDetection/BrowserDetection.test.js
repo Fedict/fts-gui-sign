@@ -2,7 +2,6 @@ import { getBrowser, browser,  browserIsAccepted } from "./BrowserDetection"
 
 const ORIGINAL_window = { ...window }
 
-const ORIGINAL_window = { ...window }
 describe("tests of BrowserDetection", () => {
 
     beforeAll(() => {

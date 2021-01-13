@@ -10,8 +10,6 @@ import { handleFlowIdError } from "../../controlIds/flowId/FlowIdHelpers"
 
 const INCORECT_FLOW_ID = "INCORECT_FLOW_ID"
 
-const INCORECT_FLOW_ID = "INCORECT_FLOW_ID"
-
 export const resetWizard = () => (dispatch) => {
     dispatch(resetStore())
     dispatch(setNewFlowId())
