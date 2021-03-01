@@ -12,43 +12,51 @@ import { MessageContainer } from './modules/message/MessageContainer';
 import { ErrorNotSupported } from './modules/message/MessageConstants';
 import { Footer } from './modules/footer/Footer';
 import StartPageContainer from './modules/startPage/StartPageContainer';
+import MainI18nWrapper from "./modules/i18n/MainI18nWrapper";
 
 function App() {
   const browserIsSupported = browserIsAccepted()
   const notSupportedMessage = ErrorNotSupported;
   return (
-    <Router>
-      <div >
-        <Navbar />
-        {(browserIsSupported) ?
-          (<Switch>
-            <Route path="/sign">
-              <div className="container-fluid">
-                <WizardContainer />
-              </div>
-            </Route>
-            <Route path="/validate">
-              <div className="container">
-                <ValidateWizardContainer />
-              </div>
-            </Route>
-            <Route path="/">
+      <MainI18nWrapper>
+        <Router>
+          <div >
+            <Navbar />
+            {(browserIsSupported) ?
+              (<Switch>
+                <Route path="/sign">
+                  <div className="container-fluid">
+                    <WizardContainer />
+                  </div>
+                </Route>
+                <Route path="/validate">
+                  <div className="container">
+                    <ValidateWizardContainer />
+                  </div>
+                </Route>
+                <Route path="/signDocument">
+                  <div className="container-fluid">
+                    <WizardContainer />
+                  </div>
+                </Route>
+                <Route path="/">
 
-              <StartPageContainer />
-            </Route>
+                  <StartPageContainer />
+                </Route>
 
-          </Switch>)
-          : (
-            <div className="container">
-              <div className="col col-12 col-md-8 mx-auto align-middle">
-                <MessageContainer message={notSupportedMessage} />
-              </div>
-            </div>
-          )
-        }
-        <Footer />
-      </div>
-    </Router>
+              </Switch>)
+              : (
+                <div className="container">
+                  <div className="col col-12 col-md-8 mx-auto align-middle">
+                    <MessageContainer message={notSupportedMessage} />
+                  </div>
+                </div>
+              )
+            }
+            <Footer />
+          </div>
+        </Router>
+      </MainI18nWrapper>
   );
 }
 

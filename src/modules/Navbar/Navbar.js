@@ -8,8 +8,10 @@ import { navigateToStep } from "../wizard/WizardActions"
 import { resetStore } from "../../store/storeActions"
 import { WIZARD_STATE_START } from '../wizard/WizardConstants';
 import { setNewFlowId } from "../controlIds/flowId/FlowIdActions"
+import {languages} from "../../const";
+import {chooseLanguage} from "../i18n/actions/i18nActions";
 
-export const Navbar = ({ location, resetStore, navigateToStep, setNewFlowId, history }) => {
+export const Navbar = ({ location, resetStore, navigateToStep, setNewFlowId, history, chooseLanguage }) => {
 
     const links = [
         {
@@ -51,6 +53,11 @@ export const Navbar = ({ location, resetStore, navigateToStep, setNewFlowId, his
                 <div className="navbar-nav">
                     {links}
                 </div>
+                <nav className="nav ml-auto">
+                    {languages.map((language) => (
+                        <a key={language} className="nav-link" href="#" onClick={() => chooseLanguage(language)}>{language.toUpperCase()}</a>
+                    ))}
+                </nav>
             </nav>
         </header>
     )
@@ -66,7 +73,7 @@ const mapDispatchToProps = ({
     navigateToStep,
     resetStore,
     setNewFlowId,
-
+    chooseLanguage
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Navbar))

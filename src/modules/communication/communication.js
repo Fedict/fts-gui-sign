@@ -1,5 +1,5 @@
 import { getBase64Data } from "../fileUpload/helpers/FileHelper"
-
+import packageJson from '../../../package.json';
 //-----------------------------------------
 //--- constants                         ---
 //-----------------------------------------
@@ -63,6 +63,18 @@ export const createBody = (certificateBody, documentName, documentBase64, docume
     }
 }
 
+const jsonHandler = (response) => {
+    if (!response.ok) {
+        throw new Error(REQUEST_FAILED)
+    }
+    try {
+        return response.json()
+    }
+    catch{
+        return response.text()
+    }
+}
+
 //-----------------------------------------
 //--- API requests                      ---
 //-----------------------------------------
@@ -84,17 +96,7 @@ export const validateCertificatesAPI = (certificateBody) => {
             },
         }
     )
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(REQUEST_FAILED)
-            }
-            try {
-                return response.json()
-            }
-            catch{
-                return response.text()
-            }
-        })
+        .then(jsonHandler)
 }
 
 /**
@@ -119,17 +121,7 @@ export const getDataToSignAPI = async (certificateBody, document) => {
             },
         }
     )
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(REQUEST_FAILED)
-            }
-            try {
-                return response.json()
-            }
-            catch{
-                return response.text()
-            }
-        })
+        .then(jsonHandler)
 }
 
 /**
@@ -153,17 +145,7 @@ export const signDocumentAPI = async (certificateBody, document, signature) => {
             'Content-Type': 'application/json'
         },
     })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(REQUEST_FAILED)
-            }
-            try {
-                return response.json()
-            }
-            catch{
-                return response.text()
-            }
-        })
+        .then(jsonHandler)
 }
 
 /**
@@ -187,16 +169,22 @@ export const validateSignatureAPI = async (document) => {
 
         },
     })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(REQUEST_FAILED)
-            }
-            try {
-                return response.json()
-            }
-            catch{
-                return response.text()
-            }
-        })
+        .then(jsonHandler)
 }
 
+/**
+
+ */
+export const fetchMessagesForLocale = async (locale) => {
+    return fetch(`${packageJson.homepage}config/${locale}.json`)
+        .then((response) => {
+            if (response.ok) {
+                const contentType = response.headers.get("content-type");
+                //TODO try to understand why ui returns application/octet-stream when calling a json file :|
+                if (contentType && (contentType.indexOf("application/json") !== -1 || contentType.indexOf("application/octet-stream") !== -1)) {
+                    return response.json();
+                }
+            }
+            return {};
+        });
+}
