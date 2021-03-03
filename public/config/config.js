@@ -55,8 +55,6 @@ window.configData = {
         "text/xml": "XADES_LTA" /*XADES_1*/
     },
 
+    BEurl_mock: "http://localhost:8751/signandvalidation",
     BEurl: "https://validate.ta.fts.bosa.belgium.be/signandvalidation",
-
-
-
 };

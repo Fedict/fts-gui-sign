@@ -1,5 +1,7 @@
 import React from "react"
 import { CardContainer } from "./CardContainer"
+import {injectIntl} from "react-intl";
+import {isEmpty} from "../../utils/helper";
 
 /**
  * Card with buttons and a error message (based on bootstrap class "alert alert-danger")
@@ -15,7 +17,7 @@ import { CardContainer } from "./CardContainer"
  * @param {boolean} [props.nextButtonIsDisabled] - represents if the next button is Disabled
  * @param {node} [props.text] - text in the error alert
  */
-export const CardError = (
+export const CardError = injectIntl((
     {
         title,
         children,
@@ -26,9 +28,19 @@ export const CardError = (
         nextButtonText,
         onClickNext,
         nextButtonIsDisabled,
-        text
+        text,
+        intl
     }
 ) => {
+    if(cancelButtonText && cancelButtonText.id){
+        cancelButtonText = intl.formatMessage(cancelButtonText)
+    }
+    if(nextButtonText && nextButtonText){
+        nextButtonText = intl.formatMessage(nextButtonText);
+    }
+    if(title && title.id){
+        title = intl.formatMessage(title);
+    }
     return (
         <CardContainer
             title={title}
@@ -42,10 +54,10 @@ export const CardError = (
         >
             <div className="text-center">
                 <div className="alert alert-danger">
-                    {text}
+                    {text && text.id?intl.formatMessage(text):text}
                 </div>
                 {children}
             </div>
         </CardContainer>
     )
-}
+})

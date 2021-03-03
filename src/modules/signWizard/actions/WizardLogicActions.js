@@ -22,8 +22,8 @@ import {
     selectCertificate
 } from "./CertificateActions"
 import {
-    getDataToSignAPI,
-    signDocumentAPI,
+    getDataToSignAPI, getDataToSignForTokenAPI,
+    signDocumentAPI, signDocumentForTokenAPI,
     validateCertificatesAPI
 } from "../../communication/communication"
 import { setDigest } from "./DigestActions"
@@ -533,41 +533,67 @@ export const sign = (pin) => (dispatch, getStore) => {
  */
 export const signDocument = () => (dispatch, getStore) => {
 
-    const { certificate, signature, uploadFile } = getStore()
+    const { certificate, signature, uploadFile, tokenFile } = getStore()
 
     if (certificate
         && certificate.certificateSelected
         && certificate.certificateSelected.APIBody
         && signature
         && signature.signature
-        && uploadFile
-        && uploadFile.file) {
+        && ((uploadFile
+        && uploadFile.file) || (tokenFile && tokenFile.token))) {
 
         dispatch(navigateToStep(WIZARD_STATE_SIGNING_LOADING))
-        const flowId = getStore().controlId.flowId
-        signDocumentAPI(
-            certificate.certificateSelected.APIBody,
-            uploadFile.file,
-            signature.signature)
-            .then(handleFlowIdError(flowId, getStore))
-            .then((resp) => {
+        const flowId = getStore().controlId.flowId;
+        if(tokenFile && tokenFile.token){
+            signDocumentForTokenAPI(
+                certificate.certificateSelected.APIBody,
+                tokenFile.token,
+                signature.signature)
+                .then(handleFlowIdError(flowId, getStore))
+                .then((resp) => {
 
-                if (resp
-                    && resp.name
-                    && resp.bytes) {
-                    dispatch(setDownloadFile(resp))
-                    dispatch(navigateToStep(WIZARD_STATE_SUCCES))
-                }
-                else {
-                    dispatch(showErrorMessage(ErrorGeneral))
-                }
+                    if (resp
+                        && resp.name
+                        && resp.bytes) {
+                        dispatch(setDownloadFile(resp))
+                        dispatch(navigateToStep(WIZARD_STATE_SUCCES))
+                    }
+                    else {
+                        dispatch(showErrorMessage({...ErrorGeneral, body : 'error.WRONG_RESULT_SIGN_TOKEN'}))
+                    }
 
-            })
-            .catch((err) => {
-                if (err !== INCORECT_FLOW_ID) {
-                    dispatch(showErrorMessage(ErrorGeneral))
-                }
-            })
+                })
+                .catch((err) => {
+                    if (err !== INCORECT_FLOW_ID) {
+                        dispatch(showErrorMessage({...ErrorGeneral, body : 'error.FAILED_TO_SIGN'}))
+                    }
+                })
+        }else{
+            signDocumentAPI(
+                certificate.certificateSelected.APIBody,
+                uploadFile.file,
+                signature.signature)
+                .then(handleFlowIdError(flowId, getStore))
+                .then((resp) => {
+
+                    if (resp
+                        && resp.name
+                        && resp.bytes) {
+                        dispatch(setDownloadFile(resp))
+                        dispatch(navigateToStep(WIZARD_STATE_SUCCES))
+                    }
+                    else {
+                        dispatch(showErrorMessage(ErrorGeneral))
+                    }
+
+                })
+                .catch((err) => {
+                    if (err !== INCORECT_FLOW_ID) {
+                        dispatch(showErrorMessage(ErrorGeneral))
+                    }
+                })
+        }
     }
     else {
         dispatch(showErrorMessage(ErrorGeneral))

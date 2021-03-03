@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { getBrowser, browser } from '../../../browserDetection/BrowserDetection'
 import PDFViewerInternetExplorer from '../PDFViewerInternetExplorer/PDFViewerInternetExplorer'
+import {FormattedMessage} from "react-intl";
 
 /**
  * Component to display a file
@@ -30,7 +31,7 @@ export const DisplayFile = ({ uploadFile }) => {
                 return (
 
                     <object style={{ height: "85vh", width: "100%" }} type="application/pdf" data={data.url}>
-                        <p>PDF cannot be shown</p>
+                        <p><FormattedMessage id="Failed to load pdf" defaultMessage="Failed to load pdf" /></p>
                     </object>
 
                 )
@@ -42,7 +43,7 @@ export const DisplayFile = ({ uploadFile }) => {
             height: "85vh",
             width: "100%",
             backgroundColor: "white",
-            backgroundImage: "url('./img/img.jpg')",
+            backgroundImage: "url('/img/img.jpg')",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover"

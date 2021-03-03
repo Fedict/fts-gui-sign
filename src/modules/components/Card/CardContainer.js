@@ -51,7 +51,7 @@ export const CardContainer = (
                                         ? (
                                             <button className="btn btn-secondary float-left"
                                                 id="button_cancel"
-                                                onClick={(e) => { if (onClickCancel) { onClickCancel(e) } }}
+                                                onClick={(e) => { if (onClickCancel) { onClickCancel() } }}
                                             >
                                                 {cancelButtonText}
                                             </button>

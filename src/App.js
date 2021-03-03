@@ -13,6 +13,7 @@ import { ErrorNotSupported } from './modules/message/MessageConstants';
 import { Footer } from './modules/footer/Footer';
 import StartPageContainer from './modules/startPage/StartPageContainer';
 import MainI18nWrapper from "./modules/i18n/MainI18nWrapper";
+import TokenWizardContainer from "./modules/signByTokenWizard/TokenWizardContainer";
 
 function App() {
   const browserIsSupported = browserIsAccepted()
@@ -24,7 +25,12 @@ function App() {
             <Navbar />
             {(browserIsSupported) ?
               (<Switch>
-                <Route path="/sign">
+                  <Route path="/sign/:token">
+                      <div className="container-fluid">
+                          <TokenWizardContainer />
+                      </div>
+                  </Route>
+                <Route path="/sign" exact strict>
                   <div className="container-fluid">
                     <WizardContainer />
                   </div>
@@ -32,11 +38,6 @@ function App() {
                 <Route path="/validate">
                   <div className="container">
                     <ValidateWizardContainer />
-                  </div>
-                </Route>
-                <Route path="/signDocument">
-                  <div className="container-fluid">
-                    <WizardContainer />
                   </div>
                 </Route>
                 <Route path="/">

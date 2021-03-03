@@ -63,6 +63,19 @@ export const createBody = (certificateBody, documentName, documentBase64, docume
     }
 }
 
+export const createBodyForToken = (certificateBody, token) => (
+    {
+        "clientSignatureParameters": {
+            "certificateChain": certificateBody.certificateChain,
+            "detachedContents": [
+            ],
+            "signingCertificate": certificateBody.certificate,
+            "signingDate": "2020-04-06T09:45:44"
+        },
+        token
+    }
+)
+
 const jsonHandler = (response) => {
     if (!response.ok) {
         throw new Error(REQUEST_FAILED)
@@ -173,7 +186,52 @@ export const validateSignatureAPI = async (document) => {
 }
 
 /**
+ * API request to get the DataToSign by token
+ * @param {Object} certificateBody - object that represents the certificate
+ * @param {Object} token - token of the document to be signed
+ *
+ * @returns {Promise} Promise that resolves the result of the API request
+ */
+export const getDataToSignForTokenAPI = async (certificateBody, token) => {
 
+    const body = createBodyForToken(certificateBody, token);
+
+    return fetch(url + "/signing/getDataToSignForToken",
+        {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        }
+    )
+        .then(jsonHandler)
+}
+
+
+/**
+ * API request to sign a document
+ * @param {Object} certificateBody - object that represents the certificate
+ * @param {Object} token - token of the document to be signed
+ * @param {string} signature - signature value used to sign th document
+ */
+export const signDocumentForTokenAPI = async (certificateBody, token, signature) => {
+    const body = {
+        ...createBodyForToken(certificateBody, token),
+        "signatureValue": signature
+    }
+
+    return fetch(url + "/signing/signDocumentForToken", {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+        .then(jsonHandler)
+}
+/**
+    Fetches messages from config folder
  */
 export const fetchMessagesForLocale = async (locale) => {
     return fetch(`${packageJson.homepage}config/${locale}.json`)
