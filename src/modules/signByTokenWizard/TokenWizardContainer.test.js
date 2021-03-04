@@ -84,13 +84,9 @@ describe('TokenWizardContainer', () => {
             </MemoryRouter>
         </Provider>)
 
-        //expect(screen.getByLabelText(/Retrieving Metadata/i)).toBeInTheDocument();
-
-
         const startButton = await screen.findByRole('button', {name: /Start/i})
 
         startButton.click();
-
 
         expect(screen.getByText(/Retrieving certificates/i)).toBeInTheDocument();
 
@@ -101,8 +97,6 @@ describe('TokenWizardContainer', () => {
             fireEvent.keyDown(inputCode, { key: 'A', code: 'KeyA' });
             fireEvent.keyUp(inputCode, { key: 'A', code: 'KeyA' });
         }
-
-//        userEvent.type(screen.getByTestId(('input_code')), '1234')
 
         const signButton = screen.getByRole('button', {name: /Sign with eid/i})
         expect(signButton).toBeEnabled();
