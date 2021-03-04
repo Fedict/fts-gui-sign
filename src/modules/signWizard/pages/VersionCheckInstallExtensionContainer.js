@@ -4,7 +4,18 @@ import { CardContainer } from '../../components/Card/CardContainer'
 import { navigateToStep } from "../../wizard/WizardActions"
 import { resetWizard } from '../actions/WizardLogicActions'
 import { getBrowser, browser } from '../../browserDetection/BrowserDetection'
+import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
 
+const messages = defineMessages({
+    title : {
+        id : "extension.install.title",
+        defaultMessage : "Install eIDLink extension"
+    },
+    altChromeStoreImg : {
+        id : 'chrome.store.img.alt',
+        defaultMessage : "button to Chrome webstore"
+    }
+})
 export class VersionCheckInstallExtensionContainer extends React.Component {
 
     handleButtonNextClick() {
@@ -46,31 +57,30 @@ export class VersionCheckInstallExtensionContainer extends React.Component {
 
     render() {
         const usedBrowser = getBrowser()
-        const { resetWizard } = this.props
+        const { resetWizard, intl } = this.props
 
         return (
-            <CardContainer title={"Install eIDLink extension"}
+            <CardContainer title={intl.formatMessage(messages.title)}
                 onClickCancel={() => { resetWizard() }}
                 hasNextButton
                 nextButtonText="I have installed eIDLink Extension"
                 onClickNext={() => { this.handleButtonNextClick() }}
             >
-                <p>No eIDLink extension found.</p>
-                <p>Please install the eIDLink extension to use this application.</p>
-                <p>After you installed the eIDLink extension you can come back to this page an push the "I have installed eIDLink Extension" button.</p>
+
+                <p><FormattedMessage id="extension.install.text.1" defaultMessage="No eIDLink extension found."/></p>
+                <p><FormattedMessage id="extension.install.text.2" defaultMessage="Please install the eIDLink extension to use this application."/></p>
+                <p><FormattedMessage id="extension.install.text.3" defaultMessage='After you installed the eIDLink extension you can come back to this page an push the "I have installed eIDLink Extension" button.'/></p>
 
                 {(usedBrowser === browser.CHROME || usedBrowser === browser.EDGE)
                     ? (<img src="/img/ChromeWebStore_BadgeWBorder_v2_206x58.png"
                         style={{ cursor: "pointer" }}
-                        alt={"button to Chrome webstore"}
+                        alt={intl.formatMessage(messages.altChromeStoreImg)}
                         onClick={() => { this.openExtensionLink() }} />)
                     : (<button
                         className="btn btn-primary"
                         id="button_install_eID"
                         onClick={() => { this.openExtensionLink() }}>
-                        {
-
-                            "Install eIDLink extension"}
+                        <FormattedMessage id="extension.install.button" defaultMessage="Install eIDLink extension"/>
                     </button>)}
             </CardContainer>
         )
@@ -82,4 +92,4 @@ const mapDispatchToProps = ({
     resetWizard
 })
 
-export default connect(null, mapDispatchToProps)(VersionCheckInstallExtensionContainer)
+export default connect(null, mapDispatchToProps)(injectIntl(VersionCheckInstallExtensionContainer))

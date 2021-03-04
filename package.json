@@ -6,6 +6,7 @@
   "dependencies": {
     "@testing-library/jest-dom": "4.2.4",
     "bootstrap": "4.4.1",
+    "bs-stepper": "^1.7.0",
     "immutable": "^4.0.0-rc.12",
     "jquery": "3.5.1",
     "node-sass": "4.14.1",

@@ -1,4 +1,5 @@
 import React from 'react'
+import {FormattedMessage} from "react-intl";
 
 /**
  * Select component for selecting a certificate
@@ -43,9 +44,8 @@ export class CertificateSelect extends React.Component {
                     <div className="row no-gutters form-check align-content-center">
                         <div className="col">
                             <div className="card-body">
-                                <p>reader : {certificate.readerName}</p>
-                                <p>name :  {certificate.commonName}
-                                </p>
+                                <p><FormattedMessage id="certificate.choose.reader" defaultMessage="reader : {readerName}" values={{readerName : certificate.readerName}}/></p>
+                                <p><FormattedMessage id="certificate.choose.name" defaultMessage="name : {commonName}" values={{commonName : certificate.commonName}}/></p>
                             </div>
                         </div>
                     </div>

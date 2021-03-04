@@ -19,12 +19,12 @@ export class DigestForTokenLoadingContainer extends React.Component {
     }
 
     render() {
-        const { resetWizard } = this.props
+        const { resetWizard, intl } = this.props
         return (
                 <CardLoading
-                    title={this.props.intl.formatMessage(messages["Signing document"])}
+                    title={intl.formatMessage(messages["Signing document"])}
                     hasCancelButton
-                    cancelButtonText={this.props.intl.formatMessage(definedMessages.cancel)}
+                    cancelButtonText={intl.formatMessage(definedMessages.cancel)}
                     onClickCancel={resetWizard}
                 />
         )

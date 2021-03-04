@@ -5,6 +5,19 @@ import { CardContainer } from '../../components/Card/CardContainer';
 import { sign, resetWizard } from '../actions/WizardLogicActions'
 import { navigateToStep } from '../../wizard/WizardActions';
 import { WIZARD_STATE_SIGNING_PRESIGN_LOADING } from '../../wizard/WizardConstants';
+import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
+import {definedMessages} from "../../i18n/translations";
+
+const messages = defineMessages({
+    title: {
+        id: "signing.pininput.title",
+        defaultMessage: "Enter pin code"
+    },
+    next: {
+        id: "signing.pininput.button.sign",
+        defaultMessage: "Sign with eId"
+    }
+})
 
 export class PinInputContainer extends React.Component {
 
@@ -63,32 +76,33 @@ export class PinInputContainer extends React.Component {
     }
 
     render() {
-        const { resetWizard, pinError, certificate } = this.props
+        const { resetWizard, pinError, certificate, intl } = this.props
         const { pin } = this.state
         const pinstring = "*".repeat(pin.length)
         return (
 
             <CardContainer
-                title={"Enter pin code"}
+                title={intl.formatMessage(messages.title)}
                 hasNextButton
                 hasCancelButton
-                cancelButtonText="Cancel"
+                cancelButtonText={intl.formatMessage(definedMessages.cancel)}
                 onClickCancel={() => { resetWizard() }}
-                nextButtonText="Sign with eId"
+                nextButtonText={intl.formatMessage(messages.next)}
                 onClickNext={() => { this.handleSubmit() }}
                 nextButtonIsDisabled={pin.length < 4}>
 
                 <div className="form-group">
-                    <p>Enter the PIN
+                    <p>
                         {(certificate && certificate.certificateSelected && certificate.certificateSelected.commonName)
-                            ? " for " + certificate.certificateSelected.commonName
-                            : ""}
+                            ? <FormattedMessage id="signing.pininput.textCommonName" defaultMessage="Enter the PIN for {commonName}" values={{commonName : certificate.certificateSelected.commonName}}/>
+                            : <FormattedMessage id="signing.pininput.text" defaultMessage="Enter the PIN" />
+                        }
                     </p>
                     {(pinError && pinError.message)
                         ? (
                             <div className="text-center">
                                 <div className="alert alert-danger">
-                                    {pinError.message}
+                                    {pinError.message.id?intl.formatMessage(pinError.message):pinError.message}
                                 </div>
                             </div>)
                         : null}
@@ -121,4 +135,4 @@ const mapDispatchToProps = ({
     navigateToStep
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(PinInputContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(PinInputContainer))

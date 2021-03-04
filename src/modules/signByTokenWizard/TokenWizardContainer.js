@@ -1,6 +1,6 @@
 import {resetWizard} from "../signWizard/actions/WizardLogicActions";
 import {connect} from "react-redux";
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {
     WIZARD_STATE_CERTIFICATES_CHOOSE,
     WIZARD_STATE_CERTIFICATES_LOADING,
@@ -37,13 +37,64 @@ import SigningLoadingContainer from "../signWizard/pages/SigningLoading";
 import {useRouter} from "../utils/useRouter";
 import SuccesForTokenContainer from "./pages/SuccesForTokenContainer";
 import MetadataLoadingContainer from "./pages/MetadataLoadingContainer";
+import ReactStepper from "../components/ReactStepper/ReactStepper";
+import {defineMessages, injectIntl} from "react-intl";
 
-export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken }) => {
+const messages = defineMessages({
+    tokenStep1 : {
+        id : 'sign.token.1',
+        defaultMessage : 'Preparation'
+    },
+    tokenStep2 : {
+        id : 'sign.token.2',
+        defaultMessage : 'Enter PIN code'
+    },
+    tokenStep3 : {
+        id : 'sign.token.3',
+        defaultMessage : 'Signing'
+    },
+    tokenStep4 : {
+        id : 'sign.token.4',
+        defaultMessage : 'Ready'
+    }
+})
+
+export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, intl }) => {
+    const [currentIndexStep, setCurrentIndexStep] = useState(1);
+
     const router = useRouter();
     useEffect(() => {
         doSetToken(router.query.token, router.query.redirectUrl);
-    }, [router.query.token])
+    }, [router.query.token]);
+    useEffect(() => {
+        switch (wizard.state) {
+            case WIZARD_STATE_START:
+            case WIZARD_STATE_UPLOAD:
+            case WIZARD_STATE_VERSION_CHECK_LOADING:
+            case WIZARD_STATE_VERSION_CHECK_UPDATE:
+            case WIZARD_STATE_VERSION_CHECK_INSTALL:
+            case WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENSION:
+            case WIZARD_STATE_CERTIFICATES_LOADING:
+            case WIZARD_STATE_CERTIFICATES_CHOOSE:
+            case WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN:
+            case WIZARD_STATE_VALIDATE_LOADING:
+            case WIZARD_STATE_DIGEST_LOADING:
+                setCurrentIndexStep(1);
+                break;
+            case WIZARD_STATE_PIN_INPUT:
+                setCurrentIndexStep(2);
+                break;
+            case WIZARD_STATE_SIGNING_PRESIGN_LOADING:
+            case WIZARD_STATE_SIGNING_LOADING:
+                setCurrentIndexStep(3);
+                break;
+            case WIZARD_STATE_SUCCES:
+                setCurrentIndexStep(4);
+                break;
+        }
+    }, [wizard.state])
     let content = null;
+
     switch (wizard.state) {
         case WIZARD_STATE_START:
             content = <MetadataLoadingContainer />
@@ -111,6 +162,13 @@ export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken }
                     <TokenDisplayFile />
                 </div>
                 <div className={"col col-5"}>
+                    <ReactStepper>
+                        <ReactStepper.Header>
+                            {Object.keys(messages).map((key, index) => (
+                                <ReactStepper.HeaderStep number={index + 1} label={intl.formatMessage(messages[key])} active={(index + 1) === currentIndexStep} key={key}></ReactStepper.HeaderStep>
+                            ))}
+                        </ReactStepper.Header>
+                    </ReactStepper>
                     {content}
                 </div>
             </div>
@@ -129,4 +187,4 @@ const mapDispatchToProps = ({
     doSetToken
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(TokenWizardContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(TokenWizardContainer))

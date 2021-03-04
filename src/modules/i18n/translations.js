@@ -13,6 +13,14 @@ export const definedMessages = defineMessages({
     start : {
         id : "button.start",
         defaultMessage : "Start"
+    },
+    next : {
+        id : "button.next",
+        defaultMessage : "Next"
+    },
+    select : {
+        id : "button.select",
+        defaultMessage : "Select"
     }
 })
 
@@ -32,6 +40,10 @@ export const errorMessages = defineMessages({
     failedToSign : {
         id : 'error.FAILED_TO_SIGN',
         defaultMessage : 'Failed to sign the document'
+    },
+    failedToFetchDataToSign : {
+        id : 'error.FAILED_TO_FETCH_DATA_TO_SIGN',
+        defaultMessage : 'Failed to fetch data to sign'
     }
 
 })

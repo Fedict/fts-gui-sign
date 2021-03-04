@@ -2,6 +2,14 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { CardError } from '../../components/Card/CardError'
 import { resetWizard, navigateToSign } from "../actions/WizardLogicActions"
+import {defineMessages} from "react-intl";
+import {definedMessages} from "../../i18n/translations";
+const messages = defineMessages({
+    title: {
+        id: "pinpad.error.title",
+        defaultMessage: "Pin entry error"
+    }
+})
 
 export class PinPadError extends React.Component {
 
@@ -14,16 +22,16 @@ export class PinPadError extends React.Component {
     }
     
     render() {
-        const { pinError } = this.props
+        const { pinError, intl } = this.props
         if (pinError && pinError.message) {
             return (
                 <CardError
-                    title={"Pin entry error"}
+                    title={intl.formatMessage(messages.title)}
                     hasCancelButton={true}
-                    cancelButtonText={'Cancel'}
+                    cancelButtonText={intl.formatMessage(definedMessages.cancel)}
                     onClickCancel={() => { this.onClickCancel() }}
                     hasNextButton={true}
-                    nextButtonText={'Try again'}
+                    nextButtonText={intl.formatMessage(definedMessages.retry)}
                     onClickNext={() => { this.onClickNext() }}
                     text={pinError.message}
                />

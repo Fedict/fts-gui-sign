@@ -2,8 +2,18 @@ import React from "react"
 import { CardLoading } from "../../components/Card/CardLoading"
 import { resetWizard } from "../actions/WizardLogicActions"
 import { connect } from "react-redux"
+import {definedMessages} from "../../i18n/translations";
+import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
 
-export const SigningPreSignLoading = ({ certificate, resetWizard }) => {
+
+const messages = defineMessages({
+    title: {
+        id: "signing.presign.title",
+        defaultMessage: "Sign document"
+    }
+})
+
+export const SigningPreSignLoading = ({ certificate, resetWizard, intl }) => {
 
     const isPinPadReader = (certificate
         && certificate.certificateSelected
@@ -16,17 +26,17 @@ export const SigningPreSignLoading = ({ certificate, resetWizard }) => {
         ? " for " + certificate.certificateSelected.commonName + " "
         : ""
     return (
-        <CardLoading title={"Sign document"}
+        <CardLoading title={intl.formatMessage(messages.title)}
             hasCancelButton
-            cancelButtonText="Cancel"
+            cancelButtonText={intl.formatMessage(definedMessages.cancel)}
             onClickCancel={() => { resetWizard() }}
         >
             {(isPinPadReader)
                 ? (
                     <div>
                         <div className="alert alert-info">
-                            Please enter the PIN {certificateName} when prompted
-                                </div>
+                            <FormattedMessage id="signing.presign.text" defaultMessage="Please enter the PIN {certificateName} when prompted" values={{certificateName}} />
+                        </div>
                     </div>
                 )
                 : null}
@@ -46,4 +56,4 @@ const mapDispatchToProps = ({
     resetWizard
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(SigningPreSignLoading)
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(SigningPreSignLoading))

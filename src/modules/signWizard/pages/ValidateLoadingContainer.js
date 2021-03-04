@@ -2,6 +2,9 @@ import React from 'react'
 import { CardLoading } from '../../components/Card/CardLoading'
 import { connect } from 'react-redux'
 import { validateCertificates, resetWizard } from "../actions/WizardLogicActions"
+import {injectIntl} from "react-intl";
+import {messages} from "./CertificateValidateChainContainer";
+import {definedMessages} from "../../i18n/translations";
 
 export class ValidateLoadingContainer extends React.Component {
     componentDidMount() {
@@ -10,12 +13,12 @@ export class ValidateLoadingContainer extends React.Component {
 
     render() {
 
-        const { resetWizard } = this.props
+        const { resetWizard, intl } = this.props
         return (
            
-                <CardLoading title={"Validating certificates"}
+                <CardLoading title={intl.formatMessage(messages.title)}
                     hasCancelButton
-                    cancelButtonText="Cancel"
+                    cancelButtonText={intl.formatMessage(definedMessages.cancel)}
                     onClickCancel={() => { resetWizard() }}
                 >
 
@@ -30,4 +33,4 @@ const mapDispatchToProps = ({
      resetWizard
 })
 
-export default connect(null, mapDispatchToProps)(ValidateLoadingContainer)
+export default connect(null, mapDispatchToProps)(injectIntl(ValidateLoadingContainer))

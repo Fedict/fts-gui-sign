@@ -15,8 +15,15 @@ $theme-colors: (
 
 @import '../node_modules/bootstrap/scss/bootstrap.scss';
 
-
 //add style for modules/components/MethodeSelect/MethodeSelectCard.js
 .selectCard:hover {
   border-color: #11a0ba;
+}
+
+.inactive .bs-stepper-label{
+  color: rgb(108,75,125,0.6);
+}
+
+.inactive .bs-stepper-circle{
+  background-color: #6c757d;
 }

@@ -32,7 +32,7 @@ export const getDigestForToken = () => (dispatch, getStore) => {
             })
             .catch((err) => {
                 if (err !== INCORECT_FLOW_ID) {
-                    dispatch(showErrorMessage(ErrorGeneral))
+                    dispatch(showErrorMessage({...ErrorGeneral, message : errorMessages.failedToFetchDataToSign}))
                 }
             })
 
