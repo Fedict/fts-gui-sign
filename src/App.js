@@ -15,47 +15,51 @@ import StartPageContainer from './modules/startPage/StartPageContainer';
 import MainI18nWrapper from "./modules/i18n/MainI18nWrapper";
 import TokenWizardContainer from "./modules/signByTokenWizard/TokenWizardContainer";
 
+export const BaseApp = ({browserIsSupported, notSupportedMessage}) => (
+    <div >
+        <Navbar />
+        {(browserIsSupported) ?
+            (<Switch>
+                <Route path="/sign/:token">
+                    <div className="container-fluid">
+                        <TokenWizardContainer />
+                    </div>
+                </Route>
+                <Route path="/sign" exact strict>
+                    <div className="container-fluid">
+                        <WizardContainer />
+                    </div>
+                </Route>
+                <Route path="/validate">
+                    <div className="container">
+                        <ValidateWizardContainer />
+                    </div>
+                </Route>
+                <Route path="/">
+
+                    <StartPageContainer />
+                </Route>
+
+            </Switch>)
+            : (
+                <div className="container">
+                    <div className="col col-12 col-md-8 mx-auto align-middle">
+                        <MessageContainer message={notSupportedMessage} />
+                    </div>
+                </div>
+            )
+        }
+        <Footer />
+    </div>
+)
+
 function App() {
   const browserIsSupported = browserIsAccepted()
   const notSupportedMessage = ErrorNotSupported;
   return (
       <MainI18nWrapper>
         <Router>
-          <div >
-            <Navbar />
-            {(browserIsSupported) ?
-              (<Switch>
-                  <Route path="/sign/:token">
-                      <div className="container-fluid">
-                          <TokenWizardContainer />
-                      </div>
-                  </Route>
-                <Route path="/sign" exact strict>
-                  <div className="container-fluid">
-                    <WizardContainer />
-                  </div>
-                </Route>
-                <Route path="/validate">
-                  <div className="container">
-                    <ValidateWizardContainer />
-                  </div>
-                </Route>
-                <Route path="/">
-
-                  <StartPageContainer />
-                </Route>
-
-              </Switch>)
-              : (
-                <div className="container">
-                  <div className="col col-12 col-md-8 mx-auto align-middle">
-                    <MessageContainer message={notSupportedMessage} />
-                  </div>
-                </div>
-              )
-            }
-            <Footer />
-          </div>
+           <BaseApp browserIsSupported={browserIsSupported} notSupportedMessage={notSupportedMessage}/>
         </Router>
       </MainI18nWrapper>
   );

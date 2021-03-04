@@ -28,7 +28,7 @@ import PinInputContainer from "../signWizard/pages/PinInputContainer";
 import TokenWizardIntroContainer from "./pages/TokenWizardIntroContainer";
 import MessageContainerWithStore, {MessageContainer} from "../message/MessageContainer";
 import {ErrorGeneral} from "../message/MessageConstants";
-import {doSetToken} from "./actions/TokenActions";
+import {doSetToken, getDocumentMetadataForToken} from "./actions/TokenActions";
 import PinPadError from "../signWizard/pages/PinPadError";
 import TokenDisplayFile from "./components/DisplayFile/TokenDisplayFile";
 import DigestForTokenLoadingContainer from "./pages/DigestForTokenLoadingContainer";
@@ -36,16 +36,19 @@ import SigningPreSignLoading from "../signWizard/pages/SigningPreSignLoading";
 import SigningLoadingContainer from "../signWizard/pages/SigningLoading";
 import {useRouter} from "../utils/useRouter";
 import SuccesForTokenContainer from "./pages/SuccesForTokenContainer";
+import MetadataLoadingContainer from "./pages/MetadataLoadingContainer";
 
 export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken }) => {
     const router = useRouter();
     useEffect(() => {
-        doSetToken(router.query.token, router.query.redirectUrl)
+        doSetToken(router.query.token, router.query.redirectUrl);
     }, [router.query.token])
     let content = null;
     switch (wizard.state) {
-        case WIZARD_STATE_UPLOAD:
         case WIZARD_STATE_START:
+            content = <MetadataLoadingContainer />
+            break;
+        case WIZARD_STATE_UPLOAD:
             if (reader && reader.isOk && reader.isChecked) {
                 content = <TokenWizardIntroContainer/>;
             } else {

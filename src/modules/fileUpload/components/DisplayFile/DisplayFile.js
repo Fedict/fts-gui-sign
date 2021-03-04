@@ -30,7 +30,7 @@ export const DisplayFile = ({ uploadFile }) => {
                 }
                 return (
 
-                    <object style={{ height: "85vh", width: "100%" }} type="application/pdf" data={data.url}>
+                    <object style={{ height: "85vh", width: "100%" }} type="application/pdf" data={data.url} name={data.fileName}>
                         <p><FormattedMessage id="Failed to load pdf" defaultMessage="Failed to load pdf" /></p>
                     </object>
 

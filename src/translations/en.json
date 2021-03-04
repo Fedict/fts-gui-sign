@@ -1,3 +1,15 @@
 {
-  "Test": "Test"
+  "Failed to load pdf": "Failed to load pdf",
+  "Test": "Test",
+  "button.cancel": "Cancel",
+  "button.retry": "Try again",
+  "button.start": "Start",
+  "digestLoading.title": "Signing document",
+  "error.METADATA_FETCH": "Failed to fetch the metadata of the document",
+  "succes.button.download": "Download document",
+  "succes.next": "Close",
+  "succes.text": "Your document will be automatically downloaded. If this is not the case, you can start the download manually",
+  "succes.title": "Your document has been successfully signed!",
+  "token.intro.title": "Welcome",
+  "token.intro.txt": "Hello, {newLine} you are about to sign a document that was prepared for you."
 }

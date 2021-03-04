@@ -1,3 +1,26 @@
 {
-  "Test": "NL TEST"
+  "Failed to load pdf": "",
+  "No eId card found": "",
+  "No eId reader found": "",
+  "Please attach your eID reader": "",
+  "Please insert your eID card": "",
+  "Something went wrong": "",
+  "Something went wrong. Please reload the page and try again.": "",
+  "Test": "NL TEST",
+  "The eId card is blocked": "",
+  "The eId card was removed": "",
+  "The eId reader is not supported": "",
+  "The eId reader was removed": "",
+  "This application doesn't support this eID reader type": "",
+  "button.cancel": "",
+  "button.retry": "",
+  "button.start": "",
+  "digestLoading.title": "",
+  "error.METADATA_FETCH": "",
+  "succes.button.download": "",
+  "succes.next": "",
+  "succes.text": "",
+  "succes.title": "",
+  "token.intro.title": "",
+  "token.intro.txt": ""
 }

@@ -35,7 +35,7 @@ export const CardError = injectIntl((
     if(cancelButtonText && cancelButtonText.id){
         cancelButtonText = intl.formatMessage(cancelButtonText)
     }
-    if(nextButtonText && nextButtonText){
+    if(nextButtonText && nextButtonText.id){
         nextButtonText = intl.formatMessage(nextButtonText);
     }
     if(title && title.id){

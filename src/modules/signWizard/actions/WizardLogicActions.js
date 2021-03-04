@@ -45,6 +45,7 @@ import { handleRequestIdError } from "../../controlIds/requestId/RequestIdHelper
 import { handleFlowIdError } from "../../controlIds/flowId/FlowIdHelpers"
 import { INCORECT_REQUEST_ID } from '../../controlIds/requestId/RequestIdHelpers'
 import { INCORECT_FLOW_ID } from '../../controlIds/flowId/FlowIdHelpers'
+import {errorMessages} from "../../i18n/translations";
 
 //----------------------------------
 // helpers                    
@@ -560,13 +561,13 @@ export const signDocument = () => (dispatch, getStore) => {
                         dispatch(navigateToStep(WIZARD_STATE_SUCCES))
                     }
                     else {
-                        dispatch(showErrorMessage({...ErrorGeneral, body : 'error.WRONG_RESULT_SIGN_TOKEN'}))
+                        dispatch(showErrorMessage({...ErrorGeneral, message : errorMessages.failedToSignWrongResultFromAPI}))
                     }
 
                 })
                 .catch((err) => {
                     if (err !== INCORECT_FLOW_ID) {
-                        dispatch(showErrorMessage({...ErrorGeneral, body : 'error.FAILED_TO_SIGN'}))
+                        dispatch(showErrorMessage({...ErrorGeneral, message : errorMessages.failedToSign}))
                     }
                 })
         }else{

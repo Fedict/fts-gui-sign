@@ -97,6 +97,7 @@ export class PinInputContainer extends React.Component {
                             <div
                                 className=" form-control"
                                 id="input_code"
+                                data-testid="input_code"
                             >{pinstring}</div>
                         </div>
 

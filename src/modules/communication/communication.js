@@ -231,6 +231,14 @@ export const signDocumentForTokenAPI = async (certificateBody, token, signature)
         .then(jsonHandler)
 }
 /**
+ * API request to get document metadata by token, to set filename
+ * @param {Object} token - token of the document to be signed
+ */
+export const getDocumentMetadataForTokenAPI = async (token) => {
+    return fetch(`${url}/signing/getMetadataForToken?token=${token}`)
+        .then(jsonHandler)
+}
+/**
     Fetches messages from config folder
  */
 export const fetchMessagesForLocale = async (locale) => {

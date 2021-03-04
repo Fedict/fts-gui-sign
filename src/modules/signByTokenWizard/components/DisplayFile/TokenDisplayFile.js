@@ -11,7 +11,8 @@ export const mapStateToProps = (state) => {
                 displayFile : {
                     url :  `${url}/signing/getDocumentForToken?token=${state.tokenFile.token}`,
                     displayUrl :  `${url}/signing/getDocumentForToken?token=${state.tokenFile.token}`,
-                    isPdf : true
+                    isPdf : state.tokenFile.isPdf,
+                    fileName : state.tokenFile.fileName
                 }
             }
 
