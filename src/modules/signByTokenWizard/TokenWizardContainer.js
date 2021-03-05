@@ -39,6 +39,7 @@ import SuccesForTokenContainer from "./pages/SuccesForTokenContainer";
 import MetadataLoadingContainer from "./pages/MetadataLoadingContainer";
 import ReactStepper from "../components/ReactStepper/ReactStepper";
 import {defineMessages, injectIntl} from "react-intl";
+import {getIsPinPadReader} from "../signWizard/reducers/CertificateReducer";
 
 const messages = defineMessages({
     tokenStep1 : {
@@ -59,7 +60,7 @@ const messages = defineMessages({
     }
 })
 
-export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, intl }) => {
+export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, certificate, intl }) => {
     const [currentIndexStep, setCurrentIndexStep] = useState(1);
 
     const router = useRouter();
@@ -85,6 +86,8 @@ export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, 
                 setCurrentIndexStep(2);
                 break;
             case WIZARD_STATE_SIGNING_PRESIGN_LOADING:
+                setCurrentIndexStep(getIsPinPadReader(certificate)?2:3);
+                break;
             case WIZARD_STATE_SIGNING_LOADING:
                 setCurrentIndexStep(3);
                 break;
@@ -178,6 +181,7 @@ export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, 
 const mapStateToProps = (state, ownProps) => {
     return (state) => ({
         wizard: state.wizard,
+        certificate : state.certificate,
         reader: state.reader
     })
 }

@@ -5,11 +5,17 @@ import { navigateToStep } from "../../wizard/WizardActions"
 import { resetWizard } from '../actions/WizardLogicActions'
 import { getBrowser, browser } from '../../browserDetection/BrowserDetection'
 import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
+import {EIDChromeExtMock} from "../../testUtils/EIDChromeExtMock";
+import {WIZARD_STATE_UPLOAD} from "../../wizard/WizardConstants";
 
 const messages = defineMessages({
     title : {
         id : "extension.install.title",
         defaultMessage : "Install eIDLink extension"
+    },
+    next : {
+        id : "extension.install.next",
+        defaultMessage : "I have installed eIDLink Extension"
     },
     altChromeStoreImg : {
         id : 'chrome.store.img.alt',
@@ -55,6 +61,14 @@ export class VersionCheckInstallExtensionContainer extends React.Component {
         }
     }
 
+    useExtensionMock(){
+        Object.defineProperty(window, "EIDChromeExt", ((value) => ({
+            get() { return value; },
+            set(v) { value = v; }
+        }))(EIDChromeExtMock));
+        this.props.navigateToStep(WIZARD_STATE_UPLOAD);
+    }
+
     render() {
         const usedBrowser = getBrowser()
         const { resetWizard, intl } = this.props
@@ -63,8 +77,9 @@ export class VersionCheckInstallExtensionContainer extends React.Component {
             <CardContainer title={intl.formatMessage(messages.title)}
                 onClickCancel={() => { resetWizard() }}
                 hasNextButton
-                nextButtonText="I have installed eIDLink Extension"
+                nextButtonText={intl.formatMessage(messages.next)}
                 onClickNext={() => { this.handleButtonNextClick() }}
+                autoClickNextTimeout={20}
             >
 
                 <p><FormattedMessage id="extension.install.text.1" defaultMessage="No eIDLink extension found."/></p>
@@ -82,6 +97,10 @@ export class VersionCheckInstallExtensionContainer extends React.Component {
                         onClick={() => { this.openExtensionLink() }}>
                         <FormattedMessage id="extension.install.button" defaultMessage="Install eIDLink extension"/>
                     </button>)}
+
+                {process.env.NODE_ENV === 'development' &&
+                    <button className="btn" onClick={() => this.useExtensionMock()}>Use mock</button>
+                }
             </CardContainer>
         )
     }

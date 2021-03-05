@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { CardError } from '../../components/Card/CardError'
 import { resetWizard, navigateToSign } from "../actions/WizardLogicActions"
-import {defineMessages} from "react-intl";
+import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
 import {definedMessages} from "../../i18n/translations";
 const messages = defineMessages({
     title: {
@@ -24,6 +24,9 @@ export class PinPadError extends React.Component {
     render() {
         const { pinError, intl } = this.props
         if (pinError && pinError.message) {
+            if(pinError.message.id){
+                pinError.message = intl.formatMessage(pinError.message)
+            }
             return (
                 <CardError
                     title={intl.formatMessage(messages.title)}
@@ -55,4 +58,4 @@ const mapDispatchToProps = ({
     navigateToSign
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(PinPadError)
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(PinPadError))

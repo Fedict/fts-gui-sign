@@ -4,6 +4,7 @@ import { resetWizard } from "../actions/WizardLogicActions"
 import { connect } from "react-redux"
 import {definedMessages} from "../../i18n/translations";
 import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
+import {getIsPinPadReader} from "../reducers/CertificateReducer";
 
 
 const messages = defineMessages({
@@ -15,10 +16,7 @@ const messages = defineMessages({
 
 export const SigningPreSignLoading = ({ certificate, resetWizard, intl }) => {
 
-    const isPinPadReader = (certificate
-        && certificate.certificateSelected
-        && certificate.certificateSelected.readerType
-        && certificate.certificateSelected.readerType === "pinpad")
+    const isPinPadReader = getIsPinPadReader(certificate)
 
     const certificateName = (certificate
         && certificate.certificateSelected

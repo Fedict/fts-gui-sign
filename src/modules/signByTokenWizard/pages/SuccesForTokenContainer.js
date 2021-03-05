@@ -53,6 +53,7 @@ export class SuccesContainerForToken extends React.Component {
                 hasNextButton
                 nextButtonText={intl.formatMessage(messages.doneButton)}
                 onClickNext={() => nextButtonClicked(redirectUrl)}
+                autoClickNextTimeout={10}
             >
                 <div className="form-group">
 

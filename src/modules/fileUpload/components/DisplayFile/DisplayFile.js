@@ -18,7 +18,7 @@ export const DisplayFile = ({ uploadFile }) => {
 
     if (uploadFile && uploadFile.displayFile) {
         const data = uploadFile.displayFile
-        if (data) {
+        if (data && data.displayUrl) {
             if (data.isPdf) {
                 if (getBrowser() === browser.IE) {
                     if (data.displayUrl) {

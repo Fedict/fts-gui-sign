@@ -55,7 +55,7 @@ export const Navbar = ({ location, resetStore, navigateToStep, setNewFlowId, his
                 </div>
                 <nav className="nav ml-auto">
                     {languages.map((language) => (
-                        <a key={language} className="nav-link" href="#" onClick={() => chooseLanguage(language)}>{language.toUpperCase()}</a>
+                        <a key={language} className="nav-link" href={`#${language}`} onClick={() => chooseLanguage(language)}>{language.toUpperCase()}</a>
                     ))}
                 </nav>
             </nav>

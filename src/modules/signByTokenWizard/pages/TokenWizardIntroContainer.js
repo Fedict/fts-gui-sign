@@ -21,10 +21,11 @@ const TokenWizardIntroContainer = (props) => {
             title={props.intl.formatMessage(messages.title, {fileName : `'${props.fileName}'`})}
             hasCancelButton
             cancelButtonText={props.intl.formatMessage(definedMessages.cancel)}
-            onClickCancel={() => { resetWizard() }}
+            onClickCancel={() => { props.resetWizard() }}
             hasNextButton
             nextButtonText={props.intl.formatMessage(definedMessages.start)}
             onClickNext={() => { props.navigateToNextStep() }}
+            autoClickNextTimeout={30}
         >
             <FormattedMessage id="token.intro.txt" defaultMessage="Welcome, {newLine} you are about to sign the document on the left.{newLine}{newLine}You can now insert your eID card into the card reader (make sure you know its PIN code) and then press the Start button to start signing the document." values={{newLine : <br/>, fileName : props.fileName}}/>
         </CardContainer>

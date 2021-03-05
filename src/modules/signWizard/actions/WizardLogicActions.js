@@ -46,6 +46,7 @@ import { handleFlowIdError } from "../../controlIds/flowId/FlowIdHelpers"
 import { INCORECT_REQUEST_ID } from '../../controlIds/requestId/RequestIdHelpers'
 import { INCORECT_FLOW_ID } from '../../controlIds/flowId/FlowIdHelpers'
 import {errorMessages} from "../../i18n/translations";
+import {redirectErrorCodes} from "../../../const";
 
 //----------------------------------
 // helpers                    
@@ -608,9 +609,21 @@ export const signDocument = () => (dispatch, getStore) => {
  * - navigates to / 
  */
 export const resetWizard = () => (dispatch, getStore) => {
-    window.location.pathname = "/"
     let eIDLink = controller.getInstance()
     eIDLink.stop()
+    const {tokenFile, wizard} = getStore();
+
     dispatch(resetStore())
-    dispatch(setNewFlowId())
+    dispatch(setNewFlowId());
+    if(tokenFile && tokenFile.redirectUrl){
+        let url = new URL(tokenFile.redirectUrl);
+        url.searchParams.append('err', redirectErrorCodes.USER_CANCELLED);
+        if(wizard && wizard.state){
+            url.searchParams.append('details', wizard.state);
+        }
+        window.location = url.toString();
+    }else{
+        window.location.pathname = "/"
+    }
+
 }

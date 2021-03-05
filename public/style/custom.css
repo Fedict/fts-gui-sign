@@ -7140,3 +7140,12 @@ a.text-dark:hover, a.text-dark:focus {
 
 .selectCard:hover {
   border-color: #11a0ba; }
+
+.inactive .bs-stepper-label {
+  color: rgba(108, 75, 125, 0.6); }
+
+.inactive .bs-stepper-circle {
+  background-color: #6c757d; }
+
+.container-fluid, .container-sm, .container-md, .container-lg, .container-xl {
+  margin-bottom: 32px; }

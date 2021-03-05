@@ -1,8 +1,12 @@
+import {sleep} from "../utils/helper";
+
+const readerType = process.env.NODE_ENV === 'development'?"pinpad":"standard";
+
 export class EIDChromeExtMock {
     userCertificates =
         {Readers: [{
                 ReaderName: "Broadcom Corp Contacted SmartCard 0",
-                ReaderType: "standard",
+                ReaderType: readerType,
                 cardType: "BEID",
                 certificates: [{
                     "certificate": {"encodedCertificate": "emVnZXpncnRqenRyanRoNTE2NTE2ZXoxZjVlemYzNjFlNmYgIGV6ZiA="}
@@ -17,7 +21,7 @@ export class EIDChromeExtMock {
     userCertificatesChain = {certificateChain: {
             rootCA: "emVnZXpncnRqenRyanRoNTE2NTE2ZXoxZjVlemYzNjFlNmYgIGV6ZiA=",
             subCA : ['emVnZXpncnRqenRyanRoNTE2NTE2ZXoxZjVlemYzNjFlNmYgIGV6ZiA=']
-        }, cardType: "BEID", ReaderType: "standard", result: "OK", correlationId: "459895de-65f3-9165-a7e2-e4efb090d7d4",
+        }, cardType: "BEID", ReaderType: readerType, result: "OK", correlationId: "459895de-65f3-9165-a7e2-e4efb090d7d4",
         extensionVersion: "0.0.4",
         src: "EIDChromeExt.background"
     }
@@ -41,9 +45,22 @@ export class EIDChromeExtMock {
     }
 
     sign(lang, mac, cert, algo, digest, pin){
-        return new Promise(resolve => {
-            resolve(this.signature)
+        return sleep(500).then(() => {
+            if(process.env.NODE_ENV === 'development'){
+                if(window.confirm('Confirming the signature of the document, press yes for happy flow, no for pin input error')){
+                    return (this.signature)
+                }else{
+                    throw ({message : 'pin_2_attempts_left'})
+                }
+            }else{
+                return (this.signature)
+            }
+
         })
+    }
+
+    suspend(){
+
     }
 
 }
