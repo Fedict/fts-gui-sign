@@ -9,11 +9,11 @@ window.configData = {
     },
 
     eIDLinkUrls: {
-        windows: "https://eid.static.bosa.fgov.be/eidlink.msi",
-        macOs: "https://eid.static.bosa.fgov.be/eidlink.dmg",
+        windows: "https://eid.static.bosa.fgov.be/beidconnect.msi",
+        macOs: "https://eid.static.bosa.fgov.be/beidconnect.dmg",
         linux: {
             debian: {
-                url: "https://eid.static.bosa.fgov.be/eidlink-archive.deb",
+                url: "https://eid.static.bosa.fgov.be/beidconnect-archive.deb",
                 distributions: [
                     'Debian 9 "Stretch"',
                     'Debian 10 "Buster"',
@@ -22,14 +22,14 @@ window.configData = {
                 ]
             },
             fedora: {
-                url: "https://eid.static.bosa.fgov.be/eidlink-archive-fedora.rpm",
+                url: "https://eid.static.bosa.fgov.be/beidconnect-archive-fedora.rpm",
                 distributions: [
                     'Fedora 31',
                     'Fedora 32'
                 ]
             },
             redHat: {
-                url: "https://eid.static.bosa.fgov.be/eidlink-archive-el.rpm",
+                url: "https://eid.static.bosa.fgov.be/beidconnect-archive-el.rpm",
                 distributions:  [
                     'Red Hat Enterprise Linux 7 "Maipo"',
                     'Red Hat Enterprise Linux 8 "Ootpa"',
@@ -38,7 +38,7 @@ window.configData = {
             }
             ,
             openSUSE: {
-                url: "https://eid.static.bosa.fgov.be/eidlink-archive-suse.rpm",
+                url: "https://eid.static.bosa.fgov.be/beidconnect-archive-suse.rpm",
                 distributions: [
                     'OpenSUSE Leap 15.0',
                     'OpenSUSE Leap 15.1'
@@ -55,6 +55,6 @@ window.configData = {
         "text/xml": "XADES_LTA" /*XADES_1*/
     },
 
-    BEurl: "http://localhost:8751/signandvalidation",
-    BEurla: "https://validate.ta.fts.bosa.belgium.be/signandvalidation",
+    BEurl_mock: "http://localhost:8751/signandvalidation",
+    BEurl: "https://validate.ta.fts.bosa.belgium.be/signandvalidation",
 };

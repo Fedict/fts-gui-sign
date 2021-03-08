@@ -367,7 +367,7 @@ describe("WizardLogicActions", () => {
             eIDLinkController.controller.getInstance = jest.fn()
         })
 
-        test('requestTimeoutFunction stops eIDLink and checks version of eIDLink', () => {
+        test('requestTimeoutFunction stops BeIDConnect and checks version of BeIDConnect', () => {
             const mockDispatch = jest.fn()
             const mockGetStore = jest.fn()
             const mockStop = jest.fn()
@@ -392,7 +392,7 @@ describe("WizardLogicActions", () => {
             window.location.reload = jest.fn()
         })
 
-        test('requestTimeOutFunctionChecVersion stops eIDLink and reloads the page', () => {
+        test('requestTimeOutFunctionChecVersion stops BeIDConnect and reloads the page', () => {
             const mockDispatch = jest.fn()
             const mockGetStore = jest.fn()
             const mockStop = jest.fn()
@@ -520,7 +520,7 @@ describe("WizardLogicActions", () => {
             expect(MessageActions.showErrorMessage).toBeCalledWith(ErrorGeneral)
         })
 
-        test("checkVersion navigates to eIDLink install if eIDLink native host is not active", () => {
+        test("checkVersion navigates to BeIDConnect install if BeIDConnect native host is not active", () => {
             const requestId = 55555
             RequestIdActions.createRequestId = jest.fn(() => { return requestId })
 
@@ -547,7 +547,7 @@ describe("WizardLogicActions", () => {
             expect(navigation.navigateToStep).toBeCalledWith(WIZARD_STATE_VERSION_CHECK_INSTALL)
         })
 
-        test("checkVersion navigates to eIDLink update if eIDLink native host is outdated", () => {
+        test("checkVersion navigates to BeIDConnect update if BeIDConnect native host is outdated", () => {
             const requestId = 55555
             RequestIdActions.createRequestId = jest.fn(() => { return requestId })
 
@@ -574,7 +574,7 @@ describe("WizardLogicActions", () => {
             expect(navigation.navigateToStep).toBeCalledWith(WIZARD_STATE_VERSION_CHECK_UPDATE)
         })
 
-        test("checkVersion navigates to eIDLink extension install if eIDLink Extension is not found", () => {
+        test("checkVersion navigates to BeIDConnect extension install if BeIDConnect Extension is not found", () => {
             const requestId = 55555
             RequestIdActions.createRequestId = jest.fn(() => { return requestId })
 
@@ -1320,7 +1320,7 @@ describe("WizardLogicActions", () => {
             communication.validateCertificatesAPI = jest.fn(() => { return Promise.resolve() });
         })
 
-        test("validateCertificateChain doesn't call eIDLink getCertificateChain if there is no selectedCertificate",
+        test("validateCertificateChain doesn't call BeIDConnect getCertificateChain if there is no selectedCertificate",
             async () => {
                 const mockvalidateCertificateChain = jest.fn(() => { return Promise.resolve() })
                 eIDLinkController.controller.getInstance = jest.fn(() => ({ getCertificateChain: mockvalidateCertificateChain }))
@@ -2200,7 +2200,7 @@ describe("WizardLogicActions", () => {
             expect(createRequestId).toBeCalledWith(10000, expect.any(Function))
         })
 
-        test("sign calls eIDLink sign", () => {
+        test("sign calls BeIDConnect sign", () => {
             const certificateString = "certificateString"
             const digestString = 'digestString'
             const digestAlgorithmString = "SHA256"
