@@ -25,7 +25,8 @@ export class PinInputContainer extends React.Component {
         super(props);
 
         this.state = {
-            pin: ""
+            pin: "",
+            indexCursor : 0
         }
 
         this.onKeyUp = this.onKeyUp.bind(this)
@@ -42,26 +43,29 @@ export class PinInputContainer extends React.Component {
 
     onKeyUp(e) {
         let pincode = this.state.pin + ""
+        let indexCursor = this.state.indexCursor;
         if (e.key === 'Enter') {
             if (pincode.length >= 4) {
                 this.handleSubmit()
             }
+        } else if (e.key === 'Backspace') {
+            pincode = pincode.substr(0, pincode.length - 1)
+            this.setState({ pin: pincode, indexCursor : indexCursor - 1 })
+        }else if (e.key === 'Delete'){
+            pincode = pincode.substr(0, indexCursor) + pincode.substr(indexCursor + 1)
+            this.setState({ pin: pincode, indexCursor })
+        }else if (e.key === 'ArrowLeft'){
+            this.setState({indexCursor : Math.max(0, indexCursor - 1)})
+        }else if (e.key === 'ArrowRight'){
+            this.setState({indexCursor : Math.min(pincode.length, indexCursor + 1)})
+        }else if (e.key.length === 1) {
+            if (pincode.length < 12) {
+                pincode = pincode + e.key
+                this.setState({ pin: pincode, indexCursor : indexCursor + 1 })
+            }
+        } else {
         }
-        else {
-            if (e.key === 'Backspace') {
 
-                pincode = pincode.substr(0, pincode.length - 1)
-                this.setState({ pin: pincode })
-            }
-            if (e.key.length === 1) {
-                if (pincode.length < 12) {
-                    pincode = pincode + e.key
-                    this.setState({ pin: pincode })
-                }
-            }
-            else {
-            }
-        }
     }
 
     onchange(e) {
@@ -77,7 +81,7 @@ export class PinInputContainer extends React.Component {
 
     render() {
         const { resetWizard, pinError, certificate, intl } = this.props
-        const { pin } = this.state
+        const { pin, indexCursor } = this.state
         const pinstring = "*".repeat(pin.length)
         return (
 
@@ -112,7 +116,7 @@ export class PinInputContainer extends React.Component {
                                 className=" form-control"
                                 id="input_code"
                                 data-testid="input_code"
-                            >{pinstring}</div>
+                            >{pinstring.substr(0, indexCursor)}<span className="blinking-cursor">|</span>{pinstring.substr(indexCursor)}</div>
                         </div>
 
                     </div>
