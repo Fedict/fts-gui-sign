@@ -2,40 +2,43 @@ import React, {Component, useEffect, useState} from 'react';
 import {FormattedMessage, IntlProvider} from "react-intl";
 import {connect} from "react-redux";
 import {languages} from "../../const";
-import {loadMessagesForLocale} from "./actions/i18nActions";
+import {chooseLanguage, loadMessagesForLocale} from "./actions/i18nActions";
 import {defaults, setCookie} from "../utils/helper";
+import {useRouter} from "../utils/useRouter";
 
 const MainI18nWrapper = (props) => {
-	let [stateLocale, setStateLocale] = useState();
-	let [loading, setLoading] = useState();
-	let [messages, setMessages] = useState({});
-	let {locale} = props;
-
+	const [stateLocale, setStateLocale] = useState();
+	const [loading, setLoading] = useState();
+	const [messages, setMessages] = useState({});
+	const router = useRouter();
+	const locale = defaults(languages.indexOf(router.query.language) > -1?router.query.language:props.locale, languages[0])
 	useEffect(() => {
-		if(stateLocale !== props.locale && !loading) {
+		let mounted = true;
+		if(stateLocale !== locale && !loading) {
 			let _this = this;
-			let localeToFetch = props.locale;
+			let localeToFetch = locale;
 			setLoading(true);
 			props.doLoadMessagesForLocale(localeToFetch, (messages) => {
-				setMessages(messages);
-				setLoading(false);
-				setStateLocale(localeToFetch);
+				if(mounted){
+					setMessages(messages);
+					setLoading(false);
+					setStateLocale(localeToFetch);
+					props.chooseLanguage(localeToFetch);
+				}
 			});
 			setCookie('language', localeToFetch);
 		}
-	}, [props.locale]);
-	if(locale){
-		locale = locale.toLowerCase();
+
+		return function cleanup() {
+			mounted = false
+		}
+	}, [locale]);
+	if(!stateLocale){
+		return false;
 	}
-	if(!locale || languages.indexOf(locale) < 0){
-		locale = languages[0];
-	}
-	if(stateLocale && stateLocale !== locale){
-		locale = stateLocale;
-	}
-	let translationsForUsersLocale = defaults(messages, require('../../translations/' + locale + '.json'));
+	let translationsForUsersLocale = defaults(messages, require('../../translations/' + stateLocale + '.json'));
 	return (
-		<IntlProvider locale={locale} messages={translationsForUsersLocale}>
+		<IntlProvider locale={stateLocale} messages={translationsForUsersLocale}>
 			{props.children}
 		</IntlProvider>
 	);
@@ -51,7 +54,8 @@ const mapDispatchToProps = dispatch => {
 	return {
 		doLoadMessagesForLocale : (locale, callback) => {
 			dispatch(loadMessagesForLocale(locale, callback));
-		}
+		},
+		chooseLanguage
 	};
 };
 

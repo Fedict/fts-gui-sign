@@ -50,10 +50,10 @@ export const CardContainer = (
                 }else if(typeof onClickNext === 'function'){
                     onClickNext();
                 }
-                return function cleanup() {
-                    mounted = false
-                }
             }
+        }
+        return function cleanup() {
+            mounted = false
         }
     }, [autoClickTime, abortAutoNext])
     return (

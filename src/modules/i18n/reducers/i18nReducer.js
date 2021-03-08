@@ -6,7 +6,7 @@ import {languages} from "../../../const";
 
 
 export const initialState = {
-    language : languages[0]
+    language : undefined
 }
 
 const i18nReducer = (state = initialState, action) => {

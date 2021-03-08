@@ -56,5 +56,5 @@ window.configData = {
     },
 
     BEurl: "http://localhost:8751/signandvalidation",
-    BEurl: "https://validate.ta.fts.bosa.belgium.be/signandvalidation",
+    BEurla: "https://validate.ta.fts.bosa.belgium.be/signandvalidation",
 };

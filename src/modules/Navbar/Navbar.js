@@ -11,6 +11,12 @@ import { setNewFlowId } from "../controlIds/flowId/FlowIdActions"
 import {languages} from "../../const";
 import {chooseLanguage} from "../i18n/actions/i18nActions";
 
+const getChangeLanguageLink = (language) => {
+    let url = new URL(window.location);
+    url.searchParams.set('language', language);
+    return url.pathname + '?' + url.searchParams.toString();
+}
+
 export const Navbar = ({ location, resetStore, navigateToStep, setNewFlowId, history, chooseLanguage }) => {
 
     const links = [
@@ -55,7 +61,9 @@ export const Navbar = ({ location, resetStore, navigateToStep, setNewFlowId, his
                 </div>
                 <nav className="nav ml-auto">
                     {languages.map((language) => (
-                        <a key={language} className="nav-link" href={`#${language}`} onClick={() => chooseLanguage(language)}>{language.toUpperCase()}</a>
+                        <a key={language} className="nav-link" href={'#'} onClick={() => {
+                            history.push(getChangeLanguageLink(language))
+                        }}>{language.toUpperCase()}</a>
                     ))}
                 </nav>
             </nav>
@@ -73,7 +81,6 @@ const mapDispatchToProps = ({
     navigateToStep,
     resetStore,
     setNewFlowId,
-    chooseLanguage
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Navbar))

@@ -1,5 +1,4 @@
 {
-  "Failed to load pdf": "",
   "No eId card found": "",
   "No eId reader found": "",
   "Please attach your eID reader": "",
@@ -38,10 +37,12 @@
   "error.NO_TOKEN": "",
   "error.WRONG_RESULT_SIGN_TOKEN": "",
   "extension.install.button": "",
+  "extension.install.next": "",
   "extension.install.text.1": "",
   "extension.install.text.2": "",
   "extension.install.text.3": "",
   "extension.install.title": "",
+  "file.download.failed.pdf": "",
   "file.download.link": "",
   "file.download.text.1": "",
   "loading": "",

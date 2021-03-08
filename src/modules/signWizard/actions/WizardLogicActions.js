@@ -617,9 +617,9 @@ export const resetWizard = () => (dispatch, getStore) => {
     dispatch(setNewFlowId());
     if(tokenFile && tokenFile.redirectUrl){
         let url = new URL(tokenFile.redirectUrl);
-        url.searchParams.append('err', redirectErrorCodes.USER_CANCELLED);
+        url.searchParams.set('err', redirectErrorCodes.USER_CANCELLED);
         if(wizard && wizard.state){
-            url.searchParams.append('details', wizard.state);
+            url.searchParams.set('details', wizard.state);
         }
         window.location = url.toString();
     }else{

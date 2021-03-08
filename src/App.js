@@ -57,11 +57,11 @@ function App() {
   const browserIsSupported = browserIsAccepted()
   const notSupportedMessage = ErrorNotSupported;
   return (
-      <MainI18nWrapper>
-        <Router>
-           <BaseApp browserIsSupported={browserIsSupported} notSupportedMessage={notSupportedMessage}/>
-        </Router>
-      </MainI18nWrapper>
+      <Router>
+          <MainI18nWrapper>
+              <BaseApp browserIsSupported={browserIsSupported} notSupportedMessage={notSupportedMessage}/>
+          </MainI18nWrapper>
+      </Router>
   );
 }
 

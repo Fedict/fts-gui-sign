@@ -28,6 +28,10 @@ $theme-colors: (
   background-color: #6c757d;
 }
 
+.bs-stepper .line, .bs-stepper-line{
+  flex: 1 0 16px;
+}
+
 .container-fluid{
   margin-bottom: 32px;
 }
