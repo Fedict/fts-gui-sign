@@ -53,7 +53,7 @@ export const createBody = (certificateBody, documentName, documentBase64, docume
             "detachedContents": [
             ],
             "signingCertificate": certificateBody.certificate,
-            "signingDate": "2020-04-06T09:45:44"
+            "signingDate": null
         },
         "signingProfileId": getsigningProfileId(documentType),
         "toSignDocument": {
@@ -70,7 +70,7 @@ export const createBodyForToken = (certificateBody, token) => (
             "detachedContents": [
             ],
             "signingCertificate": certificateBody.certificate,
-            "signingDate": "2020-04-06T09:45:44"
+            "signingDate": null
         },
         token
     }

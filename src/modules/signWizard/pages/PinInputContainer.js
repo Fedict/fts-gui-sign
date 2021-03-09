@@ -42,25 +42,26 @@ export class PinInputContainer extends React.Component {
     }
 
     onKeyUp(e) {
+        //console.log(e)
         let pincode = this.state.pin + ""
         let indexCursor = this.state.indexCursor;
-        if (e.key === 'Enter') {
+        if (e.keyCode === 13) { //Enter
             if (pincode.length >= 4) {
                 this.handleSubmit()
             }
-        } else if (e.key === 'Backspace') {
-            pincode = pincode.substr(0, pincode.length - 1)
-            this.setState({ pin: pincode, indexCursor : indexCursor - 1 })
-        }else if (e.key === 'Delete'){
+        } else if (e.keyCode === 8) { //Backspace
+            pincode = pincode.substr(0, indexCursor - 1) + pincode.substr(indexCursor)
+            this.setState({ pin: pincode, indexCursor : Math.max(indexCursor - 1, 0) })
+        }else if (e.keyCode === 46){ //Delete
             pincode = pincode.substr(0, indexCursor) + pincode.substr(indexCursor + 1)
             this.setState({ pin: pincode, indexCursor })
-        }else if (e.key === 'ArrowLeft'){
+        }else if (e.keyCode === 37){ //Left
             this.setState({indexCursor : Math.max(0, indexCursor - 1)})
-        }else if (e.key === 'ArrowRight'){
+        }else if (e.keyCode === 39){ //Right
             this.setState({indexCursor : Math.min(pincode.length, indexCursor + 1)})
         }else if (e.key.length === 1) {
             if (pincode.length < 12) {
-                pincode = pincode + e.key
+                pincode = pincode.substr(0, indexCursor) + e.key + pincode.substr(indexCursor)
                 this.setState({ pin: pincode, indexCursor : indexCursor + 1 })
             }
         } else {
@@ -118,7 +119,6 @@ export class PinInputContainer extends React.Component {
                                 data-testid="input_code"
                             >{pinstring.substr(0, indexCursor)}<span className="blinking-cursor">|</span>{pinstring.substr(indexCursor)}</div>
                         </div>
-
                     </div>
                 </div>
             </CardContainer>

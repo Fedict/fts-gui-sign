@@ -1,4 +1,20 @@
 import React from 'react'
+import {defineMessages, FormattedMessage} from "react-intl";
+
+const errorMessages = defineMessages({
+    general_error : {
+        id : "error.general.title",
+            defaultMessage : "Something went wrong"
+    },
+    general_error_text : {
+        id : "error.general.text",
+        defaultMessage : "Something went wrong. Please reload the page and try again."
+    },
+    not_supported_error : {
+        id : "error.browser_not_supported.title",
+        defaultMessage : "Browser is not supported"
+    },
+})
 
 /**
  * @constant {object} messageTypes - enum with the possible types of messagetypes
@@ -13,8 +29,8 @@ export const messageTypes = {
  */
 export const ErrorGeneral = {
     type: messageTypes.ERROR,
-    title: "Something went wrong",
-    message: "Something went wrong. Please reload the page and try again.",
+    title: errorMessages.general_error,
+    message: errorMessages.general_error_text,
     body: null,
     nextButton: {
         text: null,
@@ -29,16 +45,17 @@ export const ErrorGeneral = {
  */
 export const ErrorNotSupported = {
     type: messageTypes.ERROR,
-    title: "Browser is not supported",
+    title: errorMessages.not_supported_error,
     message: (
         <div>
-            <p>Your browser is not supported. Please use one of the following browsers:</p>
+            <p><FormattedMessage id="error.browser_not_supported.text" defaultMessage="Your browser is not supported. Please use one of the following browsers:"/></p>
             <div className="col col-10 mx-auto" >
                 <ul className="text-left">
-                    <li>Chrome</li>
-                    <li>Edge (based on Chromium)</li>
-                    <li>Firefox</li>
-                    <li>Opera (based on Chromium)</li>
+                    <li><FormattedMessage id="error.browser_not_supported.supported.1" defaultMessage="Chrome"/></li>
+                    <li><FormattedMessage id="error.browser_not_supported.supported.2" defaultMessage="Edge (based on Chromium)"/></li>
+                    <li><FormattedMessage id="error.browser_not_supported.supported.3" defaultMessage="Internet explorer" /></li>
+                    <li><FormattedMessage id="error.browser_not_supported.supported.4" defaultMessage="Firefox" /></li>
+                    <li><FormattedMessage id="error.browser_not_supported.supported.5" defaultMessage="Opera (based on Chromium)"/></li>
                 </ul>
             </div>
         </div>),

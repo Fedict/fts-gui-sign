@@ -44,7 +44,7 @@ $theme-colors: (
   animation: 1s blink step-end infinite;
 }
 
-@keyframes "blink" {
+@keyframes blink {
   from, to {
     color: transparent;
   }
@@ -62,7 +62,7 @@ $theme-colors: (
   }
 }
 
-@-webkit-keyframes "blink" {
+@-webkit-keyframes blink {
   from, to {
     color: transparent;
   }
@@ -71,7 +71,7 @@ $theme-colors: (
   }
 }
 
-@-ms-keyframes "blink" {
+@-ms-keyframes blink {
   from, to {
     color: transparent;
   }
@@ -80,7 +80,7 @@ $theme-colors: (
   }
 }
 
-@-o-keyframes "blink" {
+@-o-keyframes blink {
   from, to {
     color: transparent;
   }

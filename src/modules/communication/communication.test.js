@@ -73,7 +73,7 @@ describe("createBody", () => {
                 "certificateChain": startCertificateObject.certificateChain,
                 "detachedContents": [],
                 "signingCertificate": startCertificateObject.certificate,
-                "signingDate": "2020-04-06T09:45:44",
+                "signingDate": null,
             },
             "signingProfileId": "XADES_1",
             "toSignDocument": {
