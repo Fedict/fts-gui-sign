@@ -4,8 +4,8 @@ window.configData = {
         chrome: "https://chrome.google.com/webstore/detail/eidlink/pencgnkbgaekikmiahiaakjdgaibiipp",
         edge: "https://chrome.google.com/webstore/detail/eidlink/pencgnkbgaekikmiahiaakjdgaibiipp",
         firefox: "https://eid.static.bosa.fgov.be/eidlink-fx.xpi",
-        safari: "https://eid.static.bosa.fgov.be/Bosa%20eID%20App%20Extension.dmg",
-        IE: "https://eid.static.bosa.fgov.be/eidlink.msi"
+        safari: "https://eid.static.bosa.fgov.be/BeIDConnect%20Extension.dmg",
+        IE: "https://eid.static.bosa.fgov.be/beidconnect.msi"
     },
 
     eIDLinkUrls: {
