@@ -11,7 +11,7 @@ const MainI18nWrapper = (props) => {
 	const [loading, setLoading] = useState();
 	const [messages, setMessages] = useState({});
 	const router = useRouter();
-	const locale = defaults(languages.indexOf(router.query.language) > -1?router.query.language:props.locale, languages[0])
+	const locale = defaults(languages.indexOf(router.query.language) > -1?router.query.language:props.locale, 'en')
 	useEffect(() => {
 		let mounted = true;
 		if(stateLocale !== locale && !loading) {

@@ -18,12 +18,12 @@ export const DisplayFile = ({ uploadFile }) => {
 
     if (uploadFile && uploadFile.displayFile) {
         const data = uploadFile.displayFile
-        if (data && data.displayUrl) {
+        if (data && data.url) {
             if (data.isPdf) {
                 if (getBrowser() === browser.IE) {
-                    if (data.displayUrl) {
+                    if (data.url) {
                         return (
-                            <PDFViewerInternetExplorer key={data.displayUrl} />
+                            <PDFViewerInternetExplorer key={data.url} />
                         )
                     }
                     return null
