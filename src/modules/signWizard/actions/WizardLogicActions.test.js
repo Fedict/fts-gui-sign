@@ -1828,7 +1828,7 @@ describe("WizardLogicActions", () => {
             })
             getDigest()(mockDispatch, mockGetStore)
             expect(communication.getDataToSignAPI).toBeCalledTimes(1)
-            expect(communication.getDataToSignAPI).toBeCalledWith(mockapiBody, mockFile)
+            expect(communication.getDataToSignAPI).toBeCalledWith(mockapiBody, mockFile, expect.anything())
 
         })
 
@@ -2486,6 +2486,7 @@ describe("WizardLogicActions", () => {
                 }
             }
             const mockSignatureString = "signatureString"
+            const mockSigningDate = "1234"
             const mockFile = { test: "string" }
             const mockDispatch = jest.fn((val) => val)
             const mockGetStore = jest.fn(() => {
@@ -2496,14 +2497,14 @@ describe("WizardLogicActions", () => {
                             APIBody: mockApiBody
                         }
                     },
-                    signature: { signature: mockSignatureString },
+                    signature: { signature: mockSignatureString, signingDate : mockSigningDate },
                     uploadFile: { file: mockFile }
                 }
 
             })
             signDocument()(mockDispatch, mockGetStore)
             expect(signDocumentAPI).toBeCalledTimes(1)
-            expect(signDocumentAPI).toBeCalledWith(mockApiBody, mockFile, mockSignatureString)
+            expect(signDocumentAPI).toBeCalledWith(mockApiBody, mockFile, mockSignatureString, mockSigningDate)
         })
 
         test("signDocument success handleFlowIdError", () => {

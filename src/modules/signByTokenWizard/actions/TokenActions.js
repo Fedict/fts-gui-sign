@@ -7,6 +7,8 @@ import {navigateToSign} from "../../signWizard/actions/WizardLogicActions";
 import {errorMessages} from "../../i18n/translations";
 import {navigateToStep} from "../../wizard/WizardActions";
 import {WIZARD_STATE_PIN_INPUT, WIZARD_STATE_UPLOAD} from "../../wizard/WizardConstants";
+import moment from "moment";
+import {setDateSigning} from "../../signWizard/actions/SignatureActions";
 
 export const TOKEN_RECEIVED = "TOKEN_RECEIVED"
 export const SET_DOCUMENT_TOKEN_METADATA = "SET_DOCUMENT_TOKEN_METADATA"
@@ -17,6 +19,8 @@ export const getDigestForToken = () => (dispatch, getStore) => {
     const store = getStore()
     const { certificate } = store
     const { tokenFile } = store
+    const signingDate = moment().format();
+    dispatch(setDateSigning(signingDate))
 
     if (certificate
         && certificate.certificateSelected
@@ -24,7 +28,7 @@ export const getDigestForToken = () => (dispatch, getStore) => {
         && tokenFile
         && tokenFile.token) {
         const flowId = getStore().controlId.flowId;
-        getDataToSignForTokenAPI(certificate.certificateSelected.APIBody, tokenFile.token)
+        getDataToSignForTokenAPI(certificate.certificateSelected.APIBody, tokenFile.token, signingDate)
             .then(handleFlowIdError(flowId, getStore))
             .then((resp) => {
                 dispatch(setDigest(resp))

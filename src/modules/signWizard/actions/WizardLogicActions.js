@@ -22,13 +22,13 @@ import {
     selectCertificate
 } from "./CertificateActions"
 import {
-    getDataToSignAPI, getDataToSignForTokenAPI,
+    getDataToSignAPI,
     signDocumentAPI, signDocumentForTokenAPI,
     validateCertificatesAPI
 } from "../../communication/communication"
 import { setDigest } from "./DigestActions"
 import { handleErrorEID, handlePinErrorEID } from "./SignErrorHandleActions"
-import { setSignature } from "./SignatureActions"
+import {setDateSigning, setSignature} from "./SignatureActions"
 import { setDownloadFile } from "../../fileUpload/actions/UploadFileActions"
 import {
     readerSetCheck,
@@ -47,6 +47,7 @@ import { INCORECT_REQUEST_ID } from '../../controlIds/requestId/RequestIdHelpers
 import { INCORECT_FLOW_ID } from '../../controlIds/flowId/FlowIdHelpers'
 import {errorMessages} from "../../i18n/translations";
 import {redirectErrorCodes} from "../../../const";
+import moment from 'moment'
 
 //----------------------------------
 // helpers                    
@@ -403,12 +404,13 @@ export const getDigest = () => (dispatch, getStore) => {
     const store = getStore()
     const { certificate } = store
     const { uploadFile } = store
-
+    const signingDate = moment().format();
+    dispatch(setDateSigning(signingDate))
     if (certificate
         && certificate.certificateSelected
         && certificate.certificateSelected.APIBody) {
         const flowId = getStore().controlId.flowId
-        getDataToSignAPI(certificate.certificateSelected.APIBody, uploadFile.file)
+        getDataToSignAPI(certificate.certificateSelected.APIBody, uploadFile.file, signingDate)
             .then(handleFlowIdError(flowId, getStore))
             .then((resp) => {
                 dispatch(setDigest(resp))
@@ -551,7 +553,8 @@ export const signDocument = () => (dispatch, getStore) => {
             signDocumentForTokenAPI(
                 certificate.certificateSelected.APIBody,
                 tokenFile.token,
-                signature.signature)
+                signature.signature,
+                signature.signingDate)
                 .then(handleFlowIdError(flowId, getStore))
                 .then((resp) => {
 
@@ -575,7 +578,8 @@ export const signDocument = () => (dispatch, getStore) => {
             signDocumentAPI(
                 certificate.certificateSelected.APIBody,
                 uploadFile.file,
-                signature.signature)
+                signature.signature,
+                signature.signingDate)
                 .then(handleFlowIdError(flowId, getStore))
                 .then((resp) => {
 

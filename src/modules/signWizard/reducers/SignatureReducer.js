@@ -1,8 +1,9 @@
-import { SIGNATURE_SET_SIGNATURE } from "../actions/SignatureActions"
+import {SIGNATURE_SET_DATE_SIGNING, SIGNATURE_SET_SIGNATURE} from "../actions/SignatureActions"
 import { STORE_RESET } from "../../../store/storeActions"
 
 export const initialState = {
-    signature: ""
+    signature: "",
+    signingDate : undefined
 }
 
 const SignatureReducer = (state = initialState, action) => {
@@ -11,6 +12,11 @@ const SignatureReducer = (state = initialState, action) => {
             return {
                 ...state,
                 signature: action.payload,
+            }
+        case SIGNATURE_SET_DATE_SIGNING:
+            return {
+                ...state,
+                signingDate : action.payload
             }
         case STORE_RESET:
             return initialState

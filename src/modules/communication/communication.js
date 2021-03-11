@@ -45,7 +45,7 @@ export const getsigningProfileId = (documentType) => {
  * 
  * @returns {object} body to use in the API request
  */
-export const createBody = (certificateBody, documentName, documentBase64, documentType) => {
+export const createBody = (certificateBody, documentName, documentBase64, documentType, signingDate) => {
 
     return {
         "clientSignatureParameters": {
@@ -53,7 +53,7 @@ export const createBody = (certificateBody, documentName, documentBase64, docume
             "detachedContents": [
             ],
             "signingCertificate": certificateBody.certificate,
-            "signingDate": null
+            "signingDate": signingDate
         },
         "signingProfileId": getsigningProfileId(documentType),
         "toSignDocument": {
@@ -63,14 +63,14 @@ export const createBody = (certificateBody, documentName, documentBase64, docume
     }
 }
 
-export const createBodyForToken = (certificateBody, token) => (
+export const createBodyForToken = (certificateBody, token, signingDate) => (
     {
         "clientSignatureParameters": {
             "certificateChain": certificateBody.certificateChain,
             "detachedContents": [
             ],
             "signingCertificate": certificateBody.certificate,
-            "signingDate": null
+            "signingDate": signingDate
         },
         token
     }
@@ -119,11 +119,11 @@ export const validateCertificatesAPI = (certificateBody) => {
  * 
  * @returns {Promise} Promise that resolves the result of the API request
  */
-export const getDataToSignAPI = async (certificateBody, document) => {
+export const getDataToSignAPI = async (certificateBody, document, signingDate) => {
 
     const documentB64 = await getBase64Data(document)
 
-    const body = createBody(certificateBody, document.name, documentB64, document.type);
+    const body = createBody(certificateBody, document.name, documentB64, document.type, signingDate);
 
     return fetch(url + "/signing/getDataToSign",
         {
@@ -143,11 +143,11 @@ export const getDataToSignAPI = async (certificateBody, document) => {
  * @param {Object} document - document to be signed
  * @param {string} signature - signature value used to sign th document
  */
-export const signDocumentAPI = async (certificateBody, document, signature) => {
+export const signDocumentAPI = async (certificateBody, document, signature, signingDate) => {
     const documentB64 = await getBase64Data(document)
 
     const body = {
-        ...createBody(certificateBody, document.name, documentB64, document.type),
+        ...createBody(certificateBody, document.name, documentB64, document.type, signingDate),
         "signatureValue": signature
     }
 
@@ -192,9 +192,9 @@ export const validateSignatureAPI = async (document) => {
  *
  * @returns {Promise} Promise that resolves the result of the API request
  */
-export const getDataToSignForTokenAPI = async (certificateBody, token) => {
+export const getDataToSignForTokenAPI = async (certificateBody, token, signingDate) => {
 
-    const body = createBodyForToken(certificateBody, token);
+    const body = createBodyForToken(certificateBody, token, signingDate);
 
     return fetch(url + "/signing/getDataToSignForToken",
         {
@@ -215,9 +215,9 @@ export const getDataToSignForTokenAPI = async (certificateBody, token) => {
  * @param {Object} token - token of the document to be signed
  * @param {string} signature - signature value used to sign th document
  */
-export const signDocumentForTokenAPI = async (certificateBody, token, signature) => {
+export const signDocumentForTokenAPI = async (certificateBody, token, signature, signingDate) => {
     const body = {
-        ...createBodyForToken(certificateBody, token),
+        ...createBodyForToken(certificateBody, token, signingDate),
         "signatureValue": signature
     }
 

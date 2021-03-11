@@ -82,7 +82,7 @@ describe("createBody", () => {
             }
         }
 
-        const result = createBody(startCertificateObject, startDocumentName, startDocumentBase64, startDocumentType)
+        const result = createBody(startCertificateObject, startDocumentName, startDocumentBase64, startDocumentType, null)
 
         expect(result).toEqual(expected)
     })
