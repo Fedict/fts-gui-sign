@@ -40,6 +40,7 @@ import MetadataLoadingContainer from "./pages/MetadataLoadingContainer";
 import ReactStepper from "../components/ReactStepper/ReactStepper";
 import {defineMessages, injectIntl} from "react-intl";
 import {getIsPinPadReader} from "../signWizard/reducers/CertificateReducer";
+import {defaults} from "../utils/helper";
 
 const messages = defineMessages({
     tokenStep1 : {
@@ -65,7 +66,7 @@ export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, 
 
     const router = useRouter();
     useEffect(() => {
-        doSetToken(router.query.token, router.query.redirectUrl);
+        doSetToken(router.query.token, defaults(router.query.callbackUrl, router.query.redirectUrl));
     }, [router.query.token]);
     useEffect(() => {
         switch (wizard.state) {
