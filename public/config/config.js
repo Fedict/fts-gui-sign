@@ -1,8 +1,8 @@
 window.configData = {
-    eIDLinkMinimumVersion: "1.5",
+    eIDLinkMinimumVersion: "2.0",
     eIDLinkExtensionUrls: {
-        chrome: "https://chrome.google.com/webstore/detail/eidlink/pencgnkbgaekikmiahiaakjdgaibiipp",
-        edge: "https://chrome.google.com/webstore/detail/eidlink/pencgnkbgaekikmiahiaakjdgaibiipp",
+        chrome: "https://chrome.google.com/webstore/detail/beidconnect/pencgnkbgaekikmiahiaakjdgaibiipp",
+        edge:   "https://chrome.google.com/webstore/detail/beidconnect/pencgnkbgaekikmiahiaakjdgaibiipp",
         firefox: "https://eid.static.bosa.fgov.be/eidlink-fx.xpi",
         safari: "https://eid.static.bosa.fgov.be/BeIDConnect%20Extension.dmg",
         IE: "https://eid.static.bosa.fgov.be/beidconnect.msi"

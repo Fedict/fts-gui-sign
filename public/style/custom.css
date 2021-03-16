@@ -7150,6 +7150,9 @@ a.text-dark:hover, a.text-dark:focus {
 .bs-stepper .line, .bs-stepper-line {
   flex: 1 0 16px; }
 
+.bs-stepper .step-trigger {
+  padding: 0px !important; }
+
 .container-fluid, .container-sm, .container-md, .container-lg, .container-xl {
   margin-bottom: 32px; }
 
