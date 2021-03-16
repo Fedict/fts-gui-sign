@@ -89,6 +89,7 @@
   "succes.next": "Sluiten",
   "succes.text": "Uw document wordt automatisch geladen. Is dit niet het geval, dan kunt u het document handmatig downloaden",
   "succes.title": "Uw document werd succesvol ondertekend!",
+  "title": "BOSA - document ondertekenen",
   "token.intro.title": "Digitale ondertekening van {fileName}",
   "token.intro.txt": "Welkom, {newLine} u staat op het punt het document aan de linkerkant te ondertekenen. {newLine} {newLine} U kunt nu uw eID-kaart in de kaartlezer steken (zorg ervoor dat u de pincode kent ) en druk vervolgens op de \"Start-knop\" om het document te ondertekenen. "
 }

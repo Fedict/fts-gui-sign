@@ -1,10 +1,17 @@
 import React, {Component, useEffect, useState} from 'react';
-import {FormattedMessage, IntlProvider} from "react-intl";
+import {defineMessages, FormattedMessage, IntlProvider} from "react-intl";
 import {connect} from "react-redux";
 import {languages} from "../../const";
 import {chooseLanguage, loadMessagesForLocale} from "./actions/i18nActions";
 import {defaults, setCookie} from "../utils/helper";
 import {useRouter} from "../utils/useRouter";
+
+const dMessages = defineMessages({
+	windowTitle : {
+		id : 'title',
+		defaultMessage : 'BOSA - Signing Document'
+	}
+})
 
 const MainI18nWrapper = (props) => {
 	const [stateLocale, setStateLocale] = useState();
@@ -24,6 +31,9 @@ const MainI18nWrapper = (props) => {
 					setLoading(false);
 					setStateLocale(localeToFetch);
 					props.chooseLanguage(localeToFetch);
+					if(window && window.document){
+						window.document.title = messages[dMessages.windowTitle.id];
+					}
 				}
 			});
 			setCookie('language', localeToFetch);

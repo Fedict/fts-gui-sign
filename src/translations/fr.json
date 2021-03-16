@@ -89,6 +89,7 @@
   "succes.next": "Fermer",
   "succes.text": "Votre document sera automatiquement téléchargé. Si ce n'est pas le cas, vous pouvez lancer le téléchargement manuellement",
   "succes.title": "Votre document a été signé avec succès!",
+  "title": "BOSA - signer le document",
   "token.intro.title": "Signature numérique de {fileName}",
   "token.intro.txt": "Bienvenue, {newLine} vous êtes sur le point de signer le document sur la gauche. {newLine} {newLine} Vous pouvez maintenant insérer votre carte eID dans le lecteur de carte (assurez-vous de connaître son code PIN ), ensuite appuyez sur le bouton \" Démarrer \" pour commencer à signer le document. "
 }

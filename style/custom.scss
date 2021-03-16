@@ -32,6 +32,10 @@ $theme-colors: (
   flex: 1 0 16px;
 }
 
+.bs-stepper .step-trigger{
+  padding: 0px 0px 20px 0px !important;
+}
+
 .container-fluid{
   margin-bottom: 32px;
 }
