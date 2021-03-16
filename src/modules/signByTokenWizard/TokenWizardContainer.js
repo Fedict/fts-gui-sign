@@ -166,7 +166,7 @@ export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, 
                     <TokenDisplayFile />
                 </div>
                 <div className={"col col-5"}>
-                    <ReactStepper>
+                    <ReactStepper style={{marginBottom : 20}}>
                         <ReactStepper.Header>
                             {Object.keys(messages).map((key, index) => (
                                 <ReactStepper.HeaderStep number={index + 1} label={intl.formatMessage(messages[key])} active={(index + 1) === currentIndexStep} key={key}></ReactStepper.HeaderStep>

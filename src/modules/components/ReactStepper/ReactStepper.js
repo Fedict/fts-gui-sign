@@ -34,7 +34,7 @@ const Content = (props) => (
 
 class ReactStepper extends Component {
     render() {
-        return <div className={"bs-stepper " + (this.props.vertical?"vertical":"")}>
+        return <div className={"bs-stepper " + (this.props.vertical?"vertical":"")} style={this.props.style}>
             {this.props.children}
         </div>
     }
