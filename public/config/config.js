@@ -3,7 +3,7 @@ window.configData = {
     eIDLinkExtensionUrls: {
         chrome: "https://chrome.google.com/webstore/detail/beidconnect/pencgnkbgaekikmiahiaakjdgaibiipp",
         edge:   "https://chrome.google.com/webstore/detail/beidconnect/pencgnkbgaekikmiahiaakjdgaibiipp",
-        firefox: "https://eid.static.bosa.fgov.be/eidlink-fx.xpi",
+        firefox: "https://eid.static.bosa.fgov.be/beidconnect-fx.xpi",
         safari: "https://eid.static.bosa.fgov.be/BeIDConnect%20Extension.dmg",
         IE: "https://eid.static.bosa.fgov.be/beidconnect.msi"
     },
