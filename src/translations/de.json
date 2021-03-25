@@ -2,7 +2,7 @@
   "abort.autonext": "eine Weile auf diesem Bildschirm bleiben",
   "beidconnect.linux.download": "Archiv herunterladen",
   "beidconnect.linux.install": "BeIDConnect unter Linux installieren",
-  "beidconnect.linux.step.1": "Installieren Sie das „eID-archive“, damit das „eID“-Paket-Repository verfügbar wird",
+  "beidconnect.linux.step.1": "Installieren Sie das „beidconnect-archive“, damit das „beidconnect“-Paket-Repository verfügbar wird",
   "beidconnect.linux.step.2": "Installieren Sie das „beidconnect“-Paket auf die für Ihre Distribution übliche Weise. Dazu müssen Sie eventuell zunächst ein Update der Indizes durchführen (z. B. mit „apt-get update“).",
   "beidconnect.linux.supported.title": "Unterstützte Distributionen und Versionen",
   "button.cancel": "Abbrechen",

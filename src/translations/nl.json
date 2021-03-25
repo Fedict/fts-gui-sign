@@ -2,7 +2,7 @@
   "abort.autonext": "op dit scherm blijven",
   "beidconnect.linux.download": "Archief downloaden",
   "beidconnect.linux.install": "Installeer BeIDConnect op Linux",
-  "beidconnect.linux.step.1": "Installeer het 'eID-archive' zodat het \" eID \" pakket repository beschikbaar wordt",
+  "beidconnect.linux.step.1": "Installeer het 'beidconnect-archive' pakket zodat het \" beidconnect \" pakket repository beschikbaar wordt",
   "beidconnect.linux.step.2": "Installeer het 'beidconnect'-pakket op de gebruikelijke wijze voor uw distributiesysteem. Het kan zijn dat u eerst een update van de indexen moet uitvoeren (bijv. met behulp van \" apt-get update \"). ",
   "beidconnect.linux.supported.title": "Ondersteunde distributies en versies",
   "button.cancel": "Annuleren",

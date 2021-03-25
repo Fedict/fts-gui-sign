@@ -20,7 +20,7 @@ export const EIDLinkLinuxInstall = ({ linuxDistributions }) => {
         <div>
             <div className="col">
                 <h2><FormattedMessage id="beidconnect.linux.install" defaultMessage="Install BeIDConnect on Linux"/></h2>
-                <NumberdText number={"1"}><FormattedMessage id="beidconnect.linux.step.1" defaultMessage={'Install the \'eID-archive\' so the "eID" pakket repository becomes available'}/></NumberdText>
+                <NumberdText number={"1"}><FormattedMessage id="beidconnect.linux.step.1" defaultMessage={'Install the \'beidconnect-archive\' package so the "beidconnect" package repository becomes available'}/></NumberdText>
                 <NumberdText number={"2"}><FormattedMessage id="beidconnect.linux.step.2" defaultMessage={"Install the 'beidconnect' package in the usual way for your distribution. This may require you to first perform an update of the indexes (e.g. using \"apt-get update\")."}/> </NumberdText>
             </div>
             <div className="col">
