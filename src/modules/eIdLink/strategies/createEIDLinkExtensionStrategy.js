@@ -49,7 +49,7 @@ export const createEIDLinkExtensionStrategy = (api) => {
      * @param {string} mac - mac
      */
     const getCertificate = (lang, mac) => {
-        return api.getUserCertificates(lang, mac)
+        return api.getUserCertificates(lang, mac, 'NONREPUDIATION')
             .then((response) => {
                 return response
             })

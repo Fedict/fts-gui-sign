@@ -48,6 +48,7 @@ import { INCORECT_FLOW_ID } from '../../controlIds/flowId/FlowIdHelpers'
 import {errorMessages} from "../../i18n/translations";
 import {redirectErrorCodes} from "../../../const";
 import moment from 'moment'
+import {defaults} from "../../utils/helper";
 
 //----------------------------------
 // helpers                    
@@ -279,7 +280,11 @@ export const validateCertificates = () => (dispatch, getStore) => {
                 else {
                     if (newList.length === 1) {
                         dispatch(selectCertificate(newList[0]))
-                        dispatch(navigateToStep(WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN))
+                        if(window.configData && defaults(window.configData.skipCertificateChainValidate, true)){
+                            dispatch(navigateToStep(WIZARD_STATE_DIGEST_LOADING))
+                        }else{
+                            dispatch(navigateToStep(WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN))
+                        }
                     }
                     else {
                         dispatch(navigateToStep(WIZARD_STATE_CERTIFICATES_CHOOSE))

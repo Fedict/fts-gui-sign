@@ -1110,7 +1110,7 @@ describe("WizardLogicActions", () => {
             expect(CertificateActions.selectCertificate).toBeCalledWith(callParametersCertifictateListPased[0])
 
             expect(navigation.navigateToStep).toBeCalledTimes(1)
-            expect(navigation.navigateToStep).toBeCalledWith(WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN)
+            expect(navigation.navigateToStep).toBeCalledWith(WIZARD_STATE_DIGEST_LOADING)
         })
 
         test("validateCertificates success valid certificates list.length > 1 navigates to WIZARD_STATE_CERTIFICATES_CHOOSE ", async () => {

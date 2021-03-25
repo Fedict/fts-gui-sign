@@ -57,4 +57,5 @@ window.configData = {
 
     BEurl_mock: "http://localhost:8751/signandvalidation",
     BEurl: "https://validate.ta.fts.bosa.belgium.be/signandvalidation",
+    skipCertificateChainValidate : true
 };
