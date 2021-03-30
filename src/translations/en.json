@@ -34,7 +34,7 @@
   "eid.link.error.reader.not_supported.title": "The eId reader is not supported",
   "eid.link.error.reader.removed": "The eId reader was removed",
   "eid.update.text.1": "The installed version of BeIDConnect is not up to date.",
-  "eid.update.text.2": "Please install the latest version of BeIDConnect to use this aplication",
+  "eid.update.text.2": "Please install the latest version of BeIDConnect to use this application",
   "eid.update.title": "Update BeIDConnect",
   "error.FAILED_TO_FETCH_DATA_TO_SIGN": "Failed to fetch data to sign",
   "error.FAILED_TO_SIGN": "Failed to sign the document",
