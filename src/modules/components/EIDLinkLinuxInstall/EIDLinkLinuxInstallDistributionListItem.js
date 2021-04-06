@@ -1,4 +1,5 @@
 import React from 'react'
+import {FormattedMessage} from "react-intl";
 
 /**
  * table row that displays a list of distributions and a buttom to download the archive
@@ -24,7 +25,7 @@ export const EIDLinkLinuxInstallDistributionListItem = ({ url, distributions }) 
                 </ul>
             </td>
             <td className='col-4'>
-                <button className="btn btn-primary " onClick={() => { handelClick() }}>Download archive</button>
+                <button className="btn btn-primary " onClick={() => { handelClick() }}><FormattedMessage id="beidconnect.linux.download" defaultMessage="Download archive"/></button>
             </td>
         </tr>
     )

@@ -1,4 +1,5 @@
 import 'react-app-polyfill/ie9';
+import 'react-app-polyfill/ie11';
 import 'react-app-polyfill/stable'
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -7,6 +8,7 @@ import * as serviceWorker from './serviceWorker';
 import configureStore from './store/store';
 import { Provider } from 'react-redux';
 import { getBrowser, browser } from './modules/browserDetection/BrowserDetection';
+import 'bs-stepper/dist/css/bs-stepper.min.css';
 
 const store = configureStore();
 const browsertype = getBrowser()
@@ -29,7 +31,8 @@ const app = (
         }
 
         <App />
-    </Provider>)
+    </Provider>);
+
 ReactDOM.render(app, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change

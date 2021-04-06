@@ -4,7 +4,7 @@ import {
     validateCertificatesAPI,
     getDataToSignAPI,
     signDocumentAPI,
-    validateSignatureAPI
+    validateSignatureAPI, getDataToSignForTokenAPI
 } from "./communication";
 import { getBase64Data } from "../fileUpload/helpers/FileHelper"
 import * as filehelper from "../fileUpload/helpers/FileHelper"
@@ -73,7 +73,7 @@ describe("createBody", () => {
                 "certificateChain": startCertificateObject.certificateChain,
                 "detachedContents": [],
                 "signingCertificate": startCertificateObject.certificate,
-                "signingDate": "2020-04-06T09:45:44",
+                "signingDate": null,
             },
             "signingProfileId": "XADES_1",
             "toSignDocument": {
@@ -82,7 +82,7 @@ describe("createBody", () => {
             }
         }
 
-        const result = createBody(startCertificateObject, startDocumentName, startDocumentBase64, startDocumentType)
+        const result = createBody(startCertificateObject, startDocumentName, startDocumentBase64, startDocumentType, null)
 
         expect(result).toEqual(expected)
     })
@@ -582,3 +582,53 @@ describe('validateSignatureAPI', () => {
     })
 })
 
+describe('getDataToSignForTokenAPI', () => {
+    //mocking
+    const resultJson = { result: "result" }
+    const mockResponse = {
+        ok: true,
+        json: jest.fn(() => { return resultJson }),
+        text: jest.fn()
+    }
+
+    fetch.mockResponseOnce(JSON.stringify(resultJson));
+
+    const startCertificateObject = {
+        certificateChain: [
+            { encodedCertificate: "certificatestring" },
+            { encodedCertificate: "certificatestring" }
+        ],
+        certificate: { encodedCertificate: "certificatestring" }
+    };
+    const expectedBody = {
+        "clientSignatureParameters": {
+            "certificateChain": [
+                { encodedCertificate: "certificatestring" },
+                { encodedCertificate: "certificatestring" }
+            ],
+            "detachedContents": [
+            ],
+            "signingCertificate": { encodedCertificate: "certificatestring" },
+            "signingDate": "this value will be replaced later"
+        },
+        token : '12345456'
+    }
+    const startToken = '12345456';
+    test("fetch called", async () => {
+        const result = await getDataToSignForTokenAPI(startCertificateObject, startToken)
+
+        expect(global.fetch).toHaveBeenCalledTimes(1)
+        expect(global.fetch.mock.calls[0][0]).toEqual("/signing/getDataToSignForToken")
+        //correct the date of the expected body
+        let bodyCalled = JSON.parse(global.fetch.mock.calls[0][1].body);
+        expectedBody.clientSignatureParameters.signingDate = bodyCalled.clientSignatureParameters.signingDate;
+        expect(global.fetch.mock.calls[0][1].body).toEqual(JSON.stringify(expectedBody))
+        expect(global.fetch.mock.calls[0][1].method).toEqual('POST')
+        expect(result).toEqual(resultJson)
+    })
+
+    afterEach(() => {
+        window.fetch = ORIGINAL_Fetch
+    })
+
+})

@@ -8,47 +8,60 @@ import {
 } from "react-router-dom";
 import ValidateWizardContainer from './modules/validateWizard/ValidateWizardContainer';
 import { browserIsAccepted } from './modules/browserDetection/BrowserDetection';
-import { MessageContainer } from './modules/message/MessageContainer';
+import MessageContainer from './modules/message/MessageContainer';
 import { ErrorNotSupported } from './modules/message/MessageConstants';
 import { Footer } from './modules/footer/Footer';
 import StartPageContainer from './modules/startPage/StartPageContainer';
+import MainI18nWrapper from "./modules/i18n/MainI18nWrapper";
+import TokenWizardContainer from "./modules/signByTokenWizard/TokenWizardContainer";
+
+export const BaseApp = ({browserIsSupported, notSupportedMessage}) => (
+    <div >
+        <Navbar />
+        {(browserIsSupported) ?
+            (<Switch>
+                <Route path="/sign/:token">
+                    <div className="container-fluid">
+                        <TokenWizardContainer />
+                    </div>
+                </Route>
+                <Route path="/sign" exact strict>
+                    <div className="container-fluid">
+                        <WizardContainer />
+                    </div>
+                </Route>
+                <Route path="/validate">
+                    <div className="container">
+                        <ValidateWizardContainer />
+                    </div>
+                </Route>
+                <Route path="/">
+
+                    <StartPageContainer />
+                </Route>
+
+            </Switch>)
+            : (
+                <div className="container">
+                    <div className="col col-12 col-md-8 mx-auto align-middle">
+                        <MessageContainer message={notSupportedMessage} />
+                    </div>
+                </div>
+            )
+        }
+        <Footer />
+    </div>
+)
 
 function App() {
   const browserIsSupported = browserIsAccepted()
   const notSupportedMessage = ErrorNotSupported;
   return (
-    <Router>
-      <div >
-        <Navbar />
-        {(browserIsSupported) ?
-          (<Switch>
-            <Route path="/sign">
-              <div className="container-fluid">
-                <WizardContainer />
-              </div>
-            </Route>
-            <Route path="/validate">
-              <div className="container">
-                <ValidateWizardContainer />
-              </div>
-            </Route>
-            <Route path="/">
-
-              <StartPageContainer />
-            </Route>
-
-          </Switch>)
-          : (
-            <div className="container">
-              <div className="col col-12 col-md-8 mx-auto align-middle">
-                <MessageContainer message={notSupportedMessage} />
-              </div>
-            </div>
-          )
-        }
-        <Footer />
-      </div>
-    </Router>
+      <Router>
+          <MainI18nWrapper>
+              <BaseApp browserIsSupported={browserIsSupported} notSupportedMessage={notSupportedMessage}/>
+          </MainI18nWrapper>
+      </Router>
   );
 }
 

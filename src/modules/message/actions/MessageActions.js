@@ -1,5 +1,7 @@
 import { navigateToStep } from "../../wizard/WizardActions"
 import { WIZARD_STATE_MESSAGE } from "../../wizard/WizardConstants"
+import {getStackTrace} from "../../utils/helper";
+import {ErrorGeneral} from "../MessageConstants";
 
 export const MESSAGE_SET_ERROR = "MESSAGE_SET_ERROR"
 export const MESSAGE_SET_INFO = "MESSAGE_SET_INFO"
@@ -19,6 +21,9 @@ export const MESSAGE_SET_INFO = "MESSAGE_SET_INFO"
  * @param {string} message.hasCancleButton - indicates if the cancel button is visible
  */
 export const showErrorMessage = (message) => (dispatch) => {
+    if(message && message.title === ErrorGeneral.title && message.message === ErrorGeneral.message){
+        console.log('No context provided for error message', getStackTrace());
+    }
     dispatch({ type: MESSAGE_SET_ERROR, payload: message })
     dispatch(navigateToStep(WIZARD_STATE_MESSAGE))
 }

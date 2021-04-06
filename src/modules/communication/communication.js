@@ -1,5 +1,5 @@
 import { getBase64Data } from "../fileUpload/helpers/FileHelper"
-
+import packageJson from '../../../package.json';
 //-----------------------------------------
 //--- constants                         ---
 //-----------------------------------------
@@ -45,7 +45,7 @@ export const getsigningProfileId = (documentType) => {
  * 
  * @returns {object} body to use in the API request
  */
-export const createBody = (certificateBody, documentName, documentBase64, documentType) => {
+export const createBody = (certificateBody, documentName, documentBase64, documentType, signingDate) => {
 
     return {
         "clientSignatureParameters": {
@@ -53,13 +53,38 @@ export const createBody = (certificateBody, documentName, documentBase64, docume
             "detachedContents": [
             ],
             "signingCertificate": certificateBody.certificate,
-            "signingDate": "2020-04-06T09:45:44"
+            "signingDate": signingDate
         },
         "signingProfileId": getsigningProfileId(documentType),
         "toSignDocument": {
             "bytes": documentBase64,
             "name": documentName
         }
+    }
+}
+
+export const createBodyForToken = (certificateBody, token, signingDate) => (
+    {
+        "clientSignatureParameters": {
+            "certificateChain": certificateBody.certificateChain,
+            "detachedContents": [
+            ],
+            "signingCertificate": certificateBody.certificate,
+            "signingDate": signingDate
+        },
+        token
+    }
+)
+
+const jsonHandler = (response) => {
+    if (!response.ok) {
+        throw new Error(REQUEST_FAILED)
+    }
+    try {
+        return response.json()
+    }
+    catch{
+        return response.text()
     }
 }
 
@@ -84,17 +109,7 @@ export const validateCertificatesAPI = (certificateBody) => {
             },
         }
     )
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(REQUEST_FAILED)
-            }
-            try {
-                return response.json()
-            }
-            catch{
-                return response.text()
-            }
-        })
+        .then(jsonHandler)
 }
 
 /**
@@ -104,11 +119,11 @@ export const validateCertificatesAPI = (certificateBody) => {
  * 
  * @returns {Promise} Promise that resolves the result of the API request
  */
-export const getDataToSignAPI = async (certificateBody, document) => {
+export const getDataToSignAPI = async (certificateBody, document, signingDate) => {
 
     const documentB64 = await getBase64Data(document)
 
-    const body = createBody(certificateBody, document.name, documentB64, document.type);
+    const body = createBody(certificateBody, document.name, documentB64, document.type, signingDate);
 
     return fetch(url + "/signing/getDataToSign",
         {
@@ -119,17 +134,7 @@ export const getDataToSignAPI = async (certificateBody, document) => {
             },
         }
     )
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(REQUEST_FAILED)
-            }
-            try {
-                return response.json()
-            }
-            catch{
-                return response.text()
-            }
-        })
+        .then(jsonHandler)
 }
 
 /**
@@ -138,11 +143,11 @@ export const getDataToSignAPI = async (certificateBody, document) => {
  * @param {Object} document - document to be signed
  * @param {string} signature - signature value used to sign th document
  */
-export const signDocumentAPI = async (certificateBody, document, signature) => {
+export const signDocumentAPI = async (certificateBody, document, signature, signingDate) => {
     const documentB64 = await getBase64Data(document)
 
     const body = {
-        ...createBody(certificateBody, document.name, documentB64, document.type),
+        ...createBody(certificateBody, document.name, documentB64, document.type, signingDate),
         "signatureValue": signature
     }
 
@@ -153,17 +158,7 @@ export const signDocumentAPI = async (certificateBody, document, signature) => {
             'Content-Type': 'application/json'
         },
     })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(REQUEST_FAILED)
-            }
-            try {
-                return response.json()
-            }
-            catch{
-                return response.text()
-            }
-        })
+        .then(jsonHandler)
 }
 
 /**
@@ -187,16 +182,75 @@ export const validateSignatureAPI = async (document) => {
 
         },
     })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error(REQUEST_FAILED)
-            }
-            try {
-                return response.json()
-            }
-            catch{
-                return response.text()
-            }
-        })
+        .then(jsonHandler)
 }
 
+/**
+ * API request to get the DataToSign by token
+ * @param {Object} certificateBody - object that represents the certificate
+ * @param {Object} token - token of the document to be signed
+ *
+ * @returns {Promise} Promise that resolves the result of the API request
+ */
+export const getDataToSignForTokenAPI = async (certificateBody, token, signingDate) => {
+
+    const body = createBodyForToken(certificateBody, token, signingDate);
+
+    return fetch(url + "/signing/getDataToSignForToken",
+        {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        }
+    )
+        .then(jsonHandler)
+}
+
+
+/**
+ * API request to sign a document
+ * @param {Object} certificateBody - object that represents the certificate
+ * @param {Object} token - token of the document to be signed
+ * @param {string} signature - signature value used to sign th document
+ */
+export const signDocumentForTokenAPI = async (certificateBody, token, signature, signingDate) => {
+    const body = {
+        ...createBodyForToken(certificateBody, token, signingDate),
+        "signatureValue": signature
+    }
+
+    return fetch(url + "/signing/signDocumentForToken", {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+        .then(jsonHandler)
+}
+/**
+ * API request to get document metadata by token, to set filename
+ * @param {Object} token - token of the document to be signed
+ */
+export const getDocumentMetadataForTokenAPI = async (token) => {
+    return fetch(`${url}/signing/getMetadataForToken?token=${token}`)
+        .then(jsonHandler)
+}
+/**
+    Fetches messages from config folder
+ */
+export const fetchMessagesForLocale = async (locale) => {
+    return fetch(`${packageJson.homepage}config/${locale}.json`)
+        .then((response) => {
+            if (response.ok) {
+                const contentType = response.headers.get("content-type");
+                //TODO try to understand why ui returns application/octet-stream when calling a json file :|
+                if (contentType && (contentType.indexOf("application/json") !== -1 || contentType.indexOf("application/octet-stream") !== -1)) {
+                    return response.json();
+                }
+            }
+            return {};
+        });
+}

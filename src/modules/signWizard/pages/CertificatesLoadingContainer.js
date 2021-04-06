@@ -3,6 +3,15 @@ import { CardLoading } from '../../components/Card/CardLoading'
 import { connect } from 'react-redux'
 import { getCertificates } from "../actions/WizardLogicActions"
 import { resetWizard } from '../actions/WizardLogicActions'
+import {defineMessages, injectIntl} from "react-intl";
+import {definedMessages} from "../../i18n/translations";
+
+const messages = defineMessages({
+    title: {
+        id: "retrieve.certificates.title",
+        defaultMessage: "Retrieving certificates"
+    }
+})
 
 export class CertificatesLoadingContainer extends React.Component {
 
@@ -11,11 +20,11 @@ export class CertificatesLoadingContainer extends React.Component {
     }
 
     render() {
-        const { resetWizard } = this.props
+        const { resetWizard, intl } = this.props
         return (
-                <CardLoading title={"Retrieving certificates"}
+                <CardLoading title={intl.formatMessage(messages.title)}
                     hasCancelButton
-                    cancelButtonText="Cancel"
+                    cancelButtonText={intl.formatMessage(definedMessages.cancel)}
                     onClickCancel={() => { resetWizard() }}
                 />
         )
@@ -27,4 +36,4 @@ const mapDispatchToProps = ({
      resetWizard
 })
 
-export default connect(null, mapDispatchToProps)(CertificatesLoadingContainer)
+export default connect(null, mapDispatchToProps)(injectIntl(CertificatesLoadingContainer))

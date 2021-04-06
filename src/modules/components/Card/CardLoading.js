@@ -1,5 +1,6 @@
 import React from "react"
 import { CardContainer } from "./CardContainer"
+import {FormattedMessage} from "react-intl";
 
 /**
  * Card with cancel button and a spinner
@@ -28,7 +29,7 @@ export const CardLoading = (
             <div className="text-center">
                 {children}
                 <div className="spinner-border text-primary " role="status">
-                    <span className="sr-only">Loading...</span>
+                    <span className="sr-only"><FormattedMessage id="loading" defaultMessage="Loading..." /></span>
                 </div>
             </div>
         </CardContainer>

@@ -12,6 +12,7 @@ import {
 import { navigateToPinError, resetWizard } from "./WizardLogicActions";
 import { ErrorGeneral } from "../../message/MessageConstants";
 import { showErrorMessage } from "../../message/actions/MessageActions";
+import {defineMessages} from "react-intl";
 
 /**
  * enum for the errorResponses from eIDLink
@@ -109,16 +110,16 @@ export const showPinError = (message) => (dispatch) => {
 /**
  * enum with pin error messages shown in the pin Error
  */
-export const pinErrorText = {
-    pin_incorrect: "PIN is incorrect",
-    pin_too_short: "PIN is to short",
-    pin_length: "PIN doesn't have the correct length",
-    pin_too_long: "PIN is too long",
-    pin_3_attempts_left: "PIN is incorrect :  3 attempts remaining",
-    pin_2_attempts_left: "PIN is incorrect : 2 attempts remaining",
-    pin_1_attempt_left: "PIN is incorrect : 1 attempt remaining",
-    pin_timeout: "entering the PIN took too long."
-}
+export const pinErrorText = defineMessages({
+    pin_incorrect: {id : 'pin_incorrect', defaultMessage : "PIN is incorrect"},
+    pin_too_short: {id : 'pin_too_short', defaultMessage : "PIN is to short"},
+    pin_length: {id : 'pin_length', defaultMessage : "PIN doesn't have the correct length"},
+    pin_too_long: {id : 'pin_too_long', defaultMessage : "PIN is too long"},
+    pin_3_attempts_left: {id : 'pin_3_attempts_left', defaultMessage : "PIN is incorrect :  3 attempts remaining"},
+    pin_2_attempts_left: {id : 'pin_2_attempts_left', defaultMessage : "PIN is incorrect : 2 attempts remaining"},
+    pin_1_attempt_left: {id : 'pin_1_attempt_left', defaultMessage : "PIN is incorrect : 1 attempt remaining"},
+    pin_timeout: {id : 'pin_timeout', defaultMessage : "entering the PIN took too long."}
+})
 
 /**
  * function to handle eID pin errors
@@ -128,32 +129,9 @@ export const pinErrorText = {
  * @param {boolean} isInSession - boolean that represents is the signing proces is in progress
  */
 export const handlePinErrorEID = (error, isInSession) => (dispatch) => {
-    switch (error.message) {
-        case errorStatuses.pin_1_attempt_left:
-            dispatch(showPinError(pinErrorText.pin_1_attempt_left))
-            break;
-        case errorStatuses.pin_2_attempts_left:
-            dispatch(showPinError(pinErrorText.pin_2_attempts_left))
-            break;
-        case errorStatuses.pin_3_attempts_left:
-            dispatch(showPinError(pinErrorText.pin_3_attempts_left))
-            break;
-        case errorStatuses.pin_too_long:
-            dispatch(showPinError(pinErrorText.pin_too_long))
-            break;
-        case errorStatuses.pin_length:
-            dispatch(showPinError(pinErrorText.pin_length))
-            break;
-        case errorStatuses.pin_too_short:
-            dispatch(showPinError(pinErrorText.pin_too_short))
-            break;
-        case errorStatuses.pin_incorrect:
-            dispatch(showPinError(pinErrorText.pin_incorrect))
-            break;
-        case errorStatuses.pin_timeout:
-            dispatch(showPinError(pinErrorText.pin_timeout))
-            break;
-        default:
-            dispatch(handleErrorEID(error, isInSession))
+    if(error.message && pinErrorText[error.message]){
+        dispatch(showPinError(pinErrorText[error.message]))
+    }else{
+        dispatch(handleErrorEID(error, isInSession))
     }
 }

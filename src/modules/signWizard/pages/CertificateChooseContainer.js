@@ -6,6 +6,15 @@ import { WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN } from '../../wizard/WizardCon
 import { navigateToStep } from '../../wizard/WizardActions'
 import { selectCertificate } from "../actions/CertificateActions"
 import { resetWizard } from '../actions/WizardLogicActions'
+import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
+import {definedMessages} from "../../i18n/translations";
+
+const messages = defineMessages({
+    title: {
+        id: "certificate.choose.title",
+        defaultMessage: "Select a certificate"
+    }
+})
 
 export class CertificateChooseContainer extends React.Component {
 
@@ -23,20 +32,20 @@ export class CertificateChooseContainer extends React.Component {
 
     render() {
 
-        const { certificate, resetWizard } = this.props
+        const { certificate, resetWizard, intl } = this.props
         if (certificate) {
             return (
                 <CardContainer
-                    title="Select a certificate"
+                    title={intl.formatMessage(messages.title)}
                     hasCancelButton
-                    cancelButtonText="Cancel"
+                    cancelButtonText={intl.formatMessage(definedMessages.cancel)}
                     onClickCancel={() => { resetWizard() }}
                     hasNextButton
-                    nextButtonText="Select"
+                    nextButtonText={intl.formatMessage(definedMessages.select)}
                     onClickNext={() => { this.navigateToNextStep() }}
                     nextButtonIsDisabled={(certificate && !certificate.certificateSelected)}
                 >
-                    <p>Multiple valid certificates are found. Please select the certificate you want to use.</p>
+                    <p><FormattedMessage id="certificate.choose.text.1" defaultMessage="Multiple valid certificates are found. Please select the certificate you want to use."/></p>
                     <CertificateSelect
                         id="certificate_select"
                         onChange={(cert) => { this.onChange(cert) }}
@@ -61,4 +70,4 @@ const mapDispatchToProps = ({
 
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(CertificateChooseContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(CertificateChooseContainer))

@@ -15,6 +15,8 @@ import PinErrorReducer from "../modules/signWizard/reducers/PinErrorReducer";
 import ReaderReducer from "../modules/signWizard/reducers/ReaderReducer";
 import ValidationReducer from "../modules/validateWizard/reducers/ValidationReducer";
 import ControlIdReducer from "../modules/controlIds/common/ControlIdReducer";
+import i18nReducer from "../modules/i18n/reducers/i18nReducer";
+import TokenReducer from "../modules/signByTokenWizard/reducers/tokenReducers";
 
 export default function configureStore(initialState = {}) {
 
@@ -29,6 +31,8 @@ export default function configureStore(initialState = {}) {
     const rootReducer = combineReducers({
         wizard: wizardReducer,
         uploadFile: UploadFileReducer,
+        tokenFile: TokenReducer,
+        i18n: i18nReducer,
         message: MessageReducer,
         certificate: CertificateReducer,
         digest: DigestReducer,

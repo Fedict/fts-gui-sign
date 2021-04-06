@@ -7140,3 +7140,55 @@ a.text-dark:hover, a.text-dark:focus {
 
 .selectCard:hover {
   border-color: #11a0ba; }
+
+.inactive .bs-stepper-label {
+  color: rgba(108, 75, 125, 0.6); }
+
+.inactive .bs-stepper-circle {
+  background-color: #6c757d; }
+
+.bs-stepper .line, .bs-stepper-line {
+  flex: 1 0 16px; }
+
+.bs-stepper .step-trigger {
+  padding: 0px !important; }
+
+.container-fluid, .container-sm, .container-md, .container-lg, .container-xl {
+  margin-bottom: 32px; }
+
+.blinking-cursor {
+  -webkit-animation: 1s blink step-end infinite;
+  -moz-animation: 1s blink step-end infinite;
+  -ms-animation: 1s blink step-end infinite;
+  -o-animation: 1s blink step-end infinite;
+  animation: 1s blink step-end infinite; }
+
+@keyframes blink {
+  from, to {
+    color: transparent; }
+  50% {
+    color: black; } }
+
+@-moz-keyframes blink {
+  from, to {
+    color: transparent; }
+  50% {
+    color: black; } }
+
+@-webkit-keyframes blink {
+  from, to {
+    color: transparent; }
+  50% {
+    color: black; } }
+
+@-ms-keyframes blink {
+  from, to {
+    color: transparent; }
+  50% {
+    color: black; } }
+
+@-o-keyframes blink {
+  from, to {
+    color: transparent; }
+  50% {
+    color: black; } }

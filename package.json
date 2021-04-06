@@ -2,12 +2,14 @@
   "name": "sign_document",
   "version": "0.1.0",
   "private": true,
+  "homepage": "/",
   "dependencies": {
     "@testing-library/jest-dom": "4.2.4",
-    "@testing-library/react": "9.5.0",
-    "@testing-library/user-event": "7.2.1",
     "bootstrap": "4.4.1",
+    "bs-stepper": "^1.7.0",
+    "immutable": "^4.0.0-rc.12",
     "jquery": "3.5.1",
+    "moment": "^2.29.1",
     "node-sass": "4.14.1",
     "pdfjs-dist": "2.4.456",
     "popper.js": "1.16.1",
@@ -20,10 +22,12 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.4.3",
     "redux": "4.0.5",
+    "redux-logger": "^3.0.6",
     "redux-thunk": "2.3.0",
     "typescript": "3.8.3"
   },
   "scripts": {
+    "css": "./node_modules/.bin/node-sass ./style/custom.scss ./public/style/custom.css",
     "start": "react-scripts start",
     "build": "./node_modules/.bin/node-sass ./style/custom.scss ./public/style/custom.css && react-scripts build",
     "test": "react-scripts test --watchAll=false",
@@ -40,12 +44,29 @@
       "not op_mini all"
     ],
     "development": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+      "ie 11",
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
     ]
   },
   "devDependencies": {
-    "@types/jest": "^25.1.4"
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+    "@types/fetch-mock": "^7.3.3",
+    "@types/jest": "^25.1.4",
+    "csv-writer": "^1.6.0",
+    "extract-react-intl-messages": "^4.1.1",
+    "fetch-mock": "^9.11.0",
+    "jest-fetch-mock": "^3.0.3",
+    "node-fetch": "^2.6.1"
+  },
+  "babel": {
+    "presets": [
+      "react-app"
+    ],
+    "plugins": [
+      "@babel/plugin-transform-arrow-functions"
+    ]
   }
 }

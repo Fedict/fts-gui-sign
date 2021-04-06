@@ -5,6 +5,19 @@ import { CardContainer } from '../../components/Card/CardContainer';
 import { sign, resetWizard } from '../actions/WizardLogicActions'
 import { navigateToStep } from '../../wizard/WizardActions';
 import { WIZARD_STATE_SIGNING_PRESIGN_LOADING } from '../../wizard/WizardConstants';
+import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
+import {definedMessages} from "../../i18n/translations";
+
+const messages = defineMessages({
+    title: {
+        id: "signing.pininput.title",
+        defaultMessage: "Enter pin code"
+    },
+    next: {
+        id: "signing.pininput.button.sign",
+        defaultMessage: "Sign with eId"
+    }
+})
 
 export class PinInputContainer extends React.Component {
 
@@ -12,7 +25,8 @@ export class PinInputContainer extends React.Component {
         super(props);
 
         this.state = {
-            pin: ""
+            pin: "",
+            indexCursor : 0
         }
 
         this.onKeyUp = this.onKeyUp.bind(this)
@@ -28,27 +42,31 @@ export class PinInputContainer extends React.Component {
     }
 
     onKeyUp(e) {
+        //console.log(e)
         let pincode = this.state.pin + ""
-        if (e.key === 'Enter') {
+        let indexCursor = this.state.indexCursor;
+        if (e.keyCode === 13) { //Enter
             if (pincode.length >= 4) {
                 this.handleSubmit()
             }
+        } else if (e.keyCode === 8) { //Backspace
+            pincode = pincode.substr(0, indexCursor - 1) + pincode.substr(indexCursor)
+            this.setState({ pin: pincode, indexCursor : Math.max(indexCursor - 1, 0) })
+        }else if (e.keyCode === 46){ //Delete
+            pincode = pincode.substr(0, indexCursor) + pincode.substr(indexCursor + 1)
+            this.setState({ pin: pincode, indexCursor })
+        }else if (e.keyCode === 37){ //Left
+            this.setState({indexCursor : Math.max(0, indexCursor - 1)})
+        }else if (e.keyCode === 39){ //Right
+            this.setState({indexCursor : Math.min(pincode.length, indexCursor + 1)})
+        }else if (e.key.length === 1) {
+            if (pincode.length < 12) {
+                pincode = pincode.substr(0, indexCursor) + e.key + pincode.substr(indexCursor)
+                this.setState({ pin: pincode, indexCursor : indexCursor + 1 })
+            }
+        } else {
         }
-        else {
-            if (e.key === 'Backspace') {
 
-                pincode = pincode.substr(0, pincode.length - 1)
-                this.setState({ pin: pincode })
-            }
-            if (e.key.length === 1) {
-                if (pincode.length < 12) {
-                    pincode = pincode + e.key
-                    this.setState({ pin: pincode })
-                }
-            }
-            else {
-            }
-        }
     }
 
     onchange(e) {
@@ -63,32 +81,33 @@ export class PinInputContainer extends React.Component {
     }
 
     render() {
-        const { resetWizard, pinError, certificate } = this.props
-        const { pin } = this.state
+        const { resetWizard, pinError, certificate, intl } = this.props
+        const { pin, indexCursor } = this.state
         const pinstring = "*".repeat(pin.length)
         return (
 
             <CardContainer
-                title={"Enter pin code"}
+                title={intl.formatMessage(messages.title)}
                 hasNextButton
                 hasCancelButton
-                cancelButtonText="Cancel"
+                cancelButtonText={intl.formatMessage(definedMessages.cancel)}
                 onClickCancel={() => { resetWizard() }}
-                nextButtonText="Sign with eId"
+                nextButtonText={intl.formatMessage(messages.next)}
                 onClickNext={() => { this.handleSubmit() }}
                 nextButtonIsDisabled={pin.length < 4}>
 
                 <div className="form-group">
-                    <p>Enter the PIN
+                    <p>
                         {(certificate && certificate.certificateSelected && certificate.certificateSelected.commonName)
-                            ? " for " + certificate.certificateSelected.commonName
-                            : ""}
+                            ? <FormattedMessage id="signing.pininput.textCommonName" defaultMessage="Enter the PIN for {commonName}" values={{commonName : certificate.certificateSelected.commonName}}/>
+                            : <FormattedMessage id="signing.pininput.text" defaultMessage="Enter the PIN" />
+                        }
                     </p>
                     {(pinError && pinError.message)
                         ? (
                             <div className="text-center">
                                 <div className="alert alert-danger">
-                                    {pinError.message}
+                                    {pinError.message.id?intl.formatMessage(pinError.message):pinError.message}
                                 </div>
                             </div>)
                         : null}
@@ -97,9 +116,9 @@ export class PinInputContainer extends React.Component {
                             <div
                                 className=" form-control"
                                 id="input_code"
-                            >{pinstring}</div>
+                                data-testid="input_code"
+                            >{pinstring.substr(0, indexCursor)}<span className="blinking-cursor">|</span>{pinstring.substr(indexCursor)}</div>
                         </div>
-
                     </div>
                 </div>
             </CardContainer>
@@ -120,4 +139,4 @@ const mapDispatchToProps = ({
     navigateToStep
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(PinInputContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(PinInputContainer))

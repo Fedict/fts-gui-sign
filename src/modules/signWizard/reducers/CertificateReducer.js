@@ -23,4 +23,11 @@ const CertificateReducer = (state = initialState, action) => {
     }
 }
 
+export const getIsPinPadReader = (state) => {
+    return (state
+        && state.certificateSelected
+        && state.certificateSelected.readerType
+        && state.certificateSelected.readerType === "pinpad")
+}
+
 export default CertificateReducer

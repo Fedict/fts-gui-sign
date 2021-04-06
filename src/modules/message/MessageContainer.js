@@ -5,6 +5,8 @@ import { messageTypes, ErrorGeneral } from './MessageConstants'
 import { CardError } from '../components/Card/CardError'
 import { CardInfo } from '../components/Card/CardInfo'
 import { resetWizard } from '../signWizard/actions/WizardLogicActions'
+import {injectIntl} from "react-intl";
+import {definedMessages} from "../i18n/translations";
 
 /**
  * a card that shows a message and has a cancel and next button
@@ -21,7 +23,7 @@ import { resetWizard } from '../signWizard/actions/WizardLogicActions'
  * @param {function} [props.navigateToStep] - action to navigate to a page
  * @param {function} [props.onCancel] - onCancel callback
  */
-export const MessageContainer = ({ message, navigateToStep, onCancel }) => {
+export const MessageContainer = ({ message, navigateToStep, onCancel, intl }) => {
 
     const handleButtonNextClick = () => {
         if (message && message.nextButton && message.nextButton.nextPage) {
@@ -55,7 +57,7 @@ export const MessageContainer = ({ message, navigateToStep, onCancel }) => {
         <Container
             title={shownMessage.title}
             hasCancelButton={shownMessage.hasCancleButton}
-            cancelButtonText="Cancel"
+            cancelButtonText={intl.formatMessage(definedMessages.cancel)}
             onClickCancel={() => {
                 if (onCancel) {
                     onCancel()
@@ -83,4 +85,4 @@ const mapDispatchToProps = ({
     resetWizard,
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(MessageContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(MessageContainer))

@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { getBrowser, browser } from '../../../browserDetection/BrowserDetection'
 import PDFViewerInternetExplorer from '../PDFViewerInternetExplorer/PDFViewerInternetExplorer'
+import {FormattedMessage} from "react-intl";
 
 /**
  * Component to display a file
@@ -17,23 +18,28 @@ export const DisplayFile = ({ uploadFile }) => {
 
     if (uploadFile && uploadFile.displayFile) {
         const data = uploadFile.displayFile
-        if (data) {
+        if (data && data.url) {
             if (data.isPdf) {
                 if (getBrowser() === browser.IE) {
-                    if (data.displayUrl) {
+                    if (data.url) {
                         return (
-                            <PDFViewerInternetExplorer key={data.displayUrl} />
+                            <PDFViewerInternetExplorer key={data.url} />
                         )
                     }
                     return null
                 }
                 return (
 
-                    <object style={{ height: "85vh", width: "100%" }} type="application/pdf" data={data.url}>
-                        <p>PDF cannot be shown</p>
+                    <object style={{ height: "85vh", width: "100%" }} type="application/pdf" data={data.url} name={data.fileName}>
+                        <p><FormattedMessage id="file.download.failed.pdf" defaultMessage="Failed to load pdf" /></p>
                     </object>
 
                 )
+            }else{
+                return <div>
+                    <p><FormattedMessage id="file.download.text.1" defaultMessage="The document to sign can't be previewed but you can download it by right-clicking on the link below and selecting the option 'save-link-as'."/></p>
+                    <p><a href={data.url} download={data.fileName} title={data.fileName}><FormattedMessage id="file.download.link" defaultMessage="Download the file to sign"/></a></p>
+                </div>
             }
         }
     }
@@ -42,7 +48,7 @@ export const DisplayFile = ({ uploadFile }) => {
             height: "85vh",
             width: "100%",
             backgroundColor: "white",
-            backgroundImage: "url('./img/img.jpg')",
+            backgroundImage: "url('/img/img.jpg')",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover"

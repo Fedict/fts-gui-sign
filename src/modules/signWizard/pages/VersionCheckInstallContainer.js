@@ -6,7 +6,17 @@ import { WIZARD_STATE_VERSION_CHECK_LOADING } from '../../wizard/WizardConstants
 import { resetWizard, checkVersion } from '../actions/WizardLogicActions'
 import { OS, getOS } from "../../browserDetection/OSDetection"
 import { EIDLinkLinuxInstall } from '../../components/EIDLinkLinuxInstall/EIDLinkLinuxInstall'
-
+import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
+const messages = defineMessages({
+    title : {
+        id : 'eid.install.title',
+        defaultMessage : "Install eIDLink"
+    },
+    next : {
+        id : 'eid.install.next',
+        defaultMessage : "I have installed eIDLink"
+    }
+})
 export class VersionCheckInstallContainer extends React.Component {
 
     constructor(props) {
@@ -48,22 +58,22 @@ export class VersionCheckInstallContainer extends React.Component {
     }
 
     render() {
-        const { resetWizard } = this.props
+        const { resetWizard, intl } = this.props
         const usedOs = getOS()
         return (
-            <CardContainer title={"Install eIDLink"}
+            <CardContainer title={intl.formatMessage(messages.title)}
                 onClickCancel={() => { resetWizard() }}
                 hasNextButton
-                nextButtonText="I have installed eIDLink"
+                nextButtonText={intl.formatMessage(messages.next)}
                 onClickNext={() => { this.handleButtonNextClick() }}
             >
-                <p>No eIDLink is found</p>
-                <p>Please install eIDLink to use this application</p>
+                <p><FormattedMessage id="eid.install.text.1" defaultMessage="No eIDLink is found"/></p>
+                <p><FormattedMessage id="eid.install.text.2" defaultMessage="Please install eIDLink to use this application"/></p>
 
                 {
                     (usedOs === OS.LINUX)
                         ? <EIDLinkLinuxInstall linuxDistributions={linuxDistributions} />
-                        : <button className="btn btn-primary" id="button_install_eID" onClick={() => { this.handleOnClick() }}>Download and install eIDLink</button>
+                        : <button className="btn btn-primary" id="button_install_eID" onClick={() => { this.handleOnClick() }}><FormattedMessage id="eid.button.download" defaultMessage="Download and install eIDLink" /></button>
                 }
             </CardContainer>
         )
@@ -86,4 +96,4 @@ const mapDispatchToProps = ({
     resetWizard
 })
 
-export default connect(null, mapDispatchToProps)(VersionCheckInstallContainer)
+export default connect(null, mapDispatchToProps)(injectIntl(VersionCheckInstallContainer))
