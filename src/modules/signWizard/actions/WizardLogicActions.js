@@ -562,19 +562,26 @@ export const signDocument = () => (dispatch, getStore) => {
                 signature.signingDate)
                 .then(handleFlowIdError(flowId, getStore))
                 .then((resp) => {
-
+                    //console.log('signDocumentForTokenAPI response', resp)
                     if (resp
                         && resp.name
                         && resp.bytes) {
                         dispatch(setDownloadFile(resp))
                         dispatch(navigateToStep(WIZARD_STATE_SUCCES))
+                    } else {
+                        if(errorMessages[resp.message]){
+                            dispatch(showErrorMessage({...ErrorGeneral, title : errorMessages.failedToSignWrongResultFromAPI, message : errorMessages[resp.message]}));
+                        }else{
+                            dispatch(showErrorMessage({
+                                ...ErrorGeneral,
+                                message: errorMessages.failedToSignWrongResultFromAPI,
+                                body: resp.message
+                            }))
+                        }
                     }
-                    else {
-                        dispatch(showErrorMessage({...ErrorGeneral, message : errorMessages.failedToSignWrongResultFromAPI}))
-                    }
-
                 })
                 .catch((err) => {
+                    //console.log('signDocumentForTokenAPI error', err)
                     if (err !== INCORECT_FLOW_ID) {
                         dispatch(showErrorMessage({...ErrorGeneral, message : errorMessages.failedToSign}))
                     }
@@ -620,15 +627,20 @@ export const signDocument = () => (dispatch, getStore) => {
 export const resetWizard = () => (dispatch, getStore) => {
     let eIDLink = controller.getInstance()
     eIDLink.stop()
-    const {tokenFile, wizard} = getStore();
+    const {tokenFile, wizard, message} = getStore();
 
     dispatch(resetStore())
     dispatch(setNewFlowId());
     if(tokenFile && tokenFile.redirectUrl){
         let url = new URL(tokenFile.redirectUrl);
-        url.searchParams.set('err', redirectErrorCodes.USER_CANCELLED);
         if(wizard && wizard.state){
-            url.searchParams.set('details', wizard.state);
+            if(wizard.state === 'WIZARD_STATE_MESSAGE' && message && message.message && message.message.id){
+                const errorType = Object.keys(errorMessages).find((k) => errorMessages[k].id === message.message.id);
+                url.searchParams.set('err', defaults(redirectErrorCodes[errorType], errorType, 'SERVER_ERROR'));
+            }else{
+                url.searchParams.set('err', redirectErrorCodes.USER_CANCELLED);
+                url.searchParams.set('details', wizard.state);
+            }
         }
         window.location = url.toString();
     }else{

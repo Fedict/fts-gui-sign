@@ -39,7 +39,7 @@
   "error.FAILED_TO_FETCH_DATA_TO_SIGN": "Impossible de récupérer les données à signer",
   "error.FAILED_TO_SIGN": "Impossible de signer le document",
   "error.METADATA_FETCH": "Impossible de récupérer les métadonnées du document",
-  "error.NO_TOKEN": "Le token n'est pas présent dans redux",
+  "error.NO_TOKEN_IN_STATE": "Le token n'est pas présent dans redux",
   "error.WRONG_RESULT_SIGN_TOKEN": "Impossible de signer le document",
   "error.browser_not_supported.supported.1": "",
   "error.browser_not_supported.supported.2": "",

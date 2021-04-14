@@ -34,7 +34,7 @@ describe("MessageReducer", () => {
                             isVisible: false,
                             nextPage: "test"
                         },
-                        hasCancleButton: false
+                        hasCancelButton: false
                     }
                 }
                 const result = MessageReducer(startState, action)
@@ -70,7 +70,7 @@ describe("MessageReducer", () => {
                             isVisible: false,
                             nextPage: "test"
                         },
-                        hasCancleButton: false
+                        hasCancelButton: false
                     }
                 }
                 const result = MessageReducer(startState, action)
@@ -90,7 +90,7 @@ describe("MessageReducer", () => {
                         isVisible: false,
                         nextPage: "test"
                     },
-                    hasCancleButton: false
+                    hasCancelButton: false
                 }
                 const action = { type: STORE_RESET }
 

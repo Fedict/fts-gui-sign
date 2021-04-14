@@ -37,7 +37,7 @@ export const ErrorGeneral = {
         isVisible: false,
         nextPage: null
     },
-    hasCancleButton: true
+    hasCancelButton: true
 }
 
 /**
@@ -65,5 +65,5 @@ export const ErrorNotSupported = {
         isVisible: false,
         nextPage: null
     },
-    hasCancleButton: false
+    hasCancelButton: false
 }

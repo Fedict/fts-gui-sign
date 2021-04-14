@@ -18,7 +18,7 @@ export const MESSAGE_SET_INFO = "MESSAGE_SET_INFO"
  * @param {node} message.nextButton.text - text on the nexty button
  * @param {boolean} message.nextButton.isVisible - indicates if the button is visible
  * @param {string} message.nextButton.nextPage - Wizard id of the page where the nextbutton has to navigate to
- * @param {string} message.hasCancleButton - indicates if the cancel button is visible
+ * @param {string} message.hasCancelButton - indicates if the cancel button is visible
  */
 export const showErrorMessage = (message) => (dispatch) => {
     if(message && message.title === ErrorGeneral.title && message.message === ErrorGeneral.message){
@@ -40,7 +40,7 @@ export const showErrorMessage = (message) => (dispatch) => {
  * @param {node} message.nextButton.text - text on the nexty button
  * @param {boolean} message.nextButton.isVisible - indicates if the button is visible
  * @param {string} message.nextButton.nextPage - Wizard id of the page where the nextbutton has to navigate to
- * @param {string} message.hasCancleButton - indicates if the cancel button is visible
+ * @param {string} message.hasCancelButton - indicates if the cancel button is visible
  */
 export const showInfoMessage = (message) => (dispatch) => {
     dispatch({ type: MESSAGE_SET_INFO, payload: message })

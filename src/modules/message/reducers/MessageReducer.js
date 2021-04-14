@@ -12,7 +12,7 @@ export const initialState = {
         isVisible: "",//the button is visible
         nextPage: ""//the name of the page where the butons navigates to
     },
-    hasCancleButton: "" //the button is visible
+    hasCancelButton: "" //the button is visible
 }
 
 /**

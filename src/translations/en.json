@@ -39,7 +39,7 @@
   "error.FAILED_TO_FETCH_DATA_TO_SIGN": "Failed to fetch data to sign",
   "error.FAILED_TO_SIGN": "Failed to sign the document",
   "error.METADATA_FETCH": "Failed to fetch the metadata of the document",
-  "error.NO_TOKEN": "Token not in redux state",
+  "error.NO_TOKEN_IN_STATE": "Token not in redux state",
   "error.WRONG_RESULT_SIGN_TOKEN": "Failed to sign the document",
   "error.browser_not_supported.supported.1": "Chrome",
   "error.browser_not_supported.supported.2": "Edge (based on Chromium)",

@@ -25,5 +25,5 @@ export const MessageCertificatesNotFound = {
         isVisible: true,
         nextPage: WIZARD_STATE_CERTIFICATES_LOADING
     },
-    hasCancleButton: true
+    hasCancelButton: true
 }

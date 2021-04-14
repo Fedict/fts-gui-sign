@@ -60,7 +60,7 @@ const createError = (title, message) => {
             isVisible: false,
             nextPage: ""
         },
-        hasCancleButton: true
+        hasCancelButton: true
     }
 }
 export const Error_EID_http_status_0 = ErrorGeneral

@@ -39,7 +39,7 @@
   "error.FAILED_TO_FETCH_DATA_TO_SIGN": "Kan gegevens niet ophalen om te ondertekenen",
   "error.FAILED_TO_SIGN": "Kan het document niet ondertekenen",
   "error.METADATA_FETCH": "Kan de metadata van het document niet ophalen",
-  "error.NO_TOKEN": "Token niet gevonden of ongeldig",
+  "error.NO_TOKEN_IN_STATE": "Token niet gevonden of ongeldig",
   "error.WRONG_RESULT_SIGN_TOKEN": "Kan het document niet ondertekenen",
   "error.browser_not_supported.supported.1": "",
   "error.browser_not_supported.supported.2": "",

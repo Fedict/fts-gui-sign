@@ -141,11 +141,19 @@ describe('validateCertificatesAPI', () => {
     })
 
     test("validateCertificatesAPI can throw error", async () => {
-        expect.assertions(7)
+        expect.assertions(1)
+        const errorResponse = {
+            status : 400,
+            message: 'SIGN_CERT_EXPIRED',
+            error : 'Some err happened'
+        };
         const mockResponse = {
             ok: false,
-            json: jest.fn(),
-            text: jest.fn()
+            json: jest.fn(() => Promise.resolve(errorResponse)),
+            text: jest.fn(),
+            headers : {
+                get : jest.fn((headerName) => (headerName === 'content-type'?'application/json':undefined))
+            }
         }
 
         const mockPromiseFunction = jest.fn(() => Promise.resolve(mockResponse))
@@ -155,9 +163,12 @@ describe('validateCertificatesAPI', () => {
         const startBody = { value: 1 }
 
         try {
-            await validateCertificatesAPI(startBody)
+            const result = await validateCertificatesAPI(startBody)
+
+            expect(result).toBe(errorResponse);
         }
         catch (e) {
+            /*
             expect(e.message).toBe(REQUEST_FAILED)
             expect(global.fetch).toHaveBeenCalledTimes(1)
             expect(global.fetch.mock.calls[0][0]).toEqual("/validation/validateCertificates")
@@ -166,6 +177,7 @@ describe('validateCertificatesAPI', () => {
 
             expect(mockResponse.json).toBeCalledTimes(0)
             expect(mockResponse.text).toBeCalledTimes(0)
+             */
         }
     })
 

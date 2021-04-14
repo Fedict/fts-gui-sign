@@ -39,7 +39,7 @@
   "error.FAILED_TO_FETCH_DATA_TO_SIGN": "Daten zum Signieren konnten nicht geholt werden",
   "error.FAILED_TO_SIGN": "Unterzeichnen des Dokuments fehlgeschlagen",
   "error.METADATA_FETCH": "Die Metadaten des Dokuments konnten nicht geholt werden",
-  "error.NO_TOKEN": "Token nicht im Redux-Zustand",
+  "error.NO_TOKEN_IN_STATE": "Token nicht im Redux-Zustand",
   "error.WRONG_RESULT_SIGN_TOKEN": "Unterzeichnen des Dokuments fehlgeschlagen",
   "error.browser_not_supported.supported.1": "Chrome",
   "error.browser_not_supported.supported.2": "Edge (auf Chrome basierend)",

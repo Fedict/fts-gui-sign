@@ -31,14 +31,32 @@ export const getDigestForToken = () => (dispatch, getStore) => {
         getDataToSignForTokenAPI(certificate.certificateSelected.APIBody, tokenFile.token, signingDate)
             .then(handleFlowIdError(flowId, getStore))
             .then((resp) => {
-                dispatch(setDigest(resp))
-                dispatch(navigateToSign())
+                if(resp.digest && resp.digestAlgorithm){
+                    dispatch(setDigest(resp))
+                    dispatch(navigateToSign())
+                }else{
+                    if(errorMessages[resp.message]){
+                        dispatch(showErrorMessage({
+                            ...ErrorGeneral,
+                            title : errorMessages.failedToFetchDataToSign,
+                            message : errorMessages[resp.message]
+                        }));
+                    }else{
+                        dispatch(showErrorMessage({
+                            ...ErrorGeneral,
+                            message: errorMessages.failedToFetchDataToSign,
+                            body: resp.message
+                        }))
+                    }
+                }
             })
             .catch((err) => {
                 if (err !== INCORECT_FLOW_ID) {
                     dispatch(showErrorMessage({...ErrorGeneral, message : errorMessages.failedToFetchDataToSign}))
                 }
             })
+
+    }else{
 
     }
 
@@ -55,8 +73,25 @@ export const getDocumentMetadataForToken = () => (dispatch, getStore) => {
         getDocumentMetadataForTokenAPI(token)
             .then(handleFlowIdError(flowId, getStore))
             .then((resp) => {
-                dispatch(setDocumentMetadata(resp))
-                dispatch(navigateToStep(WIZARD_STATE_UPLOAD))
+                //console.log('getDocumentMetadataForTokenAPI', resp)
+                if(resp.mimetype && resp.filename){
+                    dispatch(setDocumentMetadata(resp))
+                    dispatch(navigateToStep(WIZARD_STATE_UPLOAD))
+                }else{
+                    if(errorMessages[resp.message]){
+                        dispatch(showErrorMessage({
+                            ...ErrorGeneral,
+                            title : errorMessages.failedToFetchMetadata,
+                            message : errorMessages[resp.message]
+                        }));
+                    }else{
+                        dispatch(showErrorMessage({
+                            ...ErrorGeneral,
+                            message: errorMessages.failedToFetchMetadata,
+                            body: resp.message
+                        }))
+                    }
+                }
             }).catch((err) => {
                 if (err !== INCORECT_FLOW_ID) {
                     console.log('getDocumentMetadataForToken', err);
