@@ -1,8 +1,9 @@
-import React from 'react'
+import React, {Fragment} from 'react'
 import { connect } from 'react-redux'
 import { getBrowser, browser } from '../../../browserDetection/BrowserDetection'
 import PDFViewerInternetExplorer from '../PDFViewerInternetExplorer/PDFViewerInternetExplorer'
 import {FormattedMessage} from "react-intl";
+import {defaults} from "../../../utils/helper";
 
 /**
  * Component to display a file
@@ -23,7 +24,9 @@ export const DisplayFile = ({ uploadFile }) => {
                 if (getBrowser() === browser.IE) {
                     if (data.url) {
                         return (
-                            <PDFViewerInternetExplorer url={data.url} />
+                            <Fragment>
+                                <PDFViewerInternetExplorer displayFile={uploadFile.displayFile}/>
+                            </Fragment>
                         )
                     }
                     return null

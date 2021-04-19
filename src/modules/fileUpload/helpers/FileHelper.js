@@ -71,7 +71,11 @@ export const GetDataUrlFromFile = (document) => {
         let reader = new FileReader();
 
         reader.onloadend = () => {
-            resolve(reader.result)
+            if(!reader.result){
+                reject();
+            }else{
+                resolve(reader.result);
+            }
         }
 
         reader.onerror = () => {

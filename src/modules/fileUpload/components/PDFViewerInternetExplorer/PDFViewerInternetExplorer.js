@@ -21,9 +21,8 @@ export class PDFViewerInternetExplorer extends React.Component {
     componentDidMount() {
         const element = this.viewerRef.current
         const pageCounter = this.pageCounterRef.current
-        const { url } = this.props
-
-        this.backend.init(url, element, pageCounter)
+        const { displayFile } = this.props
+        this.backend.init(displayFile.displayUrl, element, pageCounter)
     }
 
     componentWillUnmount() {
@@ -54,7 +53,7 @@ export class PDFViewerInternetExplorer extends React.Component {
 
 const mapStateToProps = (state) => {
     return (state) => ({
-        uploadFile: state.uploadFile
+        //displayFile: state.uploadFile.displayFile
     })
 }
 
