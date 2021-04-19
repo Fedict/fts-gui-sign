@@ -16,15 +16,23 @@ export default class PDFJs {
     isRendering = false
 
     init = async (source, canvasElement, pageElement) => {
-        
+        if(!source){
+            console.error("PDFJs.init - Source is not defined")
+            return;
+        }
 
         this.element = canvasElement
         this.pageElement = pageElement
 
-        const data = getBinaryFromDataURI(source)
-
+        const pdfData = {};
+        if (source.indexOf(';base64,') > -1) {
+            const data = getBinaryFromDataURI(source)
+            pdfData.data = data;
+        }else{
+            pdfData.url = source;
+        }
         let me = this
-        pdfjsLib.getDocument({ data: data }).promise.then(pdf => {
+        pdfjsLib.getDocument(pdfData).promise.then(pdf => {
 
             const totalPagesCount = pdf.numPages;
             me.documentLength = totalPagesCount
@@ -59,6 +67,8 @@ export default class PDFJs {
                 me.isRendering = false
                 
             })
+        }, (err) => {
+            console.log(err)
         }).catch((err) => {
             console.log(err)
             

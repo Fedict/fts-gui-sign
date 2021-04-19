@@ -23,7 +23,7 @@ export const DisplayFile = ({ uploadFile }) => {
                 if (getBrowser() === browser.IE) {
                     if (data.url) {
                         return (
-                            <PDFViewerInternetExplorer key={data.url} />
+                            <PDFViewerInternetExplorer url={data.url} />
                         )
                     }
                     return null

@@ -83,10 +83,11 @@ export const GetDataUrlFromFile = (document) => {
 }
 
 export const getBinaryFromDataURI = (dataURI) => {
-    if (dataURI) {
+    if (dataURI && dataURI.indexOf(';base64,') > -1) {
         var base64Index = dataURI.indexOf(';base64,') + ';base64,'.length;
         var base64 = dataURI.substring(base64Index);
         var raw = window.atob(base64);
         return raw
     }
+    return undefined;
 }
