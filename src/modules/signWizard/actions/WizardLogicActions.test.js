@@ -848,6 +848,7 @@ describe("WizardLogicActions", () => {
             MessageActions.showErrorMessage = jest.fn();
             CertificateActions.selectCertificate = jest.fn()
             navigation.navigateToStep = jest.fn()
+            window.configData = { skipCertificateChainValidate: false }
         })
 
         test("validateCertificates calls validateCertificatesAPI with the correct body ", () => {
@@ -1110,7 +1111,7 @@ describe("WizardLogicActions", () => {
             expect(CertificateActions.selectCertificate).toBeCalledWith(callParametersCertifictateListPased[0])
 
             expect(navigation.navigateToStep).toBeCalledTimes(1)
-            expect(navigation.navigateToStep).toBeCalledWith(WIZARD_STATE_DIGEST_LOADING)
+            expect(navigation.navigateToStep).toBeCalledWith(WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN)
         })
 
         test("validateCertificates success valid certificates list.length > 1 navigates to WIZARD_STATE_CERTIFICATES_CHOOSE ", async () => {
