@@ -430,8 +430,22 @@ export const getDigest = () => (dispatch, getStore) => {
         getDataToSignAPI(certificate.certificateSelected.APIBody, uploadFile.file, signingDate)
             .then(handleFlowIdError(flowId, getStore))
             .then((resp) => {
-                dispatch(setDigest(resp))
-                dispatch(navigateToSign())
+                if(resp.digest && resp.digestAlgorithm) {
+                    dispatch(setDigest(resp))
+                    dispatch(navigateToSign())
+                }else if(errorMessages[resp.message]){
+                    dispatch(showErrorMessage({
+                        ...ErrorGeneral,
+                        title : errorMessages.failedToFetchDataToSign,
+                        message : errorMessages[resp.message]
+                    }));
+                }else{
+                    dispatch(showErrorMessage({
+                        ...ErrorGeneral,
+                        message: errorMessages.failedToFetchDataToSign,
+                        body: resp.message
+                    }))
+                }
             })
             .catch((err) => {
                 if (err !== INCORECT_FLOW_ID) {
@@ -614,7 +628,15 @@ export const signDocument = () => (dispatch, getStore) => {
                         dispatch(navigateToStep(WIZARD_STATE_SUCCES))
                     }
                     else {
-                        dispatch(showErrorMessage(ErrorGeneral))
+                        if(errorMessages[resp.message]){
+                            dispatch(showErrorMessage({...ErrorGeneral, title : errorMessages.failedToSignWrongResultFromAPI, message : errorMessages[resp.message]}));
+                        }else{
+                            dispatch(showErrorMessage({
+                                ...ErrorGeneral,
+                                message: errorMessages.failedToSignWrongResultFromAPI,
+                                body: resp.message
+                            }))
+                        }
                     }
 
                 })
