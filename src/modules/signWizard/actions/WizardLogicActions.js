@@ -253,6 +253,15 @@ export const validateCertificates = () => (dispatch, getStore) => {
             }
         })
 
+        if(certificate.certificateList.length === 1
+            && window.configData
+            && defaults(window.configData.skipCertificateChainValidate, true)){
+            dispatch(saveCertificateList(certificate.certificateList))
+            dispatch(selectCertificate(certificate.certificateList[0]))
+            dispatch(navigateToStep(WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN))
+            return;
+        }
+
         const flowId = getStore().controlId.flowId
 
         validateCertificatesAPI(APIBody)
@@ -280,11 +289,7 @@ export const validateCertificates = () => (dispatch, getStore) => {
                 else {
                     if (newList.length === 1) {
                         dispatch(selectCertificate(newList[0]))
-                        if(window.configData && defaults(window.configData.skipCertificateChainValidate, true)){
-                            dispatch(navigateToStep(WIZARD_STATE_DIGEST_LOADING))
-                        }else{
-                            dispatch(navigateToStep(WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN))
-                        }
+                        dispatch(navigateToStep(WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN))
                     }
                     else {
                         dispatch(navigateToStep(WIZARD_STATE_CERTIFICATES_CHOOSE))
@@ -349,7 +354,7 @@ export const validateCertificateChain = () => (dispatch, getStore) => {
 }
 
 /**
- * funtion (action) does a validateCertificatesAPI request with a signle certificate
+ * function (action) does a validateCertificatesAPI request with a single certificate
  * - will check both keyUsage and certificateChain
  * - will save updated date in selected certificate
  * - if certificate is ok --> navigate to nonce loading page (WIZARD_STATE_NONCE_LOADING)
@@ -366,8 +371,15 @@ export const validateCertificateChain = () => (dispatch, getStore) => {
  */
 export const validateCertificate = (certificateObject) => (dispatch, getStore) => {
 
-    if (certificateObject.APIBody) {
 
+    if (certificateObject.APIBody) {
+        if(window.configData && defaults(window.configData.skipCertificateChainValidate, true)){
+            console.log('skip validateCertificate', certificateObject)
+            dispatch(selectCertificate(certificateObject))
+            dispatch(navigateToStep(WIZARD_STATE_DIGEST_LOADING))
+            return;
+        }
+        console.log('validateCertificate', certificateObject)
         const APIBody = [{
             ...certificateObject.APIBody,
             "expectedKeyUsage": "NON_REPUDIATION"
