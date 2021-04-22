@@ -9,6 +9,7 @@ import {navigateToStep} from "../../wizard/WizardActions";
 import {WIZARD_STATE_PIN_INPUT, WIZARD_STATE_UPLOAD} from "../../wizard/WizardConstants";
 import moment from "moment";
 import {setDateSigning} from "../../signWizard/actions/SignatureActions";
+import {parseErrorMessage} from "../../utils/helper";
 
 export const TOKEN_RECEIVED = "TOKEN_RECEIVED"
 export const SET_DOCUMENT_TOKEN_METADATA = "SET_DOCUMENT_TOKEN_METADATA"
@@ -35,11 +36,13 @@ export const getDigestForToken = () => (dispatch, getStore) => {
                     dispatch(setDigest(resp))
                     dispatch(navigateToSign())
                 }else{
-                    if(errorMessages[resp.message]){
+                    const parsedError = parseErrorMessage(resp.message);
+                    if(parsedError && errorMessages[parsedError.type]){
                         dispatch(showErrorMessage({
                             ...ErrorGeneral,
                             title : errorMessages.failedToFetchDataToSign,
-                            message : errorMessages[resp.message]
+                            message : errorMessages[parsedError.type],
+                            ref : parsedError.ref
                         }));
                     }else{
                         dispatch(showErrorMessage({
@@ -78,11 +81,13 @@ export const getDocumentMetadataForToken = () => (dispatch, getStore) => {
                     dispatch(setDocumentMetadata(resp))
                     dispatch(navigateToStep(WIZARD_STATE_UPLOAD))
                 }else{
-                    if(errorMessages[resp.message]){
+                    const parsedError = parseErrorMessage(resp.message);
+                    if(parsedError && errorMessages[parsedError.type]){
                         dispatch(showErrorMessage({
                             ...ErrorGeneral,
                             title : errorMessages.failedToFetchMetadata,
-                            message : errorMessages[resp.message]
+                            message : errorMessages[parsedError.type],
+                            ref : parsedError.ref
                         }));
                     }else{
                         dispatch(showErrorMessage({

@@ -12,6 +12,7 @@ export const initialState = {
         isVisible: "",//the button is visible
         nextPage: ""//the name of the page where the butons navigates to
     },
+    ref : "",
     hasCancelButton: "" //the button is visible
 }
 

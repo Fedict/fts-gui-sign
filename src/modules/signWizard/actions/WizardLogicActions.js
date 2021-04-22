@@ -48,7 +48,7 @@ import { INCORECT_FLOW_ID } from '../../controlIds/flowId/FlowIdHelpers'
 import {errorMessages} from "../../i18n/translations";
 import {redirectErrorCodes} from "../../../const";
 import moment from 'moment'
-import {defaults} from "../../utils/helper";
+import {defaults, parseErrorMessage} from "../../utils/helper";
 
 //----------------------------------
 // helpers                    
@@ -433,18 +433,22 @@ export const getDigest = () => (dispatch, getStore) => {
                 if(resp.digest && resp.digestAlgorithm) {
                     dispatch(setDigest(resp))
                     dispatch(navigateToSign())
-                }else if(errorMessages[resp.message]){
-                    dispatch(showErrorMessage({
-                        ...ErrorGeneral,
-                        title : errorMessages.failedToFetchDataToSign,
-                        message : errorMessages[resp.message]
-                    }));
                 }else{
-                    dispatch(showErrorMessage({
-                        ...ErrorGeneral,
-                        message: errorMessages.failedToFetchDataToSign,
-                        body: resp.message
-                    }))
+                    const parsedError = parseErrorMessage(resp.message);
+                    if(parsedError && errorMessages[parsedError.type]){
+                        dispatch(showErrorMessage({
+                            ...ErrorGeneral,
+                            title : errorMessages.failedToFetchDataToSign,
+                            message : errorMessages[parsedError.type],
+                            ref : parsedError.ref
+                        }));
+                    }else{
+                        dispatch(showErrorMessage({
+                            ...ErrorGeneral,
+                            message: errorMessages.failedToFetchDataToSign,
+                            body: resp.message
+                        }))
+                    }
                 }
             })
             .catch((err) => {
@@ -595,8 +599,14 @@ export const signDocument = () => (dispatch, getStore) => {
                         dispatch(setDownloadFile(resp))
                         dispatch(navigateToStep(WIZARD_STATE_SUCCES))
                     } else {
-                        if(errorMessages[resp.message]){
-                            dispatch(showErrorMessage({...ErrorGeneral, title : errorMessages.failedToSignWrongResultFromAPI, message : errorMessages[resp.message]}));
+                        const parsedError = parseErrorMessage(resp.message);
+                        if(parsedError && errorMessages[parsedError.type]){
+                            dispatch(showErrorMessage({
+                                ...ErrorGeneral,
+                                title : errorMessages.failedToSignWrongResultFromAPI,
+                                message : errorMessages[parsedError.type],
+                                ref : parsedError.ref
+                            }));
                         }else{
                             dispatch(showErrorMessage({
                                 ...ErrorGeneral,
@@ -668,6 +678,9 @@ export const resetWizard = () => (dispatch, getStore) => {
     if(tokenFile && tokenFile.redirectUrl){
         let url = new URL(tokenFile.redirectUrl);
         if(wizard && wizard.state){
+            if(message && message.ref){
+                url.searchParams.set('ref', message.ref);
+            }
             if(wizard.state === 'WIZARD_STATE_MESSAGE' && message && message.message && message.message.id){
                 const errorType = Object.keys(errorMessages).find((k) => errorMessages[k].id === message.message.id);
                 url.searchParams.set('err', defaults(redirectErrorCodes[errorType], errorType, 'SERVER_ERROR'));
