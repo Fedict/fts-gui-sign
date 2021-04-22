@@ -80,6 +80,26 @@ export const errorMessages = defineMessages({
     CERT_REVOKED: {
         id: 'error.CERT_REVOKED',
         defaultMessage: 'The certificate is revoked'
+    },
+    INTERNAL_ERR: {
+        id: 'error.INTERNAL_ERR',
+        defaultMessage: 'Unexpected error happened'
+    },
+    UNKNOWN_PROFILE: {
+        id: 'error.UNKNOWN_PROFILE',
+        defaultMessage: 'Unknown signature profile'
+    },
+    EMPTY_PARAM: {
+        id: 'error.EMPTY_PARAM',
+        defaultMessage: 'Empty (null) parameter in request'
+    },
+    INVALID_TOKEN : {
+        id: 'error.INVALID_TOKEN',
+        defaultMessage: 'Invalid token in request'
+    },
+    PARSE_ERROR : {
+        id: 'error.PARSE_ERROR',
+        defaultMessage: 'Coudln\'t parse request'
     }
 
 })
