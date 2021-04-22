@@ -42,7 +42,8 @@ export const getDigestForToken = () => (dispatch, getStore) => {
                             ...ErrorGeneral,
                             title : errorMessages.failedToFetchDataToSign,
                             message : errorMessages[parsedError.type],
-                            ref : parsedError.ref
+                            ref : parsedError.ref,
+                            errorDetails : parsedError.details
                         }));
                     }else{
                         dispatch(showErrorMessage({
@@ -87,7 +88,8 @@ export const getDocumentMetadataForToken = () => (dispatch, getStore) => {
                             ...ErrorGeneral,
                             title : errorMessages.failedToFetchMetadata,
                             message : errorMessages[parsedError.type],
-                            ref : parsedError.ref
+                            ref : parsedError.ref,
+                            errorDetails : parsedError.details
                         }));
                     }else{
                         dispatch(showErrorMessage({

@@ -229,6 +229,16 @@ export function getStackTrace () {
 }
 
 const parseErrorMessagePartNames = ['ref', 'type', 'details']
+
+/**
+ * parses the error message and returns an object
+ * @param errorMessage
+ * @returns {
+ *     ref,
+ *     type,
+ *     details
+ * }
+ */
 export function parseErrorMessage(errorMessage){
 	const split = (errorMessage && errorMessage.split('||')) || []
 	return (1 < split.length && split.length <= parseErrorMessagePartNames.length && split.reduce((result, errorPart, errorPartIndex) => {

@@ -440,7 +440,8 @@ export const getDigest = () => (dispatch, getStore) => {
                             ...ErrorGeneral,
                             title : errorMessages.failedToFetchDataToSign,
                             message : errorMessages[parsedError.type],
-                            ref : parsedError.ref
+                            ref : parsedError.ref,
+                            errorDetails : parsedError.details
                         }));
                     }else{
                         dispatch(showErrorMessage({
@@ -605,7 +606,8 @@ export const signDocument = () => (dispatch, getStore) => {
                                 ...ErrorGeneral,
                                 title : errorMessages.failedToSignWrongResultFromAPI,
                                 message : errorMessages[parsedError.type],
-                                ref : parsedError.ref
+                                ref : parsedError.ref,
+                                errorDetails : parsedError.details
                             }));
                         }else{
                             dispatch(showErrorMessage({
@@ -679,7 +681,10 @@ export const resetWizard = () => (dispatch, getStore) => {
         let url = new URL(tokenFile.redirectUrl);
         if(wizard && wizard.state){
             if(message && message.ref){
-                url.searchParams.set('ref', message.ref);
+                url.searchParams.set('ref', encodeURI(message.ref));
+            }
+            if(message && message.errorDetails){
+                url.searchParams.set('details', encodeURI(message.errorDetails));
             }
             if(wizard.state === 'WIZARD_STATE_MESSAGE' && message && message.message && message.message.id){
                 const errorType = Object.keys(errorMessages).find((k) => errorMessages[k].id === message.message.id);
