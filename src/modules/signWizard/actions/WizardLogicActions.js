@@ -681,10 +681,10 @@ export const resetWizard = () => (dispatch, getStore) => {
         let url = new URL(tokenFile.redirectUrl);
         if(wizard && wizard.state){
             if(message && message.ref){
-                url.searchParams.set('ref', encodeURI(message.ref));
+                url.searchParams.set('ref', message.ref);
             }
             if(message && message.errorDetails){
-                url.searchParams.set('details', encodeURI(message.errorDetails));
+                url.searchParams.set('details', message.errorDetails);
             }
             if(wizard.state === 'WIZARD_STATE_MESSAGE' && message && message.message && message.message.id){
                 const errorType = Object.keys(errorMessages).find((k) => errorMessages[k].id === message.message.id);
@@ -694,7 +694,7 @@ export const resetWizard = () => (dispatch, getStore) => {
                 url.searchParams.set('details', wizard.state);
             }
         }
-        window.location = url.toString();
+        window.location.replace(url.toString());
     }else{
         window.location.pathname = "/"
     }
