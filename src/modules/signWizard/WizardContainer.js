@@ -37,7 +37,7 @@ import PinPadError from './pages/PinPadError'
 import VersionCheckInstallExtensionContainer from './pages/VersionCheckInstallExtensionContainer'
 import { ErrorGeneral } from '../message/MessageConstants'
 import { resetWizard } from './actions/WizardLogicActions'
-import DisplayFile from '../fileUpload/components/DisplayFile/DisplayFile'
+import DisplayFile from '../fileUpload/components/UploadDisplayFile/UploadDisplayFile'
 import CertificateValidateChainContainer from './pages/CertificateValidateChainContainer'
 
 export const WizardContainer = ({ wizard, reader, resetWizard }) => {

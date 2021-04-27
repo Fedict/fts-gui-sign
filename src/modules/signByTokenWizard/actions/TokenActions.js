@@ -110,10 +110,10 @@ export const getDocumentMetadataForToken = () => (dispatch, getStore) => {
     }
 }
 
-export const doSetToken = (token, redirectUrl) => (dispatch) => {
+export const doSetToken = (token, redirectUrl, xsltUrl) => (dispatch) => {
     dispatch({
         type : TOKEN_RECEIVED,
-        payload : {token, redirectUrl}
+        payload : {token, redirectUrl, xsltUrl}
     })
 }
 
@@ -121,6 +121,7 @@ export const setDocumentMetadata = (metadata) => ({
     type : SET_DOCUMENT_TOKEN_METADATA,
     payload : {
         fileName : metadata.filename,
-        isPdf : metadata.mimetype && metadata.mimetype.indexOf('application/pdf') > -1
+        isPdf : metadata.mimetype && metadata.mimetype.indexOf('application/pdf') > -1,
+        isXml : metadata.mimetype && (metadata.mimetype.indexOf('application/xml') > -1 || metadata.mimetype.indexOf('text/xml') > -1)
     }
 })

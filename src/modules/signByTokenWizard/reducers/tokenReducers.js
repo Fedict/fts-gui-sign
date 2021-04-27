@@ -11,10 +11,19 @@ export const initialState = {
 const TokenReducer = (state = initialState, action) => {
     switch (action.type) {
         case TOKEN_RECEIVED:{
-            return {...state, token : action.payload.token, redirectUrl : action.payload.redirectUrl}
+            return {
+                ...state,
+                token : action.payload.token,
+                redirectUrl : action.payload.redirectUrl,
+                xsltUrl : action.payload.xsltUrl
+            }
         }
         case SET_DOCUMENT_TOKEN_METADATA : {
-            return {...state, isPdf : action.payload.isPdf, fileName : action.payload.fileName}
+            return {
+                ...state,
+                isPdf : action.payload.isPdf,
+                isXml : action.payload.isXml,
+                fileName : action.payload.fileName}
         }
         case STORE_RESET:
             return initialState
