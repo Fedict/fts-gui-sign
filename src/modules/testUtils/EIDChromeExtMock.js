@@ -35,7 +35,12 @@ export class EIDChromeExtMock {
 
     getUserCertificates(lang, mac){
         return new Promise(resolve => {
-            resolve(this.userCertificates)
+            if(window.confirm('Is error to getUserCertificates?')){
+                throw ({message : 'card_error', report : 'Card error from mock'})
+            } else{
+                resolve(this.userCertificates)
+            }
+
         })
     }
     getUserCertificateChain(lang, mac){

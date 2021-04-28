@@ -202,6 +202,7 @@ export const getCertificates = () => (dispatch, getStore) => {
 
     const requestId = dispatch(createRequestId(10000, requestTimeoutFunction))
     const flowId = getStore().controlId.flowId
+    const token = getStore().tokenFile.token
 
     eIDLink.getCertificate()
         .then(handleFlowIdError(flowId, getStore))
@@ -224,7 +225,7 @@ export const getCertificates = () => (dispatch, getStore) => {
         .catch((err) => {
             if (err !== INCORECT_REQUEST_ID && err !== INCORECT_FLOW_ID) {
                 dispatch(removeRequestId(requestId))
-                dispatch(handleErrorEID(err))
+                dispatch(handleErrorEID(err, false, token))
             }
         })
 }
@@ -320,6 +321,8 @@ export const validateCertificateChain = () => (dispatch, getStore) => {
     const store = getStore()
     const { certificate } = store
 
+    const token = getStore().tokenFile.token
+
     if (certificate
         && certificate.certificateSelected
         && certificate.certificateSelected.certificate) {
@@ -347,7 +350,7 @@ export const validateCertificateChain = () => (dispatch, getStore) => {
             .catch((error) => {
                 if (error !== INCORECT_REQUEST_ID && error !== INCORECT_FLOW_ID) {
                     dispatch(removeRequestId(requestId))
-                    dispatch(handleErrorEID(error))
+                    dispatch(handleErrorEID(error, false, token))
                 }
             })
     }
@@ -694,7 +697,7 @@ export const resetWizard = () => (dispatch, getStore) => {
                 url.searchParams.set('details', wizard.state);
             }
         }
-        window.location.replace(url.toString());
+        window.location.href = url.toString();
     }else{
         window.location.pathname = "/"
     }

@@ -1,7 +1,7 @@
 import { WIZARD_STATE_CERTIFICATES_LOADING } from "../../wizard/WizardConstants";
 import { ErrorGeneral } from "../../message/MessageConstants";
 import {defineMessages} from "react-intl";
-import {definedMessages} from "../../i18n/translations";
+import {definedMessages, errorMessages as globalErrorMessages} from "../../i18n/translations";
 
 const errorMessages = defineMessages({
     "The eId reader was removed" : {
@@ -39,14 +39,6 @@ const errorMessages = defineMessages({
     "Something went wrong" : {
         id : "eid.link.error.general.title",
         defaultMessage : "Something went wrong"
-    },
-    "Something went wrong. Please reload the page and try again." : {
-        id : "eid.link.error.general.text",
-        defaultMessage : "Something went wrong. Please reload the page and try again."
-    },
-    "The eId card is blocked" : {
-        id : "eid.link.error.card.blocked",
-        defaultMessage : "The eId card is blocked"
     }
 })
 
@@ -96,13 +88,13 @@ export const Error_EID_no_card_NotInSession = {
 }
 
 export const Error_EID_card_error = {
-    ...createError(errorMessages["Something went wrong"], errorMessages["Something went wrong. Please reload the page and try again."])
+    ...createError(errorMessages["Something went wrong"], globalErrorMessages.BEID_LINK_ERROR)
 }
 
 export const Error_EID_card_blocked = {
-    ...createError(errorMessages["The eId card is blocked"], errorMessages["The eId card is blocked"])
+    ...createError(errorMessages["The eId card is blocked"], globalErrorMessages.CARD_BLOCKED_ERROR)
 }
 
 export const Error_EID_signature_failed = {
-    ...createError(errorMessages["Something went wrong"], errorMessages["Something went wrong. Please reload the page and try again."])
+    ...createError(errorMessages["Something went wrong"], globalErrorMessages.beidLinkError)
 }

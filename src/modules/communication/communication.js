@@ -260,3 +260,23 @@ export const fetchMessagesForLocale = async (locale) => {
             return {};
         });
 }
+
+
+
+export const sendBEIDLinkErrorToBE = async (report, message, token) => {
+    const body = {
+        "err": "FE_NATIVE_ERR",
+        "report": report,
+        "result": message,
+        "token": token && token.substring(token.length-8)
+    }
+
+    return fetch(url + "/logging/error", {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+        .then(jsonHandler)
+}

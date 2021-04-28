@@ -39,7 +39,11 @@ const XmlDataViewer = (props) => {
 
     return <Fragment>
         {previewError?
-            <FormattedMessage id="xmlpreview.error" defaultMessage="Couldn't create the preview of the document to sign"/>
+            (
+                props.previewErrorRenderer?
+                    props.previewErrorRenderer():
+                <FormattedMessage id="xmlpreview.error" defaultMessage="Couldn't create the preview of the document to sign"/>
+            )
         :(loading?
                 <FormattedMessage id="xmlpreview.loading" defaultMessage="Loading the preview of the document..."/>
         :false)
@@ -47,9 +51,14 @@ const XmlDataViewer = (props) => {
         <div style={previewSkipped || loading?{display:'none'}:{
             boxShadow: 'inset -5px -5px 20px #888888',
             border: '3px solid black',
-            padding: '5px 0px 5px 5px'
+            padding: '5px 0px 5px 5px',
+            textAlign: 'right'
         }}>
-        <iframe ref={iframeEl} width={'100%'} height={700} frameBorder={0}></iframe>
+            <a style={{marginRight:30}} href="#" onClick={()=>{
+                window.frames["xmlDataContent"].focus();
+                window.frames["xmlDataContent"].print();
+            }}><img src="/img/print.svg" alt={"Print"}/></a>
+        <iframe ref={iframeEl} width={'100%'} height={700} frameBorder={0} name="xmlDataContent"></iframe>
         </div>
     </Fragment>
 }

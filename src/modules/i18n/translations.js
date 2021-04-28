@@ -25,6 +25,14 @@ export const definedMessages = defineMessages({
 })
 
 export const errorMessages = defineMessages({
+    BEID_LINK_ERROR : {
+        id : "eid.link.error.general.text",
+        defaultMessage : "Something went wrong. Please reload the page and try again."
+    },
+    CARD_BLOCKED_ERROR : {
+        id : "eid.link.error.card.blocked",
+        defaultMessage : "The eId card is blocked"
+    },
     failedToFetchMetadata: {
         id: 'error.METADATA_FETCH',
         defaultMessage: 'Failed to fetch the metadata of the document'
