@@ -45,7 +45,7 @@ export const errorMessages = defineMessages({
         id: 'error.WRONG_RESULT_SIGN_TOKEN',
         defaultMessage: 'Failed to sign the document'
     },
-    failedToSign: {
+    FAILED_TO_SIGN: {
         id: 'error.FAILED_TO_SIGN',
         defaultMessage: 'Failed to sign the document'
     },

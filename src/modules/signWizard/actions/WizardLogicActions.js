@@ -624,7 +624,7 @@ export const signDocument = () => (dispatch, getStore) => {
                 .catch((err) => {
                     //console.log('signDocumentForTokenAPI error', err)
                     if (err !== INCORECT_FLOW_ID) {
-                        dispatch(showErrorMessage({...ErrorGeneral, message : errorMessages.failedToSign}))
+                        dispatch(showErrorMessage({...ErrorGeneral, message : errorMessages.FAILED_TO_SIGN}))
                     }
                 })
         }else{

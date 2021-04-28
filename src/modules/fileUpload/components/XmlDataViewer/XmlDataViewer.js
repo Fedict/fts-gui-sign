@@ -1,12 +1,24 @@
 import React, {Fragment, useEffect, useRef, useState} from "react";
-import {FormattedMessage} from "react-intl";
+import {defineMessages, FormattedMessage, useIntl} from "react-intl";
 import {transformXML} from "../../../utils/xsltUtils";
+
+const messages = defineMessages({
+    downloadTitle : {
+        id : 'xmlpreview.button.download',
+        defaultMessage : 'Download original xml'
+    },
+    printTitle : {
+        id : 'xmlpreview.button.print',
+        defaultMessage : 'Print'
+    }
+})
 
 const XmlDataViewer = (props) => {
     const [previewSkipped, setPreviewSkipped] = useState(false);
     const [previewError, setPreviewError] = useState(false);
     const [loading, setLoading] = useState(true);
     const iframeEl = useRef(null);
+    const intl = useIntl();
     useEffect(() => {
         if(!props.xslt){
             setPreviewSkipped(true);
@@ -54,11 +66,16 @@ const XmlDataViewer = (props) => {
             padding: '5px 0px 5px 5px',
             textAlign: 'right'
         }}>
+            <a style={{marginRight:30}} href={props.data} target="_blank"
+               title={intl.formatMessage(messages.downloadTitle)}
+            ><img height={20} src="/img/download.svg" alt={intl.formatMessage(messages.downloadTitle)}/></a>
             <a style={{marginRight:30}} href="#" onClick={()=>{
                 window.frames["xmlDataContent"].focus();
                 window.frames["xmlDataContent"].print();
-            }}><img src="/img/print.svg" alt={"Print"}/></a>
-        <iframe ref={iframeEl} width={'100%'} height={700} frameBorder={0} name="xmlDataContent"></iframe>
+            }}
+               title={intl.formatMessage(messages.printTitle)}
+            ><img height={20} src="/img/print.svg" alt={intl.formatMessage(messages.printTitle)}/></a>
+            <iframe ref={iframeEl} width={'100%'} height={700} frameBorder={0} name="xmlDataContent"></iframe>
         </div>
     </Fragment>
 }
