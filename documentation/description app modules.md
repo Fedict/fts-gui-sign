@@ -34,6 +34,8 @@ module with all the requests to the API
 + validateSignatureAPI (document)
   + POST /validation/validateSignature
 
++ similar calls for the sign with token flow
+
 ## components
 folder with react components 
 
@@ -44,7 +46,7 @@ folder with react components
   + CardLoading : card with a loading circle
 + certificateSelect
   + select component to choose a certificate
-+ EIDLinkLinkuxInstall
++ EIDLinkLinuxInstall
   + install page for Linux distributions
 + methodSelect
   + a card to select a signing methode
@@ -52,7 +54,7 @@ folder with react components
   + a text with a number before it
 
 ## controlIds
-a module to control applicions ids
+a module to control applications ids
 
 + flowId : a unique id for the every flow
 + requestId : a unique id for the every API request
@@ -80,12 +82,12 @@ module to show custom error messages
 the navbar of the application
 
 ## signWizard
-the sign functionalitie wizard
+the sign functionality wizard
 
 + actions 
   + the redux actions used in the application
 + messages
-  + error messages specific to the sign funtionalety
+  + error messages specific to the sign functionality
 + pages
   + containers of the pages of the wizard
 + reducers
@@ -94,6 +96,22 @@ the sign functionalitie wizard
   + container of the wizard
   + all pages are linked here
   
+## signByTokenWizard
+the sign by token functionality wizard
++ actions 
+  + the redux actions used in the application
++ components
+  + Display file - to show a preview of the document to sign - reuses the DisplayFile of the sign flow
+  + PDF Viewer for IE - reuses the one of the sign flow
++ pages
+  + containers of the pages of the wizard
+    + TokenWizardIntroContainer - first step in the flow
+    + DigestForTokenLoadingContainer & MetadataLoadingContainer show please wait message
+    + SuccesForTokenContainer - last screen of happy flow when signing by token
++ reducers
+  + redux reducers
++ TokenWizardContainer orchestrates which page to show depending on the step 
+
 ## startpage
 the startpage to select a signing methode
 
@@ -103,14 +121,14 @@ the validate functionalety wizard
 + actions 
   + the redux actions used in the application
 + constants
-  + constands used in the validation proces
+  + constants used in the validation proces
 + pages
   + containers of the pages of the wizard
 + reducers
   + redux reducers
 + ValidateWizardContainer.js
   + container of the wizard
-  + all pages are linked here
+  + all pages are being linked here
 
 ## wizard
 logic to make show th e correct wizard pages
@@ -119,3 +137,9 @@ logic to make show th e correct wizard pages
   + navigateToStep : redux action to navigate to a specific step in the wizard
 + constants
   + list of the names of the wizard pages
+
+## i18n
+Module to handle the translation mechanism of the FE it is based on react-intl
+  
+## translations
+Contains the json files for each supported languages. Currently FR,NL,EN & DE
