@@ -202,7 +202,7 @@ export const getCertificates = () => (dispatch, getStore) => {
 
     const requestId = dispatch(createRequestId(10000, requestTimeoutFunction))
     const flowId = getStore().controlId.flowId
-    const token = getStore().tokenFile.token
+    const token = getStore().tokenFile && getStore().tokenFile.token
 
     eIDLink.getCertificate()
         .then(handleFlowIdError(flowId, getStore))
@@ -321,7 +321,7 @@ export const validateCertificateChain = () => (dispatch, getStore) => {
     const store = getStore()
     const { certificate } = store
 
-    const token = getStore().tokenFile.token
+    const token = getStore().tokenFile && getStore().tokenFile.token
 
     if (certificate
         && certificate.certificateSelected

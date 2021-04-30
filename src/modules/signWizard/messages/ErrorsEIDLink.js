@@ -75,7 +75,12 @@ export const Error_EID_unsupported_reader = {
 }
 
 export const Error_EID_no_card_InSession = {
-    ...createError(errorMessages["The eId card was removed"], errorMessages["The eId card was removed"])
+    ...createError(errorMessages["The eId card was removed"], errorMessages["The eId card was removed"]),
+    nextButton: {
+        text: definedMessages.retry,
+        isVisible: true,
+        nextPage: WIZARD_STATE_CERTIFICATES_LOADING
+    },
 }
 
 export const Error_EID_no_card_NotInSession = {
