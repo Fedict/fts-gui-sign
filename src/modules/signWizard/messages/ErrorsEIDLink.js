@@ -52,7 +52,8 @@ const createError = (title, message) => {
             isVisible: false,
             nextPage: ""
         },
-        hasCancelButton: true
+        hasCancelButton: true,
+        err : 'BEID_CONNECT_ERROR'
     }
 }
 export const Error_EID_http_status_0 = ErrorGeneral
