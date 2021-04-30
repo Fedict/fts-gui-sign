@@ -59,7 +59,8 @@ const createError = (title, message) => {
 export const Error_EID_http_status_0 = ErrorGeneral
 
 export const Error_EID_no_reader_InSession = {
-    ...createError(errorMessages["The eId reader was removed"], errorMessages["The eId reader was removed"])
+    ...createError(errorMessages["The eId reader was removed"], errorMessages["The eId reader was removed"]),
+    err : 'NO_READER'
 }
 
 export const Error_EID_no_reader_NotInSession = {
@@ -69,10 +70,12 @@ export const Error_EID_no_reader_NotInSession = {
         isVisible: true,
         nextPage: WIZARD_STATE_CERTIFICATES_LOADING
     },
+    err : 'NO_READER'
 }
 
 export const Error_EID_unsupported_reader = {
-    ...createError(errorMessages["The eId reader is not supported"], errorMessages["This application doesn't support this eID reader type"])
+    ...createError(errorMessages["The eId reader is not supported"], errorMessages["This application doesn't support this eID reader type"]),
+    err : 'UNSUPPORTED_READER'
 }
 
 export const Error_EID_no_card_InSession = {
@@ -82,6 +85,7 @@ export const Error_EID_no_card_InSession = {
         isVisible: true,
         nextPage: WIZARD_STATE_CERTIFICATES_LOADING
     },
+    err : 'USER_CANCELLED'
 }
 
 export const Error_EID_no_card_NotInSession = {
@@ -91,10 +95,12 @@ export const Error_EID_no_card_NotInSession = {
         isVisible: true,
         nextPage: WIZARD_STATE_CERTIFICATES_LOADING
     },
+    err : 'USER_CANCELLED'
 }
 
 export const Error_EID_card_error = {
-    ...createError(errorMessages["Something went wrong"], globalErrorMessages.BEID_CONNECT_ERROR)
+    ...createError(errorMessages["Something went wrong"], globalErrorMessages.BEID_CONNECT_ERROR),
+    err : 'CARD_ERROR'
 }
 
 export const Error_EID_card_blocked = {
@@ -102,5 +108,5 @@ export const Error_EID_card_blocked = {
 }
 
 export const Error_EID_signature_failed = {
-    ...createError(errorMessages["Something went wrong"], globalErrorMessages.beidLinkError)
+    ...createError(errorMessages["Something went wrong"], globalErrorMessages.BEID_CONNECT_ERROR)
 }
