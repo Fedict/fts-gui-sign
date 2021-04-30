@@ -93,7 +93,7 @@ export const Error_EID_no_card_NotInSession = {
 }
 
 export const Error_EID_card_error = {
-    ...createError(errorMessages["Something went wrong"], globalErrorMessages.BEID_LINK_ERROR)
+    ...createError(errorMessages["Something went wrong"], globalErrorMessages.BEID_CONNECT_ERROR)
 }
 
 export const Error_EID_card_blocked = {

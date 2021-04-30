@@ -691,7 +691,7 @@ export const resetWizard = () => (dispatch, getStore) => {
             }
             if(wizard.state === 'WIZARD_STATE_MESSAGE' && message && message.message && message.message.id){
                 const errorType = Object.keys(errorMessages).find((k) => errorMessages[k].id === message.message.id);
-                url.searchParams.set('err', defaults(redirectErrorCodes[errorType], errorType, 'SERVER_ERROR'));
+                url.searchParams.set('err', defaults(redirectErrorCodes[errorType], errorType, message.err, 'SERVER_ERROR'));
             }else{
                 url.searchParams.set('err', redirectErrorCodes.USER_CANCELLED);
                 url.searchParams.set('details', wizard.state);

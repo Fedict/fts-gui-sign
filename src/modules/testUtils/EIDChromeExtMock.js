@@ -55,7 +55,8 @@ export class EIDChromeExtMock {
                 if(window.confirm('Confirming the signature of the document, press yes for happy flow, no for pin input error')){
                     return (this.signature)
                 }else{
-                    throw ({message : 'pin_2_attempts_left'})
+                    //throw ({message : 'pin_2_attempts_left'})
+                    throw ({message : 'general_error'})
                 }
             }else{
                 return (this.signature)

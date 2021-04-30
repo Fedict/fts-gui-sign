@@ -25,7 +25,7 @@ export const definedMessages = defineMessages({
 })
 
 export const errorMessages = defineMessages({
-    BEID_LINK_ERROR : {
+    BEID_CONNECT_ERROR : {
         id : "eid.link.error.general.text",
         defaultMessage : "Something went wrong. Please reload the page and try again."
     },

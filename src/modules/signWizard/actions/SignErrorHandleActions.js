@@ -11,9 +11,16 @@ import {
 } from "../messages/ErrorsEIDLink";
 import { navigateToPinError, resetWizard } from "./WizardLogicActions";
 import { ErrorGeneral } from "../../message/MessageConstants";
-import { showErrorMessage } from "../../message/actions/MessageActions";
+import { showErrorMessage as showErrorMessageInFlow } from "../../message/actions/MessageActions";
 import {defineMessages} from "react-intl";
 import {sendBEIDLinkErrorToBE} from "../../communication/communication";
+
+const showErrorMessage = (errorObject) => {
+    return showErrorMessageInFlow({
+        ...errorObject,
+        err : 'BEID_CONNECT_ERROR'
+    })
+}
 
 /**
  * enum for the errorResponses from eIDLink
@@ -95,6 +102,7 @@ export const handleErrorEID = (error, isInSession, token) => (dispatch) => {
             dispatch(resetWizard())
             break;
         default:
+            dispatch(showErrorMessage(ErrorGeneral))
             reportError = true;
             break;
     }
