@@ -104,9 +104,11 @@ export const Error_EID_card_error = {
 }
 
 export const Error_EID_card_blocked = {
-    ...createError(errorMessages["The eId card is blocked"], globalErrorMessages.CARD_BLOCKED_ERROR)
+    ...createError(errorMessages["The eId card is blocked"], globalErrorMessages.CARD_BLOCKED_ERROR),
+    err : 'CARD_BLOCKED'
 }
 
 export const Error_EID_signature_failed = {
-    ...createError(errorMessages["Something went wrong"], globalErrorMessages.BEID_CONNECT_ERROR)
+    ...createError(errorMessages["Something went wrong"], globalErrorMessages.BEID_CONNECT_ERROR),
+    err : 'SIGNATURE_FAILED'
 }

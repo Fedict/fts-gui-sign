@@ -95,7 +95,10 @@ export const handleErrorEID = (error, isInSession, token) => (dispatch) => {
             dispatch(resetWizard())
             break;
         default:
-            dispatch(showErrorMessage(ErrorGeneral))
+            dispatch(showErrorMessage({
+                ...ErrorGeneral,
+                err : 'BEID_CONNECT_ERROR'
+            }))
             reportError = true;
             break;
     }
