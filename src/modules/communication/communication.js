@@ -78,6 +78,12 @@ export const createBodyForToken = (certificateBody, token, signingDate) => (
 
 const jsonHandler = (response) => {
     if (!response.ok) {
+        if(response.headers){
+            const contentType = response.headers.get("content-type");
+            if (contentType && contentType.indexOf("application/json") > -1) {
+                return response.json();
+            }
+        }
         throw new Error(REQUEST_FAILED)
     }
     try {
@@ -253,4 +259,24 @@ export const fetchMessagesForLocale = async (locale) => {
             }
             return {};
         });
+}
+
+
+
+export const sendBEIDLinkErrorToBE = async (report, message, token) => {
+    const body = {
+        "err": "FE_NATIVE_ERR",
+        "report": report,
+        "result": message,
+        "token": token && token.substring(token.length-8)
+    }
+
+    return fetch(url + "/logging/error", {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
+        .then(jsonHandler)
 }

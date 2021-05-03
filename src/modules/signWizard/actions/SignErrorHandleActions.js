@@ -11,8 +11,9 @@ import {
 } from "../messages/ErrorsEIDLink";
 import { navigateToPinError, resetWizard } from "./WizardLogicActions";
 import { ErrorGeneral } from "../../message/MessageConstants";
-import { showErrorMessage } from "../../message/actions/MessageActions";
+import { showErrorMessage  } from "../../message/actions/MessageActions";
 import {defineMessages} from "react-intl";
+import {sendBEIDLinkErrorToBE} from "../../communication/communication";
 
 /**
  * enum for the errorResponses from eIDLink
@@ -42,11 +43,12 @@ export const errorStatuses = {
  * @param {string} error.message - errorMessage from de eID reader
  * @param {boolean} isInSession - boolean that represents is the signing proces is in progress
  */
-export const handleErrorEID = (error, isInSession) => (dispatch) => {
-
+export const handleErrorEID = (error, isInSession, token) => (dispatch) => {
+    let reportError = false;
     switch (error.message) {
         case errorStatuses.http_status_0:
             dispatch(showErrorMessage(Error_EID_http_status_0))
+            reportError = true;
             break;
         case errorStatuses.no_reader:
             if (isInSession) {
@@ -58,6 +60,7 @@ export const handleErrorEID = (error, isInSession) => (dispatch) => {
             break;
         case errorStatuses.unsupported_reader:
             dispatch(showErrorMessage(Error_EID_unsupported_reader))
+            reportError = true;
             break;
         case errorStatuses.no_card:
             if (isInSession) {
@@ -68,10 +71,12 @@ export const handleErrorEID = (error, isInSession) => (dispatch) => {
             }
             break;
         case errorStatuses.card_error:
-            dispatch(showErrorMessage(Error_EID_card_error))
+            dispatch(showErrorMessage(Error_EID_card_error));
+            reportError = true;
             break;
         case errorStatuses.signature_failed:
             dispatch(showErrorMessage(Error_EID_signature_failed))
+            reportError = true;
             break
         case errorStatuses.pin_1_attempt_left:
         case errorStatuses.pin_2_attempts_left:
@@ -89,7 +94,19 @@ export const handleErrorEID = (error, isInSession) => (dispatch) => {
         case errorStatuses.cancel:
             dispatch(resetWizard())
             break;
-        default: break;
+        default:
+            dispatch(showErrorMessage(ErrorGeneral))
+            reportError = true;
+            break;
+    }
+    if(reportError){
+        try{
+            sendBEIDLinkErrorToBE(error.report, error.message, token).then((data) => {
+                dispatch(showErrorMessage({ref:data.ref}))
+            });
+        }catch (e){
+            console.log('Failed to log error')
+        }
     }
 }
 

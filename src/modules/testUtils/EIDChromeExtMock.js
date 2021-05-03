@@ -34,8 +34,13 @@ export class EIDChromeExtMock {
     }
 
     getUserCertificates(lang, mac){
-        return new Promise(resolve => {
-            resolve(this.userCertificates)
+        return new Promise((resolve, reject) => {
+            if(window.confirm('Is error to getUserCertificates?')){
+                reject ({message : 'card_error', report : 'Card error from mock'})
+            } else{
+                resolve(this.userCertificates)
+            }
+
         })
     }
     getUserCertificateChain(lang, mac){
@@ -50,7 +55,8 @@ export class EIDChromeExtMock {
                 if(window.confirm('Confirming the signature of the document, press yes for happy flow, no for pin input error')){
                     return (this.signature)
                 }else{
-                    throw ({message : 'pin_2_attempts_left'})
+                    //throw ({message : 'pin_2_attempts_left'})
+                    throw ({message : 'general_error'})
                 }
             }else{
                 return (this.signature)

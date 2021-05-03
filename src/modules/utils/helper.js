@@ -227,3 +227,24 @@ export function getStackTrace () {
 	stack = stack.split('\n').map(function (line) { return line.trim(); });
 	return stack.splice(stack[0] == 'Error' ? 2 : 1);
 }
+
+const parseErrorMessagePartNames = ['ref', 'type', 'details']
+
+/**
+ * parses the error message and returns an object
+ * @param errorMessage
+ * @returns {
+ *     ref,
+ *     type,
+ *     details
+ * }
+ */
+export function parseErrorMessage(errorMessage){
+	const split = (errorMessage && errorMessage.split('||')) || []
+	return (1 < split.length && split.length <= parseErrorMessagePartNames.length && split.reduce((result, errorPart, errorPartIndex) => {
+		if(errorPartIndex < parseErrorMessagePartNames.length){
+			result[parseErrorMessagePartNames[errorPartIndex]] = errorPart;
+		}
+		return result;
+	}, {})) || errorMessage;
+}

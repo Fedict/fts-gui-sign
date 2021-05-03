@@ -1,7 +1,7 @@
 import { WIZARD_STATE_CERTIFICATES_LOADING } from "../../wizard/WizardConstants";
 import { ErrorGeneral } from "../../message/MessageConstants";
 import {defineMessages} from "react-intl";
-import {definedMessages} from "../../i18n/translations";
+import {definedMessages, errorMessages as globalErrorMessages} from "../../i18n/translations";
 
 const errorMessages = defineMessages({
     "The eId reader was removed" : {
@@ -39,14 +39,6 @@ const errorMessages = defineMessages({
     "Something went wrong" : {
         id : "eid.link.error.general.title",
         defaultMessage : "Something went wrong"
-    },
-    "Something went wrong. Please reload the page and try again." : {
-        id : "eid.link.error.general.text",
-        defaultMessage : "Something went wrong. Please reload the page and try again."
-    },
-    "The eId card is blocked" : {
-        id : "eid.link.error.card.blocked",
-        defaultMessage : "The eId card is blocked"
     }
 })
 
@@ -60,13 +52,15 @@ const createError = (title, message) => {
             isVisible: false,
             nextPage: ""
         },
-        hasCancleButton: true
+        hasCancelButton: true,
+        err : 'BEID_CONNECT_ERROR'
     }
 }
 export const Error_EID_http_status_0 = ErrorGeneral
 
 export const Error_EID_no_reader_InSession = {
-    ...createError(errorMessages["The eId reader was removed"], errorMessages["The eId reader was removed"])
+    ...createError(errorMessages["The eId reader was removed"], errorMessages["The eId reader was removed"]),
+    err : 'NO_READER'
 }
 
 export const Error_EID_no_reader_NotInSession = {
@@ -76,14 +70,22 @@ export const Error_EID_no_reader_NotInSession = {
         isVisible: true,
         nextPage: WIZARD_STATE_CERTIFICATES_LOADING
     },
+    err : 'NO_READER'
 }
 
 export const Error_EID_unsupported_reader = {
-    ...createError(errorMessages["The eId reader is not supported"], errorMessages["This application doesn't support this eID reader type"])
+    ...createError(errorMessages["The eId reader is not supported"], errorMessages["This application doesn't support this eID reader type"]),
+    err : 'UNSUPPORTED_READER'
 }
 
 export const Error_EID_no_card_InSession = {
-    ...createError(errorMessages["The eId card was removed"], errorMessages["The eId card was removed"])
+    ...createError(errorMessages["The eId card was removed"], errorMessages["The eId card was removed"]),
+    nextButton: {
+        text: definedMessages.retry,
+        isVisible: true,
+        nextPage: WIZARD_STATE_CERTIFICATES_LOADING
+    },
+    err : 'USER_CANCELLED'
 }
 
 export const Error_EID_no_card_NotInSession = {
@@ -93,16 +95,18 @@ export const Error_EID_no_card_NotInSession = {
         isVisible: true,
         nextPage: WIZARD_STATE_CERTIFICATES_LOADING
     },
+    err : 'USER_CANCELLED'
 }
 
 export const Error_EID_card_error = {
-    ...createError(errorMessages["Something went wrong"], errorMessages["Something went wrong. Please reload the page and try again."])
+    ...createError(errorMessages["Something went wrong"], globalErrorMessages.BEID_CONNECT_ERROR),
+    err : 'CARD_ERROR'
 }
 
 export const Error_EID_card_blocked = {
-    ...createError(errorMessages["The eId card is blocked"], errorMessages["The eId card is blocked"])
+    ...createError(errorMessages["The eId card is blocked"], globalErrorMessages.CARD_BLOCKED_ERROR)
 }
 
 export const Error_EID_signature_failed = {
-    ...createError(errorMessages["Something went wrong"], errorMessages["Something went wrong. Please reload the page and try again."])
+    ...createError(errorMessages["Something went wrong"], globalErrorMessages.BEID_CONNECT_ERROR)
 }

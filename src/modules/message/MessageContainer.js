@@ -19,7 +19,7 @@ import {definedMessages} from "../i18n/translations";
  * @param {node} [props.message.nextButton.text] - text on the nexty button
  * @param {boolean} [props.message.nextButton.isVisible] - indicates if the button is visible
  * @param {string} [props.message.nextButton.nextPage] - Wizard id of the page where the nextbutton has to navigate to
- * @param {string} [props.message.hasCancleButton] - indicates if the cancel button is visible
+ * @param {string} [props.message.hasCancelButton] - indicates if the cancel button is visible
  * @param {function} [props.navigateToStep] - action to navigate to a page
  * @param {function} [props.onCancel] - onCancel callback
  */
@@ -56,7 +56,7 @@ export const MessageContainer = ({ message, navigateToStep, onCancel, intl }) =>
     return (
         <Container
             title={shownMessage.title}
-            hasCancelButton={shownMessage.hasCancleButton}
+            hasCancelButton={shownMessage.hasCancelButton}
             cancelButtonText={intl.formatMessage(definedMessages.cancel)}
             onClickCancel={() => {
                 if (onCancel) {
@@ -69,7 +69,9 @@ export const MessageContainer = ({ message, navigateToStep, onCancel, intl }) =>
 
             text={shownMessage.message}
         >
-            {shownMessage.body}
+            {shownMessage.body? (
+                shownMessage.body.id && intl.formatMessage(shownMessage.body)
+            ):shownMessage.body}
         </Container>
     )
 }

@@ -9,7 +9,7 @@
   + text (node) - text on the next button
   + isVisible (boolean) - indicates if the button is visible
   + nextPage (string) - WizardPageId of the page will navigate to
-+ hasCancleButton (string) - indicates if the cancel button is visible
++ hasCancelButton (string) - indicates if the cancel button is visible
 
 ## messageObject in redux store
 + type (string) - type of the message that is shown
@@ -20,7 +20,7 @@
   + text (node) - text on the next button
   + isVisible (boolean) - indicates if the button is visible
   + nextPage (string) - WizardPageId of the page will navigate to
-+ hasCancleButton (string) - indicates if the cancel button is visible
++ hasCancelButton (string) - indicates if the cancel button is visible
 
 ## messageTypes 
 + ERROR: "ERROR" (string)

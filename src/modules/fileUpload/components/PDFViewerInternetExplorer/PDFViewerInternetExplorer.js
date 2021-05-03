@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import pdfjs from './pdf'
+import {defaults} from "../../../utils/helper";
 
 export class PDFViewerInternetExplorer extends React.Component {
 
@@ -20,10 +21,8 @@ export class PDFViewerInternetExplorer extends React.Component {
     componentDidMount() {
         const element = this.viewerRef.current
         const pageCounter = this.pageCounterRef.current
-        const { uploadFile } = this.props
-        const data = uploadFile.displayFile
-
-        this.backend.init(data.displayUrl, element, pageCounter)
+        const { displayFile } = this.props
+        this.backend.init(displayFile.displayUrl, element, pageCounter)
     }
 
     componentWillUnmount() {
@@ -54,7 +53,7 @@ export class PDFViewerInternetExplorer extends React.Component {
 
 const mapStateToProps = (state) => {
     return (state) => ({
-        uploadFile: state.uploadFile
+        //displayFile: state.uploadFile.displayFile
     })
 }
 

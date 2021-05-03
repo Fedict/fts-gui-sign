@@ -48,7 +48,7 @@ import { INCORECT_FLOW_ID } from '../../controlIds/flowId/FlowIdHelpers'
 import {errorMessages} from "../../i18n/translations";
 import {redirectErrorCodes} from "../../../const";
 import moment from 'moment'
-import {defaults} from "../../utils/helper";
+import {defaults, parseErrorMessage} from "../../utils/helper";
 
 //----------------------------------
 // helpers                    
@@ -202,6 +202,7 @@ export const getCertificates = () => (dispatch, getStore) => {
 
     const requestId = dispatch(createRequestId(10000, requestTimeoutFunction))
     const flowId = getStore().controlId.flowId
+    const token = getStore().tokenFile && getStore().tokenFile.token
 
     eIDLink.getCertificate()
         .then(handleFlowIdError(flowId, getStore))
@@ -224,7 +225,7 @@ export const getCertificates = () => (dispatch, getStore) => {
         .catch((err) => {
             if (err !== INCORECT_REQUEST_ID && err !== INCORECT_FLOW_ID) {
                 dispatch(removeRequestId(requestId))
-                dispatch(handleErrorEID(err))
+                dispatch(handleErrorEID(err, false, token))
             }
         })
 }
@@ -253,6 +254,15 @@ export const validateCertificates = () => (dispatch, getStore) => {
             }
         })
 
+        if(certificate.certificateList.length === 1
+            && window.configData
+            && defaults(window.configData.skipCertificateChainValidate, true)){
+            dispatch(saveCertificateList(certificate.certificateList))
+            dispatch(selectCertificate(certificate.certificateList[0]))
+            dispatch(navigateToStep(WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN))
+            return;
+        }
+
         const flowId = getStore().controlId.flowId
 
         validateCertificatesAPI(APIBody)
@@ -280,11 +290,7 @@ export const validateCertificates = () => (dispatch, getStore) => {
                 else {
                     if (newList.length === 1) {
                         dispatch(selectCertificate(newList[0]))
-                        if(window.configData && defaults(window.configData.skipCertificateChainValidate, true)){
-                            dispatch(navigateToStep(WIZARD_STATE_DIGEST_LOADING))
-                        }else{
-                            dispatch(navigateToStep(WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN))
-                        }
+                        dispatch(navigateToStep(WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN))
                     }
                     else {
                         dispatch(navigateToStep(WIZARD_STATE_CERTIFICATES_CHOOSE))
@@ -315,6 +321,8 @@ export const validateCertificateChain = () => (dispatch, getStore) => {
     const store = getStore()
     const { certificate } = store
 
+    const token = getStore().tokenFile && getStore().tokenFile.token
+
     if (certificate
         && certificate.certificateSelected
         && certificate.certificateSelected.certificate) {
@@ -342,14 +350,14 @@ export const validateCertificateChain = () => (dispatch, getStore) => {
             .catch((error) => {
                 if (error !== INCORECT_REQUEST_ID && error !== INCORECT_FLOW_ID) {
                     dispatch(removeRequestId(requestId))
-                    dispatch(handleErrorEID(error))
+                    dispatch(handleErrorEID(error, false, token))
                 }
             })
     }
 }
 
 /**
- * funtion (action) does a validateCertificatesAPI request with a signle certificate
+ * function (action) does a validateCertificatesAPI request with a single certificate
  * - will check both keyUsage and certificateChain
  * - will save updated date in selected certificate
  * - if certificate is ok --> navigate to nonce loading page (WIZARD_STATE_NONCE_LOADING)
@@ -366,8 +374,15 @@ export const validateCertificateChain = () => (dispatch, getStore) => {
  */
 export const validateCertificate = (certificateObject) => (dispatch, getStore) => {
 
-    if (certificateObject.APIBody) {
 
+    if (certificateObject.APIBody) {
+        if(window.configData && defaults(window.configData.skipCertificateChainValidate, true)){
+            console.log('skip validateCertificate', certificateObject)
+            dispatch(selectCertificate(certificateObject))
+            dispatch(navigateToStep(WIZARD_STATE_DIGEST_LOADING))
+            return;
+        }
+        console.log('validateCertificate', certificateObject)
         const APIBody = [{
             ...certificateObject.APIBody,
             "expectedKeyUsage": "NON_REPUDIATION"
@@ -418,8 +433,27 @@ export const getDigest = () => (dispatch, getStore) => {
         getDataToSignAPI(certificate.certificateSelected.APIBody, uploadFile.file, signingDate)
             .then(handleFlowIdError(flowId, getStore))
             .then((resp) => {
-                dispatch(setDigest(resp))
-                dispatch(navigateToSign())
+                if(resp.digest && resp.digestAlgorithm) {
+                    dispatch(setDigest(resp))
+                    dispatch(navigateToSign())
+                }else{
+                    const parsedError = parseErrorMessage(resp.message);
+                    if(parsedError && errorMessages[parsedError.type]){
+                        dispatch(showErrorMessage({
+                            ...ErrorGeneral,
+                            title : errorMessages.failedToFetchDataToSign,
+                            message : errorMessages[parsedError.type],
+                            ref : parsedError.ref,
+                            errorDetails : parsedError.details
+                        }));
+                    }else{
+                        dispatch(showErrorMessage({
+                            ...ErrorGeneral,
+                            message: errorMessages.failedToFetchDataToSign,
+                            body: resp.message
+                        }))
+                    }
+                }
             })
             .catch((err) => {
                 if (err !== INCORECT_FLOW_ID) {
@@ -562,21 +596,35 @@ export const signDocument = () => (dispatch, getStore) => {
                 signature.signingDate)
                 .then(handleFlowIdError(flowId, getStore))
                 .then((resp) => {
-
+                    //console.log('signDocumentForTokenAPI response', resp)
                     if (resp
                         && resp.name
                         && resp.bytes) {
                         dispatch(setDownloadFile(resp))
                         dispatch(navigateToStep(WIZARD_STATE_SUCCES))
+                    } else {
+                        const parsedError = parseErrorMessage(resp.message);
+                        if(parsedError && errorMessages[parsedError.type]){
+                            dispatch(showErrorMessage({
+                                ...ErrorGeneral,
+                                title : errorMessages.failedToSignWrongResultFromAPI,
+                                message : errorMessages[parsedError.type],
+                                ref : parsedError.ref,
+                                errorDetails : parsedError.details
+                            }));
+                        }else{
+                            dispatch(showErrorMessage({
+                                ...ErrorGeneral,
+                                message: errorMessages.failedToSignWrongResultFromAPI,
+                                body: resp.message
+                            }))
+                        }
                     }
-                    else {
-                        dispatch(showErrorMessage({...ErrorGeneral, message : errorMessages.failedToSignWrongResultFromAPI}))
-                    }
-
                 })
                 .catch((err) => {
+                    //console.log('signDocumentForTokenAPI error', err)
                     if (err !== INCORECT_FLOW_ID) {
-                        dispatch(showErrorMessage({...ErrorGeneral, message : errorMessages.failedToSign}))
+                        dispatch(showErrorMessage({...ErrorGeneral, message : errorMessages.FAILED_TO_SIGN}))
                     }
                 })
         }else{
@@ -595,7 +643,15 @@ export const signDocument = () => (dispatch, getStore) => {
                         dispatch(navigateToStep(WIZARD_STATE_SUCCES))
                     }
                     else {
-                        dispatch(showErrorMessage(ErrorGeneral))
+                        if(errorMessages[resp.message]){
+                            dispatch(showErrorMessage({...ErrorGeneral, title : errorMessages.failedToSignWrongResultFromAPI, message : errorMessages[resp.message]}));
+                        }else{
+                            dispatch(showErrorMessage({
+                                ...ErrorGeneral,
+                                message: errorMessages.failedToSignWrongResultFromAPI,
+                                body: resp.message
+                            }))
+                        }
                     }
 
                 })
@@ -620,17 +676,28 @@ export const signDocument = () => (dispatch, getStore) => {
 export const resetWizard = () => (dispatch, getStore) => {
     let eIDLink = controller.getInstance()
     eIDLink.stop()
-    const {tokenFile, wizard} = getStore();
+    const {tokenFile, wizard, message} = getStore();
 
     dispatch(resetStore())
     dispatch(setNewFlowId());
     if(tokenFile && tokenFile.redirectUrl){
         let url = new URL(tokenFile.redirectUrl);
-        url.searchParams.set('err', redirectErrorCodes.USER_CANCELLED);
         if(wizard && wizard.state){
-            url.searchParams.set('details', wizard.state);
+            if(message && message.ref){
+                url.searchParams.set('ref', message.ref);
+            }
+            if(message && message.errorDetails){
+                url.searchParams.set('details', message.errorDetails);
+            }
+            if(wizard.state === 'WIZARD_STATE_MESSAGE' && message && message.message && message.message.id){
+                const errorType = Object.keys(errorMessages).find((k) => errorMessages[k].id === message.message.id);
+                url.searchParams.set('err', defaults(redirectErrorCodes[errorType], errorType, message.err, 'SERVER_ERROR'));
+            }else{
+                url.searchParams.set('err', redirectErrorCodes.USER_CANCELLED);
+                url.searchParams.set('details', wizard.state);
+            }
         }
-        window.location = url.toString();
+        window.location.href = url.toString();
     }else{
         window.location.pathname = "/"
     }

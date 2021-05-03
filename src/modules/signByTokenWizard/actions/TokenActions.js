@@ -9,6 +9,7 @@ import {navigateToStep} from "../../wizard/WizardActions";
 import {WIZARD_STATE_PIN_INPUT, WIZARD_STATE_UPLOAD} from "../../wizard/WizardConstants";
 import moment from "moment";
 import {setDateSigning} from "../../signWizard/actions/SignatureActions";
+import {parseErrorMessage} from "../../utils/helper";
 
 export const TOKEN_RECEIVED = "TOKEN_RECEIVED"
 export const SET_DOCUMENT_TOKEN_METADATA = "SET_DOCUMENT_TOKEN_METADATA"
@@ -31,14 +32,35 @@ export const getDigestForToken = () => (dispatch, getStore) => {
         getDataToSignForTokenAPI(certificate.certificateSelected.APIBody, tokenFile.token, signingDate)
             .then(handleFlowIdError(flowId, getStore))
             .then((resp) => {
-                dispatch(setDigest(resp))
-                dispatch(navigateToSign())
+                if(resp.digest && resp.digestAlgorithm){
+                    dispatch(setDigest(resp))
+                    dispatch(navigateToSign())
+                }else{
+                    const parsedError = parseErrorMessage(resp.message);
+                    if(parsedError && errorMessages[parsedError.type]){
+                        dispatch(showErrorMessage({
+                            ...ErrorGeneral,
+                            title : errorMessages.failedToFetchDataToSign,
+                            message : errorMessages[parsedError.type],
+                            ref : parsedError.ref,
+                            errorDetails : parsedError.details
+                        }));
+                    }else{
+                        dispatch(showErrorMessage({
+                            ...ErrorGeneral,
+                            message: errorMessages.failedToFetchDataToSign,
+                            body: resp.message
+                        }))
+                    }
+                }
             })
             .catch((err) => {
                 if (err !== INCORECT_FLOW_ID) {
                     dispatch(showErrorMessage({...ErrorGeneral, message : errorMessages.failedToFetchDataToSign}))
                 }
             })
+
+    }else{
 
     }
 
@@ -55,8 +77,28 @@ export const getDocumentMetadataForToken = () => (dispatch, getStore) => {
         getDocumentMetadataForTokenAPI(token)
             .then(handleFlowIdError(flowId, getStore))
             .then((resp) => {
-                dispatch(setDocumentMetadata(resp))
-                dispatch(navigateToStep(WIZARD_STATE_UPLOAD))
+                //console.log('getDocumentMetadataForTokenAPI', resp)
+                if(resp.mimetype && resp.filename){
+                    dispatch(setDocumentMetadata(resp))
+                    dispatch(navigateToStep(WIZARD_STATE_UPLOAD))
+                }else{
+                    const parsedError = parseErrorMessage(resp.message);
+                    if(parsedError && errorMessages[parsedError.type]){
+                        dispatch(showErrorMessage({
+                            ...ErrorGeneral,
+                            title : errorMessages.failedToFetchMetadata,
+                            message : errorMessages[parsedError.type],
+                            ref : parsedError.ref,
+                            errorDetails : parsedError.details
+                        }));
+                    }else{
+                        dispatch(showErrorMessage({
+                            ...ErrorGeneral,
+                            message: errorMessages.failedToFetchMetadata,
+                            body: resp.message
+                        }))
+                    }
+                }
             }).catch((err) => {
                 if (err !== INCORECT_FLOW_ID) {
                     console.log('getDocumentMetadataForToken', err);
@@ -68,10 +110,10 @@ export const getDocumentMetadataForToken = () => (dispatch, getStore) => {
     }
 }
 
-export const doSetToken = (token, redirectUrl) => (dispatch) => {
+export const doSetToken = (token, redirectUrl, xsltUrl) => (dispatch) => {
     dispatch({
         type : TOKEN_RECEIVED,
-        payload : {token, redirectUrl}
+        payload : {token, redirectUrl, xsltUrl}
     })
 }
 
@@ -79,6 +121,7 @@ export const setDocumentMetadata = (metadata) => ({
     type : SET_DOCUMENT_TOKEN_METADATA,
     payload : {
         fileName : metadata.filename,
-        isPdf : metadata.mimetype && metadata.mimetype.indexOf('application/pdf') > -1
+        isPdf : metadata.mimetype && metadata.mimetype.indexOf('application/pdf') > -1,
+        isXml : metadata.mimetype && (metadata.mimetype.indexOf('application/xml') > -1 || metadata.mimetype.indexOf('text/xml') > -1)
     }
 })

@@ -140,7 +140,8 @@ describe("SignErrorHandleActions", () => {
             const mockDispatch = jest.fn()
             handleErrorEID(error)(mockDispatch)
 
-            expect(showErrorMessage).toBeCalledTimes(0)
+            expect(showErrorMessage).toBeCalledTimes(1)
+            expect(showErrorMessage).toBeCalledWith(ErrorGeneral)
         })
     })
 
@@ -394,9 +395,8 @@ describe("SignErrorHandleActions", () => {
                 const mockDispatch1 = jest.fn((val) => { val(mockDispatch2) })
                 handlePinErrorEID(startError)(mockDispatch1)
 
-                expect(mockDispatch2).not.toBeCalled()
-
-                expect(showErrorMessage).not.toBeCalled()
+                expect(mockDispatch2).toBeCalled()
+                expect(showErrorMessage).toBeCalledWith(ErrorGeneral)
             })
         })
     })
