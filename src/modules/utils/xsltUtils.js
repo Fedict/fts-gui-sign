@@ -23,7 +23,7 @@ const transformXMLIE = (xmlDoc, xslDoc) =>{
     return proc.output;
 }
 
-function loadDoc(url) {
+export const loadDoc = (url) => {
     return new Promise(function(resolve, reject) {
         var req = new XMLHttpRequest();
         req.open("GET", url);

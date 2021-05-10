@@ -1,8 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import {DisplayFile} from "../../../fileUpload/components/DisplayFile/DisplayFile";
+import {getBEUrl} from "../../../utils/helper";
 
-const url = (window && window.configData) ? window.configData.BEurl : ""
+const url = getBEUrl();
 
 export const mapStateToProps = (state) => {
     if(state.tokenFile.token){

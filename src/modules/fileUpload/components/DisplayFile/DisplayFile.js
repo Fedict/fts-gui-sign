@@ -49,7 +49,6 @@ export const DisplayFile = ({ uploadFile }) => {
                     {data.isXml && <XmlDataViewer data={data.url} xslt={data.xsltUrl} previewErrorRenderer={() => (
                         dataNotVisualizable
                     )}></XmlDataViewer>}
-                    {(!data.isXml || !data.xsltUrl) && dataNotVisualizable}
                     <p><a href={data.url} download={data.fileName} title={data.fileName}><FormattedMessage id="file.download.link" defaultMessage="Download the file to sign"/></a></p>
                 </div>
             }

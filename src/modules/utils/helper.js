@@ -248,3 +248,7 @@ export function parseErrorMessage(errorMessage){
 		return result;
 	}, {})) || errorMessage;
 }
+
+export const getBEUrl = () => {
+	return (window && window.configData) ? window.configData.BEurl : ""
+}
