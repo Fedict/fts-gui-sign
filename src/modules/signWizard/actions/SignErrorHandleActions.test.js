@@ -141,7 +141,10 @@ describe("SignErrorHandleActions", () => {
             handleErrorEID(error)(mockDispatch)
 
             expect(showErrorMessage).toBeCalledTimes(1)
-            expect(showErrorMessage).toBeCalledWith(ErrorGeneral)
+            expect(showErrorMessage).toBeCalledWith({
+                ...ErrorGeneral,
+                err : 'BEID_CONNECT_ERROR'
+            })
         })
     })
 
@@ -396,7 +399,10 @@ describe("SignErrorHandleActions", () => {
                 handlePinErrorEID(startError)(mockDispatch1)
 
                 expect(mockDispatch2).toBeCalled()
-                expect(showErrorMessage).toBeCalledWith(ErrorGeneral)
+                expect(showErrorMessage).toBeCalledWith({
+                    ...ErrorGeneral,
+                    err : 'BEID_CONNECT_ERROR'
+                })
             })
         })
     })
