@@ -1,35 +1,63 @@
-import { errorStatuses, handleErrorEID, showPinError, PIN_ERROR_SET_ERROR, handlePinErrorEID, pinErrorText } from "./SignErrorHandleActions"
+import {
+    errorStatuses,
+    handleErrorEID,
+    showPinError,
+    PIN_ERROR_SET_ERROR,
+    handlePinErrorEID,
+    pinErrorText,
+    doReportError
+} from "./SignErrorHandleActions"
 import { showErrorMessage } from "../../message/actions/MessageActions"
 import * as  MessageActions from "../../message/actions/MessageActions"
 import { Error_EID_http_status_0, Error_EID_no_reader_InSession, Error_EID_no_reader_NotInSession, Error_EID_unsupported_reader, Error_EID_card_blocked, Error_EID_signature_failed, Error_EID_card_error, Error_EID_no_card_NotInSession, Error_EID_no_card_InSession } from "../messages/ErrorsEIDLink"
 import { resetWizard, navigateToPinError } from "./WizardLogicActions"
 import * as wizardLogicActions from "./WizardLogicActions"
 import { ErrorGeneral } from "../../message/MessageConstants"
+import {sendBEIDLinkErrorToBE} from "../../communication/communication";
+import * as communicationFn from "../../communication/communication";
+
+
 
 
 const ORIGINAL_ShowErroressage = showErrorMessage
 const ORIGINAL_resetWizard = resetWizard
 const ORIGINAL_navigateToPinError = navigateToPinError
+const ORIGINAL_sendBEIDLinkErrorToBE = sendBEIDLinkErrorToBE
+const flushPromises = () => new Promise(setImmediate);
+
+const replaceFunctions = () => {
+    MessageActions.showErrorMessage = jest.fn()
+    wizardLogicActions.resetWizard = jest.fn()
+    communicationFn.sendBEIDLinkErrorToBE = jest.fn()
+    communicationFn.sendBEIDLinkErrorToBE.mockReturnValue(new Promise((resolve) => {
+        resolve({ref:'123'});
+    }));
+}
+
+process.on('unhandledRejection', (reason, p) => {
+    console.error('Unhandled Rejection at:', p, 'reason:', reason)
+});
+
+const resetFunctions = () => {
+    MessageActions.showErrorMessage = ORIGINAL_ShowErroressage
+    wizardLogicActions.resetWizard = ORIGINAL_resetWizard
+    communicationFn.sendBEIDLinkErrorToBE = ORIGINAL_sendBEIDLinkErrorToBE
+}
 
 
 describe("SignErrorHandleActions", () => {
     describe("handleErrorEID", () => {
 
-        beforeEach(() => {
-            MessageActions.showErrorMessage = jest.fn()
-            wizardLogicActions.resetWizard = jest.fn()
-        })
+        beforeEach(replaceFunctions);
 
-        afterEach(() => {
-            MessageActions.showErrorMessage = ORIGINAL_ShowErroressage
-            wizardLogicActions.resetWizard = ORIGINAL_resetWizard
-        })
+        afterEach(resetFunctions)
 
         test('handleErrorEID error.message errorStatuses.http_status_0 show error Error_EID_http_status_0 ', () => {
-            const error = { message: errorStatuses.http_status_0 }
+            const error = { message: errorStatuses.http_status_0, report : 'Sample report' }
             const mockDispatch = jest.fn()
             handleErrorEID(error)(mockDispatch)
-
+            //once for showErrorMessage & once for doReportError
+            expect(mockDispatch).toBeCalledTimes(2)
             expect(showErrorMessage).toBeCalledTimes(1)
             expect(showErrorMessage).toBeCalledWith(Error_EID_http_status_0)
         })
@@ -38,7 +66,8 @@ describe("SignErrorHandleActions", () => {
             const error = { message: errorStatuses.no_reader }
             const mockDispatch = jest.fn()
             handleErrorEID(error, true)(mockDispatch)
-
+            //once for showErrorMessage
+            expect(mockDispatch).toBeCalledTimes(1)
             expect(showErrorMessage).toBeCalledTimes(1)
             expect(showErrorMessage).toBeCalledWith(Error_EID_no_reader_InSession)
         })
@@ -57,6 +86,8 @@ describe("SignErrorHandleActions", () => {
             const mockDispatch = jest.fn()
             handleErrorEID(error)(mockDispatch)
 
+            //once for showErrorMessage & once for doReportError
+            expect(mockDispatch).toBeCalledTimes(2)
             expect(showErrorMessage).toBeCalledTimes(1)
             expect(showErrorMessage).toBeCalledWith(Error_EID_unsupported_reader)
         })
@@ -84,6 +115,8 @@ describe("SignErrorHandleActions", () => {
             const mockDispatch = jest.fn()
             handleErrorEID(error)(mockDispatch)
 
+            //once for showErrorMessage & once for doReportError
+            expect(mockDispatch).toBeCalledTimes(2)
             expect(showErrorMessage).toBeCalledTimes(1)
             expect(showErrorMessage).toBeCalledWith(Error_EID_card_error)
         })
@@ -93,6 +126,8 @@ describe("SignErrorHandleActions", () => {
             const mockDispatch = jest.fn()
             handleErrorEID(error)(mockDispatch)
 
+            //once for showErrorMessage & once for doReportError
+            expect(mockDispatch).toBeCalledTimes(2)
             expect(showErrorMessage).toBeCalledTimes(1)
             expect(showErrorMessage).toBeCalledWith(Error_EID_signature_failed)
         })
@@ -136,11 +171,14 @@ describe("SignErrorHandleActions", () => {
         })
 
         test('handleErrorEID error.message unknown shows no message', () => {
-            const error = { message: "unknown" }
+            const error = { message: "unknown", report : "some report" }
             const mockDispatch = jest.fn()
             handleErrorEID(error)(mockDispatch)
 
             expect(showErrorMessage).toBeCalledTimes(1)
+
+            //once for showErrorMessage & once for doReportError
+            expect(mockDispatch).toBeCalledTimes(2)
             expect(showErrorMessage).toBeCalledWith({
                 ...ErrorGeneral,
                 err : 'BEID_CONNECT_ERROR'
@@ -177,19 +215,15 @@ describe("SignErrorHandleActions", () => {
 
     describe("handlePinErrorEID", () => {
 
-        beforeEach(() => {
-            MessageActions.showErrorMessage = jest.fn()
-            wizardLogicActions.resetWizard = jest.fn()
-        })
+        beforeEach(replaceFunctions)
 
-        afterEach(() => {
-            MessageActions.showErrorMessage = ORIGINAL_ShowErroressage
-            wizardLogicActions.resetWizard = ORIGINAL_resetWizard
-        })
+        afterEach(resetFunctions)
 
         test('handlePinErrorEID error.message errorStatuses.pin_1_attempt_left show pinerror pinErrorText.pin_1_attempt_left ', () => {
             const mockDispatch2 = jest.fn()
-            const mockDispatch1 = jest.fn(val => { val(mockDispatch2) })
+            const mockDispatch1 = jest.fn(val => {
+                val(mockDispatch2)
+            })
 
             const errorMessage = { message: errorStatuses.pin_1_attempt_left }
             handlePinErrorEID(errorMessage)(mockDispatch1)
@@ -269,15 +303,9 @@ describe("SignErrorHandleActions", () => {
 
         describe("not pin specific errors", () => {
 
-            beforeEach(() => {
-                MessageActions.showErrorMessage = jest.fn()
-                wizardLogicActions.resetWizard = jest.fn()
-            })
+            beforeEach(replaceFunctions)
 
-            afterEach(() => {
-                MessageActions.showErrorMessage = ORIGINAL_ShowErroressage
-                wizardLogicActions.resetWizard = ORIGINAL_resetWizard
-            })
+            afterEach(resetFunctions)
 
             test('handlePinErrorEID error.message errorStatuses.http_status_0 show error Error_EID_http_status_0 ', () => {
                 const startError = { message: errorStatuses.http_status_0 }
@@ -287,7 +315,8 @@ describe("SignErrorHandleActions", () => {
                 handlePinErrorEID(startError)(mockDispatch1)
 
                 expect(mockDispatch2).toBeCalled()
-                expect(showErrorMessage).toBeCalledWith(Error_EID_http_status_0)
+                expect(showErrorMessage).toBeCalledWith(Error_EID_http_status_0);
+
             })
 
             test('handlePinErrorEID error.message errorStatuses.no_reader isInSession show error Error_EID_no_reader_InSession ', () => {
@@ -320,7 +349,7 @@ describe("SignErrorHandleActions", () => {
                 handlePinErrorEID(startError)(mockDispatch1)
 
                 expect(mockDispatch2).toBeCalled()
-                expect(showErrorMessage).toBeCalledWith(Error_EID_unsupported_reader)
+                expect(showErrorMessage).toBeCalledWith(Error_EID_unsupported_reader);
             })
 
             test('handlePinErrorEID error.message errorStatuses.no_card isInSession show error Error_EID_no_card_InSession ', () => {
@@ -353,7 +382,8 @@ describe("SignErrorHandleActions", () => {
                 handlePinErrorEID(startError)(mockDispatch1)
 
                 expect(mockDispatch2).toBeCalled()
-                expect(showErrorMessage).toBeCalledWith(Error_EID_card_error)
+                expect(showErrorMessage).toBeCalledWith(Error_EID_card_error);
+
             })
 
             test('handlePinErrorEID error.message errorStatuses.signature_failed show error Error_EID_signature_failed ', () => {
@@ -364,7 +394,7 @@ describe("SignErrorHandleActions", () => {
                 handlePinErrorEID(startError)(mockDispatch1)
 
                 expect(mockDispatch2).toBeCalled()
-                expect(showErrorMessage).toBeCalledWith(Error_EID_signature_failed)
+                expect(showErrorMessage).toBeCalledWith(Error_EID_signature_failed);
             })
 
             test('handlePinErrorEID error.message errorStatuses.card_blocked show error Error_EID_card_blocked ', () => {
@@ -402,7 +432,7 @@ describe("SignErrorHandleActions", () => {
                 expect(showErrorMessage).toBeCalledWith({
                     ...ErrorGeneral,
                     err : 'BEID_CONNECT_ERROR'
-                })
+                });
             })
         })
     })

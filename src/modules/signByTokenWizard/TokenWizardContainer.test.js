@@ -15,6 +15,7 @@ describe('TokenWizardContainer', () => {
     beforeAll(() => {
         ORIGINAL_window = { ...window }
 
+        window.confirm = () => (false);
 
         Object.defineProperty(window, "EIDChromeExt", ((value) => ({
             get() { return value; },
@@ -182,6 +183,6 @@ describe('TokenWizardContainer', () => {
     });
 
     afterAll(() => {
-        window = ORIGINAL_window
+        window = ORIGINAL_window;
     })
 })

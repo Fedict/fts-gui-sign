@@ -36,7 +36,7 @@ export class EIDChromeExtMock {
     getUserCertificates(lang, mac){
         return new Promise((resolve, reject) => {
             if(window.confirm('Is error to getUserCertificates?')){
-                reject ({message : 'no_card', report : 'Card error from mock'})
+                reject ({message : 'unsupported_reader', report : 'Card error from mock'})
             } else{
                 resolve(this.userCertificates)
             }
