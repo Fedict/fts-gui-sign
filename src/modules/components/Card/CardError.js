@@ -1,7 +1,6 @@
 import React from "react"
 import { CardContainer } from "./CardContainer"
 import {injectIntl} from "react-intl";
-import {isEmpty} from "../../utils/helper";
 
 /**
  * Card with buttons and a error message (based on bootstrap class "alert alert-danger")
