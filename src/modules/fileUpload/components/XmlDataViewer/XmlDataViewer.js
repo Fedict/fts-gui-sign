@@ -1,6 +1,7 @@
 import React, {Fragment, useEffect, useRef, useState} from "react";
 import {defineMessages, FormattedMessage, useIntl} from "react-intl";
-import {transformXML} from "../../../utils/xsltUtils";
+import {loadDoc, transformXML} from "../../../utils/xsltUtils";
+import XMLViewer from "react-xml-viewer";
 
 const messages = defineMessages({
     downloadTitle : {
@@ -17,12 +18,20 @@ const XmlDataViewer = (props) => {
     const [previewSkipped, setPreviewSkipped] = useState(false);
     const [previewError, setPreviewError] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [xml, setXml] = useState(undefined);
     const iframeEl = useRef(null);
     const intl = useIntl();
     useEffect(() => {
         if(!props.xslt){
-            setPreviewSkipped(true);
-            setLoading(false);
+            function xmlLoadingFailed(){
+                setPreviewSkipped(true);
+                setLoading(false);
+            }
+            loadDoc(props.data).then((xml) => {
+                setLoading(false);
+                setXml(new XMLSerializer().serializeToString(xml.documentElement))
+            }, xmlLoadingFailed)
+                .catch(xmlLoadingFailed)
             return;
         }
         try{
@@ -60,7 +69,18 @@ const XmlDataViewer = (props) => {
                 <FormattedMessage id="xmlpreview.loading" defaultMessage="Loading the preview of the document..."/>
         :false)
         }
-        <div style={previewSkipped || loading?{display:'none'}:{
+        {/*raw xml*/}
+        {xml && <div style={{
+            boxShadow: 'inset -5px -5px 20px #888888',
+            border: '3px solid black',
+            padding: '5px 0px 5px 5px',
+            maxHeight : window.innerHeight - 200,
+            overflow: "scroll"
+        }}>
+            <XMLViewer xml={xml} collapsible={true} invalidXml={()=>false}/>
+        </div>}
+
+        <div style={previewSkipped || loading || xml?{display:'none'}:{
             boxShadow: 'inset -5px -5px 20px #888888',
             border: '3px solid black',
             padding: '5px 0px 5px 5px',

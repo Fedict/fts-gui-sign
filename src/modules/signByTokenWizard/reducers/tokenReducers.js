@@ -1,5 +1,6 @@
 import {STORE_RESET} from "../../../store/storeActions";
 import {SET_DOCUMENT_TOKEN_METADATA, TOKEN_RECEIVED} from "../actions/TokenActions";
+import {defaults} from "../../utils/helper";
 
 export const initialState = {
 
@@ -23,7 +24,9 @@ const TokenReducer = (state = initialState, action) => {
                 ...state,
                 isPdf : action.payload.isPdf,
                 isXml : action.payload.isXml,
-                fileName : action.payload.fileName}
+                fileName : action.payload.fileName,
+                xsltUrl : defaults(action.payload.xsltUrl, state.xsltUrl)
+            }
         }
         case STORE_RESET:
             return initialState

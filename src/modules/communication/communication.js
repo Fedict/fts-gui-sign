@@ -1,5 +1,6 @@
 import { getBase64Data } from "../fileUpload/helpers/FileHelper"
 import packageJson from '../../../package.json';
+import {getBEUrl} from "../utils/helper";
 //-----------------------------------------
 //--- constants                         ---
 //-----------------------------------------
@@ -7,7 +8,7 @@ import packageJson from '../../../package.json';
 /**
  * @const {string} - API url: can be configured in config.js
  */
-const url = (window && window.configData) ? window.configData.BEurl : ""
+const url = getBEUrl()
 
 /**
  * @const {string} - key to return when the api request fails

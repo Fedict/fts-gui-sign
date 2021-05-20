@@ -38,6 +38,26 @@ export const errorStatuses = {
 }
 
 /**
+ * Function that will call the backend to report the error and store the resulting ref in the store.
+ * @param report
+ * @param message
+ * @param token
+ * @returns {function(*): void}
+ */
+export let doReportError = (report, message, token) => (dispatch) => {
+    sendBEIDLinkErrorToBE(report, message, token).then((data) => {
+        if (data && data.ref) {
+            //store the resulting ref in the redux store.
+            dispatch(showErrorMessage({ref: data.ref}))
+        }
+    }).catch((err) => {
+        console.log('Failed to send error to BE', err)
+    });
+}
+
+
+
+/**
  * function to handle the error response from eID reader
  * @param {object} error - errorObject from eID reader
  * @param {string} error.message - errorMessage from de eID reader
@@ -95,18 +115,16 @@ export const handleErrorEID = (error, isInSession, token) => (dispatch) => {
             dispatch(resetWizard())
             break;
         default:
-            dispatch(showErrorMessage(ErrorGeneral))
+            dispatch(showErrorMessage({
+                ...ErrorGeneral,
+                err : 'BEID_CONNECT_ERROR'
+            }))
             reportError = true;
             break;
     }
-    if(reportError){
-        try{
-            sendBEIDLinkErrorToBE(error.report, error.message, token).then((data) => {
-                dispatch(showErrorMessage({ref:data.ref}))
-            });
-        }catch (e){
-            console.log('Failed to log error')
-        }
+    if(reportError && (error.report || error.message)){
+        console.log('calling doReportError', error)
+        dispatch(doReportError(error.report, error.message, token));
     }
 }
 
@@ -146,7 +164,7 @@ export const pinErrorText = defineMessages({
  * @param {boolean} isInSession - boolean that represents is the signing proces is in progress
  */
 export const handlePinErrorEID = (error, isInSession) => (dispatch) => {
-    if(error.message && pinErrorText[error.message]){
+    if(error && error.message && pinErrorText[error.message]){
         dispatch(showPinError(pinErrorText[error.message]))
     }else{
         dispatch(handleErrorEID(error, isInSession))

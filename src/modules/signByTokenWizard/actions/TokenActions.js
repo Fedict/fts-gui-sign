@@ -9,7 +9,7 @@ import {navigateToStep} from "../../wizard/WizardActions";
 import {WIZARD_STATE_PIN_INPUT, WIZARD_STATE_UPLOAD} from "../../wizard/WizardConstants";
 import moment from "moment";
 import {setDateSigning} from "../../signWizard/actions/SignatureActions";
-import {parseErrorMessage} from "../../utils/helper";
+import {getBEUrl, parseErrorMessage} from "../../utils/helper";
 
 export const TOKEN_RECEIVED = "TOKEN_RECEIVED"
 export const SET_DOCUMENT_TOKEN_METADATA = "SET_DOCUMENT_TOKEN_METADATA"
@@ -117,11 +117,16 @@ export const doSetToken = (token, redirectUrl, xsltUrl) => (dispatch) => {
     })
 }
 
+const replaceBEURL = (url) => {
+    return url && url.replace('${BEurl}', getBEUrl());
+}
+
 export const setDocumentMetadata = (metadata) => ({
     type : SET_DOCUMENT_TOKEN_METADATA,
     payload : {
         fileName : metadata.filename,
         isPdf : metadata.mimetype && metadata.mimetype.indexOf('application/pdf') > -1,
-        isXml : metadata.mimetype && (metadata.mimetype.indexOf('application/xml') > -1 || metadata.mimetype.indexOf('text/xml') > -1)
+        isXml : metadata.mimetype && (metadata.mimetype.indexOf('application/xml') > -1 || metadata.mimetype.indexOf('text/xml') > -1),
+        xsltUrl: replaceBEURL(metadata.xsltUrl)
     }
 })
