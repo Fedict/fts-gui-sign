@@ -306,7 +306,7 @@ export const sendLogInfo = (message, callback, token) => {
     lastLogInfo.token = token;
     lastLogInfo.amount = 0;
     const body = {
-        "level" : "info",
+        "level" : "INFO",
         "message": message,
         "token": token && token.substring(token.length-8)
     }
