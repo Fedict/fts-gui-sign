@@ -1,6 +1,6 @@
 import { getBase64Data } from "../fileUpload/helpers/FileHelper"
 import packageJson from '../../../package.json';
-import {getBEUrl} from "../utils/helper";
+import {defaults, defaultsExcludeEmpty, getBEUrl} from "../utils/helper";
 //-----------------------------------------
 //--- constants                         ---
 //-----------------------------------------
@@ -272,12 +272,71 @@ export const sendBEIDLinkErrorToBE = async (report, message, token) => {
         "token": token && token.substring(token.length-8)
     }
 
+
     return fetch(url + "/logging/error", {
         method: 'POST',
         body: JSON.stringify(body),
         headers: {
             'Content-Type': 'application/json'
-        },
+        }
     })
         .then(jsonHandler)
+}
+
+let lastLogInfo = {
+    amount : 0
+};
+
+export const sendLogInfoIgnoreResult = (message, token) => {
+    sendLogInfo(message, () =>{}, token);
+}
+
+export const sendLogInfo = (message, callback, token) => {
+    console.log('sendLogInfo', message, token);
+    if(defaultsExcludeEmpty(message, '______') === '______'
+        || defaultsExcludeEmpty(token, '______') === '______'
+        || (lastLogInfo.message === message && lastLogInfo.token === token && lastLogInfo.amount++ > 5)){
+        //ignore if message is empty or when sending the same message more than 5 times to the CS
+        if(typeof callback === 'function'){
+            callback();
+        }
+        return;
+    }
+    lastLogInfo.message = message;
+    lastLogInfo.token = token;
+    lastLogInfo.amount = 0;
+    const body = {
+        "level" : "info",
+        "message": message,
+        "token": token && token.substring(token.length-8)
+    }
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(),
+        typeof callback === 'function'?
+            defaults((window.configData?window.configData.logTimeout:undefined), 10000):90000
+    );
+
+    return fetch(url + "/logging/log", {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        signal: controller.signal
+    })
+        .then(() => {
+            clearTimeout(id);
+
+            if(typeof callback === 'function'){
+                callback();
+            }
+        })
+        .catch((e) => {
+            clearTimeout(id);
+
+            //error but try calling callback anyway
+            if(typeof callback === 'function'){
+                callback();
+            }
+        })
 }

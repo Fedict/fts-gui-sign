@@ -4,7 +4,7 @@ import {
     validateCertificatesAPI,
     getDataToSignAPI,
     signDocumentAPI,
-    validateSignatureAPI, getDataToSignForTokenAPI
+    validateSignatureAPI, getDataToSignForTokenAPI, sendLogInfo
 } from "./communication";
 import { getBase64Data } from "../fileUpload/helpers/FileHelper"
 import * as filehelper from "../fileUpload/helpers/FileHelper"
@@ -643,4 +643,27 @@ describe('getDataToSignForTokenAPI', () => {
         window.fetch = ORIGINAL_Fetch
     })
 
+})
+
+describe('calling sendLogInfo', () => {
+
+    test('fetch called', async () => {
+        global.fetch.resetMocks();
+        sendLogInfo('A message', () => {}, 'the token 12345678');
+        expect(global.fetch).toHaveBeenCalledTimes(1)
+        expect(global.fetch.mock.calls[0][0]).toEqual("/logging/log")
+        let bodyCalled = JSON.parse(global.fetch.mock.calls[0][1].body);
+        const expectedBody = {
+            "level" : "info",
+            "message" : 'A message',
+            "token" : '12345678'
+        }
+        expect(global.fetch.mock.calls[0][1].body).toEqual(JSON.stringify(expectedBody))
+    });
+
+    test("Don't call CS logging when message is empty string", () => {
+        global.fetch.resetMocks();
+        sendLogInfo('', () => {},'the token 12345678');
+        expect(global.fetch).toHaveBeenCalledTimes(0)
+    })
 })

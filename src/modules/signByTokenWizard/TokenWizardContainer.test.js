@@ -75,6 +75,9 @@ describe('TokenWizardContainer', () => {
             "digestAlgorithm" : null,
             "name" : "20201223121854-signed-pades-baseline-lta.pdf"
         })
+        fetchMock.post('/logging/log', {
+
+        })
 
         render(<Provider store={store}>
             <MemoryRouter initialIndex={0} initialEntries={[`/sign/${token}`]}>
@@ -154,7 +157,9 @@ describe('TokenWizardContainer', () => {
             "digestAlgorithm" : null,
             "name" : "20201223121854-signed-pades-baseline-lta.pdf"
         })
+        fetchMock.post('/logging/log', {
 
+        })
         render(<Provider store={store}>
             <MemoryRouter initialIndex={0} initialEntries={[`/sign/${token}`]}>
                 <Switch>

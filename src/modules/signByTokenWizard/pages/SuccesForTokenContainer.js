@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { CardContainer } from '../../components/Card/CardContainer';
 import { getBlobFromBase64 } from '../../fileUpload/helpers/FileHelper';
 import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
+import {sendLogInfo, sendLogInfoIgnoreResult} from "../../communication/communication";
+import {doWithToken} from "../../utils/helper";
 
 const messages = defineMessages({
     title : {
@@ -18,7 +20,7 @@ const messages = defineMessages({
 export class SuccesContainerForToken extends React.Component {
 
     downloadFile() {
-        const { uploadFile } = this.props
+        const { uploadFile, token } = this.props
 
         if (uploadFile
             && uploadFile.downloadFile
@@ -30,12 +32,16 @@ export class SuccesContainerForToken extends React.Component {
                 window.navigator.msSaveOrOpenBlob(blobData,uploadFile.downloadFile.name);
             }
             else {
-                let linkSource = `data:application/octet-stream;base64,{base64}`;
-                linkSource = linkSource.replace("{base64}", uploadFile.downloadFile.bytes)
+                let linkSource = `data:application/octet-stream;base64,${uploadFile.downloadFile.bytes}`;
                 const downloadLink = document.createElement("a");
 
                 downloadLink.href = linkSource;
                 downloadLink.download = uploadFile.downloadFile.name;
+                if(token){
+                    downloadLink.addEventListener("click", () => {
+                        sendLogInfoIgnoreResult('UI - DOWNLOAD_PRESSED', token);
+                    });
+                }
                 downloadLink.click();
             }
         }
@@ -77,17 +83,20 @@ export class SuccesContainerForToken extends React.Component {
 const mapStateToProps = (state) => {
     return (state) => ({
         uploadFile: state.uploadFile,
-        redirectUrl : state.tokenFile.redirectUrl
+        redirectUrl : state.tokenFile.redirectUrl,
+        token : state.tokenFile.token
     })
 }
 const mapDispatchToProps = (dispatch) => {
     return {
         nextButtonClicked : (redirectUrl) => {
-            if(redirectUrl){
-                window.location = redirectUrl
-            }else{
-                console.log('redirectUrl not defined');
-            }
+            dispatch(doWithToken(sendLogInfo.bind(undefined, 'UI - REDIRECT - ' + redirectUrl, () => {
+                if(redirectUrl){
+                    window.location = redirectUrl
+                }else{
+                    console.log('redirectUrl not defined');
+                }
+            })))
         }
     }
 }

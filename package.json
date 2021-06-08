@@ -31,7 +31,7 @@
     "css": "./node_modules/.bin/node-sass ./style/custom.scss ./public/style/custom.css",
     "start": "react-scripts start",
     "build": "./node_modules/.bin/node-sass ./style/custom.scss ./public/style/custom.css && react-scripts build",
-    "test": "react-scripts test --watchAll=false",
+    "test": "react-scripts test --watchAll=false --coverage=true",
     "tests": "react-scripts test",
     "eject": "react-scripts eject"
   },

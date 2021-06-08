@@ -22,7 +22,7 @@ import {
     selectCertificate
 } from "./CertificateActions"
 import {
-    getDataToSignAPI,
+    getDataToSignAPI, sendLogInfo,
     signDocumentAPI, signDocumentForTokenAPI,
     validateCertificatesAPI
 } from "../../communication/communication"
@@ -48,7 +48,7 @@ import { INCORECT_FLOW_ID } from '../../controlIds/flowId/FlowIdHelpers'
 import {errorMessages} from "../../i18n/translations";
 import {redirectErrorCodes} from "../../../const";
 import moment from 'moment'
-import {defaults, parseErrorMessage} from "../../utils/helper";
+import {defaults, doWithToken, parseErrorMessage} from "../../utils/helper";
 
 //----------------------------------
 // helpers                    
@@ -678,28 +678,39 @@ export const resetWizard = () => (dispatch, getStore) => {
     eIDLink.stop()
     const {tokenFile, wizard, message} = getStore();
 
-    dispatch(resetStore())
-    dispatch(setNewFlowId());
+    let url;
     if(tokenFile && tokenFile.redirectUrl){
-        let url = new URL(tokenFile.redirectUrl);
-        if(wizard && wizard.state){
-            if(message && message.ref){
-                url.searchParams.set('ref', message.ref);
-            }
-            if(message && message.errorDetails){
-                url.searchParams.set('details', message.errorDetails);
-            }
-            if(wizard.state === 'WIZARD_STATE_MESSAGE' && message && message.message && message.message.id){
-                const errorType = Object.keys(errorMessages).find((k) => errorMessages[k].id === message.message.id);
-                url.searchParams.set('err', defaults(redirectErrorCodes[errorType], errorType, message.err, 'SERVER_ERROR'));
-            }else{
-                url.searchParams.set('err', redirectErrorCodes.USER_CANCELLED);
-                url.searchParams.set('details', wizard.state);
-            }
-        }
-        window.location.href = url.toString();
+        url = new URL(tokenFile.redirectUrl);
     }else{
-        window.location.pathname = "/"
+        url = new URL(window.location);
     }
+
+    if(wizard && wizard.state){
+        try{
+            url.searchParams.delete('details');
+            url.searchParams.delete('err');
+            url.searchParams.delete('ref');
+        }catch (e){
+        }
+        if(message && message.ref){
+            url.searchParams.set('ref', message.ref);
+        }
+        if(message && message.errorDetails){
+            url.searchParams.set('details', message.errorDetails);
+        }
+        if(wizard.state === 'WIZARD_STATE_MESSAGE' && message && message.message && message.message.id){
+            const errorType = Object.keys(errorMessages).find((k) => errorMessages[k].id === message.message.id);
+            url.searchParams.set('err', defaults(redirectErrorCodes[errorType], errorType, message.err, 'SERVER_ERROR'));
+        }else{
+            url.searchParams.set('err', redirectErrorCodes.USER_CANCELLED);
+            url.searchParams.set('details', wizard.state);
+        }
+    }
+    sendLogInfo('UI - CANCEL_PRESSED - ' + url.toString(), () => {
+        dispatch(resetStore())
+        dispatch(setNewFlowId());
+        window.location.href = url.toString();
+    }, tokenFile?tokenFile.token:undefined);
+
 
 }
