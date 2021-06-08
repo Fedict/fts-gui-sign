@@ -654,7 +654,7 @@ describe('calling sendLogInfo', () => {
         expect(global.fetch.mock.calls[0][0]).toEqual("/logging/log")
         let bodyCalled = JSON.parse(global.fetch.mock.calls[0][1].body);
         const expectedBody = {
-            "level" : "info",
+            "level" : "INFO",
             "message" : 'A message',
             "token" : '12345678'
         }
