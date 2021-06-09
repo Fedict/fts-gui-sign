@@ -308,7 +308,7 @@ export const sendLogInfo = (message, callback, token) => {
     const body = {
         "level" : "INFO",
         "message": message,
-        "token": token && token.substring(token.length-8)
+        "token": token
     }
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(),
