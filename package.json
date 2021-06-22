@@ -35,6 +35,13 @@
     "tests": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "jest": {
+    "coverageReporters": [
+      "html",
+      "text",
+      "cobertura"
+    ]
+  },
   "eslintConfig": {
     "extends": "react-app"
   },
