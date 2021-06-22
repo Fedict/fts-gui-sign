@@ -25,7 +25,8 @@ const TokenReducer = (state = initialState, action) => {
                 isPdf : action.payload.isPdf,
                 isXml : action.payload.isXml,
                 fileName : action.payload.fileName,
-                xsltUrl : defaults(action.payload.xsltUrl, state.xsltUrl)
+                xsltUrl : defaults(action.payload.xsltUrl, state.xsltUrl),
+                readPhoto : action.payload.readPhoto
             }
         }
         case STORE_RESET:

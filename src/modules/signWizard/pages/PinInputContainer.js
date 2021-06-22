@@ -7,6 +7,7 @@ import { navigateToStep } from '../../wizard/WizardActions';
 import { WIZARD_STATE_SIGNING_PRESIGN_LOADING } from '../../wizard/WizardConstants';
 import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
 import {definedMessages} from "../../i18n/translations";
+import {defaults} from "../../utils/helper";
 
 const messages = defineMessages({
     title: {
@@ -35,15 +36,24 @@ export class PinInputContainer extends React.Component {
 
     componentDidMount() {
         document.addEventListener("keyup", this.onKeyUp)
+        document.addEventListener("keypress", this.test)
     }
 
     componentWillUnmount() {
+        document.removeEventListener("keypress", this.test)
         document.removeEventListener("keyup", this.onKeyUp)
     }
 
+    test(e){
+        console.log(e)
+    }
+
     onKeyUp(e) {
+        if(!e.key && !e.keyCode){
+            return;
+        }
         //console.log(e)
-        let pincode = this.state.pin + ""
+        let pincode = defaults(this.state.pin, "") + "";
         let indexCursor = this.state.indexCursor;
         if (e.keyCode === 13) { //Enter
             if (pincode.length >= 4) {
@@ -59,7 +69,7 @@ export class PinInputContainer extends React.Component {
             this.setState({indexCursor : Math.max(0, indexCursor - 1)})
         }else if (e.keyCode === 39){ //Right
             this.setState({indexCursor : Math.min(pincode.length, indexCursor + 1)})
-        }else if (e.key.length === 1) {
+        }else if (e.key && e.key.length === 1) {
             if (pincode.length < 12) {
                 pincode = pincode.substr(0, indexCursor) + e.key + pincode.substr(indexCursor)
                 this.setState({ pin: pincode, indexCursor : indexCursor + 1 })

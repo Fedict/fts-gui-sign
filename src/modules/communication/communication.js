@@ -222,10 +222,11 @@ export const getDataToSignForTokenAPI = async (certificateBody, token, signingDa
  * @param {Object} token - token of the document to be signed
  * @param {string} signature - signature value used to sign th document
  */
-export const signDocumentForTokenAPI = async (certificateBody, token, signature, signingDate) => {
+export const signDocumentForTokenAPI = async (certificateBody, token, signature, signingDate, photo) => {
     const body = {
         ...createBodyForToken(certificateBody, token, signingDate),
-        "signatureValue": signature
+        "signatureValue": signature,
+        photo
     }
 
     return fetch(url + "/signing/signDocumentForToken", {

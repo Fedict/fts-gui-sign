@@ -49,6 +49,7 @@ import {errorMessages} from "../../i18n/translations";
 import {redirectErrorCodes} from "../../../const";
 import moment from 'moment'
 import {defaults, doWithToken, parseErrorMessage} from "../../utils/helper";
+import {ID_FLAGS} from "../../eIdLink/strategies/createEIDLinkExtensionStrategy";
 
 //----------------------------------
 // helpers                    
@@ -112,6 +113,34 @@ export const getCertificatesFromResponse = (response) => {
                     }
                     certificateList.push(certificateObject)
                 }
+            }
+        }
+    }
+
+    return certificateList
+}
+
+
+/**
+ * function to map the certificate response to a certificate object
+ * @param {object} response - responce from eIDLink
+ */
+export const getCertificatesFromIdResponse = (response) => {
+
+    let certificateList = []
+
+    if (response && response.Readers && response.Readers.length >= 1) {
+        for (const reader of response.Readers) {
+            if (reader && reader.signcert) {
+                const certificateObject = {
+                    readerName: reader.ReaderName,
+                    readerType: reader.ReaderType,
+                    cardType: reader.cardType,
+                    certificate: reader.signcert,
+                    APIBody: createCertificateObject(reader.signcert),
+                    photo : reader.photo
+                }
+                certificateList.push(certificateObject)
             }
         }
     }
@@ -204,6 +233,34 @@ export const getCertificates = () => (dispatch, getStore) => {
     const flowId = getStore().controlId.flowId
     const token = getStore().tokenFile && getStore().tokenFile.token
 
+    eIDLink.getIdData(
+        'en',
+        "0123456789ABCDEF0123456789ABCDEF",
+        ID_FLAGS.ID_FLAG_INCLUDE_SIGN_CERT |
+            ID_FLAGS.ID_FLAG_INCLUDE_PHOTO |
+            ID_FLAGS.ID_FLAG_INCLUDE_INTEGRITY |
+            ID_FLAGS.ID_FLAG_INCLUDE_ID
+    )
+        .then(handleFlowIdError(flowId, getStore))
+        .then(handleRequestIdError(requestId, dispatch, getStore))
+        .then((response) => {
+            const certificateList = getCertificatesFromIdResponse(response)
+
+            dispatch(saveCertificateList(certificateList))
+
+            if (certificateList.length === 0) {
+                dispatch(showErrorMessage(MessageCertificatesNotFound))
+            } else {
+                dispatch(navigateToStep(WIZARD_STATE_VALIDATE_LOADING))
+            }
+        })
+        .catch((err) => {
+            if (err !== INCORECT_REQUEST_ID && err !== INCORECT_FLOW_ID) {
+                dispatch(removeRequestId(requestId))
+                dispatch(handleErrorEID(err, false, token))
+            }
+        })
+    /*
     eIDLink.getCertificate()
         .then(handleFlowIdError(flowId, getStore))
         .then(handleRequestIdError(requestId, dispatch, getStore))
@@ -228,6 +285,7 @@ export const getCertificates = () => (dispatch, getStore) => {
                 dispatch(handleErrorEID(err, false, token))
             }
         })
+     */
 }
 
 /**
@@ -285,6 +343,7 @@ export const validateCertificates = () => (dispatch, getStore) => {
                 dispatch(saveCertificateList(newList))
 
                 if (newList.length <= 0) {
+                    console.log('MessageCertificatesNotFound', val)
                     dispatch(showErrorMessage(MessageCertificatesNotFound))
                 }
                 else {
@@ -299,7 +358,7 @@ export const validateCertificates = () => (dispatch, getStore) => {
             })
             .catch((err) => {
                 if (err !== INCORECT_FLOW_ID) {
-
+                    console.log('Failed to validate certificate', err)
                     dispatch(showErrorMessage(MessageCertificatesNotFound))
                 }
 
@@ -589,11 +648,16 @@ export const signDocument = () => (dispatch, getStore) => {
         dispatch(navigateToStep(WIZARD_STATE_SIGNING_LOADING))
         const flowId = getStore().controlId.flowId;
         if(tokenFile && tokenFile.token){
+            let photo;
+            if(tokenFile.readPhoto){
+                photo = certificate.certificateSelected.photo;
+            }
             signDocumentForTokenAPI(
                 certificate.certificateSelected.APIBody,
                 tokenFile.token,
                 signature.signature,
-                signature.signingDate)
+                signature.signingDate,
+                photo)
                 .then(handleFlowIdError(flowId, getStore))
                 .then((resp) => {
                     //console.log('signDocumentForTokenAPI response', resp)

@@ -1,4 +1,20 @@
 /**
+ * used when calling eazySign getId
+ * @type {{ID_FLAG_INCLUDE_ADDR: number, ID_FLAG_INCLUDE_CACERTS: number, ID_FLAG_INCLUDE_INTEGRITY: number, ID_FLAG_INCLUDE_AUTH_CERT: number, ID_FLAG_INCLUDE_PHOTO: number, ID_FLAG_INCLUDE_ROOTCERT: number, ID_FLAG_INCLUDE_ID: number, ID_FLAG_INCLUDE_CERTS: number, ID_FLAG_INCLUDE_SIGN_CERT: number}}
+ */
+export const ID_FLAGS = {
+    ID_FLAG_INCLUDE_ID          : 1,
+    ID_FLAG_INCLUDE_ADDR        : 2,
+    ID_FLAG_INCLUDE_PHOTO       : 4,
+    ID_FLAG_INCLUDE_INTEGRITY   : 8,
+    ID_FLAG_INCLUDE_CERTS       : 16,
+    ID_FLAG_INCLUDE_AUTH_CERT   : 32,
+    ID_FLAG_INCLUDE_SIGN_CERT   : 64,
+    ID_FLAG_INCLUDE_CACERTS     : 128,
+    ID_FLAG_INCLUDE_ROOTCERT    : 256
+}
+
+/**
  * function that creates a strategy when the extension is active
  * returns a object with the following functions:
  * - getVersion
@@ -65,6 +81,10 @@ export const createEIDLinkExtensionStrategy = (api) => {
         return api.getUserCertificateChain(lang, mac, userCert)
     }
 
+    const getIdData = (lang, mac, idFlags) => {
+        return api.getId(lang, mac, idFlags)
+    }
+
     /**
      * function to get the signing data 
      * @param {string} lang - language of the browser
@@ -95,6 +115,7 @@ export const createEIDLinkExtensionStrategy = (api) => {
         getVersion: getVersion,
         getCertificate: getCertificate,
         getCertificateChain: getCertificateChain,
+        getIdData : getIdData,
         sign: sign,
         auth: auth,
         stop: () => { }
