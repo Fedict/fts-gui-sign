@@ -29,7 +29,11 @@ export const getDigestForToken = () => (dispatch, getStore) => {
         && tokenFile
         && tokenFile.token) {
         const flowId = getStore().controlId.flowId;
-        getDataToSignForTokenAPI(certificate.certificateSelected.APIBody, tokenFile.token, signingDate)
+        let photo;
+        if(tokenFile.readPhoto){
+            photo = certificate.certificateSelected.photo;
+        }
+        getDataToSignForTokenAPI(certificate.certificateSelected.APIBody, tokenFile.token, signingDate, photo)
             .then(handleFlowIdError(flowId, getStore))
             .then((resp) => {
                 if(resp.digest && resp.digestAlgorithm){
