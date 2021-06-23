@@ -71,7 +71,8 @@ export const createBodyForToken = (certificateBody, token, signingDate, photo) =
             "detachedContents": [
             ],
             "signingCertificate": certificateBody.certificate,
-            "signingDate": signingDate
+            "signingDate": signingDate,
+            photo
         },
         token
     }
