@@ -100,8 +100,12 @@ describe('TokenWizardContainer', () => {
                 </Switch>
             </MemoryRouter>
         </Provider>)
+        const documentReadCheckBox = await screen.findByTestId("documentReadCheckbox");
 
-        const startButton = await screen.findByRole('button', {name: /Start/i})
+        expect(documentReadCheckBox).toBeInTheDocument();
+        documentReadCheckBox.click();
+
+        const startButton = await screen.findByRole('button', {name: /SIGN/i})
 
         startButton.click();
 
@@ -187,7 +191,12 @@ describe('TokenWizardContainer', () => {
             </MemoryRouter>
         </Provider>)
 
-        const startButton = await screen.findByRole('button', {name: /Start/i})
+        const documentReadCheckBox = await screen.findByTestId( "documentReadCheckbox");
+
+        expect(documentReadCheckBox).toBeInTheDocument();
+        documentReadCheckBox.click();
+
+        const startButton = await screen.findByRole('button', {name: /Sign/i})
 
         startButton.click();
 

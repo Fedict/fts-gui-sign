@@ -9,6 +9,7 @@ import configureStore from './store/store';
 import { Provider } from 'react-redux';
 import { getBrowser, browser } from './modules/browserDetection/BrowserDetection';
 import 'bs-stepper/dist/css/bs-stepper.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const store = configureStore();
 const browsertype = getBrowser()

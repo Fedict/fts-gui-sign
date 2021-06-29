@@ -13,9 +13,9 @@ const Header = (props) => (
 )
 
 const HeaderStep = (props) => (
-    <div className={"step" + (props.active?" active":" inactive")}>
+    <div className={"step" + (props.done?" done":(props.active?" active":" inactive"))}>
         <span className="step-trigger" disabled={props.disabled} id={props.buttonId}>
-            <span className="bs-stepper-circle" >{props.number}</span>
+            <span className="bs-stepper-circle" >{props.done?<i className="bi bi-check"></i>:props.number}</span>
             <span className="bs-stepper-label" id={props.label.length>0?props.label.split(" ").join(""):""}>{props.label}</span>
         </span>
     </div>

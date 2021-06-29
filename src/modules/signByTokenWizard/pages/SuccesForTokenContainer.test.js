@@ -15,7 +15,7 @@ describe("SuccesForTokenContainer", () => {
 
         const buttonElement = getByText(/Close/i);
         expect(buttonElement).toBeInTheDocument();
-        expect(buttonElement.id).toEqual("button_next");
+        expect(buttonElement.id).toEqual("button_cancel");
         buttonElement.click();
     })
 })

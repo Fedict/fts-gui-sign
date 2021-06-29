@@ -1,10 +1,11 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { connect } from 'react-redux';
 import { CardContainer } from '../../components/Card/CardContainer';
 import { getBlobFromBase64 } from '../../fileUpload/helpers/FileHelper';
 import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
 import {sendLogInfo, sendLogInfoIgnoreResult} from "../../communication/communication";
 import {doWithToken} from "../../utils/helper";
+import {Ticker} from "../../components/Ticker/Ticker";
 
 const messages = defineMessages({
     title : {
@@ -14,6 +15,10 @@ const messages = defineMessages({
     doneButton : {
         id : "succes.next",
         defaultMessage : "Close"
+    },
+    redirectMessage : {
+        id : "succes.redirect",
+        defaultMessage : "You'll be redirected in {timeLeft} seconds"
     }
 })
 
@@ -52,28 +57,31 @@ export class SuccesContainerForToken extends React.Component {
 
     render() {
         const { nextButtonClicked, redirectUrl, intl } = this.props
+
         return (
 
             <CardContainer
                 title={intl.formatMessage(messages.title)}
-                hasNextButton
-                nextButtonText={intl.formatMessage(messages.doneButton)}
-                onClickNext={() => nextButtonClicked(redirectUrl)}
-                autoClickNextTimeout={10}
+                hasCancelButton
+                cancelButtonText={intl.formatMessage(messages.doneButton)}
+                onClickCancel={() => nextButtonClicked(redirectUrl)}
             >
                 <div className="form-group">
 
-                    <div className="alert alert-primary">
+                    <p>
                         <FormattedMessage id="succes.text" defaultMessage="Your document will be automatically downloaded. If this is not the case, you can start the download manually" />
-                    </div>
-
-                    <button
-                        className="btn btn-primary"
-                        id="button_download_file"
-                        onClick={() => { this.downloadFile() }} >
-                        <FormattedMessage id="succes.button.download" defaultMessage="Download document"/>
-                    </button>
-
+                    </p>
+                    <p>
+                        <button
+                            className="btn btn-primary text-uppercase"
+                            id="button_download_file"
+                            onClick={() => { this.downloadFile() }} >
+                            <FormattedMessage id="succes.button.download" defaultMessage="Download document"/>
+                        </button>
+                    </p>
+                    <p>
+                        <Ticker autoClickNextTimeout={10} onTimeout={() => nextButtonClicked(redirectUrl)} redirectMessageDescriptor={messages.redirectMessage}/>
+                    </p>
                 </div>
             </CardContainer>
         )
