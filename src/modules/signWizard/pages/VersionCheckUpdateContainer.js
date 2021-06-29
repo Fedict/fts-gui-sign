@@ -5,6 +5,7 @@ import { navigateToStep } from "../../wizard/WizardActions"
 import { WIZARD_STATE_VERSION_CHECK_LOADING } from '../../wizard/WizardConstants'
 import { resetWizard, checkVersion } from '../actions/WizardLogicActions'
 import { getOS, OS } from '../../browserDetection/OSDetection'
+import { getBrowser, browser } from "../../browserDetection/BrowserDetection";
 import { EIDLinkLinuxInstall } from '../../components/EIDLinkLinuxInstall/EIDLinkLinuxInstall'
 import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
 import {definedMessages} from "../../i18n/translations";
@@ -47,11 +48,18 @@ export class VersionCheckUpdateContainer extends React.Component {
 
     handleOnClick() {
         const usedOs = getOS()
+        const usedBrowser = getBrowser()
+
         if (usedOs === OS.WINDOWS && window.configData && window.configData.eIDLinkUrls && window.configData.eIDLinkUrls.windows) {
             window.open(window.configData.eIDLinkUrls.windows + '?dt=' + new Date().getTime(), "_blank")
         }
-        if (usedOs === OS.MACOS && window.configData && window.configData.eIDLinkUrls && window.configData.eIDLinkUrls.macOs) {
-            window.open(window.configData.eIDLinkUrls.macOs + '?dt=' + new Date().getTime(), "_blank")
+        if (usedOs === OS.MACOS) {
+            if (usedBrowser === browser.SAFARI && window.configData && window.configData.eIDLinkExtensionUrls && window.configData.eIDLinkExtensionUrls.safari) {
+                window.open(window.configData.eIDLinkExtensionUrls.safari + '?dt=' + new Date().getTime(), "_blank")
+            }
+            else if (window.configData && window.configData.eIDLinkUrls && window.configData.eIDLinkUrls.macOs) {
+                window.open(window.configData.eIDLinkUrls.macOs + '?dt=' + new Date().getTime(), "_blank")
+            }
         }
         if (usedOs === OS.LINUX && window.configData && window.configData.eIDLinkUrls && window.configData.eIDLinkUrls.linux) {
             window.open(window.configData.eIDLinkUrls.linux + '?dt=' + new Date().getTime(), "_blank")
