@@ -1,4 +1,4 @@
-import { WIZARD_CHANGE_STATE } from "./WizardActions"
+import {WIZARD_CHANGE_AUTO_DOWNLOAD_OPTION, WIZARD_CHANGE_STATE} from "./WizardActions"
 import { WIZARD_STATE_START } from "./WizardConstants"
 import { STORE_RESET } from "../../store/storeActions"
 
@@ -17,6 +17,12 @@ const wizardReducer = (state = initialState, action) => {
         case STORE_RESET: {
             return {
                 ...state,
+            }
+        }
+        case WIZARD_CHANGE_AUTO_DOWNLOAD_OPTION:{
+            return {
+                ...state,
+                autoDownloadDocument : action.payload
             }
         }
         default:
