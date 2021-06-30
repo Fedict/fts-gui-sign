@@ -57,6 +57,7 @@ export class PinInputContainer extends React.Component {
         //console.log(e)
         let pincode = defaults(this.state.pin, "") + "";
         let indexCursor = this.state.indexCursor;
+        let stopEventPropagation = true;
         if (e.keyCode === 13) { //Enter
             if (pincode.length >= 4) {
                 this.handleSubmit()
@@ -77,6 +78,11 @@ export class PinInputContainer extends React.Component {
                 this.setState({ pin: pincode, indexCursor : indexCursor + 1 })
             }
         } else {
+            stopEventPropagation = false;
+        }
+        if(stopEventPropagation){
+            e.stopPropagation();
+            e.preventDefault();
         }
 
     }
