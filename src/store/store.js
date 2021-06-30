@@ -17,11 +17,22 @@ import ValidationReducer from "../modules/validateWizard/reducers/ValidationRedu
 import ControlIdReducer from "../modules/controlIds/common/ControlIdReducer";
 import i18nReducer from "../modules/i18n/reducers/i18nReducer";
 import TokenReducer from "../modules/signByTokenWizard/reducers/tokenReducers";
+/*
+Middleware to accept an array as action, quite useful sometimes
+ */
+function multi ({dispatch}) {
+    return next => action =>
+        Array.isArray(action)
+            ? action.filter(Boolean).map(dispatch)
+            : next(action)
+}
 
 export default function configureStore(initialState = {}) {
 
+
+
     const middleware = [
-        thunk
+        thunk, multi
     ]
 
     const composeEnhancers = (process.env.NODE_ENV !== "production") ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose : compose

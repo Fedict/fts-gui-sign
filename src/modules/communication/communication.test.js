@@ -4,7 +4,7 @@ import {
     validateCertificatesAPI,
     getDataToSignAPI,
     signDocumentAPI,
-    validateSignatureAPI, getDataToSignForTokenAPI
+    validateSignatureAPI, getDataToSignForTokenAPI, sendLogInfo, signDocumentForTokenAPI
 } from "./communication";
 import { getBase64Data } from "../fileUpload/helpers/FileHelper"
 import * as filehelper from "../fileUpload/helpers/FileHelper"
@@ -621,13 +621,14 @@ describe('getDataToSignForTokenAPI', () => {
             "detachedContents": [
             ],
             "signingCertificate": { encodedCertificate: "certificatestring" },
-            "signingDate": "this value will be replaced later"
+            "signingDate": "this value will be replaced later",
+            "photo" : "picture bytes"
         },
         token : '12345456'
     }
     const startToken = '12345456';
     test("fetch called", async () => {
-        const result = await getDataToSignForTokenAPI(startCertificateObject, startToken)
+        const result = await getDataToSignForTokenAPI(startCertificateObject, startToken, "Any Value", "picture bytes")
 
         expect(global.fetch).toHaveBeenCalledTimes(1)
         expect(global.fetch.mock.calls[0][0]).toEqual("/signing/getDataToSignForToken")
@@ -643,4 +644,91 @@ describe('getDataToSignForTokenAPI', () => {
         window.fetch = ORIGINAL_Fetch
     })
 
+})
+
+describe('signDocumentForTokenAPI', () => {
+    test("signDocumentForTokenAPI does correct fetch request", async () => {
+        global.fetch.resetMocks();
+        //start var
+        const expectedBody = {
+            "clientSignatureParameters": {
+                "certificateChain": [
+                    {
+                        "encodedCertificate": "MIIF"
+                    },
+                    {
+                        "encodedCertificate": "MIIG"
+                    }
+                ],
+                "detachedContents": [],
+                "signingCertificate": {
+                    "encodedCertificate": "MIIG"
+                },
+                "signingDate": "2021-06-23T11:53:33+02:00",
+                "photo": "/9j/4AAQSk"
+            },
+            "token": "eyJraWQiO",
+            "signatureValue": "q42MZUa"
+        }
+        //mocking
+        const resultJson = { result: "result" }
+        const mockResponse = {
+            ok: true,
+            json: jest.fn(() => { return resultJson }),
+            text: jest.fn()
+        }
+
+        global.fetch = jest.fn().mockImplementation(() => Promise.resolve(mockResponse));
+
+        //result
+        const result = await signDocumentForTokenAPI({
+            certificateChain : [
+                {
+                    "encodedCertificate": "MIIF"
+                },
+                {
+                    "encodedCertificate": "MIIG"
+                }
+            ],
+            certificate : {
+                "encodedCertificate": "MIIG"
+            }
+        }, "eyJraWQiO", "q42MZUa", "2021-06-23T11:53:33+02:00", "/9j/4AAQSk")
+
+        //assertions
+        expect(global.fetch).toHaveBeenCalledTimes(1)
+        expect(global.fetch.mock.calls[0][0]).toEqual("/signing/signDocumentForToken")
+        expect(global.fetch.mock.calls[0][1].body).toEqual(JSON.stringify(expectedBody))
+        expect(global.fetch.mock.calls[0][1].method).toEqual('POST')
+
+        expect(mockResponse.json).toBeCalledTimes(1)
+        expect(mockResponse.text).toBeCalledTimes(0)
+        expect(result).toEqual(resultJson)
+    })
+    afterEach(() => {
+        window.fetch = ORIGINAL_Fetch
+    })
+})
+
+describe('calling sendLogInfo', () => {
+
+    test('fetch called', async () => {
+        global.fetch.resetMocks();
+        sendLogInfo('A message', () => {}, 'the token 12345678');
+        expect(global.fetch).toHaveBeenCalledTimes(1)
+        expect(global.fetch.mock.calls[0][0]).toEqual("/logging/log")
+        let bodyCalled = JSON.parse(global.fetch.mock.calls[0][1].body);
+        const expectedBody = {
+            "level" : "INFO",
+            "message" : 'A message',
+            "token" : 'the token 12345678'
+        }
+        expect(global.fetch.mock.calls[0][1].body).toEqual(JSON.stringify(expectedBody))
+    });
+
+    test("Don't call CS logging when message is empty string", () => {
+        global.fetch.resetMocks();
+        sendLogInfo('', () => {},'the token 12345678');
+        expect(global.fetch).toHaveBeenCalledTimes(0)
+    })
 })

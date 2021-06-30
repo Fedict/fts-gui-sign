@@ -1,4 +1,5 @@
 //same as _.defaults
+
 export const defaultsExcludeEmpty = function(){
 	return Array.from(arguments).find((element) => element !== undefined && element !== null && element !== '');
 }
@@ -81,4 +82,21 @@ export function parseErrorMessage(errorMessage){
 
 export const getBEUrl = () => {
 	return (window && window.configData) ? window.configData.BEurl : ""
+}
+
+/**
+ *
+ * @param actionFunction
+ * @returns {function(*, *)} to be executed with redux-thunk
+ */
+export const doWithToken = (actionFunction) => {
+	return (dispatch, getState) => {
+		const state = getState();
+		if(state && state.tokenFile){
+			actionFunction(state.tokenFile.token)
+		}else{
+			//token not defined, what else should we do?
+			actionFunction();
+		}
+	}
 }

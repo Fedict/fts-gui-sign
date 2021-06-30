@@ -71,48 +71,47 @@ export const CardContainer = (
                 <div className="card-body">
                     {children}
                 </div>
-                {
-                    (hasCancelButton || hasNextButton)
-                        ? (
-                            <div className="card-footer text-muted">
-                                {
-                                    (hasCancelButton)
-                                        ? (
-                                            <button className="btn btn-secondary float-left"
-                                                id="button_cancel"
-                                                onClick={(e) => { if (onClickCancel) { onClickCancel() } }}
-                                            >
-                                                {cancelButtonText}
-                                            </button>
-                                        )
-                                        : null
-                                }
-
-                                {
-                                    (hasNextButton)
-                                        ? (
-                                            <Fragment>
-                                                <button
-                                                className="btn btn-primary float-right"
-                                                disabled={nextButtonIsDisabled}
-                                                id="button_next"
-                                                onClick={(e) => { if (onClickNext) { onClickNext(e) } }}
-                                            >
-                                                {nextButtonText} {autoClickTime >= 0 && `(${autoClickTime})`}
-                                            </button>
-                                                {autoClickTime >= 0 && <Fragment>
-                                                    <br/>
-                                                    <br/>
-                                                    <a href="#" onClick={() => setAbortAutoNext(true)} className="float-right"><FormattedMessage id="abort.autonext" defaultMessage="stay on this screen for a while"/></a>
-                                                </Fragment>}
-                                            </Fragment>
-                                        )
-                                        : null
-                                }
-                            </div>)
-                        : null
-                }
+                {(title)
+                    ? (
+                        <div className="card-footer text-muted">
+                            {
+                                (hasNextButton)
+                                    ? (
+                                        <Fragment>
+                                            <button
+                                            className="btn btn-primary float-right"
+                                            disabled={nextButtonIsDisabled}
+                                            id="button_next"
+                                            onClick={(e) => { if (onClickNext) { onClickNext(e) } }}
+                                        >
+                                            {nextButtonText} {autoClickTime >= 0 && `(${autoClickTime})`}
+                                        </button>
+                                            {autoClickTime >= 0 && <Fragment>
+                                                <br/>
+                                                <br/>
+                                                <a href="#" onClick={() => setAbortAutoNext(true)} className="float-right"><FormattedMessage id="abort.autonext" defaultMessage="stay on this screen for a while"/></a>
+                                            </Fragment>}
+                                        </Fragment>
+                                    )
+                                    : <Fragment>&nbsp;</Fragment>
+                            }
+                        </div>
+                    ):false}
             </div>
+            {
+                (hasCancelButton)
+                    ? (
+                        <div style={{marginTop:15}}>
+                            <button className="btn btn-outline-primary"
+                                id="button_cancel"
+                                onClick={(e) => { if (onClickCancel) { onClickCancel() } }}
+                        >
+                            {cancelButtonText}
+                            </button>
+                        </div>
+                    )
+                    : null
+            }
         </div>
     )
 }

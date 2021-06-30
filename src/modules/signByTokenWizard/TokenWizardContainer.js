@@ -51,10 +51,6 @@ const messages = defineMessages({
         id : 'sign.token.2',
         defaultMessage : 'Enter PIN code'
     },
-    tokenStep3 : {
-        id : 'sign.token.3',
-        defaultMessage : 'Signing'
-    },
     tokenStep4 : {
         id : 'sign.token.4',
         defaultMessage : 'Ready'
@@ -87,13 +83,13 @@ export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, 
                 setCurrentIndexStep(2);
                 break;
             case WIZARD_STATE_SIGNING_PRESIGN_LOADING:
-                setCurrentIndexStep(getIsPinPadReader(certificate)?2:3);
+                setCurrentIndexStep(getIsPinPadReader(certificate)?2:2);
                 break;
             case WIZARD_STATE_SIGNING_LOADING:
-                setCurrentIndexStep(3);
+                setCurrentIndexStep(2);
                 break;
             case WIZARD_STATE_SUCCES:
-                setCurrentIndexStep(4);
+                setCurrentIndexStep(3);
                 break;
         }
     }, [wizard.state])
@@ -169,7 +165,12 @@ export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, 
                     <ReactStepper style={{marginBottom : 20}}>
                         <ReactStepper.Header>
                             {Object.keys(messages).map((key, index) => (
-                                <ReactStepper.HeaderStep number={index + 1} label={intl.formatMessage(messages[key])} active={(index + 1) === currentIndexStep} key={key}></ReactStepper.HeaderStep>
+                                <ReactStepper.HeaderStep
+                                    number={index + 1}
+                                    label={intl.formatMessage(messages[key])}
+                                    active={(index + 1) === currentIndexStep}
+                                    done={currentIndexStep > (index + 1)}
+                                    key={key}></ReactStepper.HeaderStep>
                             ))}
                         </ReactStepper.Header>
                     </ReactStepper>

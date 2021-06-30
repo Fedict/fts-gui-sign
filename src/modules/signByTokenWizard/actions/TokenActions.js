@@ -29,7 +29,11 @@ export const getDigestForToken = () => (dispatch, getStore) => {
         && tokenFile
         && tokenFile.token) {
         const flowId = getStore().controlId.flowId;
-        getDataToSignForTokenAPI(certificate.certificateSelected.APIBody, tokenFile.token, signingDate)
+        let photo;
+        if(tokenFile.readPhoto){
+            photo = certificate.certificateSelected.photo;
+        }
+        getDataToSignForTokenAPI(certificate.certificateSelected.APIBody, tokenFile.token, signingDate, photo)
             .then(handleFlowIdError(flowId, getStore))
             .then((resp) => {
                 if(resp.digest && resp.digestAlgorithm){
@@ -127,6 +131,7 @@ export const setDocumentMetadata = (metadata) => ({
         fileName : metadata.filename,
         isPdf : metadata.mimetype && metadata.mimetype.indexOf('application/pdf') > -1,
         isXml : metadata.mimetype && (metadata.mimetype.indexOf('application/xml') > -1 || metadata.mimetype.indexOf('text/xml') > -1),
-        xsltUrl: replaceBEURL(metadata.xsltUrl)
+        xsltUrl: replaceBEURL(metadata.xsltUrl),
+        readPhoto : metadata.readPhoto
     }
 })

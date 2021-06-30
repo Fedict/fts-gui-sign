@@ -9,6 +9,17 @@ import fetchMock from "fetch-mock";
 import {EIDChromeExtMock} from "../testUtils/EIDChromeExtMock";
 import {fireEvent} from "@testing-library/react";
 
+
+function wait(conditionF, callback, timeout = 100){
+    if(timeout <= 0){
+        callback('timedout');
+    }else if(conditionF()) {
+        callback();
+    }else{
+        setTimeout(wait.bind(undefined, conditionF, callback, timeout - 1), 100);
+    }
+}
+
 describe('TokenWizardContainer', () => {
     let store;
     let ORIGINAL_window;
@@ -29,8 +40,9 @@ describe('TokenWizardContainer', () => {
 
     });
 
-    test("sign for token flow", async () => {
+    test("sign for token flow", async (done) => {
         const token = '20201223121854';
+        let lastLogMessage;
         fetchMock.mock(`/signing/getMetadataForToken?token=${token}`, {
             body: {
                 "filename" : "This file is cool.pdf",
@@ -75,6 +87,9 @@ describe('TokenWizardContainer', () => {
             "digestAlgorithm" : null,
             "name" : "20201223121854-signed-pades-baseline-lta.pdf"
         })
+        fetchMock.post('/logging/log', (url, opts) => {
+            lastLogMessage = JSON.parse(opts.body).message;
+        })
 
         render(<Provider store={store}>
             <MemoryRouter initialIndex={0} initialEntries={[`/sign/${token}`]}>
@@ -85,31 +100,40 @@ describe('TokenWizardContainer', () => {
                 </Switch>
             </MemoryRouter>
         </Provider>)
+        const documentReadCheckBox = await screen.findByTestId("documentReadCheckbox");
 
-        const startButton = await screen.findByRole('button', {name: /Start/i})
+        expect(documentReadCheckBox).toBeInTheDocument();
+        documentReadCheckBox.click();
+
+        const startButton = await screen.findByRole('button', {name: /SIGN/i})
 
         startButton.click();
 
         expect(screen.getByText(/Retrieving certificates/i)).toBeInTheDocument();
 
-        expect(await screen.findByText(/Enter pin code/i)).toBeInTheDocument();
-        const inputCode = screen.getByTestId('input_code');
+        //expect(await screen.findByText(/Enter the PIN/i)).toBeInTheDocument();
 
-        for(let i = 1; i <= 4; i++){
-            fireEvent.keyDown(inputCode, { key: 'A', code: 'KeyA' });
-            fireEvent.keyUp(inputCode, { key: 'A', code: 'KeyA' });
-        }
+        wait(() => (lastLogMessage.indexOf('WIZARD_STATE_PIN_INPUT') > -1), async () => {
 
-        const signButton = screen.getByRole('button', {name: /Sign with eid/i})
-        expect(signButton).toBeEnabled();
-        signButton.click();
+            const inputCode = screen.getByTestId('input_code');
 
-        expect(await screen.findByText(/Your document has been successfully signed!/i)).toBeInTheDocument();
+            for (let i = 1; i <= 4; i++) {
+                fireEvent.keyDown(inputCode, {key: 'A', code: 'KeyA'});
+                fireEvent.keyUp(inputCode, {key: 'A', code: 'KeyA'});
+            }
 
+            const signButton = screen.getByRole('button', {name: /Sign with eid/i})
+            expect(signButton).toBeEnabled();
+            signButton.click();
+
+            expect(await screen.findByText(/Your document has been successfully signed!/i)).toBeInTheDocument();
+            done();
+        }, 10)
     })
 
-    test("sign for token flow with two certificates", async () => {
+    test("sign for token flow with two certificates", async (done) => {
         const token = '20201223121854';
+        let lastLogMessage = '';
         fetchMock.mock(`/signing/getMetadataForToken?token=${token}`, {
             body: {
                 "filename" : "This file is cool.pdf",
@@ -154,7 +178,9 @@ describe('TokenWizardContainer', () => {
             "digestAlgorithm" : null,
             "name" : "20201223121854-signed-pades-baseline-lta.pdf"
         })
-
+        fetchMock.post('/logging/log', (url, opts) => {
+            lastLogMessage = JSON.parse(opts.body).message;
+        })
         render(<Provider store={store}>
             <MemoryRouter initialIndex={0} initialEntries={[`/sign/${token}`]}>
                 <Switch>
@@ -165,7 +191,12 @@ describe('TokenWizardContainer', () => {
             </MemoryRouter>
         </Provider>)
 
-        const startButton = await screen.findByRole('button', {name: /Start/i})
+        const documentReadCheckBox = await screen.findByTestId( "documentReadCheckbox");
+
+        expect(documentReadCheckBox).toBeInTheDocument();
+        documentReadCheckBox.click();
+
+        const startButton = await screen.findByRole('button', {name: /Sign/i})
 
         startButton.click();
 
@@ -176,6 +207,31 @@ describe('TokenWizardContainer', () => {
         screen.getByText(/Joske Wiske/i).click();
 
         screen.getByRole('button', {name: /Select/i}).click();
+
+        expect(await screen.findByText(/Enter the PIN/i)).toBeInTheDocument();
+
+        wait(() => (lastLogMessage.indexOf('WIZARD_STATE_PIN_INPUT') > -1), async () => {
+            const inputCode = screen.getByTestId('input_code');
+
+            for(let i = 1; i <= 4; i++){
+                fireEvent.keyDown(inputCode, { key: 'A', code: 'KeyA' });
+                fireEvent.keyUp(inputCode, { key: 'A', code: 'KeyA' });
+            }
+
+            const signButton = screen.getByRole('button', {name: /Sign with eid/i})
+            expect(signButton).toBeEnabled();
+            signButton.click();
+
+            expect(await screen.findByText(/Your document has been successfully signed!/i)).toBeInTheDocument();
+
+            done();
+        })
+
+        //expect(lastLogMessage.indexOf('WIZARD_STATE_PIN_INPUT') > -1).toBeTruthy();
+
+
+
+
     })
 
     afterEach(() => {

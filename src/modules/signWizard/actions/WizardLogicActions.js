@@ -22,7 +22,7 @@ import {
     selectCertificate
 } from "./CertificateActions"
 import {
-    getDataToSignAPI,
+    getDataToSignAPI, sendLogInfo,
     signDocumentAPI, signDocumentForTokenAPI,
     validateCertificatesAPI
 } from "../../communication/communication"
@@ -48,7 +48,8 @@ import { INCORECT_FLOW_ID } from '../../controlIds/flowId/FlowIdHelpers'
 import {errorMessages} from "../../i18n/translations";
 import {redirectErrorCodes} from "../../../const";
 import moment from 'moment'
-import {defaults, parseErrorMessage} from "../../utils/helper";
+import {defaults, doWithToken, parseErrorMessage} from "../../utils/helper";
+import {ID_FLAGS} from "../../eIdLink/strategies/createEIDLinkExtensionStrategy";
 
 //----------------------------------
 // helpers                    
@@ -112,6 +113,34 @@ export const getCertificatesFromResponse = (response) => {
                     }
                     certificateList.push(certificateObject)
                 }
+            }
+        }
+    }
+
+    return certificateList
+}
+
+
+/**
+ * function to map the certificate response to a certificate object
+ * @param {object} response - responce from eIDLink
+ */
+export const getCertificatesFromIdResponse = (response) => {
+
+    let certificateList = []
+
+    if (response && response.Readers && response.Readers.length >= 1) {
+        for (const reader of response.Readers) {
+            if (reader && reader.signcert) {
+                const certificateObject = {
+                    readerName: reader.ReaderName,
+                    readerType: reader.ReaderType,
+                    cardType: reader.cardType,
+                    certificate: reader.signcert,
+                    APIBody: createCertificateObject(reader.signcert),
+                    photo : reader.photo
+                }
+                certificateList.push(certificateObject)
             }
         }
     }
@@ -204,6 +233,34 @@ export const getCertificates = () => (dispatch, getStore) => {
     const flowId = getStore().controlId.flowId
     const token = getStore().tokenFile && getStore().tokenFile.token
 
+    eIDLink.getIdData(
+        'en',
+        "0123456789ABCDEF0123456789ABCDEF",
+        ID_FLAGS.ID_FLAG_INCLUDE_SIGN_CERT |
+            ID_FLAGS.ID_FLAG_INCLUDE_PHOTO |
+            ID_FLAGS.ID_FLAG_INCLUDE_INTEGRITY |
+            ID_FLAGS.ID_FLAG_INCLUDE_ID
+    )
+        .then(handleFlowIdError(flowId, getStore))
+        .then(handleRequestIdError(requestId, dispatch, getStore))
+        .then((response) => {
+            const certificateList = getCertificatesFromIdResponse(response)
+
+            dispatch(saveCertificateList(certificateList))
+
+            if (certificateList.length === 0) {
+                dispatch(showErrorMessage(MessageCertificatesNotFound))
+            } else {
+                dispatch(navigateToStep(WIZARD_STATE_VALIDATE_LOADING))
+            }
+        })
+        .catch((err) => {
+            if (err !== INCORECT_REQUEST_ID && err !== INCORECT_FLOW_ID) {
+                dispatch(removeRequestId(requestId))
+                dispatch(handleErrorEID(err, false, token))
+            }
+        })
+    /*
     eIDLink.getCertificate()
         .then(handleFlowIdError(flowId, getStore))
         .then(handleRequestIdError(requestId, dispatch, getStore))
@@ -228,6 +285,7 @@ export const getCertificates = () => (dispatch, getStore) => {
                 dispatch(handleErrorEID(err, false, token))
             }
         })
+     */
 }
 
 /**
@@ -285,6 +343,7 @@ export const validateCertificates = () => (dispatch, getStore) => {
                 dispatch(saveCertificateList(newList))
 
                 if (newList.length <= 0) {
+                    console.log('MessageCertificatesNotFound', val)
                     dispatch(showErrorMessage(MessageCertificatesNotFound))
                 }
                 else {
@@ -299,7 +358,7 @@ export const validateCertificates = () => (dispatch, getStore) => {
             })
             .catch((err) => {
                 if (err !== INCORECT_FLOW_ID) {
-
+                    console.log('Failed to validate certificate', err)
                     dispatch(showErrorMessage(MessageCertificatesNotFound))
                 }
 
@@ -589,11 +648,16 @@ export const signDocument = () => (dispatch, getStore) => {
         dispatch(navigateToStep(WIZARD_STATE_SIGNING_LOADING))
         const flowId = getStore().controlId.flowId;
         if(tokenFile && tokenFile.token){
+            let photo;
+            if(tokenFile.readPhoto){
+                photo = certificate.certificateSelected.photo;
+            }
             signDocumentForTokenAPI(
                 certificate.certificateSelected.APIBody,
                 tokenFile.token,
                 signature.signature,
-                signature.signingDate)
+                signature.signingDate,
+                photo)
                 .then(handleFlowIdError(flowId, getStore))
                 .then((resp) => {
                     //console.log('signDocumentForTokenAPI response', resp)
@@ -678,28 +742,39 @@ export const resetWizard = () => (dispatch, getStore) => {
     eIDLink.stop()
     const {tokenFile, wizard, message} = getStore();
 
-    dispatch(resetStore())
-    dispatch(setNewFlowId());
+    let url;
     if(tokenFile && tokenFile.redirectUrl){
-        let url = new URL(tokenFile.redirectUrl);
-        if(wizard && wizard.state){
-            if(message && message.ref){
-                url.searchParams.set('ref', message.ref);
-            }
-            if(message && message.errorDetails){
-                url.searchParams.set('details', message.errorDetails);
-            }
-            if(wizard.state === 'WIZARD_STATE_MESSAGE' && message && message.message && message.message.id){
-                const errorType = Object.keys(errorMessages).find((k) => errorMessages[k].id === message.message.id);
-                url.searchParams.set('err', defaults(redirectErrorCodes[errorType], errorType, message.err, 'SERVER_ERROR'));
-            }else{
-                url.searchParams.set('err', redirectErrorCodes.USER_CANCELLED);
-                url.searchParams.set('details', wizard.state);
-            }
-        }
-        window.location.href = url.toString();
+        url = new URL(tokenFile.redirectUrl);
     }else{
-        window.location.pathname = "/"
+        url = new URL(window.location);
     }
+
+    if(wizard && wizard.state){
+        try{
+            url.searchParams.delete('details');
+            url.searchParams.delete('err');
+            url.searchParams.delete('ref');
+        }catch (e){
+        }
+        if(message && message.ref){
+            url.searchParams.set('ref', message.ref);
+        }
+        if(message && message.errorDetails){
+            url.searchParams.set('details', message.errorDetails);
+        }
+        if(wizard.state === 'WIZARD_STATE_MESSAGE' && message && message.message && message.message.id){
+            const errorType = Object.keys(errorMessages).find((k) => errorMessages[k].id === message.message.id);
+            url.searchParams.set('err', defaults(redirectErrorCodes[errorType], errorType, message.err, 'SERVER_ERROR'));
+        }else{
+            url.searchParams.set('err', redirectErrorCodes.USER_CANCELLED);
+            url.searchParams.set('details', wizard.state);
+        }
+    }
+    sendLogInfo('UI - CANCEL_PRESSED - ' + url.toString(), () => {
+        dispatch(resetStore())
+        dispatch(setNewFlowId());
+        window.location.href = url.toString();
+    }, tokenFile?tokenFile.token:undefined);
+
 
 }
