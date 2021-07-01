@@ -15,7 +15,7 @@ import {
     navigateToPinError,
     sign,
     signDocument,
-    resetWizard
+    resetWizard, getCertificatesFromIdResponse
 } from "./WizardLogicActions"
 import { WIZARD_STATE_PIN_INPUT, WIZARD_STATE_SIGNING_PRESIGN_LOADING, WIZARD_STATE_UPLOAD, WIZARD_STATE_VERSION_CHECK_INSTALL, WIZARD_STATE_VERSION_CHECK_UPDATE, WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENSION, WIZARD_STATE_VALIDATE_LOADING, WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN, WIZARD_STATE_CERTIFICATES_CHOOSE, WIZARD_STATE_DIGEST_LOADING, WIZARD_STATE_PINPAD_ERROR, WIZARD_STATE_SIGNING_LOADING, WIZARD_STATE_SUCCES, WIZARD_STATE_VERSION_CHECK_LOADING, WIZARD_STATE_START } from "../../wizard/WizardConstants"
 
@@ -62,6 +62,7 @@ import * as storeActions from "../../../store/storeActions"
 import { setNewFlowId } from "../../controlIds/flowId/FlowIdActions"
 import * as FlowIdActions from "../../controlIds/flowId/FlowIdActions"
 import { MessageCertificatesNotFound } from "../messages/MessageCertificatesNotFound"
+import {EIDChromeExtMock} from "../../testUtils/EIDChromeExtMock";
 
 
 const ORIGINAL_controller = controller
@@ -629,9 +630,9 @@ describe("WizardLogicActions", () => {
 
         })
 
-        test("getCertificates calls getCertificate of eIDLink", () => {
+        test("getCertificates calls getIdData of eIDLink", () => {
             const mockgetCertificates = jest.fn(() => { return Promise.resolve() })
-            eIDLinkController.controller.getInstance = jest.fn(() => { return { getCertificate: mockgetCertificates } })
+            eIDLinkController.controller.getInstance = jest.fn(() => { return { getIdData: mockgetCertificates } })
 
             const mockDispatch = jest.fn()
             const mockGetStore = jest.fn(() => { return { controlId: { flowId: 20 } } })
@@ -643,7 +644,7 @@ describe("WizardLogicActions", () => {
 
         test("getCertificates creates a requestId", () => {
             const mockgetCertificates = jest.fn(() => { return Promise.resolve() })
-            eIDLinkController.controller.getInstance = jest.fn(() => { return { getCertificate: mockgetCertificates } })
+            eIDLinkController.controller.getInstance = jest.fn(() => { return { getIdData: mockgetCertificates } })
 
             const mockDispatch = jest.fn()
             const mockGetStore = jest.fn(() => { return { controlId: { flowId: 20 } } })
@@ -672,7 +673,9 @@ describe("WizardLogicActions", () => {
                 "extensionVersion": "0.0.4"
             }
             const mockgetCertificates = jest.fn(() => { return Promise.resolve(resultGetCertificates) })
-            eIDLinkController.controller.getInstance = jest.fn(() => { return { getCertificate: mockgetCertificates } })
+            const resultGetIdData = new EIDChromeExtMock().idData;
+            const mockgetIdData = jest.fn(() => { return Promise.resolve(resultGetIdData) })
+            eIDLinkController.controller.getInstance = jest.fn(() => { return { getIdData: mockgetIdData } })
 
             const mockDispatch = jest.fn()
             const mockGetStore = jest.fn(() => { return { controlId: { flowId: 20 } } })
@@ -680,7 +683,7 @@ describe("WizardLogicActions", () => {
             FlowIdHelpers.handleFlowIdError = jest.fn(() => (value) => { return value })
             RequestIdHelpers.handleRequestIdError = jest.fn(() => (value) => { return value })
 
-            const expectedResult = getCertificatesFromResponse(resultGetCertificates)
+            const expectedResult = getCertificatesFromIdResponse(resultGetIdData)
             getCertificates()(mockDispatch, mockGetStore)
 
             await flushPromises();
@@ -699,7 +702,7 @@ describe("WizardLogicActions", () => {
                 "extensionVersion": "0.0.4"
             }
             const mockgetCertificates = jest.fn(() => { return Promise.resolve(resultGetCertificates) })
-            eIDLinkController.controller.getInstance = jest.fn(() => { return { getCertificate: mockgetCertificates } })
+            eIDLinkController.controller.getInstance = jest.fn(() => { return { getIdData: mockgetCertificates } })
 
             const mockDispatch = jest.fn()
             const mockGetStore = jest.fn(() => { return { controlId: { flowId: 20 } } })
@@ -737,7 +740,9 @@ describe("WizardLogicActions", () => {
                 "extensionVersion": "0.0.4"
             }
             const mockgetCertificates = jest.fn(() => { return Promise.resolve(resultGetCertificates) })
-            eIDLinkController.controller.getInstance = jest.fn(() => { return { getCertificate: mockgetCertificates } })
+            const resultGetIdData = new EIDChromeExtMock().idData;
+            const mockgetIdData = jest.fn(() => { return Promise.resolve(resultGetIdData) })
+            eIDLinkController.controller.getInstance = jest.fn(() => { return { getIdData: mockgetIdData } })
 
             const mockDispatch = jest.fn()
             const mockGetStore = jest.fn(() => { return { controlId: { flowId: 20 } } })
@@ -745,7 +750,7 @@ describe("WizardLogicActions", () => {
             FlowIdHelpers.handleFlowIdError = jest.fn(() => (value) => { return value })
             RequestIdHelpers.handleRequestIdError = jest.fn(() => (value) => { return value })
 
-            const expectedResult = getCertificatesFromResponse(resultGetCertificates)
+            const expectedResult = getCertificatesFromIdResponse(resultGetIdData)
             getCertificates()(mockDispatch, mockGetStore)
 
             await flushPromises();
@@ -766,7 +771,7 @@ describe("WizardLogicActions", () => {
             RequestIdActions.createRequestId = jest.fn(() => { return requestId })
             const errorValue = "errorValue"
             const mockgetCertificates = jest.fn(() => { return Promise.reject(errorValue) })
-            eIDLinkController.controller.getInstance = jest.fn(() => { return { getCertificate: mockgetCertificates } })
+            eIDLinkController.controller.getInstance = jest.fn(() => { return { getIdData: mockgetCertificates } })
 
             const mockDispatch = jest.fn((val) => { return val })
             const mockGetStore = jest.fn(() => { return { controlId: { flowId: 20 } } })
@@ -789,7 +794,7 @@ describe("WizardLogicActions", () => {
         test("getCertificates error INCORECT_REQUEST_ID does nothing", async () => {
 
             const mockgetCertificates = jest.fn(() => { return Promise.resolve() })
-            eIDLinkController.controller.getInstance = jest.fn(() => { return { getCertificate: mockgetCertificates } })
+            eIDLinkController.controller.getInstance = jest.fn(() => { return { getIdData: mockgetCertificates } })
 
             const mockDispatch = jest.fn((val) => { return val })
             const mockGetStore = jest.fn(() => { return { controlId: { flowId: 20 } } })
@@ -810,7 +815,7 @@ describe("WizardLogicActions", () => {
 
         test("getCertificates error INCORECT_FLOW_ID does nothing", async () => {
             const mockgetCertificates = jest.fn(() => { return Promise.resolve() })
-            eIDLinkController.controller.getInstance = jest.fn(() => { return { getCertificate: mockgetCertificates } })
+            eIDLinkController.controller.getInstance = jest.fn(() => { return { getIdData: mockgetCertificates } })
 
             const mockDispatch = jest.fn((val) => { return val })
             const mockGetStore = jest.fn(() => { return { controlId: { flowId: 20 } } })

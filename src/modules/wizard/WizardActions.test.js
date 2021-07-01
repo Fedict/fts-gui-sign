@@ -10,7 +10,7 @@ describe("WizardActions", () => {
 
         test("navigateToStep returns a action with type WIZARD_CHANGE_STATE and payload action", () => {
             const payload = "wizard step string"
-            const result = navigateToStep(payload)
+            const result = navigateToStep(payload)[1]
 
             expect(result.type).toBe(WIZARD_CHANGE_STATE)
             expect(result.payload).toEqual(payload)

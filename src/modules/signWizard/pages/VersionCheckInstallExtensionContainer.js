@@ -79,7 +79,7 @@ export class VersionCheckInstallExtensionContainer extends React.Component {
                 hasNextButton
                 nextButtonText={intl.formatMessage(messages.next)}
                 onClickNext={() => { this.handleButtonNextClick() }}
-                autoClickNextTimeout={20}
+                autoClickNextTimeout={undefined}
             >
 
                 <p><FormattedMessage id="extension.install.text.1" defaultMessage="No eIDLink extension found."/></p>

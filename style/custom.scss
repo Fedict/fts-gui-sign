@@ -28,8 +28,25 @@ $theme-colors: (
   background-color: #6c757d;
 }
 
+.done .bs-stepper-circle{
+  background-color: #01c301;
+}
+
 .bs-stepper .line, .bs-stepper-line{
   flex: 1 0 16px;
+}
+
+.bs-stepper-circle{
+  line-height: 1.5em;
+}
+
+.done .bs-stepper-circle .bi{
+  font-size: 1.5em;
+}
+
+.done .bs-stepper-circle{
+  line-height: 1.5em;
+  padding: .25em 0;
 }
 
 .bs-stepper .step-trigger{

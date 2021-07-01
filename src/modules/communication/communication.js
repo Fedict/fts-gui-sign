@@ -1,6 +1,6 @@
 import { getBase64Data } from "../fileUpload/helpers/FileHelper"
 import packageJson from '../../../package.json';
-import {getBEUrl} from "../utils/helper";
+import {defaults, defaultsExcludeEmpty, getBEUrl} from "../utils/helper";
 //-----------------------------------------
 //--- constants                         ---
 //-----------------------------------------
@@ -64,14 +64,15 @@ export const createBody = (certificateBody, documentName, documentBase64, docume
     }
 }
 
-export const createBodyForToken = (certificateBody, token, signingDate) => (
+export const createBodyForToken = (certificateBody, token, signingDate, photo) => (
     {
         "clientSignatureParameters": {
             "certificateChain": certificateBody.certificateChain,
             "detachedContents": [
             ],
             "signingCertificate": certificateBody.certificate,
-            "signingDate": signingDate
+            "signingDate": signingDate,
+            photo
         },
         token
     }
@@ -199,9 +200,9 @@ export const validateSignatureAPI = async (document) => {
  *
  * @returns {Promise} Promise that resolves the result of the API request
  */
-export const getDataToSignForTokenAPI = async (certificateBody, token, signingDate) => {
+export const getDataToSignForTokenAPI = async (certificateBody, token, signingDate, photo) => {
 
-    const body = createBodyForToken(certificateBody, token, signingDate);
+    const body = createBodyForToken(certificateBody, token, signingDate, photo);
 
     return fetch(url + "/signing/getDataToSignForToken",
         {
@@ -222,9 +223,9 @@ export const getDataToSignForTokenAPI = async (certificateBody, token, signingDa
  * @param {Object} token - token of the document to be signed
  * @param {string} signature - signature value used to sign th document
  */
-export const signDocumentForTokenAPI = async (certificateBody, token, signature, signingDate) => {
+export const signDocumentForTokenAPI = async (certificateBody, token, signature, signingDate, photo) => {
     const body = {
-        ...createBodyForToken(certificateBody, token, signingDate),
+        ...createBodyForToken(certificateBody, token, signingDate, photo),
         "signatureValue": signature
     }
 
@@ -272,12 +273,71 @@ export const sendBEIDLinkErrorToBE = async (report, message, token) => {
         "token": token && token.substring(token.length-8)
     }
 
+
     return fetch(url + "/logging/error", {
         method: 'POST',
         body: JSON.stringify(body),
         headers: {
             'Content-Type': 'application/json'
-        },
+        }
     })
         .then(jsonHandler)
+}
+
+let lastLogInfo = {
+    amount : 0
+};
+
+export const sendLogInfoIgnoreResult = (message, token) => {
+    sendLogInfo(message, () =>{}, token);
+}
+
+export const sendLogInfo = (message, callback, token) => {
+    console.log('sendLogInfo', message, token);
+    if(defaultsExcludeEmpty(message, '______') === '______'
+        || defaultsExcludeEmpty(token, '______') === '______'
+        || (lastLogInfo.message === message && lastLogInfo.token === token && lastLogInfo.amount++ > 5)){
+        //ignore if message is empty or when sending the same message more than 5 times to the CS
+        if(typeof callback === 'function'){
+            callback();
+        }
+        return;
+    }
+    lastLogInfo.message = message;
+    lastLogInfo.token = token;
+    lastLogInfo.amount = 0;
+    const body = {
+        "level" : "INFO",
+        "message": message,
+        "token": token
+    }
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(),
+        typeof callback === 'function'?
+            defaults((window.configData?window.configData.logTimeout:undefined), 10000):90000
+    );
+
+    return fetch(url + "/logging/log", {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        signal: controller.signal
+    })
+        .then(() => {
+            clearTimeout(id);
+
+            if(typeof callback === 'function'){
+                callback();
+            }
+        })
+        .catch((e) => {
+            clearTimeout(id);
+
+            //error but try calling callback anyway
+            if(typeof callback === 'function'){
+                callback();
+            }
+        })
 }

@@ -1,5 +1,5 @@
 window.configData = {
-    eIDLinkMinimumVersion: "2.0",
+    eIDLinkMinimumVersion: "2.3",
     eIDLinkExtensionUrls: {
         chrome: "https://chrome.google.com/webstore/detail/beidconnect/pencgnkbgaekikmiahiaakjdgaibiipp",
         edge:   "https://chrome.google.com/webstore/detail/beidconnect/pencgnkbgaekikmiahiaakjdgaibiipp",
@@ -55,7 +55,7 @@ window.configData = {
         "text/xml": "XADES_LTA" /*XADES_1*/
     },
 
-    BEurl_mock: "http://localhost:8751/signandvalidation",
     BEurl: "https://validate.ta.fts.bosa.belgium.be/signandvalidation",
+    //BEurl: "http://localhost:8751/signandvalidation",
     skipCertificateChainValidate : true
 };

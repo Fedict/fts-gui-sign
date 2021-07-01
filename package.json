@@ -6,6 +6,7 @@
   "dependencies": {
     "@testing-library/jest-dom": "4.2.4",
     "bootstrap": "4.4.1",
+    "bootstrap-icons": "^1.5.0",
     "bs-stepper": "^1.7.0",
     "immutable": "^4.0.0-rc.12",
     "jquery": "3.5.1",
@@ -31,9 +32,16 @@
     "css": "./node_modules/.bin/node-sass ./style/custom.scss ./public/style/custom.css",
     "start": "react-scripts start",
     "build": "./node_modules/.bin/node-sass ./style/custom.scss ./public/style/custom.css && react-scripts build",
-    "test": "react-scripts test --watchAll=false",
+    "test": "react-scripts test --watchAll=false --coverage=true",
     "tests": "react-scripts test",
     "eject": "react-scripts eject"
+  },
+  "jest": {
+    "coverageReporters": [
+      "html",
+      "text",
+      "cobertura"
+    ]
   },
   "eslintConfig": {
     "extends": "react-app"
