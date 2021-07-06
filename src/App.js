@@ -14,10 +14,11 @@ import { Footer } from './modules/footer/Footer';
 import StartPageContainer from './modules/startPage/StartPageContainer';
 import MainI18nWrapper from "./modules/i18n/MainI18nWrapper";
 import TokenWizardContainer from "./modules/signByTokenWizard/TokenWizardContainer";
+import {isInIframe} from "./modules/utils/helper";
 
 export const BaseApp = ({browserIsSupported, notSupportedMessage}) => (
     <div >
-        <Navbar />
+        {isInIframe()?false:<Navbar />}
         {(browserIsSupported) ?
             (<Switch>
                 <Route path="/sign/:token">

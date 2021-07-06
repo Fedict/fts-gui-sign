@@ -22,7 +22,7 @@ import {
     selectCertificate
 } from "./CertificateActions"
 import {
-    getDataToSignAPI, sendLogInfo,
+    getDataToSignAPI, sendLogInfo, sendLogInfoIgnoreResult,
     signDocumentAPI, signDocumentForTokenAPI,
     validateCertificatesAPI
 } from "../../communication/communication"
@@ -823,4 +823,10 @@ export const resetWizard = () => (dispatch, getStore) => {
     }, tokenFile?tokenFile.token:undefined);
 
 
+}
+
+export const doSendLogInfo = (message) => (dispatch, getStore) => {
+    console.log('doSendLogInfo',message)
+    const {tokenFile} = getStore();
+    sendLogInfoIgnoreResult(message, tokenFile && tokenFile.token?tokenFile.token:undefined);
 }

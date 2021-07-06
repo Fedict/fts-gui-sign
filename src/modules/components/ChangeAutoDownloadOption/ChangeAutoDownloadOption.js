@@ -2,6 +2,7 @@ import {FormattedMessage, injectIntl} from "react-intl";
 import React, {useState} from "react";
 import {connect} from "react-redux";
 import {changeOptionAutoDownloadDocument} from "../../wizard/WizardActions";
+import {doSendLogInfo} from "../../signWizard/actions/WizardLogicActions";
 
 const ChangeAutoDownloadOption = (props) => {
     const [checked, setChecked] = useState(true);
@@ -20,7 +21,10 @@ const ChangeAutoDownloadOption = (props) => {
     return <p className="form-check">
         <input
             type="checkbox"
-            onChange={(e) => {changeChecked(e.target.checked); }}
+            onChange={(e) => {
+                changeChecked(e.target.checked);
+                props.doSendLogInfo('UI - downloadDocumentCheckbox - ' + e.target.checked);
+            }}
             className="form-check-input"
             id="downloadDocument"
             data-testid="downloadDocument"
@@ -37,7 +41,8 @@ const mapStateToProps = (state) => {
     })
 }
 const mapDispatchToProps = ({
-    changeOptionAutoDownloadDocument
+    changeOptionAutoDownloadDocument,
+    doSendLogInfo
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChangeAutoDownloadOption);

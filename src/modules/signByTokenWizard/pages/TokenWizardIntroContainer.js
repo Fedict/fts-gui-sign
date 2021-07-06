@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {CardContainer} from "../../components/Card/CardContainer";
 import {navigateToStep} from "../../wizard/WizardActions";
 import {selectCertificate} from "../../signWizard/actions/CertificateActions";
-import {getCertificatesWithCallback, resetWizard} from "../../signWizard/actions/WizardLogicActions";
+import {doSendLogInfo, getCertificatesWithCallback, resetWizard} from "../../signWizard/actions/WizardLogicActions";
 import {WIZARD_STATE_CERTIFICATES_LOADING, WIZARD_STATE_VALIDATE_LOADING} from "../../wizard/WizardConstants";
 import {definedMessages} from "../../i18n/translations";
 import {boldedText} from "../../utils/reactIntlUtils";
@@ -35,7 +35,10 @@ const TokenWizardIntroContainer = (props) => {
                               defaultMessage="Welcome, {newLine} you are about to sign the document on the left.{newLine}{newLine}You can now insert your eID card into the card reader (make sure you know its PIN code) and then press the Start button to start signing the document."
                               values={{newLine : <br/>, fileName : props.fileName, b : boldedText, signButtonText : <FormattedMessage id="buttons.sign" defaultMessage="sign"/>}}/>
             <p className="form-check">
-                <input type="checkbox" onChange={(e) => {setChecked(e.target.checked)}} className="form-check-input" id="documentReadCheckbox" data-testid="documentReadCheckbox" value={checked} defaultChecked={checked}/>
+                <input type="checkbox" onChange={(e) => {
+                    props.doSendLogInfo('UI - documentReadCheckbox - ' + e.target.checked);
+                    setChecked(e.target.checked);
+                }} className="form-check-input" id="documentReadCheckbox" data-testid="documentReadCheckbox" value={checked} defaultChecked={checked}/>
                 <label className="form-check-label" htmlFor="documentReadCheckbox"><FormattedMessage id="token.intro.check.read" defaultMessage="I have read this document"/></label>
             </p>
             <p>
@@ -75,7 +78,8 @@ const mapDispatchToProps = ({
     navigateToNextStep : () => navigateToStep(WIZARD_STATE_VALIDATE_LOADING),
     selectCertificate,
     getCertificates : getCertificatesWithCallback,
-    resetWizard
+    resetWizard,
+    doSendLogInfo
 })
 
 export const TokenWizardIntroComponent = injectIntl(TokenWizardIntroContainer)
