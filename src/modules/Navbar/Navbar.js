@@ -56,9 +56,9 @@ export const Navbar = ({ location, resetStore, navigateToStep, setNewFlowId, his
                     <img src="/img/logo.png" alt="BOSA"
                         style={{ width: "188px", height: "54px" }} />
                 </a>
-                <div className="navbar-nav">
+                {false && <div className="navbar-nav">
                     {links}
-                </div>
+                </div>}
                 <nav className="nav ml-auto">
                     {languages.map((language) => (
                         <a key={language} className="nav-link" href={'#'} onClick={() => {
