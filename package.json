@@ -63,7 +63,7 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "@types/fetch-mock": "^7.3.3",
-    "@types/jest": "^25.1.4",
+    "@types/jest": "^25.2.3",
     "csv-writer": "^1.6.0",
     "extract-react-intl-messages": "^4.1.1",
     "fetch-mock": "^9.11.0",

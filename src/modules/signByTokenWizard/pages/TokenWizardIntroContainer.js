@@ -4,10 +4,11 @@ import {connect} from 'react-redux';
 import {CardContainer} from "../../components/Card/CardContainer";
 import {navigateToStep} from "../../wizard/WizardActions";
 import {selectCertificate} from "../../signWizard/actions/CertificateActions";
-import {resetWizard} from "../../signWizard/actions/WizardLogicActions";
-import {WIZARD_STATE_CERTIFICATES_LOADING} from "../../wizard/WizardConstants";
+import {getCertificatesWithCallback, resetWizard} from "../../signWizard/actions/WizardLogicActions";
+import {WIZARD_STATE_CERTIFICATES_LOADING, WIZARD_STATE_VALIDATE_LOADING} from "../../wizard/WizardConstants";
 import {definedMessages} from "../../i18n/translations";
 import {boldedText} from "../../utils/reactIntlUtils";
+import {ReadCertificates} from "../../components/ReadCertificates/ReadCertificates";
 
 const messages = defineMessages({
     title : {
@@ -18,6 +19,7 @@ const messages = defineMessages({
 
 const TokenWizardIntroContainer = (props) => {
     const [checked, setChecked] = useState(false);
+    const [certificatesRead, setCertificatesRead] = useState(false);
     return (
         <CardContainer
             title={props.intl.formatMessage(messages.title, {fileName : `'${props.fileName}'`})}
@@ -38,13 +40,15 @@ const TokenWizardIntroContainer = (props) => {
             </p>
             <p>
                 <button
-                    className={checked?"btn btn-primary text-uppercase":"btn btn-secondary text-uppercase"}
-                    disabled={!checked}
+                    className={checked && certificatesRead?"btn btn-primary text-uppercase":"btn btn-secondary text-uppercase"}
+                    disabled={!(checked && certificatesRead)}
                     onClick={() => { props.navigateToNextStep() }}
                     id="button_next"
                 >
                     <FormattedMessage id="buttons.sign" defaultMessage="sign"/>
                 </button>
+                <span style={{padding : 30}}>&nbsp;</span>
+                <ReadCertificates getCertificates={props.getCertificates} onCertificatesRead={setCertificatesRead} />
             </p>
             <hr/>
             <FormattedMessage tagName={"p"} id="token.intro.reject"
@@ -68,8 +72,9 @@ function mapStateToProps(state){
     };
 }
 const mapDispatchToProps = ({
-    navigateToNextStep : () => navigateToStep(WIZARD_STATE_CERTIFICATES_LOADING),
+    navigateToNextStep : () => navigateToStep(WIZARD_STATE_VALIDATE_LOADING),
     selectCertificate,
+    getCertificates : getCertificatesWithCallback,
     resetWizard
 })
 

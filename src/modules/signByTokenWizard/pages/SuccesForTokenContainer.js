@@ -34,7 +34,7 @@ export class SuccesContainerForToken extends React.Component {
             && uploadFile.downloadFile.bytes
         ) {
 
-            if (window.navigator.msSaveBlob) {
+            if (typeof window.navigator.msSaveOrOpenBlob === 'function') {
                 const blobData = getBlobFromBase64(uploadFile.downloadFile.bytes);
                 window.navigator.msSaveOrOpenBlob(blobData,uploadFile.downloadFile.name);
             }
@@ -121,7 +121,7 @@ const mapDispatchToProps = (dispatch) => {
                 if(redirectUrl){
                     window.location = redirectUrl
                 }else{
-                    console.log('redirectUrl not defined');
+                    //console.log('redirectUrl not defined');
                 }
             })))
         }

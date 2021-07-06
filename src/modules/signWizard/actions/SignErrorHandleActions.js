@@ -63,39 +63,45 @@ export let doReportError = (report, message, token) => (dispatch) => {
  * @param {string} error.message - errorMessage from de eID reader
  * @param {boolean} isInSession - boolean that represents is the signing proces is in progress
  */
-export const handleErrorEID = (error, isInSession, token) => (dispatch) => {
+export const handleErrorEID = (error, isInSession, token, callback) => (dispatch) => {
+    if(!callback){
+        callback = function(e){
+            dispatch(showErrorMessage(e))
+        }
+    }
     let reportError = false;
+    let message;
     switch (error.message) {
         case errorStatuses.http_status_0:
-            dispatch(showErrorMessage(Error_EID_http_status_0))
+            message = Error_EID_http_status_0;
             reportError = true;
             break;
         case errorStatuses.no_reader:
             if (isInSession) {
-                dispatch(showErrorMessage(Error_EID_no_reader_InSession))
+                message = (Error_EID_no_reader_InSession)
             }
             else {
-                dispatch(showErrorMessage(Error_EID_no_reader_NotInSession))
+                message = (Error_EID_no_reader_NotInSession)
             }
             break;
         case errorStatuses.unsupported_reader:
-            dispatch(showErrorMessage(Error_EID_unsupported_reader))
+            message = (Error_EID_unsupported_reader)
             reportError = true;
             break;
         case errorStatuses.no_card:
             if (isInSession) {
-                dispatch(showErrorMessage(Error_EID_no_card_InSession))
+                message = (Error_EID_no_card_InSession)
             }
             else {
-                dispatch(showErrorMessage(Error_EID_no_card_NotInSession))
+                message = (Error_EID_no_card_NotInSession);
             }
             break;
         case errorStatuses.card_error:
-            dispatch(showErrorMessage(Error_EID_card_error));
+            message = (Error_EID_card_error);
             reportError = true;
             break;
         case errorStatuses.signature_failed:
-            dispatch(showErrorMessage(Error_EID_signature_failed))
+            message = (Error_EID_signature_failed);
             reportError = true;
             break
         case errorStatuses.pin_1_attempt_left:
@@ -106,25 +112,28 @@ export const handleErrorEID = (error, isInSession, token) => (dispatch) => {
         case errorStatuses.pin_too_short:
         case errorStatuses.pin_incorrect:
         case errorStatuses.pin_timeout:
-            dispatch(showErrorMessage(ErrorGeneral))
+            message = (ErrorGeneral)
             break;
         case errorStatuses.card_blocked:
-            dispatch(showErrorMessage(Error_EID_card_blocked))
+            message = (Error_EID_card_blocked)
             break;
         case errorStatuses.cancel:
-            dispatch(resetWizard())
+            dispatch(resetWizard()) //TODO
             break;
         default:
-            dispatch(showErrorMessage({
+            message = {
                 ...ErrorGeneral,
                 err : 'BEID_CONNECT_ERROR'
-            }))
+            }
             reportError = true;
             break;
     }
     if(reportError && (error.report || error.message)){
-        console.log('calling doReportError', error)
+        //console.log('calling doReportError', error)
         dispatch(doReportError(error.report, error.message, token));
+    }
+    if(message){
+        callback(message);
     }
 }
 

@@ -20,7 +20,15 @@ export const createDelayedAction = (action, timeout) =>{
 }
 
 export function sleep (time) {
-	return new Promise((resolve) => setTimeout(resolve, time));
+	return new Promise((resolve, reject) => {
+		setTimeout(() => {
+			try{
+				resolve();
+			}catch (e){
+				reject(e);
+			}
+		}, time)
+	});
 }
 
 export const setCookie = (cname, cvalue) => {

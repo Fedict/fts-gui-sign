@@ -2,7 +2,22 @@ import {sleep} from "../utils/helper";
 
 const readerType = process.env.NODE_ENV === 'development'?"pinpad":"standard";
 
+const timeout = process.env.NODE_ENV === 'development'?1000:1;
+
+let ExtensionError = function(eventData) {
+    this.message = eventData.result;
+    this.report = eventData.report;
+};
+
+ExtensionError.prototype.toString = function() {
+    return JSON.stringify(this);
+};
+
 export class EIDChromeExtMock {
+
+
+    cardNotInserted = {Readers: "", result: "no_card", correlationId: "4107213d-ab38-551d-c96c-c0c696b28f8f", src: "beidconnect.background", extensionVersion: "0"}
+
     userCertificates =
         {Readers: [{
                 ReaderName: "Broadcom Corp Contacted SmartCard 0",
@@ -48,13 +63,20 @@ export class EIDChromeExtMock {
         })
     }
     getUserCertificateChain(lang, mac){
-        return new Promise(resolve => {
-            resolve(this.userCertificatesChain)
+        return sleep(timeout * 1).then(() => {
+            if(process.env.NODE_ENV === 'development'){
+                if(window.confirm('Is card inserted? - getUserCertificateChain')){
+
+                }else{
+                    throw new ExtensionError(this.cardNotInserted);
+                }
+            }
+            return this.userCertificatesChain;
         })
     }
 
     sign(lang, mac, cert, algo, digest, pin){
-        return sleep(5000).then(() => {
+        return sleep(timeout * 5).then(() => {
             if(process.env.NODE_ENV === 'development'){
                 if(window.confirm('Confirming the signature of the document, press yes for happy flow, no for pin input error')){
                     return (this.signature)
@@ -70,7 +92,14 @@ export class EIDChromeExtMock {
     }
 
     getId(){
-        return sleep(500).then(() => {
+        return sleep(timeout * 2).then(() => {
+            if(process.env.NODE_ENV === 'development'){
+                if(window.confirm('Is card inserted?')){
+
+                }else{
+                    throw new ExtensionError(this.cardNotInserted);
+                }
+            }
             return this.idData;
         })
     }

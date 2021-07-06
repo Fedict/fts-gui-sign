@@ -288,6 +288,52 @@ export const getCertificates = () => (dispatch, getStore) => {
      */
 }
 
+
+/**
+ * function (action) to call the eIDLink getCertificate function
+ * - saves certificate list in redux store
+ * - if no certificates are found --> shows MessageCertificatesNotFound error
+ * - if certificates are found --> navigates to certificates validation loading page (WIZARD_STATE_VALIDATE_LOADING)
+ */
+export const getCertificatesWithCallback = (callback) => (dispatch, getStore) => {
+
+    let eIDLink = controller.getInstance()
+
+    const requestId = dispatch(createRequestId(10000, requestTimeoutFunction))
+    const flowId = getStore().controlId.flowId
+    const token = getStore().tokenFile && getStore().tokenFile.token
+
+    eIDLink.getIdData(
+        'en',
+        "0123456789ABCDEF0123456789ABCDEF",
+        ID_FLAGS.ID_FLAG_INCLUDE_SIGN_CERT |
+        ID_FLAGS.ID_FLAG_INCLUDE_PHOTO |
+        ID_FLAGS.ID_FLAG_INCLUDE_INTEGRITY |
+        ID_FLAGS.ID_FLAG_INCLUDE_ID
+    )
+        .then(handleFlowIdError(flowId, getStore))
+        .then(handleRequestIdError(requestId, dispatch, getStore))
+        .then((response) => {
+            const certificateList = getCertificatesFromIdResponse(response)
+
+            dispatch(saveCertificateList(certificateList))
+
+            if(typeof callback === 'function'){
+                if (certificateList.length === 0) {
+                    callback(MessageCertificatesNotFound)
+                } else {
+                    callback(true);
+                }
+            }
+        })
+        .catch((err) => {
+            if (err !== INCORECT_REQUEST_ID && err !== INCORECT_FLOW_ID) {
+                dispatch(removeRequestId(requestId))
+                dispatch(handleErrorEID(err, false, token, callback))
+            }
+        })
+}
+
 /**
  * funtion (action) does a validateCertificatesAPI request with multiple certificates from redux store
  * - only checks the keyusage
@@ -343,7 +389,7 @@ export const validateCertificates = () => (dispatch, getStore) => {
                 dispatch(saveCertificateList(newList))
 
                 if (newList.length <= 0) {
-                    console.log('MessageCertificatesNotFound', val)
+                    //console.log('MessageCertificatesNotFound', val)
                     dispatch(showErrorMessage(MessageCertificatesNotFound))
                 }
                 else {
@@ -358,7 +404,7 @@ export const validateCertificates = () => (dispatch, getStore) => {
             })
             .catch((err) => {
                 if (err !== INCORECT_FLOW_ID) {
-                    console.log('Failed to validate certificate', err)
+                    //console.log('Failed to validate certificate', err)
                     dispatch(showErrorMessage(MessageCertificatesNotFound))
                 }
 
@@ -436,12 +482,12 @@ export const validateCertificate = (certificateObject) => (dispatch, getStore) =
 
     if (certificateObject.APIBody) {
         if(window.configData && defaults(window.configData.skipCertificateChainValidate, true)){
-            console.log('skip validateCertificate', certificateObject)
+            //console.log('skip validateCertificate', certificateObject)
             dispatch(selectCertificate(certificateObject))
             dispatch(navigateToStep(WIZARD_STATE_DIGEST_LOADING))
             return;
         }
-        console.log('validateCertificate', certificateObject)
+        //console.log('validateCertificate', certificateObject)
         const APIBody = [{
             ...certificateObject.APIBody,
             "expectedKeyUsage": "NON_REPUDIATION"

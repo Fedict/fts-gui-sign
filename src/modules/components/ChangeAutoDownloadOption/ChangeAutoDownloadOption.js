@@ -23,6 +23,7 @@ const ChangeAutoDownloadOption = (props) => {
             onChange={(e) => {changeChecked(e.target.checked); }}
             className="form-check-input"
             id="downloadDocument"
+            data-testid="downloadDocument"
             value={checked}
             defaultChecked={checked}
             ref={(r) => setCheckbox(r)}

@@ -293,7 +293,7 @@ export const sendLogInfoIgnoreResult = (message, token) => {
 }
 
 export const sendLogInfo = (message, callback, token) => {
-    console.log('sendLogInfo', message, token);
+    //console.log('sendLogInfo', message, token);
     if(defaultsExcludeEmpty(message, '______') === '______'
         || defaultsExcludeEmpty(token, '______') === '______'
         || (lastLogInfo.message === message && lastLogInfo.token === token && lastLogInfo.amount++ > 5)){

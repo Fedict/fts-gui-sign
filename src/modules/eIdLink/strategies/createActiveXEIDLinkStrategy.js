@@ -16,7 +16,7 @@ export const createActiveXEIDLinkStrategy = () => {
         messagePromise({ operation: 'VERSION' }).then(
             function (msg) {
                 var installedVersion = msg.version;
-                console.log("BeIDConnect version is " + installedVersion);
+                //console.log("BeIDConnect version is " + installedVersion);
 
                 if (isUptodate(minimumVersion, installedVersion)) {
                     onSuccess(installedVersion);
@@ -30,22 +30,22 @@ export const createActiveXEIDLinkStrategy = () => {
     }
 
     const getCertificateChain = (lang, mac, userCert) => {
-        console.log("Getting certificate chain");
+        //console.log("Getting certificate chain");
         return messagePromise({ operation: 'CERTCHAIN', cert: userCert });
     }
 
     const sign = (language, mac, cert, algo, digest, pin) => {
-        console.log(pin ? "Signing with PIN" : "Signing with pinpad");
+        //console.log(pin ? "Signing with PIN" : "Signing with pinpad");
         return messagePromise({ operation: 'SIGN', cert: cert, algo: algo, digest: digest, pin: pin, language: language, mac: mac });
     }
 
     const auth = (language, mac, cert, algo, digest, pin) => {
-        console.log(pin ? "Signing with PIN" : "Signing with pinpad");
+        //console.log(pin ? "Signing with PIN" : "Signing with pinpad");
         return messagePromise({ operation: 'AUTH', cert: cert, algo: algo, digest: digest, pin: pin, language: language, mac: mac });
     }
 
     const getCertificate = (language, mac) => {
-        console.log("Reading user certificates");
+        //console.log("Reading user certificates");
         return messagePromise({ operation: 'USERCERTS', language: language, mac: mac });
     };
 
@@ -73,13 +73,13 @@ export const createActiveXEIDLinkStrategy = () => {
     
                         const response = obj.sendNativeMessage(JSON.stringify(msg));
                         const responseJson = JSON.parse(response)
-                        console.log("Processing reply from BeIDConnect : " + JSON.stringify(responseJson));
+                        //console.log("Processing reply from BeIDConnect : " + JSON.stringify(responseJson));
 
                         if (responseJson.correlationId) {
 
                             var p = pendingPromises[msg.correlationId];
                             if (!p) {
-                                console.log("No pending promise found, ignoring BeIDConnect reply");
+                                //console.log("No pending promise found, ignoring BeIDConnect reply");
                                 return;
                             }
 
@@ -98,7 +98,7 @@ export const createActiveXEIDLinkStrategy = () => {
                                 );
                             }
                         } else {
-                            console.log("Ignoring message without correlationId");
+                            //console.log("Ignoring message without correlationId");
                         }
                     }
                 } catch (err) {

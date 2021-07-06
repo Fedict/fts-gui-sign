@@ -105,7 +105,7 @@ export const getDocumentMetadataForToken = () => (dispatch, getStore) => {
                 }
             }).catch((err) => {
                 if (err !== INCORECT_FLOW_ID) {
-                    console.log('getDocumentMetadataForToken', err);
+                    //console.log('getDocumentMetadataForToken', err);
                     dispatch(showErrorMessage({...ErrorGeneral, message : errorMessages.failedToFetchMetadata}))
                 }
             })

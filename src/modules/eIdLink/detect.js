@@ -9,15 +9,15 @@ export const isChromeExtensionDetected = () => {
  * function that checks if the activeX extension is active
  */
 export const isActiveXControlDetected = () => {
-    console.log("activeX", document.DemoActiveX)
+    //console.log("activeX", document.DemoActiveX)
     try {
         var obj = document.DemoActiveX;
         if (obj) {
-            console.log("activeX", obj.IsPresent)
+            //console.log("activeX", obj.IsPresent)
             return obj.IsPresent();
         }
     } catch (ex) {
-        console.log("eIDLink ActiveX control not in window");
+        //console.log("eIDLink ActiveX control not in window");
     }
     return false;
 }
