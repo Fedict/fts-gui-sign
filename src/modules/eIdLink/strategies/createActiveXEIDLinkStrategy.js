@@ -29,6 +29,11 @@ export const createActiveXEIDLinkStrategy = () => {
             });
     }
 
+    const getIdData = (language, mac, idFlags) => {
+        //console.log("Getting certificate chain");
+        return messagePromise({ operation: 'ID', idflags : idFlags.toString(), mac, language });
+    }
+
     const getCertificateChain = (lang, mac, userCert) => {
         //console.log("Getting certificate chain");
         return messagePromise({ operation: 'CERTCHAIN', cert: userCert });
@@ -113,6 +118,7 @@ export const createActiveXEIDLinkStrategy = () => {
     return ({
         getVersion,
         getCertificateChain,
+        getIdData,
         getCertificate,
         sign,
         auth,
