@@ -249,7 +249,7 @@ describe('TokenWizardContainer', () => {
             console.log("SIGN BUTTON CLICKED")
             //console.log('TokenWC sign button clicked');
 
-            expect(await screen.findByText(/You can download it by clicking the./i)).toBeInTheDocument();
+            expect(await screen.findByText(/You can download the document by clicking on/i)).toBeInTheDocument();
             done();
         }, 10)
 
@@ -337,7 +337,7 @@ describe('TokenWizardContainer', () => {
 
         screen.getByRole('button', {name: /Select/i}).click();
 
-        expect(await screen.findByText(/Enter your eID pin code/i)).toBeInTheDocument();
+        expect(await screen.findByText(/Download document after signing./i)).toBeInTheDocument();
 
         wait(() => (lastLogMessage.indexOf('WIZARD_STATE_PIN_INPUT') > -1), async () => {
             const inputCode = screen.getByTestId('input_code');

@@ -123,7 +123,7 @@ describe("Pinpad support", () => {
         expect(navigation.navigateToStep.mock.calls.length).toBe(1)
         expect(navigation.navigateToStep.mock.calls[0][0]).toBe(WIZARD_STATE_SIGNING_PRESIGN_LOADING)
 
-        expect(dispatch.mock.calls.length).toBe(2)
+        expect(dispatch.mock.calls.length).toBe(3)
 
     })
 
@@ -2060,7 +2060,7 @@ describe("WizardLogicActions", () => {
                 }
             })
             navigateToSign()(mockDispatch, mockGetStore)
-            expect(mockDispatch).toBeCalledTimes(2)
+            expect(mockDispatch).toBeCalledTimes(3)
             expect(navigateToStep).toBeCalledWith(WIZARD_STATE_SIGNING_PRESIGN_LOADING)
         })
 
@@ -2158,7 +2158,7 @@ describe("WizardLogicActions", () => {
             sign(pin)(mockDispatch, mockGetStore)
             expect(showErrorMessage).toBeCalledTimes(1)
             expect(showErrorMessage).toBeCalledWith(ErrorGeneral)
-            expect(mockDispatch).toBeCalledTimes(1)
+            expect(mockDispatch).toBeCalledTimes(2)
         })
 
         test("sign pinpad creates a requestId of 30000ms", () => {
