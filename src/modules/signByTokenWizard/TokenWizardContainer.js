@@ -143,7 +143,8 @@ export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, 
             content = <SigningLoadingContainer />;
             break;
         case WIZARD_STATE_PINPAD_ERROR:
-            content = <PinPadError />
+            content = <SigningPreSignLoading />
+            //content = <PinPadError />
             break;
         case WIZARD_STATE_SUCCES:
             content = <SuccesForTokenContainer />;

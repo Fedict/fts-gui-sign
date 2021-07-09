@@ -27,7 +27,7 @@ import {
     validateCertificatesAPI
 } from "../../communication/communication"
 import { setDigest } from "./DigestActions"
-import { handleErrorEID, handlePinErrorEID } from "./SignErrorHandleActions"
+import {handleErrorEID, handlePinErrorEID, resetPinError} from "./SignErrorHandleActions"
 import {setDateSigning, setSignature} from "./SignatureActions"
 import { setDownloadFile } from "../../fileUpload/actions/UploadFileActions"
 import {
@@ -582,6 +582,7 @@ export const navigateToSign = () => (dispatch, getStore) => {
         && certificate.certificateSelected.readerType) {
 
         if (certificate.certificateSelected.readerType === "pinpad") {
+            dispatch(resetPinError())
             dispatch(navigateToStep(WIZARD_STATE_SIGNING_PRESIGN_LOADING))
             dispatch(sign(null))
         }
@@ -626,6 +627,8 @@ export const navigateToPinError = () => (dispatch, getStore) => {
  */
 export const sign = (pin) => (dispatch, getStore) => {
     const { certificate, digest } = getStore()
+
+    dispatch(resetPinError());
 
     if (certificate
         && certificate.certificateSelected

@@ -137,6 +137,11 @@ export const handleErrorEID = (error, isInSession, token, callback) => (dispatch
     }
 }
 
+export const STORE_RESET_PIN_ERROR = "STORE_RESET_PIN_ERROR"
+
+export const resetPinError = () => (dispatch) => {
+    dispatch({ type: STORE_RESET_PIN_ERROR })
+}
 /**
  * action type to change the pin error message
  */
