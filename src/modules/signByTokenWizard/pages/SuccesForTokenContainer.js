@@ -46,7 +46,7 @@ export class SuccesContainerForToken extends React.Component {
                 downloadLink.download = uploadFile.downloadFile.name;
                 if(token){
                     downloadLink.addEventListener("click", () => {
-                        sendLogInfoIgnoreResult('UI - DOWNLOAD_PRESSED', token);
+                        sendLogInfoIgnoreResult('UI - DOWNLOAD_BUTTON CLICKED', token);
                     });
                 }
 

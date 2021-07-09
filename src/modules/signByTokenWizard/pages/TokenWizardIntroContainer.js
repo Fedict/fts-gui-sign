@@ -9,6 +9,8 @@ import {WIZARD_STATE_CERTIFICATES_LOADING, WIZARD_STATE_VALIDATE_LOADING} from "
 import {definedMessages} from "../../i18n/translations";
 import {boldedText} from "../../utils/reactIntlUtils";
 import {ReadCertificates} from "../../components/ReadCertificates/ReadCertificates";
+import {doWithToken} from "../../utils/helper";
+import {sendLogInfoIgnoreResult} from "../../communication/communication";
 
 const messages = defineMessages({
     title : {
@@ -45,7 +47,10 @@ const TokenWizardIntroContainer = (props) => {
                 <button
                     className={checked && certificatesRead?"btn btn-primary text-uppercase":"btn btn-secondary text-uppercase"}
                     disabled={!(checked && certificatesRead)}
-                    onClick={() => { props.navigateToNextStep() }}
+                    onClick={() => {
+                        props.doSendLogInfo('UI - SIGN_BUTTON CLICKED')
+                        props.navigateToNextStep()
+                    }}
                     id="button_next"
                 >
                     <FormattedMessage id="buttons.sign" defaultMessage="sign"/>
@@ -75,7 +80,7 @@ function mapStateToProps(state){
     };
 }
 const mapDispatchToProps = ({
-    navigateToNextStep : () => navigateToStep(WIZARD_STATE_VALIDATE_LOADING),
+    navigateToNextStep : () => (navigateToStep(WIZARD_STATE_VALIDATE_LOADING)),
     selectCertificate,
     getCertificates : getCertificatesWithCallback,
     resetWizard,

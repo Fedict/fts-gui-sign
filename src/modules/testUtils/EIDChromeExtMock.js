@@ -49,6 +49,10 @@ export class EIDChromeExtMock {
         ], "result": "OK", "correlationId": "07386ce7-f73e-4e99-dfc3-8d69b6adf33d"}
 
     checkVersion(minimumVersion, onCorrectVersion, onNotInstalled, onNeedsUpdate){
+        if(false && process.env.NODE_ENV === 'development'){
+            onNotInstalled();
+            return;
+        }
         onCorrectVersion(minimumVersion);
     }
 
@@ -78,16 +82,21 @@ export class EIDChromeExtMock {
     sign(lang, mac, cert, algo, digest, pin){
         return sleep(timeout * 5).then(() => {
             if(process.env.NODE_ENV === 'development'){
-                if(window.confirm('Confirming the signature of the document, press yes for happy flow, no for pin input error')){
+                let result = window.prompt('Signature result [ok] 2, 1, 0, no_reader, no_card, card_blocked, pin_timeout, cancel');
+                if(result === '' || !result) {
                     return (this.signature)
                 }else{
-                    //throw ({message : 'pin_2_attempts_left'})
-                    throw ({message : 'no_reader'})
+                    if(result.length === 1){
+                        if(result === '0'){
+                            throw ({message : 'card_blocked'})
+                        }
+                        throw ({message : `pin_${result}_attempt${result === '1'?'':'s'}_left`})
+                    }
+                    throw ({message : result})
                 }
             }else{
                 return (this.signature)
             }
-
         })
     }
 

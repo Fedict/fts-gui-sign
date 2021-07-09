@@ -104,7 +104,7 @@ export const doWithToken = (actionFunction) => {
 			actionFunction(state.tokenFile.token)
 		}else{
 			//token not defined, what else should we do?
-			actionFunction();
+			actionFunction(undefined);
 		}
 	}
 }

@@ -24,11 +24,14 @@ const messages = defineMessages({
 })
 export class VersionCheckInstallExtensionContainer extends React.Component {
 
+    state = {extensionClicked : false}
+
     handleButtonNextClick() {
         window.location.reload();
     }
 
     openExtensionLink() {
+        this.setState({extensionClicked : true})
         let url
         if (window.configData && window.configData.eIDLinkExtensionUrls) {
             const UsedBrowser = getBrowser()
@@ -78,6 +81,7 @@ export class VersionCheckInstallExtensionContainer extends React.Component {
                 onClickCancel={() => { resetWizard() }}
                 hasNextButton
                 nextButtonText={intl.formatMessage(messages.next)}
+                nextButtonIsDisabled={!this.state.extensionClicked}
                 onClickNext={() => { this.handleButtonNextClick() }}
                 autoClickNextTimeout={undefined}
             >
@@ -86,17 +90,12 @@ export class VersionCheckInstallExtensionContainer extends React.Component {
                 <p><FormattedMessage id="extension.install.text.2" defaultMessage="Please install the eIDLink extension to use this application."/></p>
                 <p><FormattedMessage id="extension.install.text.3" defaultMessage='After you installed the eIDLink extension you can come back to this page an push the "I have installed eIDLink Extension" button.'/></p>
 
-                {(usedBrowser === browser.CHROME || usedBrowser === browser.EDGE)
-                    ? (<img src="/img/ChromeWebStore_BadgeWBorder_v2_206x58.png"
-                        style={{ cursor: "pointer" }}
-                        alt={intl.formatMessage(messages.altChromeStoreImg)}
-                        onClick={() => { this.openExtensionLink() }} />)
-                    : (<button
-                        className="btn btn-primary"
+                    <button
+                        className={this.state.extensionClicked?"btn btn-secondary":"btn btn-primary"}
                         id="button_install_eID"
                         onClick={() => { this.openExtensionLink() }}>
                         <FormattedMessage id="extension.install.button" defaultMessage="Install eIDLink extension"/>
-                    </button>)}
+                    </button>
 
                 {process.env.NODE_ENV === 'development' &&
                     <button className="btn" onClick={() => this.useExtensionMock()}>Use mock</button>

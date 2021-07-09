@@ -48,7 +48,7 @@ import { INCORECT_FLOW_ID } from '../../controlIds/flowId/FlowIdHelpers'
 import {errorMessages} from "../../i18n/translations";
 import {redirectErrorCodes} from "../../../const";
 import moment from 'moment'
-import {defaults, doWithToken, parseErrorMessage} from "../../utils/helper";
+import {defaults, parseErrorMessage} from "../../utils/helper";
 import {ID_FLAGS} from "../../eIdLink/strategies/createEIDLinkExtensionStrategy";
 
 //----------------------------------
@@ -816,7 +816,7 @@ export const resetWizard = () => (dispatch, getStore) => {
             url.searchParams.set('details', wizard.state);
         }
     }
-    sendLogInfo('UI - CANCEL_PRESSED - ' + url.toString(), () => {
+    sendLogInfo('UI - CANCEL_BUTTON CLICKED - ' + url.toString(), () => {
         dispatch(resetStore())
         dispatch(setNewFlowId());
         window.location.href = url.toString();

@@ -23,7 +23,8 @@ export class VersionCheckInstallContainer extends React.Component {
         super(props)
 
         this.state = {
-            intervalId: ""
+            intervalId: "",
+            installButtonClicked : false
         }
     }
 
@@ -55,6 +56,8 @@ export class VersionCheckInstallContainer extends React.Component {
         if (usedOs === OS.MACOS && window.configData && window.configData.eIDLinkUrls && window.configData.eIDLinkUrls.macOs) {
             window.open(window.configData.eIDLinkUrls.macOs + '?dt=' + new Date().getTime(), "_blank")
         }
+
+        this.setState({installButtonClicked : true})
     }
 
     render() {
@@ -66,6 +69,7 @@ export class VersionCheckInstallContainer extends React.Component {
                 hasNextButton
                 nextButtonText={intl.formatMessage(messages.next)}
                 onClickNext={() => { this.handleButtonNextClick() }}
+                nextButtonIsDisabled={!this.state.installButtonClicked}
             >
                 <p><FormattedMessage id="eid.install.text.1" defaultMessage="No eIDLink is found"/></p>
                 <p><FormattedMessage id="eid.install.text.2" defaultMessage="Please install eIDLink to use this application"/></p>
@@ -73,7 +77,7 @@ export class VersionCheckInstallContainer extends React.Component {
                 {
                     (usedOs === OS.LINUX)
                         ? <EIDLinkLinuxInstall linuxDistributions={linuxDistributions} />
-                        : <button className="btn btn-primary" id="button_install_eID" onClick={() => { this.handleOnClick() }}><FormattedMessage id="eid.button.download" defaultMessage="Download and install eIDLink" /></button>
+                        : <button className={this.state.installButtonClicked?"btn btn-secondary":"btn btn-primary"} id="button_install_eID" onClick={() => { this.handleOnClick() }}><FormattedMessage id="eid.button.download" defaultMessage="Download and install eIDLink" /></button>
                 }
             </CardContainer>
         )
