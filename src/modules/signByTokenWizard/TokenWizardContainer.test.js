@@ -337,7 +337,7 @@ describe('TokenWizardContainer', () => {
 
         screen.getByRole('button', {name: /Select/i}).click();
 
-        expect(await screen.findByText(/Download document after signing./i)).toBeInTheDocument();
+        expect(await screen.findByText(/Download document after signing/i)).toBeInTheDocument();
 
         wait(() => (lastLogMessage.indexOf('WIZARD_STATE_PIN_INPUT') > -1), async () => {
             const inputCode = screen.getByTestId('input_code');
