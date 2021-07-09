@@ -121,7 +121,10 @@ export class PinInputContainer extends React.Component {
                             : <FormattedMessage
                                 id="signing.pininput.text"
                                 defaultMessage="Enter the PIN"
-                                values={{b: boldedText, newLine : <br/>}}
+                                values={{b: boldedText,
+                                    newLine : <br/>,
+                                    signingButton : intl.formatMessage({id : "signing.pininput.button.sign"})
+                                }}
                             />
                         }
                     </p>

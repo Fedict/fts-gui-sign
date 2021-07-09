@@ -41,7 +41,7 @@ const TokenWizardIntroContainer = (props) => {
                     props.doSendLogInfo('UI - documentReadCheckbox - ' + e.target.checked);
                     setChecked(e.target.checked);
                 }} className="form-check-input" id="documentReadCheckbox" data-testid="documentReadCheckbox" value={checked} defaultChecked={checked}/>
-                <label className="form-check-label" htmlFor="documentReadCheckbox"><FormattedMessage id="token.intro.check.read" defaultMessage="I have read this document"/></label>
+                <label className="form-check-label" htmlFor="documentReadCheckbox"><FormattedMessage id="token.intro.check.read" defaultMessage="I have read this document"/><sup>*</sup></label>
             </p>
             <p>
                 <button

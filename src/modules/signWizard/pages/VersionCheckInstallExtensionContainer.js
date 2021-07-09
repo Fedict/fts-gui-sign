@@ -88,7 +88,10 @@ export class VersionCheckInstallExtensionContainer extends React.Component {
 
                 <p><FormattedMessage id="extension.install.text.1" defaultMessage="No eIDLink extension found."/></p>
                 <p><FormattedMessage id="extension.install.text.2" defaultMessage="Please install the eIDLink extension to use this application."/></p>
-                <p><FormattedMessage id="extension.install.text.3" defaultMessage='After you installed the eIDLink extension you can come back to this page an push the "I have installed eIDLink Extension" button.'/></p>
+                <p><FormattedMessage id="extension.install.text.3"
+                                     defaultMessage='After you installed the eIDLink extension you can come back to this page an push the "I have installed eIDLink Extension" button.'
+                                     values={{extensionInstallNext : intl.formatMessage(messages.next)}}
+                /></p>
 
                     <button
                         className={this.state.extensionClicked?"btn btn-secondary":"btn btn-primary"}
