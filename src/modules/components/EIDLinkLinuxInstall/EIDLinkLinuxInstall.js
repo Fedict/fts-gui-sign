@@ -1,8 +1,9 @@
-import React from "react"
+import React, {useState} from "react"
 import { EIDLinkLinuxInstallDistributionListItem } from "./EIDLinkLinuxInstallDistributionListItem"
 import { NumberdText } from '../NumberedText/NumberdText'
-import {FormattedMessage} from "react-intl";
+import {FormattedMessage, injectIntl} from "react-intl";
 import {boldedText} from "../../utils/reactIntlUtils";
+import Modal from "react-bootstrap/Modal";
 
 /**
  * display to show the installation buttons for Linux
@@ -11,8 +12,8 @@ import {boldedText} from "../../utils/reactIntlUtils";
  * @param {[string]} props.linuxDistributions[].distributions - list of linux distributions supported by the archive
  * @param {string} props.linuxDistributions[].url - url to the archive download
  */
-export const EIDLinkLinuxInstall = ({ linuxDistributions }) => {
-    
+export const EIDLinkLinuxInstall = (injectIntl(({ linuxDistributions, intl }) => {
+    const [showLicense, setShowLicense] = useState(false);
     const list = linuxDistributions.map((val, index) => {
         return <EIDLinkLinuxInstallDistributionListItem {...val} index={index} key={index} />
     })
@@ -25,7 +26,10 @@ export const EIDLinkLinuxInstall = ({ linuxDistributions }) => {
                     <FormattedMessage
                         id="beidconnect.linux.step.1"
                         defaultMessage={'Install the \'beidconnect-archive\' package so the "beidconnect" package repository becomes available'}
-                        values={{b : boldedText, newLine : <br />}}
+                        values={{b : boldedText, newLine : <br />, licenseLink :
+                                <a href={"#"} onClick={setShowLicense.bind(undefined, true)}>
+                                    <FormattedMessage id="beidconnect.linux.license.link" defaultMessage=""/>
+                                </a>}}
 
                     />
                 </NumberdText>
@@ -39,6 +43,11 @@ export const EIDLinkLinuxInstall = ({ linuxDistributions }) => {
                     </tbody>
                 </table>
             </div>
+            <Modal show={showLicense} onHide={setShowLicense} size="lg" centered>
+                <Modal.Body>
+                    <iframe src={`/license/${intl.locale}/BeIDConnect-Licence.htm`} height={window.innerHeight - 100} width={"100%"}></iframe>
+                </Modal.Body>
+            </Modal>
         </div>
     )
-}
+}))

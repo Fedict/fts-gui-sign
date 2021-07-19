@@ -49,8 +49,8 @@ export class EIDChromeExtMock {
         ], "result": "OK", "correlationId": "07386ce7-f73e-4e99-dfc3-8d69b6adf33d"}
 
     checkVersion(minimumVersion, onCorrectVersion, onNotInstalled, onNeedsUpdate){
-        if(false && process.env.NODE_ENV === 'development'){
-            onNotInstalled();
+        if(true && process.env.NODE_ENV === 'development'){
+            onNeedsUpdate();
             return;
         }
         onCorrectVersion(minimumVersion);

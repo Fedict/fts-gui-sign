@@ -7,6 +7,7 @@ import { resetWizard, checkVersion } from '../actions/WizardLogicActions'
 import { OS, getOS } from "../../browserDetection/OSDetection"
 import { EIDLinkLinuxInstall } from '../../components/EIDLinkLinuxInstall/EIDLinkLinuxInstall'
 import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
+import {defaults} from "../../utils/helper";
 const messages = defineMessages({
     title : {
         id : 'eid.install.title',
@@ -51,7 +52,8 @@ export class VersionCheckInstallContainer extends React.Component {
     handleOnClick() {
         const usedOs = getOS()
         if (usedOs === OS.WINDOWS && window.configData && window.configData.eIDLinkUrls && window.configData.eIDLinkUrls.windows) {
-            window.open(window.configData.eIDLinkUrls.windows + '?dt=' + new Date().getTime(), "_blank")
+            let url = defaults(window.configData.eIDLinkUrls.windows[this.props.intl.locale], window.configData.eIDLinkUrls.windows)
+            window.open(url + '?dt=' + new Date().getTime(), "_blank")
         }
         if (usedOs === OS.MACOS && window.configData && window.configData.eIDLinkUrls && window.configData.eIDLinkUrls.macOs) {
             window.open(window.configData.eIDLinkUrls.macOs + '?dt=' + new Date().getTime(), "_blank")
@@ -69,7 +71,7 @@ export class VersionCheckInstallContainer extends React.Component {
                 hasNextButton
                 nextButtonText={intl.formatMessage(messages.next)}
                 onClickNext={() => { this.handleButtonNextClick() }}
-                nextButtonIsDisabled={!this.state.installButtonClicked}
+                nextButtonIsDisabled={!this.state.installButtonClicked && usedOs !== OS.LINUX}
             >
                 <p><FormattedMessage id="eid.install.text.1" defaultMessage="No eIDLink is found"/></p>
                 <p><FormattedMessage id="eid.install.text.2" defaultMessage="Please install eIDLink to use this application"/></p>

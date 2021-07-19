@@ -9,7 +9,12 @@ window.configData = {
     },
 
     eIDLinkUrls: {
-        windows: "https://eid.static.bosa.fgov.be/beidconnect.msi",
+        windows: {
+            en : "https://eid.static.bosa.fgov.be/beidconnect.msi",
+            de : "https://eid.static.bosa.fgov.be/beidconnect.msi",
+            nl : "https://eid.static.bosa.fgov.be/beidconnect_nl.msi",
+            fr : "https://eid.static.bosa.fgov.be/beidconnect_fr.msi",
+        },
         macOs: "https://eid.static.bosa.fgov.be/beidconnect.dmg",
         linux: {
             debian: {
@@ -56,6 +61,6 @@ window.configData = {
     },
 
     BEurl: "https://validate.ta.fts.bosa.belgium.be/signandvalidation",
-    //BEurl: "http://localhost:8751/signandvalidation",
+    BEurl: "http://localhost:8751/signandvalidation",
     skipCertificateChainValidate : true
 };
