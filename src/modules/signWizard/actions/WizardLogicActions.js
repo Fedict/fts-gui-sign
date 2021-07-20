@@ -706,11 +706,14 @@ export const signDocument = () => (dispatch, getStore) => {
                 tokenFile.token,
                 signature.signature,
                 signature.signingDate,
-                photo)
+                photo,
+                tokenFile.disallowSignedDownloads)
                 .then(handleFlowIdError(flowId, getStore))
                 .then((resp) => {
                     //console.log('signDocumentForTokenAPI response', resp)
-                    if (resp
+                    if(tokenFile.disallowSignedDownloads){
+                        dispatch(navigateToStep(WIZARD_STATE_SUCCES))
+                    }else if (resp
                         && resp.name
                         && resp.bytes) {
                         dispatch(setDownloadFile(resp))

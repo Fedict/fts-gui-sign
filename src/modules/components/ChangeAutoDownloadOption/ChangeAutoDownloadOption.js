@@ -18,7 +18,7 @@ const ChangeAutoDownloadOption = (props) => {
         }
     }
 
-    return <p className="form-check">
+    return props.allowSignedDownloads && <p className="form-check">
         <input
             type="checkbox"
             onChange={(e) => {
@@ -37,8 +37,9 @@ const ChangeAutoDownloadOption = (props) => {
 }
 
 const mapStateToProps = (state) => {
-    return (state) => ({
-    })
+    return {
+        allowSignedDownloads : !(state.tokenFile?state.tokenFile.disallowSignedDownloads:false),
+    }
 }
 const mapDispatchToProps = ({
     changeOptionAutoDownloadDocument,

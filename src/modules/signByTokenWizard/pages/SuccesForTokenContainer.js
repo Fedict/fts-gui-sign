@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {Fragment, useEffect, useState} from 'react'
 import { connect } from 'react-redux';
 import { CardContainer } from '../../components/Card/CardContainer';
 import { getBlobFromBase64 } from '../../fileUpload/helpers/FileHelper';
@@ -58,10 +58,13 @@ export class SuccesContainerForToken extends React.Component {
         if(this.props.autoDownloadDocument) {
             this.downloadFile()
         }
+        if(false && this.props.disallowSignedDownloads){
+            this.props.nextButtonClicked(this.props.redirectUrl);
+        }
     }
 
     render() {
-        const { nextButtonClicked, redirectUrl, intl } = this.props
+        const { nextButtonClicked, redirectUrl, intl, disallowSignedDownloads } = this.props
 
         return (
 
@@ -72,31 +75,40 @@ export class SuccesContainerForToken extends React.Component {
                 onClickCancel={() => nextButtonClicked(redirectUrl)}
             >
                 <div className="form-group">
+                    {disallowSignedDownloads?
+                        false && <FormattedMessage id="succes.signed.downloadNotAllowed"
+                                          defaultMessage="<b>Your document has been successfully signed</b>"
+                                          values={{b : boldedText}}
+                        />
+                    :
+                        <Fragment>
+                            <p>
+                                {this.props.autoDownloadDocument ?
+                                    <FormattedMessage id="succes.autodownload"
+                                                      defaultMessage="Your document will be automatically downloaded. If this is not the case, you can start the download manually"
+                                                      values={{b : boldedText, newLine : <br/>, succesButtonDownload : intl.formatMessage({id : "succes.button.download", defaultMessage : "Download document"})}}
+                                    />
+                                    :
+                                    <FormattedMessage id="succes.documentNotAutoDownloaded"
+                                                      defaultMessage="<b>Your document has been successfully signed</b>{newLine}"
+                                                      values={{b : boldedText, newLine : <br/>, succesButtonDownload : intl.formatMessage({id : "succes.button.download", defaultMessage : "Download document"})}}
+                                    />
+                                }
+                            </p>
+                            <p>
+                                <button
+                                    className="btn btn-primary text-uppercase"
+                                    id="button_download_file"
+                                    onClick={() => { this.downloadFile() }} >
+                                    <FormattedMessage id="succes.button.download" defaultMessage="Download document"/>
+                                </button>
+                            </p>
+                        </Fragment>
+                    }
 
-                    <p>
-                        {this.props.autoDownloadDocument ?
-                            <FormattedMessage id="succes.autodownload"
-                                              defaultMessage="Your document will be automatically downloaded. If this is not the case, you can start the download manually"
-                                              values={{b : boldedText, newLine : <br/>, succesButtonDownload : intl.formatMessage({id : "succes.button.download", defaultMessage : "Download document"})}}
-                            />
-                            :
-                            <FormattedMessage id="succes.documentNotAutoDownloaded"
-                                              defaultMessage="<b>Your document has been succesfully signed</b>{newLine}"
-                                              values={{b : boldedText, newLine : <br/>, succesButtonDownload : intl.formatMessage({id : "succes.button.download", defaultMessage : "Download document"})}}
-                            />
-                        }
-                    </p>
-                    <p>
-                        <button
-                            className="btn btn-primary text-uppercase"
-                            id="button_download_file"
-                            onClick={() => { this.downloadFile() }} >
-                            <FormattedMessage id="succes.button.download" defaultMessage="Download document"/>
-                        </button>
-                    </p>
-                    {this.props.autoDownloadDocument &&
+                    {(this.props.autoDownloadDocument || disallowSignedDownloads) &&
                         <p>
-                            <Ticker autoClickNextTimeout={10} onTimeout={() => nextButtonClicked(redirectUrl)}
+                            <Ticker autoClickNextTimeout={disallowSignedDownloads?3:10} onTimeout={() => nextButtonClicked(redirectUrl)}
                                     redirectMessageDescriptor={messages.redirectMessage}/>
                         </p>
                     }
@@ -111,7 +123,8 @@ const mapStateToProps = (state) => {
         uploadFile: state.uploadFile,
         redirectUrl : state.tokenFile.redirectUrl,
         token : state.tokenFile.token,
-        autoDownloadDocument : state.wizard.autoDownloadDocument !== false
+        autoDownloadDocument : state.wizard.autoDownloadDocument !== false && !state.tokenFile.disallowSignedDownloads,
+        disallowSignedDownloads : state.tokenFile.disallowSignedDownloads
     })
 }
 const mapDispatchToProps = (dispatch) => {

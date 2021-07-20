@@ -132,6 +132,7 @@ export const setDocumentMetadata = (metadata) => ({
         isPdf : metadata.mimetype && metadata.mimetype.indexOf('application/pdf') > -1,
         isXml : metadata.mimetype && (metadata.mimetype.indexOf('application/xml') > -1 || metadata.mimetype.indexOf('text/xml') > -1),
         xsltUrl: replaceBEURL(metadata.xsltUrl),
-        readPhoto : metadata.readPhoto
+        readPhoto : metadata.readPhoto,
+        disallowSignedDownloads : metadata.disallowSignedDownloads
     }
 })

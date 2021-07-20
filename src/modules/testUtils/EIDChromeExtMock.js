@@ -1,6 +1,6 @@
 import {sleep} from "../utils/helper";
 
-const readerType = process.env.NODE_ENV === 'development'?"pinpad":"standard";
+const readerType = process.env.NODE_ENV === 'development' && true?"pinpad":"standard";
 
 const timeout = process.env.NODE_ENV === 'development'?1000:1;
 
@@ -13,7 +13,7 @@ ExtensionError.prototype.toString = function() {
     return JSON.stringify(this);
 };
 
-let checkVersionCounter = 0;
+let checkVersionCounter = 2;
 
 export class EIDChromeExtMock {
 

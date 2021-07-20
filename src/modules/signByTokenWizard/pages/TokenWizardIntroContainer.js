@@ -36,6 +36,10 @@ const TokenWizardIntroContainer = (props) => {
             <FormattedMessage tagName={"p"} id="token.intro.txt"
                               defaultMessage="Welcome, {newLine} you are about to sign the document on the left.{newLine}{newLine}You can now insert your eID card into the card reader (make sure you know its PIN code) and then press the Start button to start signing the document."
                               values={{newLine : <br/>, fileName : props.fileName, b : boldedText, signButtonText : <FormattedMessage id="buttons.sign" defaultMessage="sign"/>}}/>
+
+            {props.disallowSignedDownloads &&
+            <FormattedMessage tagName={"p"} id="token.intro.nodownload" defaultMessage="Please note: <b>you will not be able to download</b> the signed document(s) after signing." values={{b : boldedText}}/>
+            }
             <p className="form-check">
                 <input type="checkbox" onChange={(e) => {
                     props.doSendLogInfo('UI - documentReadCheckbox - ' + e.target.checked);
@@ -76,7 +80,8 @@ const TokenWizardIntroContainer = (props) => {
 
 function mapStateToProps(state){
     return {
-        fileName : state.tokenFile.fileName
+        fileName : state.tokenFile.fileName,
+        disallowSignedDownloads : state.tokenFile.disallowSignedDownloads,
     };
 }
 const mapDispatchToProps = ({

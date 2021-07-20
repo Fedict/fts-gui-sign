@@ -78,6 +78,13 @@ export const createBodyForToken = (certificateBody, token, signingDate, photo) =
     }
 )
 
+const noContentHandler = (response) => {
+    if (!response.ok) {
+        throw new Error(REQUEST_FAILED)
+    }
+    return true;
+}
+
 const jsonHandler = (response) => {
     if (!response.ok) {
         if(response.headers){
@@ -223,7 +230,7 @@ export const getDataToSignForTokenAPI = async (certificateBody, token, signingDa
  * @param {Object} token - token of the document to be signed
  * @param {string} signature - signature value used to sign th document
  */
-export const signDocumentForTokenAPI = async (certificateBody, token, signature, signingDate, photo) => {
+export const signDocumentForTokenAPI = async (certificateBody, token, signature, signingDate, photo, expectNoContent = false) => {
     const body = {
         ...createBodyForToken(certificateBody, token, signingDate, photo),
         "signatureValue": signature
@@ -236,7 +243,7 @@ export const signDocumentForTokenAPI = async (certificateBody, token, signature,
             'Content-Type': 'application/json'
         },
     })
-        .then(jsonHandler)
+        .then(expectNoContent?noContentHandler:jsonHandler)
 }
 /**
  * API request to get document metadata by token, to set filename
