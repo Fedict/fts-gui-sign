@@ -97,7 +97,7 @@
   "signing.autodownload": "Dokument nach Unterschrift herunterladen.",
   "signing.loading.title": "Dokument unterschreiben",
   "signing.pininput.button.sign": "Unterschreiben mit eID",
-  "signing.pininput.text": "<b>Geben Sie Ihren PIN ein</b>und klicken Sie <b>{signingPininputButtonSign}</b>, um das Dokument zu signieren. ",
+  "signing.pininput.text": "<b>Geben Sie Ihren PIN ein</b> und klicken Sie <b>{signingButton}</b>, um das Dokument zu signieren. ",
   "signing.pininput.textCommonName": "Geben Sie die PIN für {commonName} ein",
   "signing.pininput.title": "PIN eingeben",
   "signing.presign.text": "<b>Bitte geben Sie die PIN </b> für {certificateName} ein, wenn Sie dazu aufgefordert werden und drücken Sie OK, um das Dokument zu unterschreiben.",
