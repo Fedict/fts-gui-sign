@@ -152,7 +152,6 @@ describe("SignErrorHandleActions", () => {
         const errorMessagesTests = [
             [errorStatuses.pin_1_attempt_left],
             [errorStatuses.pin_2_attempts_left],
-            [errorStatuses.pin_3_attempts_left],
             [errorStatuses.pin_too_long],
             [errorStatuses.pin_length],
             [errorStatuses.pin_too_short],
@@ -239,16 +238,6 @@ describe("SignErrorHandleActions", () => {
             handlePinErrorEID(errorMessage)(mockDispatch1)
 
             expect(mockDispatch2).toBeCalledWith({ type: PIN_ERROR_SET_ERROR, payload: pinErrorText.pin_2_attempts_left })
-        })
-
-        test('handlePinErrorEID error.message errorStatuses.pin_3_attempts_left show pinerror pinErrorText.pin_3_attempts_left ', () => {
-            const mockDispatch2 = jest.fn()
-            const mockDispatch1 = jest.fn(val => { val(mockDispatch2) })
-
-            const errorMessage = { message: errorStatuses.pin_3_attempts_left }
-            handlePinErrorEID(errorMessage)(mockDispatch1)
-
-            expect(mockDispatch2).toBeCalledWith({ type: PIN_ERROR_SET_ERROR, payload: pinErrorText.pin_3_attempts_left })
         })
 
         test('handlePinErrorEID error.message errorStatuses.pin_too_long show pinerror pinErrorText.pin_too_long ', () => {

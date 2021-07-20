@@ -28,7 +28,6 @@ export const errorStatuses = {
     pin_too_short: "pin_too_short",
     pin_length: "pin_length",
     pin_too_long: "pin_too_long",
-    pin_3_attempts_left: "pin_3_attempts_left",
     pin_2_attempts_left: "pin_2_attempts_left",
     pin_1_attempt_left: "pin_1_attempt_left",
     card_blocked: "card_blocked",
@@ -106,7 +105,6 @@ export const handleErrorEID = (error, isInSession, token, callback) => (dispatch
             break
         case errorStatuses.pin_1_attempt_left:
         case errorStatuses.pin_2_attempts_left:
-        case errorStatuses.pin_3_attempts_left:
         case errorStatuses.pin_too_long:
         case errorStatuses.pin_length:
         case errorStatuses.pin_too_short:
@@ -164,7 +162,6 @@ export const pinErrorText = defineMessages({
     pin_too_short: {id : 'pin_too_short', defaultMessage : "PIN is to short"},
     pin_length: {id : 'pin_length', defaultMessage : "PIN doesn't have the correct length"},
     pin_too_long: {id : 'pin_too_long', defaultMessage : "PIN is too long"},
-    pin_3_attempts_left: {id : 'pin_3_attempts_left', defaultMessage : "PIN is incorrect :  3 attempts remaining"},
     pin_2_attempts_left: {id : 'pin_2_attempts_left', defaultMessage : "PIN is incorrect : 2 attempts remaining"},
     pin_1_attempt_left: {id : 'pin_1_attempt_left', defaultMessage : "PIN is incorrect : 1 attempt remaining"},
     pin_timeout: {id : 'pin_timeout', defaultMessage : "entering the PIN took too long."}
