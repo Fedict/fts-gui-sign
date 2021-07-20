@@ -77,7 +77,7 @@ export class SuccesContainerForToken extends React.Component {
                 <div className="form-group">
                     {disallowSignedDownloads?
                         false && <FormattedMessage id="succes.signed.downloadNotAllowed"
-                                          defaultMessage="<b>Your document has been successfully signed</b>"
+                                          defaultMessage=""
                                           values={{b : boldedText}}
                         />
                     :
