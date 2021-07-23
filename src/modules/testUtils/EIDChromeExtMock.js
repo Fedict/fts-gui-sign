@@ -1,6 +1,6 @@
 import {sleep} from "../utils/helper";
 
-const readerType = process.env.NODE_ENV === 'development'?"standard":"standard";
+const readerType = process.env.NODE_ENV === 'development'?"pinpad":"standard";
 
 export class EIDChromeExtMock {
     userCertificates =
@@ -54,7 +54,7 @@ export class EIDChromeExtMock {
     }
 
     sign(lang, mac, cert, algo, digest, pin){
-        return sleep(500).then(() => {
+        return sleep(5000).then(() => {
             if(process.env.NODE_ENV === 'development'){
                 if(window.confirm('Confirming the signature of the document, press yes for happy flow, no for pin input error')){
                     return (this.signature)

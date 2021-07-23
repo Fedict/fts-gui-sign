@@ -2,6 +2,7 @@ import {sendLogInfoIgnoreResult} from "../communication/communication";
 import {WIZARD_STATE_MESSAGE, WIZARD_STATE_PIN_INPUT, WIZARD_STATE_PINPAD_ERROR} from "./WizardConstants";
 
 export const WIZARD_CHANGE_STATE = "WIZARD_CHANGE_STATE"
+export const WIZARD_CHANGE_AUTO_DOWNLOAD_OPTION = "WIZARD_CHANGE_AUTO_DOWNLOAD_OPTION"
 export const navigateToStep = (route) => {
     return [
         doSendLogMessageChangeState(route),
@@ -50,4 +51,20 @@ export const doSendLogMessageChangeState = (route) => {
             sendLogInfoIgnoreResult('UI - CHANGE_SCREEN - ' + route + extra, state.tokenFile.token);
         }
     }
+}
+
+export const doSendLogMessageChangeOptionAutoDownloadDocument = (checked) => {
+    return (dispatch, getState) => {
+        const state = getState();
+        if(state && state.tokenFile) {
+            sendLogInfoIgnoreResult('UI - CHANGE_AUTO_DOWNLOAD_OPTION - ' + checked, state.tokenFile.token);
+        }
+    }
+}
+
+export const changeOptionAutoDownloadDocument = (checked) => {
+    return [
+        doSendLogMessageChangeOptionAutoDownloadDocument(checked),
+        { type: WIZARD_CHANGE_AUTO_DOWNLOAD_OPTION, payload: checked }
+    ]
 }

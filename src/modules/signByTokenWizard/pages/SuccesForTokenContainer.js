@@ -6,6 +6,7 @@ import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
 import {sendLogInfo, sendLogInfoIgnoreResult} from "../../communication/communication";
 import {doWithToken} from "../../utils/helper";
 import {Ticker} from "../../components/Ticker/Ticker";
+import {boldedText} from "../../utils/reactIntlUtils";
 
 const messages = defineMessages({
     title : {
@@ -25,12 +26,13 @@ const messages = defineMessages({
 export class SuccesContainerForToken extends React.Component {
 
     downloadFile() {
-        const { uploadFile, token } = this.props
+        const { uploadFile, token, autoDownloadDocument } = this.props
 
         if (uploadFile
             && uploadFile.downloadFile
             && uploadFile.downloadFile.name
-            && uploadFile.downloadFile.bytes) {
+            && uploadFile.downloadFile.bytes
+        ) {
 
             if (window.navigator.msSaveBlob) {
                 const blobData = getBlobFromBase64(uploadFile.downloadFile.bytes);
@@ -47,12 +49,15 @@ export class SuccesContainerForToken extends React.Component {
                         sendLogInfoIgnoreResult('UI - DOWNLOAD_PRESSED', token);
                     });
                 }
+
                 downloadLink.click();
             }
         }
     }
     componentDidMount() {
-        this.downloadFile()
+        if(this.props.autoDownloadDocument) {
+            this.downloadFile()
+        }
     }
 
     render() {
@@ -69,7 +74,17 @@ export class SuccesContainerForToken extends React.Component {
                 <div className="form-group">
 
                     <p>
-                        <FormattedMessage id="succes.text" defaultMessage="Your document will be automatically downloaded. If this is not the case, you can start the download manually" />
+                        {this.props.autoDownloadDocument ?
+                            <FormattedMessage id="succes.autodownload"
+                                              defaultMessage="Your document will be automatically downloaded. If this is not the case, you can start the download manually"
+                                              values={{b : boldedText, newLine : <br/>}}
+                            />
+                            :
+                            <FormattedMessage id="succes.text"
+                                              defaultMessage="<b>Your document has been succesfully signed</b>{newLine}"
+                                              values={{b : boldedText, newLine : <br/>}}
+                            />
+                        }
                     </p>
                     <p>
                         <button
@@ -79,9 +94,12 @@ export class SuccesContainerForToken extends React.Component {
                             <FormattedMessage id="succes.button.download" defaultMessage="Download document"/>
                         </button>
                     </p>
-                    <p>
-                        <Ticker autoClickNextTimeout={10} onTimeout={() => nextButtonClicked(redirectUrl)} redirectMessageDescriptor={messages.redirectMessage}/>
-                    </p>
+                    {this.props.autoDownloadDocument &&
+                        <p>
+                            <Ticker autoClickNextTimeout={10} onTimeout={() => nextButtonClicked(redirectUrl)}
+                                    redirectMessageDescriptor={messages.redirectMessage}/>
+                        </p>
+                    }
                 </div>
             </CardContainer>
         )
@@ -92,7 +110,8 @@ const mapStateToProps = (state) => {
     return (state) => ({
         uploadFile: state.uploadFile,
         redirectUrl : state.tokenFile.redirectUrl,
-        token : state.tokenFile.token
+        token : state.tokenFile.token,
+        autoDownloadDocument : state.wizard.autoDownloadDocument !== false
     })
 }
 const mapDispatchToProps = (dispatch) => {

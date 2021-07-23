@@ -3,12 +3,13 @@ import React, {useState} from 'react'
 import { connect } from 'react-redux';
 import { CardContainer } from '../../components/Card/CardContainer';
 import { sign, resetWizard } from '../actions/WizardLogicActions'
-import { navigateToStep } from '../../wizard/WizardActions';
+import {navigateToStep} from '../../wizard/WizardActions';
 import { WIZARD_STATE_SIGNING_PRESIGN_LOADING } from '../../wizard/WizardConstants';
 import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
 import {definedMessages} from "../../i18n/translations";
 import {defaults} from "../../utils/helper";
 import {boldedText} from "../../utils/reactIntlUtils";
+import ChangeAutoDownloadOption from "../../components/ChangeAutoDownloadOption/ChangeAutoDownloadOption";
 
 const messages = defineMessages({
     title: {
@@ -28,8 +29,7 @@ export class PinInputContainer extends React.Component {
 
         this.state = {
             pin: "",
-            indexCursor : 0,
-            checked : true
+            indexCursor : 0
         }
 
         this.onKeyUp = this.onKeyUp.bind(this)
@@ -57,6 +57,7 @@ export class PinInputContainer extends React.Component {
         //console.log(e)
         let pincode = defaults(this.state.pin, "") + "";
         let indexCursor = this.state.indexCursor;
+        let stopEventPropagation = true;
         if (e.keyCode === 13) { //Enter
             if (pincode.length >= 4) {
                 this.handleSubmit()
@@ -77,6 +78,11 @@ export class PinInputContainer extends React.Component {
                 this.setState({ pin: pincode, indexCursor : indexCursor + 1 })
             }
         } else {
+            stopEventPropagation = false;
+        }
+        if(stopEventPropagation){
+            e.stopPropagation();
+            e.preventDefault();
         }
 
     }
@@ -84,10 +90,6 @@ export class PinInputContainer extends React.Component {
     onchange(e) {
         const pin = e.target.value
         this.setState({ pin: pin })
-    }
-
-    setChecked(checked){
-        this.setState({ checked })
     }
 
     handleSubmit() {
@@ -131,10 +133,7 @@ export class PinInputContainer extends React.Component {
                                 </div>
                             </div>)
                         : null}
-                    <p className="form-check">
-                        <input type="checkbox" onChange={(e) => {this.setChecked(e.target.checked)}} className="form-check-input" id="downloadDocument" value={checked} defaultChecked={checked}/>
-                        <label className="form-check-label" htmlFor="downloadDocument"><FormattedMessage id="signing.autodownload" defaultMessage="Download document after signing"/></label>
-                    </p>
+                    <ChangeAutoDownloadOption />
                     <div className="form-inline">
                         <div
                             className="form-control"

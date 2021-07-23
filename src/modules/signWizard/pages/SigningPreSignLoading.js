@@ -1,10 +1,12 @@
-import React from "react"
+import React, {Fragment} from "react"
 import { CardLoading } from "../../components/Card/CardLoading"
 import { resetWizard } from "../actions/WizardLogicActions"
 import { connect } from "react-redux"
 import {definedMessages} from "../../i18n/translations";
 import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
 import {getIsPinPadReader} from "../reducers/CertificateReducer";
+import ChangeAutoDownloadOption from "../../components/ChangeAutoDownloadOption/ChangeAutoDownloadOption";
+import {boldedText} from "../../utils/reactIntlUtils";
 
 
 const messages = defineMessages({
@@ -31,11 +33,13 @@ export const SigningPreSignLoading = ({ certificate, resetWizard, intl }) => {
         >
             {(isPinPadReader)
                 ? (
-                    <div>
-                        <div className="alert alert-info">
-                            <FormattedMessage id="signing.presign.text" defaultMessage="Please enter the PIN {certificateName} when prompted" values={{certificateName}} />
-                        </div>
+                    <div style={{textAlign:'left'}}>
+                        <p>
+                            <FormattedMessage id="signing.presign.text" defaultMessage="Please enter the PIN {certificateName} when prompted" values={{certificateName, b : boldedText, newLine : <br/>}} />
+                        </p>
+                        <ChangeAutoDownloadOption />
                     </div>
+
                 )
                 : null}
         </CardLoading>
