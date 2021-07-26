@@ -105,13 +105,10 @@ export class SuccesContainerForToken extends React.Component {
                             </p>
                         </Fragment>
                     }
-
-                    {(this.props.autoDownloadDocument || disallowSignedDownloads) &&
-                        <p>
-                            <Ticker autoClickNextTimeout={disallowSignedDownloads?3:10} onTimeout={() => nextButtonClicked(redirectUrl)}
-                                    redirectMessageDescriptor={messages.redirectMessage}/>
-                        </p>
-                    }
+                    <p>
+                        <Ticker autoClickNextTimeout={3} onTimeout={() => nextButtonClicked(redirectUrl)}
+                                redirectMessageDescriptor={messages.redirectMessage}/>
+                    </p>
                 </div>
             </CardContainer>
         )
