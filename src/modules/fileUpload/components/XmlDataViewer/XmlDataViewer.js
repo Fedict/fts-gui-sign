@@ -52,7 +52,7 @@ const XmlDataViewer = (props) => {
                 setPreviewError(true)
             })
         }catch (e){
-            console.log(e);
+            //console.log(e);
             setPreviewError(true);
         }
 

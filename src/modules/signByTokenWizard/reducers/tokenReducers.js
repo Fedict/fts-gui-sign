@@ -26,7 +26,8 @@ const TokenReducer = (state = initialState, action) => {
                 isXml : action.payload.isXml,
                 fileName : action.payload.fileName,
                 xsltUrl : defaults(action.payload.xsltUrl, state.xsltUrl),
-                readPhoto : action.payload.readPhoto
+                readPhoto : action.payload.readPhoto,
+                disallowSignedDownloads : action.payload.disallowSignedDownloads
             }
         }
         case STORE_RESET:

@@ -5,9 +5,11 @@
   "homepage": "/",
   "dependencies": {
     "@testing-library/jest-dom": "4.2.4",
+    "abortcontroller-polyfill": "^1.7.3",
     "bootstrap": "4.4.1",
     "bootstrap-icons": "^1.5.0",
     "bs-stepper": "^1.7.0",
+    "csvreader": "^1.0.4",
     "immutable": "^4.0.0-rc.12",
     "jquery": "3.5.1",
     "moment": "^2.29.1",
@@ -17,6 +19,7 @@
     "prop-types": "15.7.2",
     "react": "16.13.0",
     "react-app-polyfill": "1.0.6",
+    "react-bootstrap": "^1.6.1",
     "react-dom": "16.13.0",
     "react-intl": "3.12.1",
     "react-redux": "7.2.0",
@@ -60,10 +63,11 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/dom": "^8.1.0",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "@types/fetch-mock": "^7.3.3",
-    "@types/jest": "^25.1.4",
+    "@types/jest": "^25.2.3",
     "csv-writer": "^1.6.0",
     "extract-react-intl-messages": "^4.1.1",
     "fetch-mock": "^9.11.0",

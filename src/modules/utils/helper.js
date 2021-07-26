@@ -20,7 +20,15 @@ export const createDelayedAction = (action, timeout) =>{
 }
 
 export function sleep (time) {
-	return new Promise((resolve) => setTimeout(resolve, time));
+	return new Promise((resolve, reject) => {
+		setTimeout(() => {
+			try{
+				resolve();
+			}catch (e){
+				reject(e);
+			}
+		}, time)
+	});
 }
 
 export const setCookie = (cname, cvalue) => {
@@ -96,7 +104,15 @@ export const doWithToken = (actionFunction) => {
 			actionFunction(state.tokenFile.token)
 		}else{
 			//token not defined, what else should we do?
-			actionFunction();
+			actionFunction(undefined);
 		}
+	}
+}
+
+export const isInIframe = () => {
+	try {
+		return window.self !== window.top;
+	} catch (e) {
+		return true;
 	}
 }

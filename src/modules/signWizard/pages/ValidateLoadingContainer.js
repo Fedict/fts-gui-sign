@@ -2,7 +2,7 @@ import React from 'react'
 import { CardLoading } from '../../components/Card/CardLoading'
 import { connect } from 'react-redux'
 import { validateCertificates, resetWizard } from "../actions/WizardLogicActions"
-import {injectIntl} from "react-intl";
+import {FormattedMessage, injectIntl} from "react-intl";
 import {messages} from "./CertificateValidateChainContainer";
 import {definedMessages} from "../../i18n/translations";
 
@@ -21,7 +21,7 @@ export class ValidateLoadingContainer extends React.Component {
                     cancelButtonText={intl.formatMessage(definedMessages.cancel)}
                     onClickCancel={() => { resetWizard() }}
                 >
-
+                    <FormattedMessage id="validate.certificate.info" defaultMessage="The certificate is being validated, this operation can take some time."/>
                 </CardLoading>
           
         )

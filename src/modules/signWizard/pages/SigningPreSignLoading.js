@@ -1,12 +1,14 @@
 import React, {Fragment} from "react"
 import { CardLoading } from "../../components/Card/CardLoading"
-import { resetWizard } from "../actions/WizardLogicActions"
+import {navigateToSign, resetWizard} from "../actions/WizardLogicActions"
 import { connect } from "react-redux"
 import {definedMessages} from "../../i18n/translations";
 import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
 import {getIsPinPadReader} from "../reducers/CertificateReducer";
 import ChangeAutoDownloadOption from "../../components/ChangeAutoDownloadOption/ChangeAutoDownloadOption";
 import {boldedText} from "../../utils/reactIntlUtils";
+import {CardContainer} from "../../components/Card/CardContainer";
+import {LoadingSpinner} from "../../components/LoadingSpinner/LoadingSpinner";
 
 
 const messages = defineMessages({
@@ -16,7 +18,7 @@ const messages = defineMessages({
     }
 })
 
-export const SigningPreSignLoading = ({ certificate, resetWizard, intl }) => {
+export const SigningPreSignLoading = ({ certificate, resetWizard, intl, pinError, navigateToSign }) => {
 
     const isPinPadReader = getIsPinPadReader(certificate)
 
@@ -26,10 +28,13 @@ export const SigningPreSignLoading = ({ certificate, resetWizard, intl }) => {
         ? " for " + certificate.certificateSelected.commonName + " "
         : ""
     return (
-        <CardLoading title={intl.formatMessage(messages.title)}
+        <CardContainer title={intl.formatMessage(messages.title)}
             hasCancelButton
             cancelButtonText={intl.formatMessage(definedMessages.cancel)}
             onClickCancel={() => { resetWizard() }}
+            hasNextButton={pinError && pinError.message !== undefined}
+            nextButtonText={intl.formatMessage(definedMessages.retry)}
+            onClickNext={() => navigateToSign()}
         >
             {(isPinPadReader)
                 ? (
@@ -38,11 +43,19 @@ export const SigningPreSignLoading = ({ certificate, resetWizard, intl }) => {
                             <FormattedMessage id="signing.presign.text" defaultMessage="Please enter the PIN {certificateName} when prompted" values={{certificateName, b : boldedText, newLine : <br/>}} />
                         </p>
                         <ChangeAutoDownloadOption />
+                        {(pinError && pinError.message)
+                            ? (
+                                <div className="text-center">
+                                    <div className="alert alert-danger">
+                                        {pinError.message.id?intl.formatMessage(pinError.message):pinError.message}
+                                    </div>
+                                </div>)
+                            : <div className="text-center"><LoadingSpinner /></div>}
                     </div>
 
                 )
-                : null}
-        </CardLoading>
+                : <div className="text-center"><LoadingSpinner /></div>}
+        </CardContainer>
     )
 }
 
@@ -55,7 +68,8 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = ({
-    resetWizard
+    resetWizard,
+    navigateToSign
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(SigningPreSignLoading))

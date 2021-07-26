@@ -15,6 +15,9 @@ export const OS = {
  * @return {string} Returns a string with a value out of os enum
  */
 export const getOS = () => {
+    if(true && process.env.NODE_ENV === 'development'){
+        return OS.LINUX
+    }
     if (navigator.appVersion.indexOf("Win") !== -1) {
         return OS.WINDOWS
     }

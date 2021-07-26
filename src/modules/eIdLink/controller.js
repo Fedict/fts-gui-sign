@@ -7,7 +7,7 @@ export const controller = (() => {
 
     const initSignStrategy = () => {
         if (isChromeExtensionDetected()) {
-            console.log("ChromeExt - Chrome extension detected");
+            //console.log("ChromeExt - Chrome extension detected");
             return getEIDLinkExtensionStrategy();
         }
         if (isActiveXControlDetected()) {
@@ -35,7 +35,7 @@ export const controller = (() => {
      * function that creates a new strategy object and retuns the new object
      */
     const getNewInstance = () => {
-        console.log("get New instance")
+        //console.log("get New instance")
         strategy = initSignStrategy()
         return strategy
     }

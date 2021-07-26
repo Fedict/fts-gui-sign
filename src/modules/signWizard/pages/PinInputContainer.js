@@ -121,18 +121,13 @@ export class PinInputContainer extends React.Component {
                             : <FormattedMessage
                                 id="signing.pininput.text"
                                 defaultMessage="Enter the PIN"
-                                values={{b: boldedText, newLine : <br/>}}
+                                values={{b: boldedText,
+                                    newLine : <br/>,
+                                    signingButton : intl.formatMessage(messages.next)
+                                }}
                             />
                         }
                     </p>
-                    {(pinError && pinError.message)
-                        ? (
-                            <div className="text-center">
-                                <div className="alert alert-danger">
-                                    {pinError.message.id?intl.formatMessage(pinError.message):pinError.message}
-                                </div>
-                            </div>)
-                        : null}
                     <ChangeAutoDownloadOption />
                     <div className="form-inline">
                         <div
@@ -144,6 +139,15 @@ export class PinInputContainer extends React.Component {
 
                         <button className={"btn btn-primary"} onClick={() => { this.handleSubmit() }} id="button_next"><FormattedMessage id={"signing.pininput.button.sign"} defaultMessage={"Sign with eId"}/></button>
                     </div>
+
+                    {(pinError && pinError.message)
+                        ? (
+                            <div className="text-center" style={{marginTop : 10}}>
+                                <div className="alert alert-danger">
+                                    {pinError.message.id?intl.formatMessage(pinError.message):pinError.message}
+                                </div>
+                            </div>)
+                        : null}
                 </div>
             </CardContainer>
         )

@@ -22,12 +22,12 @@ import {
     selectCertificate
 } from "./CertificateActions"
 import {
-    getDataToSignAPI, sendLogInfo,
+    getDataToSignAPI, sendLogInfo, sendLogInfoIgnoreResult,
     signDocumentAPI, signDocumentForTokenAPI,
     validateCertificatesAPI
 } from "../../communication/communication"
 import { setDigest } from "./DigestActions"
-import { handleErrorEID, handlePinErrorEID } from "./SignErrorHandleActions"
+import {handleErrorEID, handlePinErrorEID, resetPinError} from "./SignErrorHandleActions"
 import {setDateSigning, setSignature} from "./SignatureActions"
 import { setDownloadFile } from "../../fileUpload/actions/UploadFileActions"
 import {
@@ -48,7 +48,7 @@ import { INCORECT_FLOW_ID } from '../../controlIds/flowId/FlowIdHelpers'
 import {errorMessages} from "../../i18n/translations";
 import {redirectErrorCodes} from "../../../const";
 import moment from 'moment'
-import {defaults, doWithToken, parseErrorMessage} from "../../utils/helper";
+import {defaults, parseErrorMessage} from "../../utils/helper";
 import {ID_FLAGS} from "../../eIdLink/strategies/createEIDLinkExtensionStrategy";
 
 //----------------------------------
@@ -288,6 +288,52 @@ export const getCertificates = () => (dispatch, getStore) => {
      */
 }
 
+
+/**
+ * function (action) to call the eIDLink getCertificate function
+ * - saves certificate list in redux store
+ * - if no certificates are found --> shows MessageCertificatesNotFound error
+ * - if certificates are found --> navigates to certificates validation loading page (WIZARD_STATE_VALIDATE_LOADING)
+ */
+export const getCertificatesWithCallback = (callback) => (dispatch, getStore) => {
+
+    let eIDLink = controller.getInstance()
+
+    const requestId = dispatch(createRequestId(10000, requestTimeoutFunction))
+    const flowId = getStore().controlId.flowId
+    const token = getStore().tokenFile && getStore().tokenFile.token
+
+    eIDLink.getIdData(
+        'en',
+        "0123456789ABCDEF0123456789ABCDEF",
+        ID_FLAGS.ID_FLAG_INCLUDE_SIGN_CERT |
+        ID_FLAGS.ID_FLAG_INCLUDE_PHOTO |
+        ID_FLAGS.ID_FLAG_INCLUDE_INTEGRITY |
+        ID_FLAGS.ID_FLAG_INCLUDE_ID
+    )
+        .then(handleFlowIdError(flowId, getStore))
+        .then(handleRequestIdError(requestId, dispatch, getStore))
+        .then((response) => {
+            const certificateList = getCertificatesFromIdResponse(response)
+
+            dispatch(saveCertificateList(certificateList))
+
+            if(typeof callback === 'function'){
+                if (certificateList.length === 0) {
+                    callback(MessageCertificatesNotFound)
+                } else {
+                    callback(true);
+                }
+            }
+        })
+        .catch((err) => {
+            if (err !== INCORECT_REQUEST_ID && err !== INCORECT_FLOW_ID) {
+                dispatch(removeRequestId(requestId))
+                dispatch(handleErrorEID(err, false, token, callback))
+            }
+        })
+}
+
 /**
  * funtion (action) does a validateCertificatesAPI request with multiple certificates from redux store
  * - only checks the keyusage
@@ -343,7 +389,7 @@ export const validateCertificates = () => (dispatch, getStore) => {
                 dispatch(saveCertificateList(newList))
 
                 if (newList.length <= 0) {
-                    console.log('MessageCertificatesNotFound', val)
+                    //console.log('MessageCertificatesNotFound', val)
                     dispatch(showErrorMessage(MessageCertificatesNotFound))
                 }
                 else {
@@ -358,7 +404,7 @@ export const validateCertificates = () => (dispatch, getStore) => {
             })
             .catch((err) => {
                 if (err !== INCORECT_FLOW_ID) {
-                    console.log('Failed to validate certificate', err)
+                    //console.log('Failed to validate certificate', err)
                     dispatch(showErrorMessage(MessageCertificatesNotFound))
                 }
 
@@ -436,12 +482,12 @@ export const validateCertificate = (certificateObject) => (dispatch, getStore) =
 
     if (certificateObject.APIBody) {
         if(window.configData && defaults(window.configData.skipCertificateChainValidate, true)){
-            console.log('skip validateCertificate', certificateObject)
+            //console.log('skip validateCertificate', certificateObject)
             dispatch(selectCertificate(certificateObject))
             dispatch(navigateToStep(WIZARD_STATE_DIGEST_LOADING))
             return;
         }
-        console.log('validateCertificate', certificateObject)
+        //console.log('validateCertificate', certificateObject)
         const APIBody = [{
             ...certificateObject.APIBody,
             "expectedKeyUsage": "NON_REPUDIATION"
@@ -536,6 +582,7 @@ export const navigateToSign = () => (dispatch, getStore) => {
         && certificate.certificateSelected.readerType) {
 
         if (certificate.certificateSelected.readerType === "pinpad") {
+            dispatch(resetPinError())
             dispatch(navigateToStep(WIZARD_STATE_SIGNING_PRESIGN_LOADING))
             dispatch(sign(null))
         }
@@ -580,6 +627,8 @@ export const navigateToPinError = () => (dispatch, getStore) => {
  */
 export const sign = (pin) => (dispatch, getStore) => {
     const { certificate, digest } = getStore()
+
+    dispatch(resetPinError());
 
     if (certificate
         && certificate.certificateSelected
@@ -657,11 +706,14 @@ export const signDocument = () => (dispatch, getStore) => {
                 tokenFile.token,
                 signature.signature,
                 signature.signingDate,
-                photo)
+                photo,
+                tokenFile.disallowSignedDownloads)
                 .then(handleFlowIdError(flowId, getStore))
                 .then((resp) => {
                     //console.log('signDocumentForTokenAPI response', resp)
-                    if (resp
+                    if(tokenFile.disallowSignedDownloads){
+                        dispatch(navigateToStep(WIZARD_STATE_SUCCES))
+                    }else if (resp
                         && resp.name
                         && resp.bytes) {
                         dispatch(setDownloadFile(resp))
@@ -770,11 +822,17 @@ export const resetWizard = () => (dispatch, getStore) => {
             url.searchParams.set('details', wizard.state);
         }
     }
-    sendLogInfo('UI - CANCEL_PRESSED - ' + url.toString(), () => {
+    sendLogInfo('UI - CANCEL_BUTTON CLICKED - ' + url.toString(), () => {
         dispatch(resetStore())
         dispatch(setNewFlowId());
         window.location.href = url.toString();
     }, tokenFile?tokenFile.token:undefined);
 
 
+}
+
+export const doSendLogInfo = (message) => (dispatch, getStore) => {
+    console.log('doSendLogInfo',message)
+    const {tokenFile} = getStore();
+    sendLogInfoIgnoreResult(message, tokenFile && tokenFile.token?tokenFile.token:undefined);
 }

@@ -1,6 +1,7 @@
 import React from "react"
 import { CardContainer } from "./CardContainer"
 import {FormattedMessage} from "react-intl";
+import {LoadingSpinner} from "../LoadingSpinner/LoadingSpinner";
 
 /**
  * Card with cancel button and a spinner
@@ -28,9 +29,7 @@ export const CardLoading = (
             onClickCancel={onClickCancel} >
             <div className="text-center">
                 {children}
-                <div className="spinner-border text-primary " role="status">
-                    <span className="sr-only"><FormattedMessage id="loading" defaultMessage="Loading..." /></span>
-                </div>
+                <LoadingSpinner />
             </div>
         </CardContainer>
     )

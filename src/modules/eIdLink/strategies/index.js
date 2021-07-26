@@ -37,7 +37,7 @@ export const getDefaultStrategy = () => {
  * - stop
  */
 export const getActiveXStrategy = () => {
-    console.log("create activeX Strategy")
+    //console.log("create activeX Strategy")
     var strategy = createActiveXEIDLinkStrategy()
     return strategy
 }

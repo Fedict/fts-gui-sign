@@ -79,7 +79,7 @@ export const CardContainer = (
                                     ? (
                                         <Fragment>
                                             <button
-                                            className="btn btn-primary float-right"
+                                            className={"float-right btn " + (nextButtonIsDisabled?"btn-secondary":"btn-primary")}
                                             disabled={nextButtonIsDisabled}
                                             id="button_next"
                                             onClick={(e) => { if (onClickNext) { onClickNext(e) } }}

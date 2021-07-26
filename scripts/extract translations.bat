@@ -10,13 +10,14 @@ xcopy ".\src\translations\en.json" ".\src\translations\original_de.json" /y
 call npx extract-messages -l=en,fr,nl,de -o src\translations -d en --flat true src\**\*.js
 
 
-
+pause 
 cd scripts
 node mergeJSONFiles.js ..\src\translations\en.json ..\src\translations\original_en.json ..\src\translations\en.json overwrite
 node mergeJSONFiles.js ..\src\translations\fr.json ..\src\translations\original_fr.json ..\src\translations\fr.json overwrite
 node mergeJSONFiles.js ..\src\translations\nl.json ..\src\translations\original_nl.json ..\src\translations\nl.json overwrite
 
 node exportTranslationFiles.js
+pause 
 
 exit
 del ..\src\translations\original_en.json

@@ -56,7 +56,7 @@ export const transformXML = (xmlUrl, xsltUrl) => {
                     resolve(transformXMLProcessor(xmlDoc, xslDoc));
                 }
             }catch (e){
-                console.log(e);
+                //console.log(e);
             }
             reject();
         }, reject);

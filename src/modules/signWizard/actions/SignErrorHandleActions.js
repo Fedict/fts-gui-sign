@@ -28,7 +28,6 @@ export const errorStatuses = {
     pin_too_short: "pin_too_short",
     pin_length: "pin_length",
     pin_too_long: "pin_too_long",
-    pin_3_attempts_left: "pin_3_attempts_left",
     pin_2_attempts_left: "pin_2_attempts_left",
     pin_1_attempt_left: "pin_1_attempt_left",
     card_blocked: "card_blocked",
@@ -63,71 +62,84 @@ export let doReportError = (report, message, token) => (dispatch) => {
  * @param {string} error.message - errorMessage from de eID reader
  * @param {boolean} isInSession - boolean that represents is the signing proces is in progress
  */
-export const handleErrorEID = (error, isInSession, token) => (dispatch) => {
+export const handleErrorEID = (error, isInSession, token, callback) => (dispatch) => {
+    if(!callback){
+        callback = function(e){
+            dispatch(showErrorMessage(e))
+        }
+    }
     let reportError = false;
+    let message;
     switch (error.message) {
         case errorStatuses.http_status_0:
-            dispatch(showErrorMessage(Error_EID_http_status_0))
+            message = Error_EID_http_status_0;
             reportError = true;
             break;
         case errorStatuses.no_reader:
             if (isInSession) {
-                dispatch(showErrorMessage(Error_EID_no_reader_InSession))
+                message = (Error_EID_no_reader_InSession)
             }
             else {
-                dispatch(showErrorMessage(Error_EID_no_reader_NotInSession))
+                message = (Error_EID_no_reader_NotInSession)
             }
             break;
         case errorStatuses.unsupported_reader:
-            dispatch(showErrorMessage(Error_EID_unsupported_reader))
+            message = (Error_EID_unsupported_reader)
             reportError = true;
             break;
         case errorStatuses.no_card:
             if (isInSession) {
-                dispatch(showErrorMessage(Error_EID_no_card_InSession))
+                message = (Error_EID_no_card_InSession)
             }
             else {
-                dispatch(showErrorMessage(Error_EID_no_card_NotInSession))
+                message = (Error_EID_no_card_NotInSession);
             }
             break;
         case errorStatuses.card_error:
-            dispatch(showErrorMessage(Error_EID_card_error));
+            message = (Error_EID_card_error);
             reportError = true;
             break;
         case errorStatuses.signature_failed:
-            dispatch(showErrorMessage(Error_EID_signature_failed))
+            message = (Error_EID_signature_failed);
             reportError = true;
             break
         case errorStatuses.pin_1_attempt_left:
         case errorStatuses.pin_2_attempts_left:
-        case errorStatuses.pin_3_attempts_left:
         case errorStatuses.pin_too_long:
         case errorStatuses.pin_length:
         case errorStatuses.pin_too_short:
         case errorStatuses.pin_incorrect:
         case errorStatuses.pin_timeout:
-            dispatch(showErrorMessage(ErrorGeneral))
+            message = (ErrorGeneral)
             break;
         case errorStatuses.card_blocked:
-            dispatch(showErrorMessage(Error_EID_card_blocked))
+            message = (Error_EID_card_blocked)
             break;
         case errorStatuses.cancel:
-            dispatch(resetWizard())
+            dispatch(resetWizard()) //TODO
             break;
         default:
-            dispatch(showErrorMessage({
+            message = {
                 ...ErrorGeneral,
                 err : 'BEID_CONNECT_ERROR'
-            }))
+            }
             reportError = true;
             break;
     }
     if(reportError && (error.report || error.message)){
-        console.log('calling doReportError', error)
+        //console.log('calling doReportError', error)
         dispatch(doReportError(error.report, error.message, token));
+    }
+    if(message){
+        callback(message);
     }
 }
 
+export const STORE_RESET_PIN_ERROR = "STORE_RESET_PIN_ERROR"
+
+export const resetPinError = () => (dispatch) => {
+    dispatch({ type: STORE_RESET_PIN_ERROR })
+}
 /**
  * action type to change the pin error message
  */
@@ -150,7 +162,6 @@ export const pinErrorText = defineMessages({
     pin_too_short: {id : 'pin_too_short', defaultMessage : "PIN is to short"},
     pin_length: {id : 'pin_length', defaultMessage : "PIN doesn't have the correct length"},
     pin_too_long: {id : 'pin_too_long', defaultMessage : "PIN is too long"},
-    pin_3_attempts_left: {id : 'pin_3_attempts_left', defaultMessage : "PIN is incorrect :  3 attempts remaining"},
     pin_2_attempts_left: {id : 'pin_2_attempts_left', defaultMessage : "PIN is incorrect : 2 attempts remaining"},
     pin_1_attempt_left: {id : 'pin_1_attempt_left', defaultMessage : "PIN is incorrect : 1 attempt remaining"},
     pin_timeout: {id : 'pin_timeout', defaultMessage : "entering the PIN took too long."}
