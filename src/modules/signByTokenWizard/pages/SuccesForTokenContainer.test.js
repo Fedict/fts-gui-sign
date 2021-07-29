@@ -12,12 +12,4 @@ describe("SuccesForTokenContainer", () => {
 
         expect(getByRole('button', {name : /Download document/i})).toBeInTheDocument();
     })
-    test("Has next button & can click on it", done => {
-        const { getByText } = render(<SuccesContainerForTokenWithIntl nextButtonClicked={done}/>);
-
-        const buttonElement = getByText(/Close/i);
-        expect(buttonElement).toBeInTheDocument();
-        expect(buttonElement.id).toEqual("button_cancel");
-        buttonElement.click();
-    })
 })
