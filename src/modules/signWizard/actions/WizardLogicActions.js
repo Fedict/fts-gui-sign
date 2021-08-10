@@ -783,6 +783,7 @@ export const signDocument = () => (dispatch, getStore) => {
     }
 }
 
+let resetWizardClicked = false;
 /**
  * function (action) to reset the wizard
  * - clears the store
@@ -790,6 +791,11 @@ export const signDocument = () => (dispatch, getStore) => {
  * - navigates to / 
  */
 export const resetWizard = () => (dispatch, getStore) => {
+    if(resetWizardClicked){
+        //this to prevent redirecting the browser twice for example with double click
+        return;
+    }
+    resetWizardClicked = true;
     let eIDLink = controller.getInstance()
     eIDLink.stop()
     const {tokenFile, wizard, message} = getStore();
@@ -826,6 +832,7 @@ export const resetWizard = () => (dispatch, getStore) => {
         dispatch(resetStore())
         dispatch(setNewFlowId());
         window.location.href = url.toString();
+        resetWizardClicked = false;
     }, tokenFile?tokenFile.token:undefined);
 
 

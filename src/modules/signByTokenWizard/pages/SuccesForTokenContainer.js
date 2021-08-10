@@ -70,7 +70,7 @@ export class SuccesContainerForToken extends React.Component {
 
             <CardContainer
                 title={intl.formatMessage(messages.title)}
-                hasCancelButton
+                hasCancelButton={false}
                 cancelButtonText={intl.formatMessage(messages.doneButton)}
                 onClickCancel={() => nextButtonClicked(redirectUrl)}
             >
