@@ -10,7 +10,7 @@ import ValidateWizardContainer from './modules/validateWizard/ValidateWizardCont
 import { browserIsAccepted } from './modules/browserDetection/BrowserDetection';
 import MessageContainer from './modules/message/MessageContainer';
 import { ErrorNotSupported } from './modules/message/MessageConstants';
-import { Footer } from './modules/footer/Footer';
+import Footer from './modules/footer/Footer';
 import StartPageContainer from './modules/startPage/StartPageContainer';
 import MainI18nWrapper from "./modules/i18n/MainI18nWrapper";
 import TokenWizardContainer from "./modules/signByTokenWizard/TokenWizardContainer";
