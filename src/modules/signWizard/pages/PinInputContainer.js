@@ -21,79 +21,8 @@ const messages = defineMessages({
         defaultMessage: "Sign with eId"
     }
 })
-/*
-export class PinInputContainer extends React.Component {
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            pin: "",
-            indexCursor : 0
-        }
-
-        this.onKeyUp = this.onKeyUp.bind(this)
-        this.handleSubmit = this.handleSubmit.bind(this)
-    }
-
-    componentDidMount() {
-        document.addEventListener("keyup", this.onKeyUp)
-    }
-
-    componentWillUnmount() {
-        document.removeEventListener("keyup", this.onKeyUp)
-    }
-
-    onKeyUp(e) {
-        if(!e.key && !e.keyCode){
-            console.log('unidentified keyEvent', e)
-            return;
-        }
-        console.log(e)
-        let pincode = defaults(this.state.pin, "") + "";
-        let indexCursor = this.state.indexCursor;
-        let stopEventPropagation = true;
-        if (e.keyCode === 13) { //Enter
-            if (pincode.length >= 4) {
-                this.handleSubmit()
-            }
-        } else if (e.keyCode === 8) { //Backspace
-            pincode = pincode.substr(0, indexCursor - 1) + pincode.substr(indexCursor)
-            this.setState({ pin: pincode, indexCursor : Math.max(indexCursor - 1, 0) })
-        }else if (e.keyCode === 46){ //Delete
-            pincode = pincode.substr(0, indexCursor) + pincode.substr(indexCursor + 1)
-            this.setState({ pin: pincode, indexCursor })
-        }else if (e.keyCode === 37){ //Left
-            this.setState({indexCursor : Math.max(0, indexCursor - 1)})
-        }else if (e.keyCode === 39){ //Right
-            this.setState({indexCursor : Math.min(pincode.length, indexCursor + 1)})
-        }else if (e.key && e.key.length === 1) {
-            if (pincode.length < 12) {
-                if(isNaN(parseInt(e.key))){
-                    console.log("The value typed is NaN");
-                    stopEventPropagation = false;
-                }else{
-                    pincode = pincode.substr(0, indexCursor) + e.key + pincode.substr(indexCursor)
-                    this.setState({ pin: pincode, indexCursor : indexCursor + 1 })
-                }
-            }
-        } else {
-            stopEventPropagation = false;
-        }
-        if(stopEventPropagation){
-            e.stopPropagation();
-            e.preventDefault();
-        }
-
-    }
-
-    onchange(e) {
-        const pin = e.target.value
-        this.setState({ pin: pin })
-    }
-*/
-
-const doLog = window.configData.BEurl === 'https://validate.ta.fts.bosa.belgium.be/signandvalidation' || window.configData.BEurl === 'http://localhost:8751/signandvalidation';
+const doLog = window.configData && (window.configData.BEurl === 'https://validate.ta.fts.bosa.belgium.be/signandvalidation' || window.configData.BEurl === 'http://localhost:8751/signandvalidation');
 let globalPin = '';
 let globalIndex = 0;
 const PinInputContainer = (props) => {

@@ -122,8 +122,8 @@ describe('TokenWizardContainer', () => {
             const inputCode = screen.getByTestId('input_code');
 
             for (let i = 1; i <= 4; i++) {
-                fireEvent.keyDown(inputCode, {key: 'A', code: 'KeyA'});
-                fireEvent.keyUp(inputCode, {key: 'A', code: 'KeyA'});
+                fireEvent.keyDown(inputCode, {key: '1', code: 'NumPad1'});
+                fireEvent.keyUp(inputCode, {key: '1', code: 'NumPad1'});
             }
 
             const signButton = screen.getByRole('button', {name: /Sign with eid/i})
@@ -238,8 +238,8 @@ describe('TokenWizardContainer', () => {
             const inputCode = screen.getByTestId('input_code');
 
             for (let i = 1; i <= 4; i++) {
-                fireEvent.keyDown(inputCode, {key: 'A', code: 'KeyA'});
-                fireEvent.keyUp(inputCode, {key: 'A', code: 'KeyA'});
+                fireEvent.keyDown(inputCode, {key: '1', code: 'NumPad1'});
+                fireEvent.keyUp(inputCode, {key: '1', code: 'NumPad1'});
             }
 
             const signButton = screen.getByRole('button', {name: /Sign with eid/i})
@@ -343,8 +343,8 @@ describe('TokenWizardContainer', () => {
             const inputCode = screen.getByTestId('input_code');
 
             for(let i = 1; i <= 4; i++){
-                fireEvent.keyDown(inputCode, { key: 'A', code: 'KeyA' });
-                fireEvent.keyUp(inputCode, { key: 'A', code: 'KeyA' });
+                fireEvent.keyDown(inputCode, { key: '0', code: 'NumPad0' });
+                fireEvent.keyUp(inputCode, { key: '0', code: 'NumPad0' });
             }
 
             const signButton = screen.getByRole('button', {name: /Sign with eid/i})
