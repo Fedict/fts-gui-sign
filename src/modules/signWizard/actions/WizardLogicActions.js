@@ -229,7 +229,7 @@ export const getCertificates = () => (dispatch, getStore) => {
 
     let eIDLink = controller.getInstance()
 
-    const requestId = dispatch(createRequestId(10000, requestTimeoutFunction))
+    const requestId = dispatch(createRequestId(30000, requestTimeoutFunction))
     const flowId = getStore().controlId.flowId
     const token = getStore().tokenFile && getStore().tokenFile.token
 
@@ -299,7 +299,7 @@ export const getCertificatesWithCallback = (callback) => (dispatch, getStore) =>
 
     let eIDLink = controller.getInstance()
 
-    const requestId = dispatch(createRequestId(10000, requestTimeoutFunction))
+    const requestId = dispatch(createRequestId(30000, requestTimeoutFunction))
     const flowId = getStore().controlId.flowId
     const token = getStore().tokenFile && getStore().tokenFile.token
 
@@ -433,7 +433,7 @@ export const validateCertificateChain = () => (dispatch, getStore) => {
         && certificate.certificateSelected.certificate) {
         const usedCertificate = certificate.certificateSelected.certificate
 
-        const requestId = dispatch(createRequestId(10000, requestTimeoutFunction))
+        const requestId = dispatch(createRequestId(15000, requestTimeoutFunction))
         const flowId = getStore().controlId.flowId
 
         eIDLink.getCertificateChain(
