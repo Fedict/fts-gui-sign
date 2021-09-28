@@ -652,7 +652,7 @@ describe("WizardLogicActions", () => {
 
             expect(mockDispatch).toBeCalledTimes(1)
             expect(RequestIdActions.createRequestId).toBeCalledTimes(1)
-            expect(RequestIdActions.createRequestId).toBeCalledWith(10000, expect.any(Function))
+            expect(RequestIdActions.createRequestId).toBeCalledWith(30000, expect.any(Function))
         })
 
         test("getCertificates success saves respons in store", async () => {
@@ -1387,7 +1387,7 @@ describe("WizardLogicActions", () => {
             validateCertificateChain()(mockDispatch, mockGetStore)
             await flushPromises()
             expect(RequestIdActions.createRequestId).toBeCalledTimes(1)
-            expect(RequestIdActions.createRequestId).toBeCalledWith(10000, requestTimeoutFunction)
+            expect(RequestIdActions.createRequestId).toBeCalledWith(15000, requestTimeoutFunction)
         })
 
         test("validateCertificateChain success calls handleFlowIdError", async () => {
