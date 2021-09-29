@@ -23,11 +23,33 @@ const messages = defineMessages({
 })
 
 const doLog = window.configData && (window.configData.BEurl === 'https://validate.ta.fts.bosa.belgium.be/signandvalidation' || window.configData.BEurl === 'http://localhost:8751/signandvalidation');
-let globalPin = '';
-let globalIndex = 0;
+
+if(!window.PinInputContainerData){
+    window.PinInputContainerData = class {
+        #pin = '';
+        constructor(){
+            this.#pin = '';
+            this.index = 0;
+        }
+        setPin(p){
+            this.#pin = p;
+        }
+        getPin() {return this.#pin;}
+        setIndex(i) {
+            this.index = i;
+        }
+        getIndex(){return this.index;}
+        reset() {
+            this.#pin = '';
+            this.index = 0;
+        }
+    }
+}
+
 const PinInputContainer = (props) => {
     const { resetWizard, pinError, certificate, intl } = props;
     let [pin, setPin] = useState('');
+    let [t, setT] = useState('');
     let [indexCursor, setIndexCursor] = useState(0);
     const pinstring = "*".repeat(pin.length);
 
@@ -37,7 +59,7 @@ const PinInputContainer = (props) => {
         sign(pin)
     }
 
-    const onKeyUp = (e) => {
+    const onKeyUp = (pinInputContainerData, e) => {
         // we need a globalVar for the onKeyUp function I think because the function is bound to the document and thus the scope
         // of the variable is a bit messed up
         if(!e.key && !e.keyCode){
@@ -47,8 +69,8 @@ const PinInputContainer = (props) => {
         if(doLog){
             console.log(e)
         }
-        let pincode = globalPin;
-        let newIndexCursor = globalIndex;
+        let pincode = pinInputContainerData.getPin();
+        let newIndexCursor = pinInputContainerData.getIndex();
         let stopEventPropagation = true;
         if (e.keyCode === 13) { //Enter
             if (pincode.length >= 4) {
@@ -84,17 +106,18 @@ const PinInputContainer = (props) => {
             setPin(pincode);
             setIndexCursor(newIndexCursor);
 
-            globalPin = pincode;
-            globalIndex = newIndexCursor;
+            pinInputContainerData.setPin(pincode);
+            pinInputContainerData.setIndex(newIndexCursor);
             if(doLog){
                 console.log('TEST --- ','pincode', pincode, 'newIndexCursor', newIndexCursor);
             }
             e.stopPropagation();
             e.preventDefault();
         }
+        setT(new Date().getTime());
     }
     useEffect(() => {
-        document.addEventListener("keyup", onKeyUp)
+        document.addEventListener("keyup", onKeyUp.bind(undefined, new window.PinInputContainerData()))
     }, [])
 
     useEffect(() => {
