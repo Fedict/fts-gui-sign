@@ -56,6 +56,9 @@ const PinInputContainer = (props) => {
     const handleSubmit = () => {
         const { navigateToStep, sign } = props
         navigateToStep(WIZARD_STATE_SIGNING_PRESIGN_LOADING)
+        if(doLog){
+            console.log('signing', pin)
+        }
         sign(pin)
     }
 
@@ -117,13 +120,21 @@ const PinInputContainer = (props) => {
         setT(new Date().getTime());
     }
     useEffect(() => {
-        document.addEventListener("keyup", onKeyUp.bind(undefined, new window.PinInputContainerData()))
+        console.log('Adding new event listener')
+        if(window.PinCodeFunction){
+            console.error('Document unmount did not happen');
+            document.removeEventListener("keyup", window.PinCodeFunction)
+        }
+        window.PinCodeFunction = onKeyUp.bind(undefined, new window.PinInputContainerData())
+        document.addEventListener("keyup", window.PinCodeFunction)
     }, [])
 
     useEffect(() => {
         return () => {
+            console.log('removing event listener')
             //wil be called on Destroy
-            document.removeEventListener("keyup", onKeyUp)
+            document.removeEventListener("keyup", window.PinCodeFunction)
+            window.PinCodeFunction = undefined;
         }
     }, [])
     useEffect(() => {

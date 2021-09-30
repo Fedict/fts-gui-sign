@@ -32,7 +32,7 @@ export const SigningPreSignLoading = ({ certificate, resetWizard, intl, pinError
             hasCancelButton
             cancelButtonText={intl.formatMessage(definedMessages.cancel)}
             onClickCancel={() => { resetWizard() }}
-            hasNextButton={pinError && pinError.message}
+            hasNextButton={pinError && pinError.message !== undefined}
             nextButtonText={intl.formatMessage(definedMessages.retry)}
             onClickNext={() => navigateToSign()}
         >
