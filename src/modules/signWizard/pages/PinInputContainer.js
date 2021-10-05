@@ -53,13 +53,15 @@ const PinInputContainer = (props) => {
     let [indexCursor, setIndexCursor] = useState(0);
     const pinstring = "*".repeat(pin.length);
 
-    const handleSubmit = () => {
+    const handleSubmit = (thePin) => {
         const { navigateToStep, sign } = props
         navigateToStep(WIZARD_STATE_SIGNING_PRESIGN_LOADING)
         if(doLog){
-            console.log('signing', pin)
+            console.log('signing', thePin)
         }
-        sign(pin)
+        if(thePin && thePin.length >= 4){
+            sign(thePin)
+        }
     }
 
     const onKeyUp = (pinInputContainerData, e) => {
@@ -77,7 +79,7 @@ const PinInputContainer = (props) => {
         let stopEventPropagation = true;
         if (e.keyCode === 13) { //Enter
             if (pincode.length >= 4) {
-                handleSubmit();
+                handleSubmit(pinInputContainerData.getPin());
             }else{
                 stopEventPropagation = false;
             }
@@ -152,7 +154,7 @@ const PinInputContainer = (props) => {
             cancelButtonText={intl.formatMessage(definedMessages.cancel)}
             onClickCancel={() => { resetWizard() }}
             nextButtonText={intl.formatMessage(messages.next)}
-            onClickNext={() => { handleSubmit() }}
+            onClickNext={() => { handleSubmit(pin) }}
             nextButtonIsDisabled={pin.length < 4}>
 
             <div className="form-group">
@@ -178,7 +180,7 @@ const PinInputContainer = (props) => {
                         style={{width:150, marginRight:30}}
                     >{pinstring.substr(0, indexCursor)}<span className="blinking-cursor">|</span>{pinstring.substr(indexCursor)}</div>
 
-                    <button className={"btn btn-primary"} onClick={() => { handleSubmit() }} id="button_next" disabled={pin.length < 4}><FormattedMessage id={"signing.pininput.button.sign"} defaultMessage={"Sign with eId"}/></button>
+                    <button className={"btn btn-primary"} onClick={() => { handleSubmit(pin) }} id="button_next" disabled={pin.length < 4}><FormattedMessage id={"signing.pininput.button.sign"} defaultMessage={"Sign with eId"}/></button>
                 </div>
 
                 {(pinError && pinError.message)
