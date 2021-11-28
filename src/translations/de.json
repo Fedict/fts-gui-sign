@@ -54,6 +54,7 @@
   "error.NO_SIGN_CERT": "Kein Signierzertifikat bereitgestellt.",
   "error.NO_TOKEN": "Erforderliches Parameter-Token nicht bereitgestellt.",
   "error.NO_TOKEN_IN_STATE": "Token nicht gefunden oder ungültig.",
+  "error.NOT_ALLOWED_TO_SIGN": "Keine Unterschriftsberechtigung",
   "error.PARSE_ERROR": "Konnte die Anfrage nicht anhandeln.",
   "error.SIGN_CERT_EXPIRED": "Das Zertifikat ist abgelaufen.",
   "error.UNKNOWN_PROFILE": "Unbekanntes Signaturprofil.",
