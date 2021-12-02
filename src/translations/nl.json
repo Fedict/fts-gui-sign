@@ -55,7 +55,7 @@
   "error.NO_SIGN_CERT": "Geen ondertekeningscertificaat verstrekt.",
   "error.NO_TOKEN": "Vereiste parameter token niet verstrekt.",
   "error.NO_TOKEN_IN_STATE": "Token niet gevonden of ongeldig.",
-  "error.NOT_ALLOWED_TO_SIGN": "Niet bevoegd om te tekenen",
+  "error.NOT_ALLOWED_TO_SIGN": "U heeft geen toestemming om dit specifiek document te ondertekenen. Contacteer de eigenaar van het document voor meer informatie.",
   "error.PARSE_ERROR": "Kon het verzoek niet verwerken.",
   "error.SIGN_CERT_EXPIRED": "Het certificaat is verlopen.",
   "error.UNKNOWN_PROFILE": "Onbekend handtekeningprofiel.",
