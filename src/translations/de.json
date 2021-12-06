@@ -85,7 +85,7 @@
   "index.title": "Signing Box",
   "index.welcome": "Willkommen",
   "index.content": "Mit dieser Anwendung können Sie Dateien elektronisch signieren und signierte Dateien mit Hilfe Ihres elektronischen Personalausweises (eID) validieren.",
-  "index.footer": "WENN SIE WEITERE INFORMATIONEN ÜBER EID-KARTEN UND EID-LESEGERÄTE WÜNSCHEN, GEHEN SIE ZU ",
+  "index.footer": "Wenn Sie weitere Informationen über Eid-karten und Eid-lesegeräte wünschen, gehen Sie zu ",
   "metadataLoading.title": "Prüfen und Laden des Dokuments",
   "pin_1_attempt_left": "PIN ist falsch: noch 1 Versuch.",
   "pin_2_attempts_left": "PIN ist falsch: noch 2 Versuche.",

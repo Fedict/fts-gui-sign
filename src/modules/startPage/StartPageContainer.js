@@ -40,7 +40,7 @@ export class StartPageContainer extends React.Component {
                                     </div>
                                 </div>
                                 <div class="card-footer">
-                                    <b><FormattedMessage id="index.footer" defaultMessage="If you want more information about eID cards and eID readers, go to " /><a href="https://eid.belgium.be/">EID.BELGIUM.BE</a></b>
+                                    <b><FormattedMessage id="index.footer" defaultMessage="If you want more information about eID cards and eID readers, go to " /><a href="https://eid.belgium.be/">eid.belgium.be</a></b>
                                 </div>
                             </div>
                         </div>

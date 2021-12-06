@@ -85,7 +85,7 @@
   "index.title": "Signing Box",
   "index.welcome": "Bienvenue",
   "index.content": "Cette application vous permettra de signer électroniquement des fichiers et de valider des fichiers signés, au moyen de votre carte d'identité électronique (eID).",
-  "index.footer": "SI VOUS VOULEZ PLUS D'INFORMATIONS SUR LES CARTES D'IDENTITÉ ÉLECTRONIQUE ET LES LECTEURS D'EID, ALLEZ SUR LE SITE ",
+  "index.footer": "Si vous voulez plus d'informations sur les cartes eID et les lecteurs eID, allez sur le site ",
   "loading": "Chargement ...",
   "metadataLoading.title": "Chargement et contrôle du document",
   "pin_1_attempt_left": "Le code PIN est incorrect: 1 tentative restante.",
