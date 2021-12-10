@@ -8,23 +8,43 @@ import UploadFileContainer from './pages/UploadFileContainer'
 import ValidateLoadingContainer from './pages/ValidateLoadingContainer'
 import ResultContainer from './pages/ResultContainer'
 import MessageContainerWithStore from '../message/MessageContainer'
+import DisplayFile from '../fileUpload/components/UploadDisplayFile/UploadDisplayFile'
 
 export const ValidateWizardContainer = ({ wizard, reader, resetWizard }) => {
-
+    let content = null;
     switch (wizard.state) {
         case WIZARD_STATE_START:
+            content = <UploadFileContainer />
+            break;
         case WIZARD_STATE_UPLOAD:
-            return <UploadFileContainer />
+            content = <UploadFileContainer />
+            break;
         case WIZARD_STATE_VALIDATE_LOADING:
-            return <ValidateLoadingContainer />
+            content = <ValidateLoadingContainer />
+            break;
         case WIZARD_STATE_RESULT:
-            return <ResultContainer />
+            content = <ResultContainer />
+            break;
         case WIZARD_STATE_MESSAGE:
-            return <MessageContainerWithStore onCancel={() => { (resetWizard()) }} />
+            content = <MessageContainerWithStore onCancel={() => { (resetWizard()) }} />
+            break;
         default:
-            return <MessageContainer message={ErrorGeneral} onCancel={() => { resetWizard() }} />
+            content = <MessageContainer message={ErrorGeneral} onCancel={() => { resetWizard() }} />
+            break;
     }
+    return (
+        <div >
+            <div className={"row mx-5 mt-3"}>
+                <div className={"col col-7"}>
+                    <DisplayFile />
+                </div>
+                <div className={"col col-5"}>
+                    {content}
+                </div>
+            </div>
+        </div >)
 }
+
 
 const mapStateToProps = (state) => {
     return (state) => ({
