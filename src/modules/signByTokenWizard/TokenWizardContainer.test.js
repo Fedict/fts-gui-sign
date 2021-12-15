@@ -97,12 +97,12 @@ describe('TokenWizardContainer', () => {
 
         console.log("RENDERED")
 
-        const documentReadCheckBox = await screen.findByTestId("documentReadCheckbox");
+        // const documentReadCheckBox = await screen.findByTestId("documentReadCheckbox");
 
-        expect(documentReadCheckBox).toBeInTheDocument();
-        documentReadCheckBox.click();
+        // expect(documentReadCheckBox).toBeInTheDocument();
+        // documentReadCheckBox.click();
 
-        console.log("CHECKED")
+        // console.log("CHECKED")
 
         const startButton = await screen.findByRole('button', {name: /SIGN/i})
 
@@ -207,12 +207,12 @@ describe('TokenWizardContainer', () => {
 
         console.log("RENDERED")
 
-        const documentReadCheckBox = await screen.findByTestId("documentReadCheckbox");
+        // const documentReadCheckBox = await screen.findByTestId("documentReadCheckbox");
 
-        expect(documentReadCheckBox).toBeInTheDocument();
-        documentReadCheckBox.click();
+        // expect(documentReadCheckBox).toBeInTheDocument();
+        // documentReadCheckBox.click();
 
-        console.log("CHECKED")
+        // console.log("CHECKED")
 
         const startButton = await screen.findByRole('button', {name: /SIGN/i})
 
@@ -315,10 +315,10 @@ describe('TokenWizardContainer', () => {
             </MemoryRouter>
         </Provider>)
 
-        const documentReadCheckBox = await screen.findByTestId( "documentReadCheckbox");
+        // const documentReadCheckBox = await screen.findByTestId( "documentReadCheckbox");
 
-        expect(documentReadCheckBox).toBeInTheDocument();
-        documentReadCheckBox.click();
+        // expect(documentReadCheckBox).toBeInTheDocument();
+        // documentReadCheckBox.click();
 
         const startButton = await screen.findByRole('button', {name: /SIGN/i})
 

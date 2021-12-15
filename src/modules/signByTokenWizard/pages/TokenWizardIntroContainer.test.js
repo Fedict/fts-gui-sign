@@ -17,14 +17,14 @@ describe("TokenWizardIntroContainer", () => {
 
         expect(buttonElement).toBeInTheDocument();
         expect(buttonElement.id).toEqual("button_next");
-        expect(buttonElement).toBeDisabled();
+        //expect(buttonElement).toBeDisabled();
 
         expect(getCertificates).toBeCalled();
 
-        const documentReadCheckBox = screen.getByTestId( "documentReadCheckbox");
+        // const documentReadCheckBox = screen.getByTestId( "documentReadCheckbox");
 
-        expect(documentReadCheckBox).toBeInTheDocument();
-        documentReadCheckBox.click();
+        // expect(documentReadCheckBox).toBeInTheDocument();
+        // documentReadCheckBox.click();
         expect(doSendLogInfo).toBeCalled();
 
         expect(buttonElement).toBeEnabled();
