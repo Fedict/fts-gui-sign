@@ -133,6 +133,7 @@ export const setDocumentMetadata = (metadata) => ({
         isXml : metadata.mimetype && (metadata.mimetype.indexOf('application/xml') > -1 || metadata.mimetype.indexOf('text/xml') > -1),
         xsltUrl: replaceBEURL(metadata.xsltUrl),
         readPhoto : metadata.readPhoto,
-        disallowSignedDownloads : metadata.disallowSignedDownloads
+        disallowSignedDownloads : metadata.disallowSignedDownloads,
+        requestDocumentReadConfirm : metadata.requestDocumentReadConfirm
     }
 })
