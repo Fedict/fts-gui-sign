@@ -134,6 +134,6 @@ export const setDocumentMetadata = (metadata) => ({
         xsltUrl: replaceBEURL(metadata.xsltUrl),
         readPhoto : metadata.readPhoto,
         disallowSignedDownloads : metadata.disallowSignedDownloads,
-        requestDocumentReadConfirm : metadata.requestDocumentReadConfirm
+        requestDocumentReadConfirm : metadata.requestDocumentReadConfirm && metadata.requestDocumentReadConfirm === true
     }
 })

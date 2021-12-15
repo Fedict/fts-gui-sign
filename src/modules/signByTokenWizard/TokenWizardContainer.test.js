@@ -322,10 +322,10 @@ describe('TokenWizardContainer', () => {
 
         const startButton = await screen.findByRole('button', {name: /SIGN/i})
 
-        wait(() => {
+        //wait(() => {
             //there is a timeout in mock for reading the eID card
             expect(startButton).toBeEnabled();
-        })
+        //})
 
         startButton.click();
 

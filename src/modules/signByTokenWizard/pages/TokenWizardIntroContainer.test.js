@@ -25,7 +25,7 @@ describe("TokenWizardIntroContainer", () => {
 
         // expect(documentReadCheckBox).toBeInTheDocument();
         // documentReadCheckBox.click();
-        expect(doSendLogInfo).toBeCalled();
+        // expect(doSendLogInfo).toBeCalled();
 
         expect(buttonElement).toBeEnabled();
         buttonElement.click();
