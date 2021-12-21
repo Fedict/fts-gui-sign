@@ -5,7 +5,7 @@ import { messageTypes, ErrorGeneral } from './MessageConstants'
 import { CardError } from '../components/Card/CardError'
 import { CardInfo } from '../components/Card/CardInfo'
 import {doSendLogInfo, resetWizard} from '../signWizard/actions/WizardLogicActions'
-import {injectIntl} from "react-intl";
+import {injectIntl, useIntl} from "react-intl";
 import {definedMessages} from "../i18n/translations";
 import {WIZARD_STATE_CERTIFICATES_LOADING} from "../wizard/WizardConstants";
 import {doWithToken} from "../utils/helper";
@@ -26,8 +26,8 @@ import {sendLogInfo, sendLogInfoIgnoreResult} from "../communication/communicati
  * @param {function} [props.navigateToStep] - action to navigate to a page
  * @param {function} [props.onCancel] - onCancel callback
  */
-export const MessageContainer = ({ message, navigateToStep, onCancel, intl, doSendLogInfo }) => {
-
+export const MessageContainer = ({ message, navigateToStep, onCancel,  doSendLogInfo }) => {
+    const intl = useIntl();
     const handleButtonNextClick = () => {
         if (message && message.nextButton && message.nextButton.nextPage) {
             doSendLogInfo('UI - RETRY_BUTTON CLICKED');

@@ -2,6 +2,14 @@ import React from 'react'
 import { CardLoading } from '../../components/Card/CardLoading'
 import { connect } from 'react-redux'
 import { validateDocument, resetWizard } from "../actions/WizardLogicActions"
+import {defineMessages, injectIntl} from "react-intl";
+import {definedMessages} from "../../i18n/translations";
+const messages = defineMessages({
+    title: {
+        id: "validate.loading.title",
+        defaultMessage: "Validating document"
+    }
+})
 
 export class ValidateLoadingContainer extends React.Component {
     componentDidMount() {
@@ -10,11 +18,11 @@ export class ValidateLoadingContainer extends React.Component {
 
     render() {
 
-        const { resetWizard } = this.props
+        const { resetWizard, intl } = this.props
         return (
-                <CardLoading title={"Validating document"}
+                <CardLoading title={intl.formatMessage(messages.title)}
                     hasCancelButton
-                    cancelButtonText="Cancel"
+                    cancelButtonText={intl.formatMessage(definedMessages.cancel)}
                     onClickCancel={() => { resetWizard() }}
                />
         )
@@ -26,4 +34,4 @@ const mapDispatchToProps = ({
      resetWizard
 })
 
-export default connect(null, mapDispatchToProps)(ValidateLoadingContainer)
+export default connect(null, mapDispatchToProps)(injectIntl(ValidateLoadingContainer))

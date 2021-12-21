@@ -10,6 +10,22 @@ import { WIZARD_STATE_START } from '../wizard/WizardConstants';
 import { setNewFlowId } from "../controlIds/flowId/FlowIdActions"
 import {languages} from "../../const";
 import {chooseLanguage} from "../i18n/actions/i18nActions";
+import {defineMessages, injectIntl, useIntl} from "react-intl";
+
+const messages = defineMessages({
+    language : {
+        id : 'language',
+        defaultMessage : 'en'
+    },
+    sign : {
+        id : 'navigation.sign',
+        defaultMessage : 'Sign'
+    },
+    validate : {
+        id : 'navigation.validate',
+        defaultMessage : 'Validate'
+    }
+})
 
 const getChangeLanguageLink = (language) => {
     let url = new URL(window.location);
@@ -17,16 +33,18 @@ const getChangeLanguageLink = (language) => {
     return url.pathname + '?' + url.searchParams.toString();
 }
 
-export const Navbar = ({ location, resetStore, navigateToStep, setNewFlowId, history, chooseLanguage }) => {
-
+export const Navbar = injectIntl(({ location, resetStore, navigateToStep, setNewFlowId, history, chooseLanguage }) => {
+    const intl = useIntl()
+    //Todo: Research a better way to do this
+    const language= intl.formatMessage(messages.language)
     const links = [
         {
-            to: '/sign',
-            label: 'Sign',
+            to: '/sign?language=' + language,
+            label: intl.formatMessage(messages.sign),
             onclick: () => { resetStore(); setNewFlowId(); navigateToStep(WIZARD_STATE_START) }
         }, {
-            to: '/validate',
-            label: 'Validate',
+            to: '/validate?language=' + language,
+            label: intl.formatMessage(messages.validate),
             onclick: () => { resetStore(); setNewFlowId(); navigateToStep(WIZARD_STATE_START) }
         },
     ].map((val, index) => {
@@ -44,19 +62,18 @@ export const Navbar = ({ location, resetStore, navigateToStep, setNewFlowId, his
             </Link>
         )
     })
-
     return (
         <header className="">
             <nav className="navbar navbar-expand navbar-light sticky-top">
-                <a href="/#" className="navbar-brand" onClick={() => {
+                <a href="#" className="navbar-brand" onClick={() => {
                     resetStore();
                     setNewFlowId();
-                    history.push("/")
+                    history.push({pathname:'/', search: "?language=" + language })
                 }}>
                     <img src="/img/logo.png" alt="BOSA"
                         style={{ width: "188px", height: "54px" }} />
                 </a>
-                {false && <div className="navbar-nav">
+                {((location.pathname === "/sign") || (location.pathname === "/validate")|| (location.pathname === "/")) && <div className="navbar-nav">
                     {links}
                 </div>}
                 <nav className="nav ml-auto">
@@ -69,7 +86,7 @@ export const Navbar = ({ location, resetStore, navigateToStep, setNewFlowId, his
             </nav>
         </header>
     )
-}
+})
 
 const mapStateToProps = (state) => {
     return (state) => ({

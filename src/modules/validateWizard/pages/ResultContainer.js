@@ -5,11 +5,23 @@ import { resetWizard } from '../actions/WizardLogicActions';
 import { indication, indicationKeys, subIndication, subIndicationKeys } from '../constants/indicationConstants';
 import { MessageContainer } from '../../message/MessageContainer';
 import { ErrorGeneral } from '../../message/MessageConstants';
+import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
+
+const messages = defineMessages({
+    title: {
+        id: "validate.result.title",
+        defaultMessage: "Result of the validation"
+    },
+    next: {
+        id: "validate.result.validateNextButton",
+        defaultMessage: "Validate next document"
+    }
+})
 
 export class ResultContainer extends React.Component {
 
     render() {
-        const { validation, resetWizard } = this.props
+        const { validation, resetWizard, intl } = this.props
 
         let subIndicationResult = "";
 
@@ -18,7 +30,7 @@ export class ResultContainer extends React.Component {
             subIndicationResult = (
                 <div className="text-center">
                     <div className={"alert " + subIndicationUsed.className}>
-                        {subIndicationUsed.message}
+                    <FormattedMessage id={subIndicationUsed.id} defaultMessage={subIndicationUsed.message} />
                     </div>
 
                 </div>
@@ -31,14 +43,14 @@ export class ResultContainer extends React.Component {
             const indicationUsed = indication[validation.indication]
             result = (
                 <CardContainer
-                    title={"Result of the validation"}
+                    title={intl.formatMessage(messages.title)}
                     hasNextButton
-                    nextButtonText="Validate next document"
+                    nextButtonText={intl.formatMessage(messages.next)}
                     onClickNext={() => { resetWizard() }}
                 >
                     <div className="text-center">
                         <div className={"alert " + indicationUsed.className}>
-                            {indicationUsed.message}
+                        <FormattedMessage id={indicationUsed.id} defaultMessage={indicationUsed.message} />
                         </div>
 
                     </div>
@@ -64,4 +76,4 @@ const mapDispatchToProps = ({
     resetWizard
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(ResultContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(ResultContainer))

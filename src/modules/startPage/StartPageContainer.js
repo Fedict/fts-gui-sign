@@ -7,12 +7,20 @@ import { resetWizard } from "../validateWizard/actions/WizardLogicActions";
 import DisplayFile from '../fileUpload/components/UploadDisplayFile/UploadDisplayFile'
 import { defineMessages, FormattedMessage, injectIntl } from "react-intl";
 
+const messages = defineMessages({
+    "language" : {
+        id : "language",
+        defaultMessage : "en"
+    }
+})
 export class StartPageContainer extends React.Component {
 
     render() {
+        
         const { history } = this.props
-        const { resetWizard } = this.props
-
+        const { resetWizard, intl } = this.props
+        //Todo: Research a better way to do this
+        const language= intl.formatMessage(messages["language"])
         return (
             <div >
                 <div className={"row mx-5 mt-3"}>
@@ -22,25 +30,32 @@ export class StartPageContainer extends React.Component {
                     <div className={"col col-5"}>
 
                         <div className={"container"}>
-                            <div class="card">
-                                <div class="card-header"><FormattedMessage id="index.title" defaultMessage="Signing Box" /></div>
-                                <div class="card-body">
-                                    <b><FormattedMessage id="index.welcome" defaultMessage="Welcome" /></b>
+                            <div className="card">
+                                <div className="card-header"><FormattedMessage id="index.title" defaultMessage="Signing Box" /></div>
+                                <div className="card-body">
+                                    <b><FormattedMessage id="index.welcome" defaultMessage="The online signature service 'Signing box' is offered by the Federal Government." /></b>
                                     <br /><br />
-                                    <FormattedMessage id="index.content" defaultMessage="This application will allow you to electronically sign files and validate signed files, by means of your electronic identity card (eID). " />
+                                    <FormattedMessage id="index.content" defaultMessage="With this service you can digitally sign your documents (pdf or xml) or check the validity of a signed document (pdf or xml). With 'Signing box' you are sure that your document is signed correctly!" />
                                     <br />
                                     <br />
-                                    <div class="row mx-5 mt-3">
-                                        <div class="col col-6">
-                                            <p align="center"><button style={{ minWidth: 115 }} className="btn btn-primary" id="button_install_eID" onClick={() => { resetWizard(); history.push('/sign') }}><FormattedMessage id="buttons.sign" defaultMessage="Sign" /></button></p>
+                                    <div className="row mx-5 mt-3">
+                                        <div className="col col-6">
+                                            
+                                            <p align="center"><button style={{ minWidth: 115 }} className="btn btn-primary" id="button_install_eID" onClick={() => { resetWizard(); history.push({pathname:'/sign', search: "?language=" + language })}}><FormattedMessage id="buttons.sign" defaultMessage="I want to sign" /></button></p>
                                         </div>
-                                        <div class="col col-6">
-                                            <p align="center"><button style={{ minWidth: 115 }} className="btn btn-primary" id="button_install_eID" onClick={() => { resetWizard(); history.push('/validate') }}><FormattedMessage id="buttons.validate" defaultMessage="Validate" /></button></p>
+                                        <div className="col col-6">
+                                            <p align="center"><button style={{ minWidth: 115 }} className="btn btn-primary" id="button_install_eID" onClick={() => { resetWizard(); history.push({pathname:'/validate', search: "?language=" + language }) }}><FormattedMessage id="buttons.validate" defaultMessage="I want to validate" /></button></p>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card-footer">
-                                    <b><FormattedMessage id="index.footer" defaultMessage="If you want more information about eID cards and eID readers, go to " /><a href="https://eid.belgium.be/">eid.belgium.be</a></b>
+                                <div className="card-footer">
+                                    <b><FormattedMessage id="index.footer" defaultMessage="If you want more information about eID cards and card readers, you can find it here: <a>Frequently asked questions signing service<a>" /><a href="https://eid.belgium.be/">eid.belgium.be</a></b>
+                                    <br/>
+                                    <br/>
+                                    <b><FormattedMessage id="index.footer2a"/>
+                                        <FormattedMessage id="index.faqurl">{link => <a href={link} target="_blank">
+                                                <FormattedMessage id="index.footer2b"/>
+                                            </a>}</FormattedMessage></b>
                                 </div>
                             </div>
                         </div>
@@ -57,4 +72,4 @@ const mapDispatchToProps = ({
 
 
 
-export default withRouter(connect(null,mapDispatchToProps)(StartPageContainer))
+export default withRouter(connect(null,mapDispatchToProps)(injectIntl(StartPageContainer)))
