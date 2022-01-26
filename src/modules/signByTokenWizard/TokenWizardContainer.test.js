@@ -69,7 +69,8 @@ describe('TokenWizardContainer', () => {
         fetchMock.post('/signing/getDataToSignForToken',{
             body: {
                 "digestAlgorithm" : "SHA256",
-                "digest" : "KxxqH7aC9Cx/xQiXfVk1OOlaCk+7mc2kXwlYl8kEqUs="
+                "digest" : "KxxqH7aC9Cx/xQiXfVk1OOlaCk+7mc2kXwlYl8kEqUs=",
+                "signingDate" : "2022-01-26T15:53:53Z"
             },
             status: 200
         })
@@ -179,7 +180,8 @@ describe('TokenWizardContainer', () => {
         fetchMock.post('/signing/getDataToSignForToken',{
             body: {
                 "digestAlgorithm" : "SHA256",
-                "digest" : "KxxqH7aC9Cx/xQiXfVk1OOlaCk+7mc2kXwlYl8kEqUs="
+                "digest" : "KxxqH7aC9Cx/xQiXfVk1OOlaCk+7mc2kXwlYl8kEqUs=",
+                "signingDate" : "2022-01-26T15:53:53Z"
             },
             status: 200
         })
@@ -293,7 +295,8 @@ describe('TokenWizardContainer', () => {
         fetchMock.post('/signing/getDataToSignForToken',{
             body: {
                 "digestAlgorithm" : "SHA256",
-                "digest" : "KxxqH7aC9Cx/xQiXfVk1OOlaCk+7mc2kXwlYl8kEqUs="
+                "digest" : "KxxqH7aC9Cx/xQiXfVk1OOlaCk+7mc2kXwlYl8kEqUs=",
+                "signingDate" : "2022-01-26T15:53:53Z"
             },
             status: 200
         })

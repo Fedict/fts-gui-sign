@@ -1906,7 +1906,8 @@ describe("WizardLogicActions", () => {
             })
             const resolvedDigest = {
                 digest: 'digest',
-                digestAlgorithm: 'SHA256'
+                digestAlgorithm: 'SHA256',
+                signingDate: "2022-01-26T15:53:53Z"
             }
             communication.getDataToSignAPI = jest.fn(() => { return Promise.resolve(resolvedDigest) })
             getDigest()(mockDispatch, mockGetStore)
@@ -1944,7 +1945,8 @@ describe("WizardLogicActions", () => {
             })
             const resolvedDigest = {
                 digest: 'digest',
-                digestAlgorithm: 'SHA256'
+                digestAlgorithm: 'SHA256',
+                signingDate : "2022-01-26T15:53:53Z"
             }
             communication.getDataToSignAPI = jest.fn(() => { return Promise.resolve(resolvedDigest) })
             getDigest()(mockDispatch, mockGetStore)

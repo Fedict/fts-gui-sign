@@ -5,11 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "edge",
+            "command": "npm run test",
+            "name": "npm run test",
             "request": "launch",
-            "name": "Lancer Edge en utilisant localhost",
-            "url": "http://localhost:8081",
-            "webRoot": "${workspaceFolder}"
+            "type": "node-terminal"
         }
     ]
 }
