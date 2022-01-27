@@ -538,9 +538,10 @@ export const getDigest = () => (dispatch, getStore) => {
         getDataToSignAPI(certificate.certificateSelected.APIBody, uploadFile.file, signingDate)
             .then(handleFlowIdError(flowId, getStore))
             .then((resp) => {
-                if(resp.digest && resp.digestAlgorithm) {
+                if(resp.digest && resp.digestAlgorithm && resp.signingDate) {
                     dispatch(setDigest(resp))
                     dispatch(navigateToSign())
+                    dispatch(setDateSigning(resp.signingDate))
                 }else{
                     const parsedError = parseErrorMessage(resp.message);
                     if(parsedError && errorMessages[parsedError.type]){
