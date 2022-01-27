@@ -1,4 +1,4 @@
-FROM node:17.4.0-bullseye-slim
+FROM node:12.22.9-buster-slim
 
 WORKDIR /app
 COPY package.json /app/
