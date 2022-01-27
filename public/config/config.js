@@ -11,7 +11,7 @@ window.configData = {
     eIDLinkUrls: {
         windows: {
             en : "https://eid.static.bosa.fgov.be/beidconnect.msi",
-            de : "https://eid.static.bosa.fgov.be/beidconnect.msi",
+            de : "https://eid.static.bosa.fgov.be/beidconnect_de.msi",
             nl : "https://eid.static.bosa.fgov.be/beidconnect_nl.msi",
             fr : "https://eid.static.bosa.fgov.be/beidconnect_fr.msi",
         },
