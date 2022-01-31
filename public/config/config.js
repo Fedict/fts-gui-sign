@@ -62,6 +62,6 @@ window.configData = {
 
     BEurl: "https://validate.ta.fts.bosa.belgium.be/signandvalidation",
     //BEurl: "http://localhost:8751/signandvalidation",
-    //BEurl: "http://localhost:8081",
+    //BEurl: "http://localhost:8080",
     skipCertificateChainValidate : true
 };
