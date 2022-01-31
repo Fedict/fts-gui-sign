@@ -10,7 +10,7 @@ npm run build
 ### Running build locally without install
 
 ```BASH
-npx serve build -l 3000
+npx serve build -l 5000
 ```
 
 ## Running appication in developer mode
@@ -88,7 +88,7 @@ docker build -t node-web .
 ### run
 
 ```BASH
-docker run -it -p 3000:3001 node-web:latest
+docker run -it -p 5000:5001 node-web:latest
 ```
 
 ## Used npm packages
