@@ -33,7 +33,7 @@ export class StartPageContainer extends React.Component {
                             <div className="card">
                                 <div className="card-header"><FormattedMessage id="index.title" defaultMessage="Signing Box" /></div>
                                 <div className="card-body">
-                                    <b><FormattedMessage id="index.welcome" defaultMessage="The online signature service 'Signing box' is offered by the Federal Government." /></b>
+                                    <FormattedMessage id="index.welcome" defaultMessage="The online signature service 'Signing box' is offered by the Federal Government." />
                                     <br /><br />
                                     <FormattedMessage id="index.content" defaultMessage="With this service you can digitally sign your documents (pdf or xml) or check the validity of a signed document (pdf or xml). With 'Signing box' you are sure that your document is signed correctly!" />
                                     <br />
@@ -49,13 +49,13 @@ export class StartPageContainer extends React.Component {
                                     </div>
                                 </div>
                                 <div className="card-footer">
-                                    <b><FormattedMessage id="index.footer" defaultMessage="If you want more information about eID cards and card readers, you can find it here: <a>Frequently asked questions signing service<a>" /><a href="https://eid.belgium.be/">eid.belgium.be</a></b>
+                                    <FormattedMessage id="index.footer" defaultMessage="If you want more information about eID cards and card readers, you can find it here: <a>Frequently asked questions signing service<a>" /><a href="https://eid.belgium.be/">eid.belgium.be</a>
                                     <br/>
                                     <br/>
-                                    <b><FormattedMessage id="index.footer2a"/>
+                                    <FormattedMessage id="index.footer2a"/>
                                         <FormattedMessage id="index.faqurl">{link => <a href={link} target="_blank">
                                                 <FormattedMessage id="index.footer2b"/>
-                                            </a>}</FormattedMessage></b>
+                                            </a>}</FormattedMessage>
                                 </div>
                             </div>
                         </div>
