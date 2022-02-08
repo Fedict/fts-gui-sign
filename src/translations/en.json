@@ -59,6 +59,7 @@
   "error.NO_TOKEN_IN_STATE": "Token not found or invalid.",
   "error.NOT_ALLOWED_TO_SIGN": "You do not have permission to sign this specific document. Please contact the owner of the document for more information.",
   "error.PARSE_ERROR": "Couldn't parse request.",
+  "error.SIGN_PERIOD_EXPIRED": "Entering the PIN took too long.",
   "error.SIGN_CERT_EXPIRED": "The certificate is expired.",
   "error.UNKNOWN_PROFILE": "Unknown signature profile.",
   "error.WRONG_RESULT_SIGN_TOKEN": "Failed to sign the document.",

@@ -59,6 +59,7 @@
   "error.NO_TOKEN_IN_STATE": "Token non trouvé ou non valide",
   "error.NOT_ALLOWED_TO_SIGN": "Vous n'avez pas la permission de signer ce document particulier. Contactez le propriétaire du document pour plus d'informations.",
   "error.PARSE_ERROR": "Impossible d'analyser la demande",
+  "error.SIGN_PERIOD_EXPIRED": "La saisie du code PIN a pris trop de temps.",
   "error.SIGN_CERT_EXPIRED": "Le certificat est expiré.",
   "error.UNKNOWN_PROFILE": "Profil de signature inconnu",
   "error.WRONG_RESULT_SIGN_TOKEN": "Impossible de signer le document",
