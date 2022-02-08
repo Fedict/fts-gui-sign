@@ -36,9 +36,10 @@ export const getDigestForToken = () => (dispatch, getStore) => {
         getDataToSignForTokenAPI(certificate.certificateSelected.APIBody, tokenFile.token, signingDate, photo)
             .then(handleFlowIdError(flowId, getStore))
             .then((resp) => {
-                if(resp.digest && resp.digestAlgorithm){
+                if(resp.digest && resp.digestAlgorithm && resp.signingDate){
                     dispatch(setDigest(resp))
                     dispatch(navigateToSign())
+                    dispatch(setDateSigning(resp.signingDate))
                 }else{
                     const parsedError = parseErrorMessage(resp.message);
                     if(parsedError && errorMessages[parsedError.type]){
@@ -133,6 +134,7 @@ export const setDocumentMetadata = (metadata) => ({
         isXml : metadata.mimetype && (metadata.mimetype.indexOf('application/xml') > -1 || metadata.mimetype.indexOf('text/xml') > -1),
         xsltUrl: replaceBEURL(metadata.xsltUrl),
         readPhoto : metadata.readPhoto,
-        disallowSignedDownloads : metadata.disallowSignedDownloads
+        disallowSignedDownloads : metadata.disallowSignedDownloads,
+        requestDocumentReadConfirm : metadata.requestDocumentReadConfirm && metadata.requestDocumentReadConfirm === true
     }
 })

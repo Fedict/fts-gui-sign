@@ -32,13 +32,14 @@ export const BaseApp = ({browserIsSupported, notSupportedMessage}) => (
                     </div>
                 </Route>
                 <Route path="/validate">
-                    <div className="container">
+                    <div className="container-fluid">
                         <ValidateWizardContainer />
                     </div>
                 </Route>
                 <Route path="/">
-
-                    <StartPageContainer />
+                    <div className="container-fluid">   
+                        <StartPageContainer />
+                    </div>
                 </Route>
 
             </Switch>)

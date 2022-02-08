@@ -40,6 +40,7 @@ const TokenWizardIntroContainer = (props) => {
             {props.disallowSignedDownloads &&
             <FormattedMessage tagName={"p"} id="token.intro.nodownload" defaultMessage="Please note: <b>you will not be able to download</b> the signed document(s) after signing." values={{b : boldedText}}/>
             }
+            {props.requestDocumentReadConfirm &&
             <p className="form-check">
                 <input type="checkbox" onChange={(e) => {
                     props.doSendLogInfo('UI - documentReadCheckbox - ' + e.target.checked);
@@ -47,10 +48,11 @@ const TokenWizardIntroContainer = (props) => {
                 }} className="form-check-input" id="documentReadCheckbox" data-testid="documentReadCheckbox" value={checked} defaultChecked={checked}/>
                 <label className="form-check-label" htmlFor="documentReadCheckbox"><FormattedMessage id="token.intro.check.read" defaultMessage="I have read this document"/><sup>*</sup></label>
             </p>
+            }
             <p>
                 <button
-                    className={checked && certificatesRead?"btn btn-primary text-uppercase":"btn btn-secondary text-uppercase"}
-                    disabled={!(checked && certificatesRead)}
+                    className={(checked||!props.requestDocumentReadConfirm) && certificatesRead?"btn btn-primary text-uppercase":"btn btn-secondary text-uppercase"}
+                    disabled={!((checked||!props.requestDocumentReadConfirm) && certificatesRead)}
                     onClick={() => {
                         props.doSendLogInfo('UI - SIGN_BUTTON CLICKED')
                         props.navigateToNextStep()
@@ -82,6 +84,7 @@ function mapStateToProps(state){
     return {
         fileName : state.tokenFile.fileName,
         disallowSignedDownloads : state.tokenFile.disallowSignedDownloads,
+        requestDocumentReadConfirm : state.tokenFile.requestDocumentReadConfirm,
     };
 }
 const mapDispatchToProps = ({

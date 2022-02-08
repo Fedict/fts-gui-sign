@@ -69,7 +69,8 @@ describe('TokenWizardContainer', () => {
         fetchMock.post('/signing/getDataToSignForToken',{
             body: {
                 "digestAlgorithm" : "SHA256",
-                "digest" : "KxxqH7aC9Cx/xQiXfVk1OOlaCk+7mc2kXwlYl8kEqUs="
+                "digest" : "KxxqH7aC9Cx/xQiXfVk1OOlaCk+7mc2kXwlYl8kEqUs=",
+                "signingDate" : "2022-01-26T15:53:53Z"
             },
             status: 200
         })
@@ -97,12 +98,12 @@ describe('TokenWizardContainer', () => {
 
         console.log("RENDERED")
 
-        const documentReadCheckBox = await screen.findByTestId("documentReadCheckbox");
+        // const documentReadCheckBox = await screen.findByTestId("documentReadCheckbox");
 
-        expect(documentReadCheckBox).toBeInTheDocument();
-        documentReadCheckBox.click();
+        // expect(documentReadCheckBox).toBeInTheDocument();
+        // documentReadCheckBox.click();
 
-        console.log("CHECKED")
+        // console.log("CHECKED")
 
         const startButton = await screen.findByRole('button', {name: /SIGN/i})
 
@@ -179,7 +180,8 @@ describe('TokenWizardContainer', () => {
         fetchMock.post('/signing/getDataToSignForToken',{
             body: {
                 "digestAlgorithm" : "SHA256",
-                "digest" : "KxxqH7aC9Cx/xQiXfVk1OOlaCk+7mc2kXwlYl8kEqUs="
+                "digest" : "KxxqH7aC9Cx/xQiXfVk1OOlaCk+7mc2kXwlYl8kEqUs=",
+                "signingDate" : "2022-01-26T15:53:53Z"
             },
             status: 200
         })
@@ -207,12 +209,12 @@ describe('TokenWizardContainer', () => {
 
         console.log("RENDERED")
 
-        const documentReadCheckBox = await screen.findByTestId("documentReadCheckbox");
+        // const documentReadCheckBox = await screen.findByTestId("documentReadCheckbox");
 
-        expect(documentReadCheckBox).toBeInTheDocument();
-        documentReadCheckBox.click();
+        // expect(documentReadCheckBox).toBeInTheDocument();
+        // documentReadCheckBox.click();
 
-        console.log("CHECKED")
+        // console.log("CHECKED")
 
         const startButton = await screen.findByRole('button', {name: /SIGN/i})
 
@@ -293,7 +295,8 @@ describe('TokenWizardContainer', () => {
         fetchMock.post('/signing/getDataToSignForToken',{
             body: {
                 "digestAlgorithm" : "SHA256",
-                "digest" : "KxxqH7aC9Cx/xQiXfVk1OOlaCk+7mc2kXwlYl8kEqUs="
+                "digest" : "KxxqH7aC9Cx/xQiXfVk1OOlaCk+7mc2kXwlYl8kEqUs=",
+                "signingDate" : "2022-01-26T15:53:53Z"
             },
             status: 200
         })
@@ -315,17 +318,17 @@ describe('TokenWizardContainer', () => {
             </MemoryRouter>
         </Provider>)
 
-        const documentReadCheckBox = await screen.findByTestId( "documentReadCheckbox");
+        // const documentReadCheckBox = await screen.findByTestId( "documentReadCheckbox");
 
-        expect(documentReadCheckBox).toBeInTheDocument();
-        documentReadCheckBox.click();
+        // expect(documentReadCheckBox).toBeInTheDocument();
+        // documentReadCheckBox.click();
 
         const startButton = await screen.findByRole('button', {name: /SIGN/i})
 
-        wait(() => {
+        //wait(() => {
             //there is a timeout in mock for reading the eID card
             expect(startButton).toBeEnabled();
-        })
+        //})
 
         startButton.click();
 

@@ -5,6 +5,19 @@ import { connect } from 'react-redux';
 import { CardContainer } from '../../components/Card/CardContainer';
 import { NumberdText } from '../../components/NumberedText/NumberdText';
 import { WIZARD_STATE_CERTIFICATES_LOADING } from '../../wizard/WizardConstants';
+import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
+import {boldedText} from "../../utils/reactIntlUtils";
+
+const messages = defineMessages({
+    title: {
+        id: "signing.upload.title",
+        defaultMessage: "Sign document"
+    },
+    next: {
+        id: "signing.pininput.button.sign",
+        defaultMessage: "Sign with eId"
+    }
+})
 
 export class UploadFileContainer extends React.Component {
 
@@ -14,7 +27,7 @@ export class UploadFileContainer extends React.Component {
             file: {}
         }
     }
-
+    
     onchange(e) {
         const file = e.target.files[0]
         this.setState({ file: file })
@@ -28,20 +41,27 @@ export class UploadFileContainer extends React.Component {
     }
 
     render() {
+        const { intl } = this.props
         return (
             <CardContainer
-                title={"Digital sign a document"}
+                title={intl.formatMessage(messages.title)}
                 hasNextButton
-                nextButtonText="sign with eId"
+                nextButtonText={intl.formatMessage(messages.next)}
                 onClickNext={() => { this.handleSubmit() }}
                 nextButtonIsDisabled={(this.state.file && this.state.file.name) ? false : true}>
 
                 <div className="form-group">
                     <div className="container" >
-                        <NumberdText number="1">Select a document by clicking on the button "Select document".</NumberdText>
-                        <NumberdText number="2">Connect your eId reader to your pc.</NumberdText>
-                        <NumberdText number="3">Insert your eId card in the eId card reader.</NumberdText>
-                        <NumberdText number="4">Click on the button "sign with eId" and enter your PIN when prompted.</NumberdText>
+                        <NumberdText number="1"><FormattedMessage id="signing.upload.text.step.1"
+                                                      defaultMessage="Select a document (pdf or xml) via the button 'Select a document'."
+                                                      values={{b : boldedText, selectDocumentButton : intl.formatMessage({id : "signing.upload.selectDocument", defaultMessage : "Select a document"})}}
+                                                      /></NumberdText>
+                        <NumberdText number="2"><FormattedMessage id="signing.upload.text.step.2" defaultMessage="Connect your eID reader."/></NumberdText>
+                        <NumberdText number="3"><FormattedMessage id="signing.upload.text.step.3" defaultMessage="Insert your eID card in the card reader."/></NumberdText>
+                        <NumberdText number="4"><FormattedMessage id="signing.upload.text.step.4"
+                                                      defaultMessage="Click on the button 'Sign with eID' and enter your pincode when asked."
+                                                      values={{b : boldedText, signButton : intl.formatMessage({id : "signing.pininput.button.sign", defaultMessage : "Sign with eID"})}}
+                                                      /></NumberdText>
 
                         <div className="row">
                             <div className="card col col-12">
@@ -56,7 +76,7 @@ export class UploadFileContainer extends React.Component {
                                                 onClick={() => {
                                                     document.getElementById('input_hidden_select_file').click()
                                                 }}
-                                            > Select document </button>
+                                            > <FormattedMessage id="signing.upload.selectDocument" defaultMessage="Select a document"/> </button>
 
                                             <input
                                                 type="file"
@@ -66,8 +86,10 @@ export class UploadFileContainer extends React.Component {
                                         </div>
                                         <div className="col col-auto align-self-center ">
                                             <p className="btn m-0" >
-                                                Selected document:
-                                                 <span id='name_select_file'> {(this.state.file && this.state.file.name) || 'no document selected'}</span>
+                                                <i>
+                                            <FormattedMessage id="signing.upload.selectedDocument" defaultMessage="Selected document:"/>
+                                                 <span id='name_select_file'> {(this.state.file && this.state.file.name) || <FormattedMessage id="signing.upload.noDocumentSelected" defaultMessage="no document selected yet"/>}</span>
+                                                 </i>
                                             </p>
                                         </div>
                                     </div>
@@ -89,4 +111,4 @@ const mapDispatchToProps = ({
     displayFile
 })
 
-export default connect(null, mapDispatchToProps)(UploadFileContainer)
+export default connect(null, mapDispatchToProps)(injectIntl(UploadFileContainer))
