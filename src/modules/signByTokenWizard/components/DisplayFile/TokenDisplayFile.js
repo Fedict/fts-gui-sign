@@ -5,25 +5,28 @@ import {getBEUrl} from "../../../utils/helper";
 
 const url = getBEUrl();
 
-export const mapStateToProps = (state) => {
+export const mapStateToProps = (state, index) => {
     if(state.tokenFile.token){
+        var id = index.index;
+        var input = state.tokenFile.inputs[id];
+        var baseUrl = url + '/signing/getFileForToken/' + state.tokenFile.token;
+        var fileNameExt = input.fileName.split(".").pop().toLowerCase();
         return {
             uploadFile: {
                 displayFile : {
-                    url :  `${url}/signing/getDocumentForToken?token=${state.tokenFile.token}`,
-                    displayUrl :  `${url}/signing/getDocumentForToken?token=${state.tokenFile.token}`,
-                    isPdf : state.tokenFile.isPdf,
-                    isXml : state.tokenFile.isXml,
-                    xsltUrl : state.tokenFile.xsltUrl,
-                    fileName : state.tokenFile.fileName
+                    url :  baseUrl + '/DOC/' + id,
+                    displayUrl :  baseUrl + '/DOC/' + id,
+                    isPdf : fileNameExt == "pdf",
+                    isXml : fileNameExt == "xml",
+                    xsltUrl : input.displayXslt ? baseUrl + '/XSLT/' + id : null,
+                    fileName : input.fileName
                 }
             }
 
         }
     }
     return {
-
-    }
+   }
 }
 
 export default connect(mapStateToProps)(DisplayFile)

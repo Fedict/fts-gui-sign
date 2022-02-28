@@ -57,7 +57,7 @@ const messages = defineMessages({
     }
 })
 
-export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, certificate, intl }) => {
+export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, certificate, intl, inputs }) => {
     const [currentIndexStep, setCurrentIndexStep] = useState(1);
 
     const router = useRouter();
@@ -160,7 +160,12 @@ export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, 
         <div >
             <div className={"row mx-5 mt-3"}>
                 <div className={"col col-7"}>
-                    <TokenDisplayFile />
+                    {inputs &&
+                        inputs.map((item, index) => ( (item.display == "Content")  &&
+                        <div>
+                            <TokenDisplayFile index={index} />
+                        </div>
+                    ))}
                 </div>
                 <div className={"col col-5"}>
                     <ReactStepper style={{marginBottom : 20}}>
@@ -184,6 +189,7 @@ export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, 
 const mapStateToProps = (state, ownProps) => {
     return (state) => ({
         wizard: state.wizard,
+        inputs: state.tokenFile.inputs,
         certificate : state.certificate,
         reader: state.reader
     })
