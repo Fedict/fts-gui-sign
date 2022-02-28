@@ -15,17 +15,17 @@ import {sendLogInfoIgnoreResult} from "../../communication/communication";
 const messages = defineMessages({
     title : {
         id : "token.intro.title",
-        defaultMessage : "Digital signing of {fileName}"
+        defaultMessage : "Digital signing of '{fileNames}'"
     }
 })
 
 const TokenWizardIntroContainer = (props) => {
     const [checked, setChecked] = useState(false);
     const [certificatesRead, setCertificatesRead] = useState(false);
-    var filenames = props.inputs.filter(i => i.display != "No").map(i => i.fileName).join("','");
+
     return (
         <CardContainer
-            title={props.intl.formatMessage(messages.title, {fileName : `'${filenames}'`})}
+            title={props.intl.formatMessage(messages.title, {fileName : `'${props.filenames}'`})}
             hasCancelButton={false}
             cancelButtonText={props.intl.formatMessage(definedMessages.cancel)}
             onClickCancel={() => { props.resetWizard() }}
@@ -83,8 +83,7 @@ const TokenWizardIntroContainer = (props) => {
 
 function mapStateToProps(state){
     return {
-        fileName : state.tokenFile.fileName,
-        inputs : state.tokenFile.inputs,
+        filenames: state.tokenFile.inputs.filter(i => i.display != "No").map(i => i.fileName).join("','"),
         disallowSignedDownloads : state.tokenFile.disallowSignedDownloads,
         requestDocumentReadConfirm : state.tokenFile.requestDocumentReadConfirm
     };
