@@ -130,6 +130,7 @@ export const setDocumentMetadata = (metadata) => ({
     type : SET_DOCUMENT_TOKEN_METADATA,
     payload : {
         fileName : metadata.filename,
+        inputs : metadata.inputs,
         isPdf : metadata.mimetype && metadata.mimetype.indexOf('application/pdf') > -1,
         isXml : metadata.mimetype && (metadata.mimetype.indexOf('application/xml') > -1 || metadata.mimetype.indexOf('text/xml') > -1),
         xsltUrl: replaceBEURL(metadata.xsltUrl),

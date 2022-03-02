@@ -36,7 +36,8 @@ describe('TokenWizardContainer', () => {
         fetchMock.mock(`/signing/getMetadataForToken?token=${token}`, {
             body: {
                 "filename" : "This file is cool.pdf",
-                "mimetype" : "application/pdf"
+                "mimetype" : "application/pdf",
+                "inputs"   : [ { "fileName": "afile", "display" : "Content" }]
             },
             status: 200
         });
@@ -147,7 +148,8 @@ describe('TokenWizardContainer', () => {
         fetchMock.mock(`/signing/getMetadataForToken?token=${token}`, {
             body: {
                 "filename" : "This file is cool.pdf",
-                "mimetype" : "application/pdf"
+                "mimetype" : "application/pdf",
+                "inputs"   : [ { "fileName": "afile", "display" : "Content" }]
             },
             status: 200
         });
@@ -263,7 +265,8 @@ describe('TokenWizardContainer', () => {
         fetchMock.mock(`/signing/getMetadataForToken?token=${token}`, {
             body: {
                 "filename" : "This file is cool.pdf",
-                "mimetype" : "application/pdf"
+                "mimetype" : "application/pdf",
+                "inputs"   : [ { "fileName": "afile", "display" : "Content" }]
             },
             status: 200
         });
