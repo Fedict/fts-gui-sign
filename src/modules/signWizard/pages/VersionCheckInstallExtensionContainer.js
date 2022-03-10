@@ -73,7 +73,6 @@ export class VersionCheckInstallExtensionContainer extends React.Component {
     }
 
     render() {
-        const usedBrowser = getBrowser()
         const { resetWizard, intl } = this.props
 
         return (

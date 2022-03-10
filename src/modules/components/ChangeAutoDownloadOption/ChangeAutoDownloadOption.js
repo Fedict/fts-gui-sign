@@ -1,4 +1,4 @@
-import {FormattedMessage, injectIntl} from "react-intl";
+import {FormattedMessage} from "react-intl";
 import React, {useState} from "react";
 import {connect} from "react-redux";
 import {changeOptionAutoDownloadDocument} from "../../wizard/WizardActions";

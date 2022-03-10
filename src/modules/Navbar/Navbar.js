@@ -9,7 +9,6 @@ import { resetStore } from "../../store/storeActions"
 import { WIZARD_STATE_START } from '../wizard/WizardConstants';
 import { setNewFlowId } from "../controlIds/flowId/FlowIdActions"
 import {languages} from "../../const";
-import {chooseLanguage} from "../i18n/actions/i18nActions";
 import {defineMessages, injectIntl, useIntl} from "react-intl";
 
 const messages = defineMessages({
