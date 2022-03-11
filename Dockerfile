@@ -7,5 +7,8 @@ RUN npm install
 RUN npm install serve -g
 COPY . /app
 
+RUN npm config set proxy http://dc-proxy.names.belgium.be:3128
+RUN npm config set https-proxy http://dc-proxy.names.belgium.be:3128
+
 RUN npm run build
 CMD ["serve", "-s", "build", "-l", "5000"]
