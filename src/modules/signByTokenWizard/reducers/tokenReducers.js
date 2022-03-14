@@ -22,13 +22,10 @@ const TokenReducer = (state = initialState, action) => {
         case SET_DOCUMENT_TOKEN_METADATA : {
             return {
                 ...state,
-                isPdf : action.payload.isPdf,
-                isXml : action.payload.isXml,
-                fileName : action.payload.fileName,
-                xsltUrl : defaults(action.payload.xsltUrl, state.xsltUrl),
                 readPhoto : action.payload.readPhoto,
                 disallowSignedDownloads : action.payload.disallowSignedDownloads,
-                requestDocumentReadConfirm : action.payload.requestDocumentReadConfirm
+                requestDocumentReadConfirm : action.payload.requestDocumentReadConfirm,
+                inputs : action.payload.inputs
             }
         }
         case STORE_RESET:
