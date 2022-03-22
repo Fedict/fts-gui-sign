@@ -64,4 +64,5 @@ window.configData = {
     //BEurl: "http://localhost:8751/signandvalidation",
     //BEurl: "http://localhost:8080",
     skipCertificateChainValidate : true
+    
 };
