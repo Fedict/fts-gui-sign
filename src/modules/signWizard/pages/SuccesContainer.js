@@ -1,10 +1,9 @@
-import React, {Fragment, useEffect, useState} from 'react'
+import React, {Fragment} from 'react'
 import { connect } from 'react-redux';
 import { CardContainer } from '../../components/Card/CardContainer';
 import { resetWizard } from '../actions/WizardLogicActions';
 import { getBlobFromBase64 } from '../../fileUpload/helpers/FileHelper';
 import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
-import {definedMessages} from "../../i18n/translations";
 import {boldedText} from "../../utils/reactIntlUtils";
 
 const messages = defineMessages({

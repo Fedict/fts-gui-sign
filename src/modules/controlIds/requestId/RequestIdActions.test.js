@@ -9,7 +9,6 @@ const ORIGINAL_getRequestIds = getRequestIds
 const ORIGINAL_generateIdFromArray = generateIdFromArray
 
 describe("RequestIdActions", () => {
-
     describe("addRequestId", () => {
 
         test("addRequestId returns a action with type WIZARD_REQUEST_ID_ADD and payload id", () => {
@@ -103,5 +102,10 @@ describe("RequestIdActions", () => {
             RequestIdHelpers.getRequestIds = ORIGINAL_getRequestIds
             ControlIdHelper.generateIdFromArray = ORIGINAL_generateIdFromArray
         })
+        beforeEach(() => {
+            jest.useFakeTimers('legacy');
+            //jest.spyOn(global, 'setTimeout');
+          });
+
     })
 })

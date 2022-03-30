@@ -1,5 +1,4 @@
-import React, {Fragment} from "react"
-import { CardLoading } from "../../components/Card/CardLoading"
+import React from "react"
 import {navigateToSign, resetWizard} from "../actions/WizardLogicActions"
 import { connect } from "react-redux"
 import {definedMessages} from "../../i18n/translations";

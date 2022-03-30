@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {FormattedMessage, useIntl} from "react-intl";
+import {useIntl} from "react-intl";
 import {LoadingSpinner} from "../LoadingSpinner/LoadingSpinner";
 
 export const ReadCertificates = (props) => {
