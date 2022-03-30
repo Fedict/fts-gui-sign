@@ -7,7 +7,6 @@ import {navigateToStep} from '../../wizard/WizardActions';
 import { WIZARD_STATE_SIGNING_PRESIGN_LOADING } from '../../wizard/WizardConstants';
 import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
 import {definedMessages} from "../../i18n/translations";
-import {defaults} from "../../utils/helper";
 import {boldedText} from "../../utils/reactIntlUtils";
 import ChangeAutoDownloadOption from "../../components/ChangeAutoDownloadOption/ChangeAutoDownloadOption";
 
@@ -49,7 +48,7 @@ if(!window.PinInputContainerData){
 const PinInputContainer = (props) => {
     const { resetWizard, pinError, certificate, intl } = props;
     let [pin, setPin] = useState('');
-    let [t, setT] = useState('');
+    //let [setT] = useState('');
     let [indexCursor, setIndexCursor] = useState(0);
     const pinstring = "*".repeat(pin.length);
 
@@ -119,7 +118,7 @@ const PinInputContainer = (props) => {
             e.stopPropagation();
             e.preventDefault();
         }
-        setT(new Date().getTime());
+        //setT(new Date().getTime());
     }
     useEffect(() => {
         console.log('Adding new event listener')

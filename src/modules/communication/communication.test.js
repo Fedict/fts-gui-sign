@@ -595,16 +595,6 @@ describe('validateSignatureAPI', () => {
 })
 
 describe('getDataToSignForTokenAPI', () => {
-    //mocking
-    const resultJson = { result: "result" }
-    const mockResponse = {
-        ok: true,
-        json: jest.fn(() => { return resultJson }),
-        text: jest.fn()
-    }
-
-    fetch.mockResponseOnce(JSON.stringify(resultJson));
-
     const startCertificateObject = {
         certificateChain: [
             { encodedCertificate: "certificatestring" },
@@ -628,6 +618,21 @@ describe('getDataToSignForTokenAPI', () => {
     }
     const startToken = '12345456';
     test("fetch called", async () => {
+        //mocking
+        global.fetch.resetMocks();
+
+        const resultJson = { result: "result" }
+        const mockResponse = {
+            ok: false,
+            json: jest.fn(() => { return resultJson }),
+            text: jest.fn(),
+            headers : {
+                get : jest.fn((headerName) => (headerName === 'content-type'?'application/json':undefined))
+            }
+        }
+        const mockPromiseFunction = jest.fn(() => Promise.resolve(mockResponse))
+        global.fetch = jest.fn().mockImplementation(mockPromiseFunction);
+
         const result = await getDataToSignForTokenAPI(startCertificateObject, startToken, "Any Value", "picture bytes")
 
         expect(global.fetch).toHaveBeenCalledTimes(1)

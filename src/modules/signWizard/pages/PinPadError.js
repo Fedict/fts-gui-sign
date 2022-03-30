@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { CardError } from '../../components/Card/CardError'
 import { resetWizard, navigateToSign } from "../actions/WizardLogicActions"
-import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
+import {defineMessages, injectIntl} from "react-intl";
 import {definedMessages} from "../../i18n/translations";
 const messages = defineMessages({
     title: {

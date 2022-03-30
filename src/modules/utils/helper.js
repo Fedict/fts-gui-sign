@@ -43,10 +43,10 @@ export const getCookie = (cname) => {
 	var ca = decodedCookie.split(';');
 	for(var i = 0; i <ca.length; i++) {
 		var c = ca[i];
-		while (c.charAt(0) == ' ') {
+		while (c.charAt(0) === ' ') {
 			c = c.substring(1);
 		}
-		if (c.indexOf(name) == 0) {
+		if (c.indexOf(name) === 0) {
 			return c.substring(name.length, c.length);
 		}
 	}
@@ -64,7 +64,7 @@ export function getStackTrace () {
 	}
 
 	stack = stack.split('\n').map(function (line) { return line.trim(); });
-	return stack.splice(stack[0] == 'Error' ? 2 : 1);
+	return stack.splice(stack[0] === 'Error' ? 2 : 1);
 }
 
 const parseErrorMessagePartNames = ['ref', 'type', 'details']

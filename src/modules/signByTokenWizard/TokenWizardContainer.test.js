@@ -6,7 +6,8 @@ import {render, screen, wait} from "../testUtils/test-utils";
 import {MemoryRouter, Route, Switch} from "react-router-dom";
 import fetchMock from "fetch-mock";
 import {EIDChromeExtMock} from "../testUtils/EIDChromeExtMock";
-import {fireEvent} from "@testing-library/react";
+import {fireEvent, waitFor} from "@testing-library/react";
+import { act } from 'react-dom/test-utils';
 
 describe('TokenWizardContainer', () => {
     let store;
@@ -20,17 +21,18 @@ describe('TokenWizardContainer', () => {
             get() { return value; },
             set(v) { value = v; }
         }))(EIDChromeExtMock));
-
-        jest.setTimeout(15 * 1000)
     })
 
     beforeEach(() => {
         store = configureStore();
         window.configData = { eIDLinkMinimumVersion: "1.0.0" }
 
+        jest.useFakeTimers("legacy");
+        jest.useRealTimers();
+        jest.setTimeout(30 * 1000);
     });
 
-    test("sign for token flow", async (done) => {
+    test("sign for token flow", async () => {
         const token = '20201223121854';
         let lastLogMessage;
         fetchMock.mock(`/signing/getMetadataForToken?token=${token}`, {
@@ -87,28 +89,35 @@ describe('TokenWizardContainer', () => {
             }
         })
 
-        render(<Provider store={store}>
-            <MemoryRouter initialIndex={0} initialEntries={[`/sign/${token}`]}>
-                <Switch>
-                    <Route path="/sign/:token">
-                        <TokenWizardContainer browserIsSupported={true} />
-                    </Route>
-                </Switch>
-            </MemoryRouter>
-        </Provider>)
+        act(() => {
+            render(<Provider store={store}>
+                <MemoryRouter initialIndex={0} initialEntries={[`/sign/${token}`]}>
+                    <Switch>
+                        <Route path="/sign/:token">
+                            <TokenWizardContainer browserIsSupported={true} />
+                        </Route>
+                    </Switch>
+                </MemoryRouter>
+            </Provider>)
+        });
 
         console.log("RENDERED")
+
+        await new Promise(process.nextTick);
+
 
         // const documentReadCheckBox = await screen.findByTestId("documentReadCheckbox");
 
         // expect(documentReadCheckBox).toBeInTheDocument();
         // documentReadCheckBox.click();
 
-        // console.log("CHECKED")
+        console.log("CHECKED")
 
-        const startButton = await screen.findByRole('button', {name: /SIGN/i})
+        const startButton = await screen.findByRole('button', {name: /I want to sign/i})
 
-        expect(startButton).toBeEnabled();
+        await waitFor(() => expect(startButton).not.toBeDisabled(),()=>{},5000);
+
+        //expect(startButton).toBeEnabled();
 
 
         console.log("BEFORE CLICK START")
@@ -116,6 +125,8 @@ describe('TokenWizardContainer', () => {
         //expect(screen.getByText(/Retrieving certificates/i)).toBeInTheDocument(); eid read in intro screen
 
         //expect(await screen.findByText(/Enter the PIN/i)).toBeInTheDocument();
+
+        //const input_code = await screen.getByTestId('input_code');
 
         wait(() => (lastLogMessage.indexOf('WIZARD_STATE_PIN_INPUT') > -1), async () => {
 
@@ -135,14 +146,12 @@ describe('TokenWizardContainer', () => {
             console.log("SIGN BUTTON CLICKED")
             //console.log('TokenWC sign button clicked');
 
-            expect(await screen.findByText(/Your document will be automatically downloaded./i)).toBeInTheDocument();
-            done();
         }, 10)
-
+        expect(await screen.findByText(/Your document will be automatically downloaded./i)).toBeInTheDocument();
     })
 
 
-    test("sign for token flow don't auto download document", async (done) => {
+    test("sign for token flow don't auto download document", async () => {
         const token = '20201223121854';
         let lastLogMessage;
         fetchMock.mock(`/signing/getMetadataForToken?token=${token}`, {
@@ -218,7 +227,11 @@ describe('TokenWizardContainer', () => {
 
         // console.log("CHECKED")
 
+        await new Promise(process.nextTick);
+
         const startButton = await screen.findByRole('button', {name: /SIGN/i})
+
+        await waitFor(() => expect(startButton).not.toBeDisabled(),()=>{},5000);
 
         expect(startButton).toBeEnabled();
 
@@ -252,14 +265,13 @@ describe('TokenWizardContainer', () => {
 
             console.log("SIGN BUTTON CLICKED")
             //console.log('TokenWC sign button clicked');
-
-            expect(await screen.findByText(/You can download the document by clicking on/i)).toBeInTheDocument();
-            done();
         }, 10)
-
+        expect(await screen.findByText(/You can download the document by clicking on/i)).toBeInTheDocument();
     })
 
-    test("sign for token flow with two certificates", async (done) => {
+    test("sign for token flow with two certificates", async () => {
+        jest.setTimeout(30 * 1000);
+        
         const token = '20201223121854';
         let lastLogMessage = '';
         fetchMock.mock(`/signing/getMetadataForToken?token=${token}`, {
@@ -311,7 +323,8 @@ describe('TokenWizardContainer', () => {
         fetchMock.post('/logging/log', (url, opts) => {
             lastLogMessage = JSON.parse(opts.body).message;
         })
-        render(<Provider store={store}>
+
+        act(() => {render(<Provider store={store}>
             <MemoryRouter initialIndex={0} initialEntries={[`/sign/${token}`]}>
                 <Switch>
                     <Route path="/sign/:token">
@@ -320,6 +333,9 @@ describe('TokenWizardContainer', () => {
                 </Switch>
             </MemoryRouter>
         </Provider>)
+        });
+
+        await new Promise(process.nextTick);
 
         // const documentReadCheckBox = await screen.findByTestId( "documentReadCheckbox");
 
@@ -327,6 +343,9 @@ describe('TokenWizardContainer', () => {
         // documentReadCheckBox.click();
 
         const startButton = await screen.findByRole('button', {name: /SIGN/i})
+
+        
+        await waitFor(() => expect(startButton).not.toBeDisabled(),()=>{},5000);
 
         //wait(() => {
             //there is a timeout in mock for reading the eID card
@@ -356,11 +375,9 @@ describe('TokenWizardContainer', () => {
             const signButton = screen.getByRole('button', {name: /Sign with eid/i})
             expect(signButton).toBeEnabled();
             signButton.click();
-
-            expect(await screen.findByText(/Your document will be automatically downloaded./i)).toBeInTheDocument();
-
-            done();
         })
+
+        expect(await screen.findByText(/Your document will be automatically downloaded./i)).toBeInTheDocument();
 
         //expect(lastLogMessage.indexOf('WIZARD_STATE_PIN_INPUT') > -1).toBeTruthy();
 

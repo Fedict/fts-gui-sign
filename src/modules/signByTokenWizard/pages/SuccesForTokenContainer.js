@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect, useState} from 'react'
+import React, {Fragment} from 'react'
 import { connect } from 'react-redux';
 import { CardContainer } from '../../components/Card/CardContainer';
 import { getBlobFromBase64 } from '../../fileUpload/helpers/FileHelper';
@@ -26,7 +26,7 @@ const messages = defineMessages({
 export class SuccesContainerForToken extends React.Component {
 
     downloadFile() {
-        const { uploadFile, token, autoDownloadDocument } = this.props
+        const { uploadFile, token } = this.props
 
         if (uploadFile
             && uploadFile.downloadFile

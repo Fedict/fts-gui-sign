@@ -1,6 +1,5 @@
 import React from "react"
 import { CardContainer } from "./CardContainer"
-import {FormattedMessage} from "react-intl";
 import {LoadingSpinner} from "../LoadingSpinner/LoadingSpinner";
 
 /**
