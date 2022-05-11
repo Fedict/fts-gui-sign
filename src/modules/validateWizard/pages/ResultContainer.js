@@ -54,6 +54,7 @@ export class ResultContainer extends React.Component {
                         </div>
 
                     </div>
+                    <a href={"data:text/plain;charset=utf-8," + validation.report} download="report.json">Download report</a>
                     {subIndicationResult}
                 </CardContainer>
             )

@@ -1,4 +1,4 @@
-import { VALIDATION_SET_INDICATION, VALIDATION_SET_SUBINDICATION } from "../actions/ValidationActions"
+import { VALIDATION_SET_DIAGNOSTICDATA, VALIDATION_SET_INDICATION, VALIDATION_SET_REPORT, VALIDATION_SET_SUBINDICATION } from "../actions/ValidationActions"
 import { STORE_RESET } from "../../../store/storeActions"
 
 const initialState = {
@@ -17,6 +17,16 @@ const ValidationReducer = (state = initialState, action) => {
             return {
                 ...state,
                 subIndication: action.payload
+            }
+        case VALIDATION_SET_REPORT:
+            return {
+                ...state,
+                report: action.payload
+            }
+        case VALIDATION_SET_DIAGNOSTICDATA:
+            return {
+                ...state,
+                diagnosticData: action.payload
             }
         case STORE_RESET:
             return initialState
