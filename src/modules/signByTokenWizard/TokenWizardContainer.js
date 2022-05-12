@@ -162,7 +162,7 @@ export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, 
                 <div className={"col col-7"}>
                     {inputs &&
                         inputs.map((item, index) => ( (item.display == "Content")  &&
-                        <div>
+                        <div key={index}>
                             <TokenDisplayFile index={index} />
                         </div>
                     ))}

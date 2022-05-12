@@ -1,4 +1,3 @@
-import React from 'react'
 import { connect } from 'react-redux'
 import {DisplayFile} from "../../../fileUpload/components/DisplayFile/DisplayFile";
 import {getBEUrl} from "../../../utils/helper";
@@ -16,8 +15,8 @@ export const mapStateToProps = (state, index) => {
                 displayFile : {
                     url :  baseUrl + '/DOC/' + id,
                     displayUrl :  baseUrl + '/DOC/' + id,
-                    isPdf : fileNameExt == "pdf",
-                    isXml : fileNameExt == "xml",
+                    isPdf : fileNameExt === "pdf",
+                    isXml : fileNameExt === "xml",
                     xsltUrl : input.displayXslt ? baseUrl + '/XSLT/' + id : null,
                     fileName : input.fileName
                 }

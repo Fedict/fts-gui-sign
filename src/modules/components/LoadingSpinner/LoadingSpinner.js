@@ -1,4 +1,4 @@
-import {FormattedMessage, useIntl} from "react-intl";
+import {useIntl} from "react-intl";
 import React from "react";
 
 export const LoadingSpinner = (props) => {

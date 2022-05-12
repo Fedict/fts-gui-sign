@@ -51,7 +51,14 @@ export class VersionCheckUpdateContainer extends React.Component {
         const usedBrowser = getBrowser()
 
         if (usedOs === OS.WINDOWS && window.configData && window.configData.eIDLinkUrls && window.configData.eIDLinkUrls.windows) {
-            window.open(window.configData.eIDLinkUrls.windows + '?dt=' + new Date().getTime(), "_blank")
+            const { intl } = this.props;
+            var language="en";
+            
+            if (intl.locale!==null && intl.locale!==undefined && (intl.locale==="fr" ||intl.locale==="nl" ||intl.locale==="de"))
+            {
+                language = intl.locale;
+            }            console.log(window.configData.eIDLinkUrls.windows[language] + '?dt=' + new Date().getTime(), "_blank");
+            window.open(window.configData.eIDLinkUrls.windows[language] + '?dt=' + new Date().getTime(), "_blank")
         }
         if (usedOs === OS.MACOS) {
             if (usedBrowser === browser.SAFARI && window.configData && window.configData.eIDLinkExtensionUrls && window.configData.eIDLinkExtensionUrls.safari) {
@@ -69,6 +76,10 @@ export class VersionCheckUpdateContainer extends React.Component {
     render() {
         const { resetWizard, intl } = this.props
         const usedOs = getOS()
+        const usedBrowser = getBrowser()
+
+        console.log(usedOs);
+        console.log(usedBrowser);
 
         return (
             <CardContainer title={intl.formatMessage(messages.title)}

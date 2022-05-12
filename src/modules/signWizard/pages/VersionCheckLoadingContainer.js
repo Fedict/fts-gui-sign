@@ -6,9 +6,9 @@ import { checkVersion } from "../actions/WizardLogicActions"
 export class VersionCheckLoadingContainer extends React.Component {
 
     componentDidMount() {
-        setTimeout(() => {
+        //setTimeout(() => {
             this.props.checkVersion()
-        }, 1000);
+        //}, 1000);
     }
 
     render() {
