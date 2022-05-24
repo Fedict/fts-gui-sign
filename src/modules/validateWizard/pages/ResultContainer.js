@@ -6,6 +6,7 @@ import { indication, indicationKeys, subIndication, subIndicationKeys } from '..
 import { MessageContainer } from '../../message/MessageContainer';
 import { ErrorGeneral } from '../../message/MessageConstants';
 import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
+import { saveAs } from 'file-saver';
 
 const messages = defineMessages({
     title: {
@@ -17,6 +18,20 @@ const messages = defineMessages({
         defaultMessage: "Validate next document"
     }
 })
+
+function getSignature(validation) {
+    var sig = getSignatures(validation)[0];
+    return sig.who + '  on ' + sig[0];
+}
+
+function getSignatures(validation) {
+    var signatures = validation.diagnosticData.Signature.map(sig => [sig.ClaimedSigningTime, sig.ChainItem[0].Certificate]);
+    signatures.forEach(sig => {
+        var cert = validation.diagnosticData.Certificate.find(cert => cert.Id === sig[1]);
+        sig.who = cert.GivenName + ' ' + cert.Surname;
+    });
+    return signatures;
+}
 
 export class ResultContainer extends React.Component {
 
@@ -54,7 +69,15 @@ export class ResultContainer extends React.Component {
                         </div>
 
                     </div>
-                    <a href={"data:text/plain;charset=utf-8," + validation.report} download="report.json">Download report</a>
+
+                    <p>Signed by :  { getSignature(validation) }</p>
+
+                    <lu>
+                        Signed by : { getSignatures(validation).map(sig => <li>{sig.who + ' on ' +sig[0]}</li> ) }
+                   </lu>
+
+
+                    <a href="#" onClick={() => saveAs(new Blob([validation.report], {type: "application/json;charset=utf-8"}), "report.json")}>Download report</a>
                     {subIndicationResult}
                 </CardContainer>
             )
