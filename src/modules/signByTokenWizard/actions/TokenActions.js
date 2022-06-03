@@ -6,7 +6,7 @@ import {ErrorGeneral} from "../../message/MessageConstants";
 import {navigateToSign} from "../../signWizard/actions/WizardLogicActions";
 import {errorMessages} from "../../i18n/translations";
 import {navigateToStep} from "../../wizard/WizardActions";
-import {WIZARD_STATE_PIN_INPUT, WIZARD_STATE_UPLOAD} from "../../wizard/WizardConstants";
+import {WIZARD_STATE_UPLOAD} from "../../wizard/WizardConstants";
 import moment from "moment";
 import {setDateSigning} from "../../signWizard/actions/SignatureActions";
 import {getBEUrl, parseErrorMessage} from "../../utils/helper";

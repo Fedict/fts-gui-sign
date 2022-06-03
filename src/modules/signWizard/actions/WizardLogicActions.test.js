@@ -15,7 +15,8 @@ import {
     navigateToPinError,
     sign,
     signDocument,
-    resetWizard, getCertificatesFromIdResponse
+    resetWizard, getCertificatesFromIdResponse,
+    clearResetWizardClicked
 } from "./WizardLogicActions"
 import { WIZARD_STATE_PIN_INPUT, WIZARD_STATE_SIGNING_PRESIGN_LOADING, WIZARD_STATE_UPLOAD, WIZARD_STATE_VERSION_CHECK_INSTALL, WIZARD_STATE_VERSION_CHECK_UPDATE, WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENSION, WIZARD_STATE_VALIDATE_LOADING, WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN, WIZARD_STATE_CERTIFICATES_CHOOSE, WIZARD_STATE_DIGEST_LOADING, WIZARD_STATE_PINPAD_ERROR, WIZARD_STATE_SIGNING_LOADING, WIZARD_STATE_SUCCES, WIZARD_STATE_VERSION_CHECK_LOADING, WIZARD_STATE_START } from "../../wizard/WizardConstants"
 
@@ -63,7 +64,7 @@ import { setNewFlowId } from "../../controlIds/flowId/FlowIdActions"
 import * as FlowIdActions from "../../controlIds/flowId/FlowIdActions"
 import { MessageCertificatesNotFound } from "../messages/MessageCertificatesNotFound"
 import {EIDChromeExtMock} from "../../testUtils/EIDChromeExtMock";
-
+import {setImmediate} from 'timers'
 
 const ORIGINAL_controller = controller
 const ORIGINAL_navigateToStep = navigateToStep
@@ -100,9 +101,7 @@ window.confirm = () => (false);
 describe("Pinpad support", () => {
 
     beforeEach(() => {
-        navigation.navigateToStep = jest.fn()
-
-        
+        navigation.navigateToStep = jest.fn()      
         global.window.configData = { BEurl: "" }
     })
 
@@ -390,16 +389,33 @@ describe("WizardLogicActions", () => {
         })
     })
     describe("requestTimeOutFunctionChecVersion", () => {
-
+        //const original = {...window.location};
         beforeEach(() => {
             eIDLinkController.controller.getInstance = jest.fn()
-            window.location.reload = jest.fn()
+            // Object.defineProperty(window, 'location', {
+            //     configurable: true,
+            //     value: { reload: jest.fn() },
+            //   });
+        })
+
+        afterEach(() => {
+            eIDLinkController.controller = ORIGINAL_controller
+            window = ORIGINAL_window
+            //Object.defineProperty(window, 'location', { configurable: true, value: original });
         })
 
         test('requestTimeOutFunctionChecVersion stops BeIDConnect and reloads the page', () => {
             const mockDispatch = jest.fn()
             const mockGetStore = jest.fn()
             const mockStop = jest.fn()
+
+            const location = window.location
+            
+            delete window.location;
+            window.location = {
+                ...location,
+                reload: jest.fn()
+            };
             eIDLinkController.controller.getInstance = jest.fn(() => { return { stop: mockStop } })
 
             requestTimeOutFunctionChecVersion(mockDispatch, mockGetStore)
@@ -407,11 +423,7 @@ describe("WizardLogicActions", () => {
             expect(mockStop).toBeCalledTimes(1)
             expect(window.location.reload).toBeCalledTimes(1)
 
-        })
-
-        afterEach(() => {
-            eIDLinkController.controller = ORIGINAL_controller
-            window = ORIGINAL_window
+            window.location = location;
         })
     })
 
@@ -2716,6 +2728,7 @@ describe("WizardLogicActions", () => {
                     }
                 }
             })
+            clearResetWizardClicked()
             resetWizard()(mockDispatch, mockGetstore)
             expect(window.location.pathname).toBe("/")
         }) 

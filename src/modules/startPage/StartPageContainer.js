@@ -1,8 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import { CardContainer } from '../components/Card/CardContainer'
-import { MethodeSelectCard } from '../components/MethodSelect/MethodSelectCard'
 import { resetWizard } from "../validateWizard/actions/WizardLogicActions";
 import DisplayFile from '../fileUpload/components/UploadDisplayFile/UploadDisplayFile'
 import { defineMessages, FormattedMessage, injectIntl } from "react-intl";
@@ -53,7 +51,7 @@ export class StartPageContainer extends React.Component {
                                     <br/>
                                     <br/>
                                     <FormattedMessage id="index.footer2a"/>
-                                        <FormattedMessage id="index.faqurl">{link => <a href={link} target="_blank">
+                                        <FormattedMessage id="index.faqurl">{link => <a href={link} rel="noreferrer" target="_blank">
                                                 <FormattedMessage id="index.footer2b"/>
                                             </a>}</FormattedMessage>
                                 </div>

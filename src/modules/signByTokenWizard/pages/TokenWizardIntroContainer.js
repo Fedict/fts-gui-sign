@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {defineMessages, FormattedMessage, injectIntl} from 'react-intl';
 import {connect} from 'react-redux';
 import {CardContainer} from "../../components/Card/CardContainer";
 import {navigateToStep} from "../../wizard/WizardActions";
 import {selectCertificate} from "../../signWizard/actions/CertificateActions";
 import {doSendLogInfo, getCertificatesWithCallback, resetWizard} from "../../signWizard/actions/WizardLogicActions";
-import {WIZARD_STATE_CERTIFICATES_LOADING, WIZARD_STATE_VALIDATE_LOADING} from "../../wizard/WizardConstants";
+import {WIZARD_STATE_VALIDATE_LOADING} from "../../wizard/WizardConstants";
 import {definedMessages} from "../../i18n/translations";
 import {boldedText} from "../../utils/reactIntlUtils";
 import {ReadCertificates} from "../../components/ReadCertificates/ReadCertificates";

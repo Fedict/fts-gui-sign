@@ -785,6 +785,10 @@ export const signDocument = () => (dispatch, getStore) => {
 }
 
 let resetWizardClicked = false;
+export const clearResetWizardClicked = () =>
+{
+    resetWizardClicked = false;
+}
 /**
  * function (action) to reset the wizard
  * - clears the store

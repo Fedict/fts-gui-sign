@@ -1,4 +1,3 @@
-import React from 'react'
 import { connect } from 'react-redux'
 import {DisplayFile} from "../../../fileUpload/components/DisplayFile/DisplayFile";
 import {getBEUrl} from "../../../utils/helper";
