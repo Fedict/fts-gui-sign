@@ -33,7 +33,7 @@ export const TokenDisplayFileList = ({ list, previewDocuments, previewFileId, se
     return (
     <div className={"col"}>
         {(list.map((item, index) => ( 
-        <div className={ "m-2 p-2"} style={{ border: "1px solid grey", backgroundColor: "lightgray", maxWidth: "100%" }}>
+        <div className={ "m-2 p-2"} style={{ border: "1px solid lightGrey", backgroundColor: "whiteSmoke", maxWidth: "100%" }}>
             <img  className={ "p-2" } src={"/img/" + item.iconType + "Icon.png"} alt={item.iconType}></img>
             <a href={ item.url + "?forceDownload" } download>{item.fileName.replace(/\.[^\.]*$/, '')}</a>
         </div>
