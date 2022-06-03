@@ -21,6 +21,7 @@ const XmlDataViewer = (props) => {
     const [xml, setXml] = useState(undefined);
     const iframeEl = useRef(null);
     const intl = useIntl();
+
     useEffect(() => {
         if(!props.xslt){
             function xmlLoadingFailed(){

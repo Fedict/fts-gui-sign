@@ -11,6 +11,7 @@ import {boldedText} from "../../utils/reactIntlUtils";
 import {ReadCertificates} from "../../components/ReadCertificates/ReadCertificates";
 import {doWithToken} from "../../utils/helper";
 import {sendLogInfoIgnoreResult} from "../../communication/communication";
+import {setPreview} from "../actions/TokenActions";
 
 const messages = defineMessages({
     title : {
@@ -19,7 +20,7 @@ const messages = defineMessages({
     }
 })
 
-const TokenWizardIntroContainer = (props) => {
+const TokenWizardIntroContainer = (props, setPreview) => {
     const [checked, setChecked] = useState(false);
     const [certificatesRead, setCertificatesRead] = useState(false);
 
@@ -56,6 +57,7 @@ const TokenWizardIntroContainer = (props) => {
                     disabled={!((checked||!props.requestDocumentReadConfirm) && certificatesRead)}
                     onClick={() => {
                         props.doSendLogInfo('UI - SIGN_BUTTON CLICKED')
+                        props.setPreview(false)
                         props.navigateToNextStep()
                     }}
                     id="button_next"
@@ -83,7 +85,7 @@ const TokenWizardIntroContainer = (props) => {
 
 function mapStateToProps(state){
     return {
-        filenames: state.tokenFile.inputs.filter(i => i.display != "No").map(i => i.fileName).join("','"),
+        filenames: state.tokenFile.inputs.map(i => i.fileName).join("','"),
         disallowSignedDownloads : state.tokenFile.disallowSignedDownloads,
         requestDocumentReadConfirm : state.tokenFile.requestDocumentReadConfirm
     };
@@ -93,9 +95,10 @@ const mapDispatchToProps = ({
     selectCertificate,
     getCertificates : getCertificatesWithCallback,
     resetWizard,
-    doSendLogInfo
+    doSendLogInfo,
+    setPreview
 })
 
-export const TokenWizardIntroComponent = injectIntl(TokenWizardIntroContainer)
+export const TokenWizardIntroComponent = injectIntl(TokenWizardIntroContainer, setPreview)
 
 export default connect(mapStateToProps, mapDispatchToProps)(TokenWizardIntroComponent);

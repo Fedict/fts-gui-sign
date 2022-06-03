@@ -31,6 +31,7 @@ import {ErrorGeneral} from "../message/MessageConstants";
 import {doSetToken, getDocumentMetadataForToken} from "./actions/TokenActions";
 import PinPadError from "../signWizard/pages/PinPadError";
 import TokenDisplayFile from "./components/DisplayFile/TokenDisplayFile";
+import TokenDisplayFileList from "./components/DisplayFile/TokenDisplayFileList";
 import DigestForTokenLoadingContainer from "./pages/DigestForTokenLoadingContainer";
 import SigningPreSignLoading from "../signWizard/pages/SigningPreSignLoading";
 import SigningLoadingContainer from "../signWizard/pages/SigningLoading";
@@ -57,7 +58,7 @@ const messages = defineMessages({
     }
 })
 
-export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, certificate, intl, inputs }) => {
+export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, certificate, intl, inputs, previewDocuments, filePreviewIndex }) => {
     const [currentIndexStep, setCurrentIndexStep] = useState(1);
 
     const router = useRouter();
@@ -156,16 +157,23 @@ export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, 
             content = <MessageContainer message={ErrorGeneral} onCancel={() => { (resetWizard()) }} />
             break;
     }
+
     return (
         <div >
             <div className={"row mx-5 mt-3"}>
                 <div className={"col col-7"}>
-                    {inputs &&
-                        inputs.map((item, index) => ( (item.display == "Content")  &&
-                        <div>
-                            <TokenDisplayFile index={index} />
+                    {inputs && 
+                        <div className={"row"}>
+                            { inputs.length > 1 && (
+                                <TokenDisplayFileList />
+                            )}
+                            { previewDocuments && (
+                                <div className={"col"}>
+                                    <TokenDisplayFile index={filePreviewIndex} />
+                                </div>
+                            )}
                         </div>
-                    ))}
+                    }
                 </div>
                 <div className={"col col-5"}>
                     <ReactStepper style={{marginBottom : 20}}>
@@ -191,7 +199,9 @@ const mapStateToProps = (state, ownProps) => {
         wizard: state.wizard,
         inputs: state.tokenFile.inputs,
         certificate : state.certificate,
-        reader: state.reader
+        reader: state.reader,
+        filePreviewIndex : state.filePreview.index,
+        previewDocuments: state.tokenFile.previewDocuments
     })
 }
 
