@@ -135,6 +135,7 @@
   "token.intro.nodownload": "Please note: <b>you will not be able to download</b> the signed document(s) after signing.",
   "token.intro.reject": "<b>Don't want to sign this document?</b>{newLine}Click <b>{rejectButtonText}</b> to reject signing the document.",
   "token.intro.title": "Digital signature of {fileName}",
+  "token.intro.multiFileTitle": "Digitally sign multiple documents",
   "token.intro.txt": "Welcome {newLine} you are about to sign the document on the left. {newLine}  {newLine} When you have read the document, connect your eID reader to your computer, insert the eID card and click <b>{signButtonText}</b> to digitally sign it.  {newLine} {newLine} You will sign the document with the PIN of your eID, please make sure that you know this PIN.",
   "validate.certificate.info": "The certificate is being validated, this operation can take some time.",
   "validate.loading.title" : "Validate document",

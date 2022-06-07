@@ -17,6 +17,10 @@ const messages = defineMessages({
     title : {
         id : "token.intro.title",
         defaultMessage : "Digital signing of '{fileNames}'"
+    },
+    multiFileTitle : {
+        id : "token.intro.multiFileTitle",
+        defaultMessage : "Digitally sign multiple documents"
     }
 })
 
@@ -26,7 +30,7 @@ const TokenWizardIntroContainer = (props, setPreview) => {
 
     return (
         <CardContainer
-            title={props.intl.formatMessage(messages.title, {fileName : `'${props.filenames}'`})}
+            title={props.intl.formatMessage(props.isMultifile ? messages.multiFileTitle : messages.title, {fileName : `'${props.filename}'`})}
             hasCancelButton={false}
             cancelButtonText={props.intl.formatMessage(definedMessages.cancel)}
             onClickCancel={() => { props.resetWizard() }}
@@ -85,7 +89,8 @@ const TokenWizardIntroContainer = (props, setPreview) => {
 
 function mapStateToProps(state){
     return {
-        filenames: state.tokenFile.inputs.map(i => i.fileName).join("','"),
+        isMultifile: state.tokenFile.inputs.length > 1,
+        filename: state.tokenFile.inputs[0].fileName,
         disallowSignedDownloads : state.tokenFile.disallowSignedDownloads,
         requestDocumentReadConfirm : state.tokenFile.requestDocumentReadConfirm
     };

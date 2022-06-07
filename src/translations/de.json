@@ -135,6 +135,7 @@
   "token.intro.nodownload": "Bitte beachten Sie: Sie können das/die unterschriebene(n) Dokument(e) nach dem unterschreiben <b>nicht herunterladen</b>.",
   "token.intro.reject": "<b>Möchten Sie dieses Dokument nicht unterschreiben? </b>{newLine}Klicken Sie auf <b>{rejectButtonText}</b>, um die Unterschrift zu verweigern.",
   "token.intro.title": "Digitales Unterschreiben von {fileName}",
+  "token.intro.multiFileTitle": "Digitales Signieren mehrerer Dokumente",
   "token.intro.txt": "Willkommen, {newLine} Sie sind dabei, das Dokument auf der linken Seite zu unterschreiben.{newLine}{newLine}Sie können nun Ihre eID-Karte in den Kartenleser einführen (vergewissern Sie sich, dass Sie den PIN-Code kennen) und dann die Schaltfläche <b>{signButtonText}</b> drücken, um mit dem Unterschreiben des Dokuments zu beginnen.",
   "validate.certificate.info": "Das Zertifikat wird gerade validiert. Diese Prüfung kann eine Weile dauern.",
   "validate.loading.title" : "Das Dokument validieren",
