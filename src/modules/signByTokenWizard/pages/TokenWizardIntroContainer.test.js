@@ -6,12 +6,13 @@ describe("TokenWizardIntroContainer", () => {
     test("shows start button & can click on it",  done => {
         const getCertificates = jest.fn();
         const doSendLogInfo = jest.fn();
+        const setPreview = jest.fn();
 
         getCertificates.mockImplementation((callback) => {
             callback(true);
         });
 
-        render(<TokenWizardIntroComponent navigateToNextStep={done} getCertificates={getCertificates} doSendLogInfo={doSendLogInfo}/>);
+        render(<TokenWizardIntroComponent navigateToNextStep={done} getCertificates={getCertificates} doSendLogInfo={doSendLogInfo} setPreview={setPreview}/>);
 
         const buttonElement = screen.getByRole('button', {name : /SIGN/i});
 
