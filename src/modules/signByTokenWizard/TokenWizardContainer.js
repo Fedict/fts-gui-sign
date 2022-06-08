@@ -171,7 +171,9 @@ export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, 
                             )}
                             { previewDocuments && (
                                 <div className="col">
-                                    <p><FormattedMessage id = "token.documents.title.name"defaultMessage="<b>DOCUMENT PREVIEW:</b> {docName}." values={{b : boldedText, docName: inputs[filePreviewIndex].fileName.toUpperCase() }}/></p>
+                                    { inputs.length > 1 && (
+                                        <p><FormattedMessage id = "token.documents.title.name"defaultMessage="<b>DOCUMENT PREVIEW:</b> {docName}." values={{b : boldedText, docName: inputs[filePreviewIndex].fileName.toUpperCase() }}/></p>
+                                    )}
                                     <TokenDisplayFile index={filePreviewIndex} />
                                 </div>
                             )}
