@@ -3,6 +3,7 @@ import React, {Fragment} from 'react'
 import { connect } from 'react-redux'
 import {setPreviewFileId} from "../../actions/TokenActions";
 import {getBEUrl} from "../../../utils/helper";
+import {FormattedMessage} from 'react-intl';
 
 /**
  * Component to display list of filenames 
@@ -22,7 +23,7 @@ export const TokenDisplayFileList = ({ list, previewDocuments, previewFileId, se
             {(list.map((item, index) => ( 
             <div className={ "text-center m-2 p-2" } style={ previewFileId !== index ?  null :  hilightBorderStyle} key={index} onClick={() => setPreviewFileId(index)}>
                 <div style={{ paddingTop: -20, border: "solid 1px lightgrey", width: 100, height:70, backgroundColor: "white", position: "relative" }}>
-                    <img src={"/img/" + item.iconType + "Icon.png"} style={{ position: "absolute", margin: "auto", left: 0, right: 0, bottom: 8 }} alt={item.iconType}></img>
+                    <img src={"/img/Icon" + item.iconType + ".png"} style={{ position: "absolute", margin: "auto", left: 0, right: 0, bottom: 8 }} alt={item.iconType}></img>
                 </div>
                 {item.fileName.replace(/\.[^\.]*$/, '')}
             </div>
@@ -32,9 +33,10 @@ export const TokenDisplayFileList = ({ list, previewDocuments, previewFileId, se
 
     return (
     <div className={"col"}>
+        <p><b><FormattedMessage id = "token.documents.list" defaultMessage="DOCUMENTS TO SIGN"/></b></p>
         {(list.map((item, index) => ( 
         <div className={ "m-2 p-2"} style={{ border: "1px solid lightGrey", backgroundColor: "whiteSmoke", maxWidth: "100%" }}>
-            <img  className={ "p-2" } src={"/img/" + item.iconType + "Icon.png"} alt={item.iconType}></img>
+            <img  className={ "p-2" } src={"/img/Icon" + item.iconType + ".png"} alt={item.iconType}></img>
             <a href={ item.url + "?forceDownload" } download>{item.fileName.replace(/\.[^\.]*$/, '')}</a>
         </div>
         )))}

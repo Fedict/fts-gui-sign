@@ -78,7 +78,7 @@ const XmlDataViewer = (props) => {
             maxHeight : window.innerHeight - 200,
             overflow: "scroll"
         }}>
-            <XMLViewer xml={xml} collapsible={true} invalidXml={()=>false}/>
+            <XMLViewer xml={xml} collapsible={true} invalidXml={<p>Invalid Xml</p>}/>
         </div>}
 
         <div style={previewSkipped || loading || xml?{display:'none'}:{

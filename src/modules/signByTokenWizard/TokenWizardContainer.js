@@ -29,6 +29,8 @@ import TokenWizardIntroContainer from "./pages/TokenWizardIntroContainer";
 import MessageContainerWithStore, {MessageContainer} from "../message/MessageContainer";
 import {ErrorGeneral} from "../message/MessageConstants";
 import {doSetToken, getDocumentMetadataForToken} from "./actions/TokenActions";
+import {FormattedMessage} from 'react-intl';
+import {boldedText} from "../utils/reactIntlUtils";
 import PinPadError from "../signWizard/pages/PinPadError";
 import TokenDisplayFile from "./components/DisplayFile/TokenDisplayFile";
 import TokenDisplayFileList from "./components/DisplayFile/TokenDisplayFileList";
@@ -162,14 +164,14 @@ export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, 
         <div >
             <div className={"row mx-5 mt-3"}>
                 <div className={"col col-7"}>
-                    <div class="col"><h1>Lorem ipsum</h1></div>
                     {inputs && 
-                        <div className={"row"}>
+                        <div className="row">
                             { inputs.length > 1 && (
                                 <TokenDisplayFileList />
                             )}
                             { previewDocuments && (
-                                <div className={"col"}>
+                                <div className="col">
+                                    <p><FormattedMessage id = "token.documents.title.name"defaultMessage="<b>DOCUMENT PREVIEW:</b> {docName}." values={{b : boldedText, docName: inputs[filePreviewIndex].fileName.toUpperCase() }}/></p>
                                     <TokenDisplayFile index={filePreviewIndex} />
                                 </div>
                             )}
