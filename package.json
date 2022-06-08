@@ -32,7 +32,7 @@
     "redux-thunk": "2.3.0",
     "stream": "0.0.2",
     "typescript": "3.8.3"
-  },
+  }, 
   "scripts": {
     "css": "./node_modules/.bin/node-sass ./style/custom.scss ./public/style/custom.css",
     "start": "react-scripts start",
