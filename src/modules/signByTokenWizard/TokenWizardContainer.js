@@ -162,6 +162,7 @@ export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, 
         <div >
             <div className={"row mx-5 mt-3"}>
                 <div className={"col col-7"}>
+                    <div class="col"><h1>Lorem ipsum</h1></div>
                     {inputs && 
                         <div className={"row"}>
                             { inputs.length > 1 && (
