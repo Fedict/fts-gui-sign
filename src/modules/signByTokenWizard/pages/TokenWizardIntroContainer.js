@@ -9,21 +9,28 @@ import {WIZARD_STATE_VALIDATE_LOADING} from "../../wizard/WizardConstants";
 import {definedMessages} from "../../i18n/translations";
 import {boldedText} from "../../utils/reactIntlUtils";
 import {ReadCertificates} from "../../components/ReadCertificates/ReadCertificates";
+import {doWithToken} from "../../utils/helper";
+import {sendLogInfoIgnoreResult} from "../../communication/communication";
+import {setPreview} from "../actions/TokenActions";
 
 const messages = defineMessages({
     title : {
         id : "token.intro.title",
         defaultMessage : "Digital signing of '{fileNames}'"
+    },
+    multiFileTitle : {
+        id : "token.intro.multiFile.title",
+        defaultMessage : "Digitally sign multiple documents"
     }
 })
 
-const TokenWizardIntroContainer = (props) => {
+const TokenWizardIntroContainer = (props, setPreview) => {
     const [checked, setChecked] = useState(false);
     const [certificatesRead, setCertificatesRead] = useState(false);
 
     return (
         <CardContainer
-            title={props.intl.formatMessage(messages.title, {fileName : `'${props.filenames}'`})}
+            title={props.intl.formatMessage(props.isMultifile ? messages.multiFileTitle : messages.title, {fileName : `'${props.filename}'`})}
             hasCancelButton={false}
             cancelButtonText={props.intl.formatMessage(definedMessages.cancel)}
             onClickCancel={() => { props.resetWizard() }}
@@ -32,10 +39,15 @@ const TokenWizardIntroContainer = (props) => {
             onClickNext={() => { props.navigateToNextStep() }}
             autoClickNextTimeout={undefined}
         >
-            <FormattedMessage tagName={"p"} id="token.intro.txt"
-                              defaultMessage="Welcome, {newLine} you are about to sign the document on the left.{newLine}{newLine}You can now insert your eID card into the card reader (make sure you know its PIN code) and then press the Start button to start signing the document."
-                              values={{newLine : <br/>, fileName : props.fileName, b : boldedText, signButtonText : <FormattedMessage id="buttons.sign" defaultMessage="sign"/>}}/>
+            <FormattedMessage tagName={"p"} 
+                            id={ props.isMultifile ? "token.intro.multiFile.txt" : "token.intro.txt" }
+                            defaultMessage={ props.isMultifile ? 
+                                "Welcome, {newLine} you are about to sign the documents on the left.{newLine}{newLine}You can now insert your eID card into the card reader (make sure you know its PIN code) and then press the Start button to start signing the documents."
+                                : "Welcome, {newLine} you are about to sign the document on the left.{newLine}{newLine}You can now insert your eID card into the card reader (make sure you know its PIN code) and then press the Start button to start signing the document."
 
+                              }
+                              values={{newLine : <br/>, fileName : props.fileName, b : boldedText, signButtonText : <FormattedMessage id="buttons.sign" defaultMessage="sign"/>}}/>
+  
             {props.disallowSignedDownloads &&
             <FormattedMessage tagName={"p"} id="token.intro.nodownload" defaultMessage="Please note: <b>you will not be able to download</b> the signed document(s) after signing." values={{b : boldedText}}/>
             }
@@ -45,7 +57,9 @@ const TokenWizardIntroContainer = (props) => {
                     props.doSendLogInfo('UI - documentReadCheckbox - ' + e.target.checked);
                     setChecked(e.target.checked);
                 }} className="form-check-input" id="documentReadCheckbox" data-testid="documentReadCheckbox" value={checked} defaultChecked={checked}/>
-                <label className="form-check-label" htmlFor="documentReadCheckbox"><FormattedMessage id="token.intro.check.read" defaultMessage="I have read this document"/><sup>*</sup></label>
+                <label className="form-check-label" htmlFor="documentReadCheckbox">
+                    <FormattedMessage id={ props.isMultifile ? "token.intro.check.multiFile.read" : "token.intro.check.read" }
+                        defaultMessage={ props.isMultifile ? "I have read these documents" : "I have read this document." }/><sup>*</sup></label>
             </p>
             }
             <p>
@@ -54,6 +68,7 @@ const TokenWizardIntroContainer = (props) => {
                     disabled={!((checked||!props.requestDocumentReadConfirm) && certificatesRead)}
                     onClick={() => {
                         props.doSendLogInfo('UI - SIGN_BUTTON CLICKED')
+                        props.setPreview(false)
                         props.navigateToNextStep()
                     }}
                     id="button_next"
@@ -64,8 +79,10 @@ const TokenWizardIntroContainer = (props) => {
                 <ReadCertificates getCertificates={props.getCertificates} onCertificatesRead={setCertificatesRead} />
             </p>
             <hr/>
-            <FormattedMessage tagName={"p"} id="token.intro.reject"
-                          defaultMessage="<b>Don't want to sign this document?</b>{newLine}Click <b>{rejectButtonText}</b> to reject signing the document"
+            <FormattedMessage tagName={"p"}
+                        id={ props.isMultifile ? "token.intro.multiFile.reject" :  "token.intro.reject" }
+                        defaultMessage={ props.isMultifile ? "<b>Don't want to sign these documents?</b>{newLine}Click <b>{rejectButtonText}</b> to reject signing the documents" :
+                          "<b>Don't want to sign this document?</b>{newLine}Click <b>{rejectButtonText}</b> to reject signing the document" }
                           values={{b : boldedText, newLine : <br/>, rejectButtonText : <FormattedMessage id="buttons.reject" defaultMessage="reject"/>}}
             />
             <button
@@ -81,7 +98,8 @@ const TokenWizardIntroContainer = (props) => {
 
 function mapStateToProps(state){
     return {
-        filenames: state.tokenFile.inputs.filter(i => i.display !== "No").map(i => i.fileName).join("','"),
+        isMultifile: state.tokenFile.inputs.length > 1,
+        filename: state.tokenFile.inputs[0].fileName,
         disallowSignedDownloads : state.tokenFile.disallowSignedDownloads,
         requestDocumentReadConfirm : state.tokenFile.requestDocumentReadConfirm
     };
@@ -91,9 +109,10 @@ const mapDispatchToProps = ({
     selectCertificate,
     getCertificates : getCertificatesWithCallback,
     resetWizard,
-    doSendLogInfo
+    doSendLogInfo,
+    setPreview
 })
 
-export const TokenWizardIntroComponent = injectIntl(TokenWizardIntroContainer)
+export const TokenWizardIntroComponent = injectIntl(TokenWizardIntroContainer, setPreview)
 
 export default connect(mapStateToProps, mapDispatchToProps)(TokenWizardIntroComponent);

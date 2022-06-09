@@ -34,8 +34,7 @@ export const DisplayFile = ({ uploadFile }) => {
                 }
                 return (
 
-                    <object style={{height: "85vh", width: "100%"}} type="application/pdf" data={data.url}
-                            name={data.fileName}>
+                    <object style={{height: "85vh", width: "100%"}} type="application/pdf" data={data.url} name={data.fileName}>
                         <p><FormattedMessage id="file.download.failed.pdf" defaultMessage="Failed to load pdf"/></p>
                     </object>
 
@@ -46,7 +45,7 @@ export const DisplayFile = ({ uploadFile }) => {
                 </Fragment>
 
                 return <div>
-                    {data.isXml && <XmlDataViewer data={data.url} xslt={data.xsltUrl} previewErrorRenderer={() => (
+                    {data.isXml && <XmlDataViewer key={data.url} data={data.url} xslt={data.xsltUrl} previewErrorRenderer={() => (
                         dataNotVisualizable
                     )}></XmlDataViewer>}
                     <p><a href={data.url} download={data.fileName} title={data.fileName}><FormattedMessage id="file.download.link" defaultMessage="Download the file to sign"/></a></p>
