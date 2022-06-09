@@ -131,6 +131,7 @@
   "succes.signed.downloadNotAllowed": "",
   "succes.signNext": "Sign next document",
   "succes.title": "Het document werd succesvol ondertekend!",
+  "succes.title.short": "Ondertekend",
   "title": "BOSA - document ondertekenen",
   "token.intro.check.read": "Ik heb het document gelezen.",
   "token.intro.check.multiFile.read": "Ik heb deze documenten gelezen.",

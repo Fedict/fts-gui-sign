@@ -130,6 +130,7 @@
   "succes.redirect": "You'll be redirected in {timeLeft} seconds",
   "succes.signed.downloadNotAllowed": "",
   "succes.title": "Your document has been successfully signed!",
+  "succes.title.short": "Signed",
   "title": "BOSA - Signing Document",
   "token.intro.check.read": "I have read this document.",
   "token.intro.check.multiFile.read": "I have read these documents.",

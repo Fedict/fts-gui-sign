@@ -130,6 +130,7 @@
   "succes.redirect": "Sie werden in {timeLeft} Sekunden weitergeleitet.",
   "succes.signed.downloadNotAllowed": "",
   "succes.title": "Ihr Dokument wurde erfolgreich unterschrieben!",
+  "succes.title.short": "Unterschrieben",
   "title": "BOSA - Dokument unterschreiben",
   "token.intro.check.read": "Ich habe das Dokument gelesen.",
   "token.intro.check.multiFile.read": "Ich habe diese Dokumente gelesen.",

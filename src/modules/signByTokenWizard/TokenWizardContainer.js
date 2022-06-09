@@ -167,7 +167,7 @@ export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, 
                     {inputs && 
                         <div className="row">
                             { inputs.length > 1 && (
-                                <TokenDisplayFileList />
+                                <TokenDisplayFileList filesAreSigned = { currentIndexStep === 3 } />
                             )}
                             { previewDocuments && (
                                 <div className="col">
