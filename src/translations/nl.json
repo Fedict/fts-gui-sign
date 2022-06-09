@@ -143,7 +143,7 @@
   "token.intro.txt": "Welkom, {newLine} je staat op het punt het document aan de linkerkant te ondertekenen. {newLine} {newLine} Wanneer je het document hebt gelezen, sluit je kaartlezer aan op de computer, steek de eID-kaart in de kaartlezer en klik op de knop <b>{signButtonText}</b>.  {newLine} {newLine} Je tekent het document door je eID pincode in te geven, zorg dat je deze bij de hand hebt.",
   "token.intro.multiFile.txt": "Welkom, {newLine} je staat op het punt de documenten aan de linkerkant te ondertekenen. {newLine} {newLine} Wanneer je de documentent hebt gelezen, sluit je kaartlezer aan op de computer, steek de eID-kaart in de kaartlezer en klik op de knop <b>{signButtonText}</b>.  {newLine} {newLine} Je tekent de documenten door je eID pincode in te geven, zorg dat je deze bij de hand hebt.",
   "token.documents.list": "DOCUMENTEN TE ONDERTEKENEN",
-  "token.documents.title.name": "<b>DOCUMENTVOORVERTONING:</b> {docName}.",
+  "token.documents.title.name": "<b>DOCUMENTVOORVERTONING:</b> {docName}",
   "validate.certificate.info": "Het certificaat wordt gevalideerd. Deze controle kan eventjes duren.",
   "validate.loading.title" : "Valideer document",
   "validate.result.messages.chainConstraintsFailure" : "De keten van ondertekeningscertificaten  (certificaat op eID), die wordt gebruikt om dit document te ondertekenen, voldoet niet aan de validatiebeperkingen. ",

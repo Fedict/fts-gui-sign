@@ -142,7 +142,7 @@
   "token.intro.txt": "Willkommen, {newLine} Sie sind dabei, das Dokument auf der linken Seite zu unterschreiben.{newLine}{newLine}Sie können nun Ihre eID-Karte in den Kartenleser einführen (vergewissern Sie sich, dass Sie den PIN-Code kennen) und dann die Schaltfläche <b>{signButtonText}</b> drücken, um mit dem Unterschreiben des Dokuments zu beginnen.",
   "token.intro.multiFile.txt": "Willkommen, {newLine} Sie sind dabei, das Dokument auf der linken Seite zu unterschreiben.{newLine}{newLine}Sie können nun Ihre eID-Karte in den Kartenleser einführen (vergewissern Sie sich, dass Sie den PIN-Code kennen) und dann die Schaltfläche <b>{signButtonText}</b> drücken, um mit dem Unterschreiben des Dokuments zu beginnen.",
   "token.documents.list": "ZU UNTERZEICHNENDE DOKUMENTE",
-  "token.documents.title.name": "<b>DOKUMENTVORSCHAU:</b> {docName}.",
+  "token.documents.title.name": "<b>DOKUMENTVORSCHAU:</b> {docName}",
   "validate.certificate.info": "Das Zertifikat wird gerade validiert. Diese Prüfung kann eine Weile dauern.",
   "validate.loading.title" : "Das Dokument validieren",
   "validate.result.messages.chainConstraintsFailure" : "Die Signierzertifikatskette (Zertifikat auf eID), die zum Signieren dieses Dokuments verwendet wird, erfüllt nicht die Validierungsbedingungen. ",
