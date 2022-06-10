@@ -1,26 +1,26 @@
-import React, {useState} from 'react';
-import {defineMessages, FormattedMessage, injectIntl} from 'react-intl';
-import {connect} from 'react-redux';
-import {CardContainer} from "../../components/Card/CardContainer";
-import {navigateToStep} from "../../wizard/WizardActions";
-import {selectCertificate} from "../../signWizard/actions/CertificateActions";
-import {doSendLogInfo, getCertificatesWithCallback, resetWizard} from "../../signWizard/actions/WizardLogicActions";
-import {WIZARD_STATE_VALIDATE_LOADING} from "../../wizard/WizardConstants";
-import {definedMessages} from "../../i18n/translations";
-import {boldedText} from "../../utils/reactIntlUtils";
-import {ReadCertificates} from "../../components/ReadCertificates/ReadCertificates";
-import {doWithToken} from "../../utils/helper";
-import {sendLogInfoIgnoreResult} from "../../communication/communication";
-import {setPreview} from "../actions/TokenActions";
+import React, { useState } from 'react';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
+import { CardContainer } from "../../components/Card/CardContainer";
+import { navigateToStep } from "../../wizard/WizardActions";
+import { selectCertificate } from "../../signWizard/actions/CertificateActions";
+import { doSendLogInfo, getCertificatesWithCallback, resetWizard } from "../../signWizard/actions/WizardLogicActions";
+import { WIZARD_STATE_VALIDATE_LOADING } from "../../wizard/WizardConstants";
+import { definedMessages } from "../../i18n/translations";
+import { boldedText } from "../../utils/reactIntlUtils";
+import { ReadCertificates } from "../../components/ReadCertificates/ReadCertificates";
+import { doWithToken } from "../../utils/helper";
+import { sendLogInfoIgnoreResult } from "../../communication/communication";
+import { setPreview } from "../actions/TokenActions";
 
 const messages = defineMessages({
-    title : {
-        id : "token.intro.title",
-        defaultMessage : "Digital signing of '{fileNames}'"
+    title: {
+        id: "token.intro.title",
+        defaultMessage: "Digital signing of '{fileNames}'"
     },
-    multiFileTitle : {
-        id : "token.intro.multiFile.title",
-        defaultMessage : "Digitally sign multiple documents"
+    multiFileTitle: {
+        id: "token.intro.multiFile.title",
+        defaultMessage: "Digitally sign multiple documents"
     }
 })
 
@@ -30,7 +30,7 @@ const TokenWizardIntroContainer = (props, setPreview) => {
 
     return (
         <CardContainer
-            title={props.intl.formatMessage(props.isMultifile ? messages.multiFileTitle : messages.title, {fileName : `'${props.filename}'`})}
+            title={props.intl.formatMessage(props.isMultifile ? messages.multiFileTitle : messages.title, { fileName: `'${props.filename}'` })}
             hasCancelButton={false}
             cancelButtonText={props.intl.formatMessage(definedMessages.cancel)}
             onClickCancel={() => { props.resetWizard() }}
@@ -39,33 +39,33 @@ const TokenWizardIntroContainer = (props, setPreview) => {
             onClickNext={() => { props.navigateToNextStep() }}
             autoClickNextTimeout={undefined}
         >
-            <FormattedMessage tagName={"p"} 
-                            id={ props.isMultifile ? "token.intro.multiFile.txt" : "token.intro.txt" }
-                            defaultMessage={ props.isMultifile ? 
-                                "Welcome, {newLine} you are about to sign the documents on the left.{newLine}{newLine}You can now insert your eID card into the card reader (make sure you know its PIN code) and then press the Start button to start signing the documents."
-                                : "Welcome, {newLine} you are about to sign the document on the left.{newLine}{newLine}You can now insert your eID card into the card reader (make sure you know its PIN code) and then press the Start button to start signing the document."
+            <FormattedMessage tagName={"p"}
+                id={props.isMultifile ? "token.intro.multiFile.txt" : "token.intro.txt"}
+                defaultMessage={props.isMultifile ?
+                    "<b>Welcome</b> {newLine}{newLine} You are about to sign the documents on the left.{newLine}{newLine}You can now insert your eID card into the card reader (make sure you know its PIN code) and then press the Start button to start signing the documents."
+                    : "<b>Welcome</b> {newLine}{newLine} You are about to sign the document on the left.{newLine}{newLine}You can now insert your eID card into the card reader (make sure you know its PIN code) and then press the Start button to start signing the document."
 
-                              }
-                              values={{newLine : <br/>, fileName : props.fileName, b : boldedText, signButtonText : <FormattedMessage id="buttons.sign" defaultMessage="sign"/>}}/>
-  
+                }
+                values={{ newLine: <br />, fileName: props.fileName, b: boldedText, signButtonText: <FormattedMessage id="buttons.sign" defaultMessage="sign" /> }} />
+
             {props.disallowSignedDownloads &&
-            <FormattedMessage tagName={"p"} id="token.intro.nodownload" defaultMessage="Please note: <b>you will not be able to download</b> the signed document(s) after signing." values={{b : boldedText}}/>
+                <FormattedMessage tagName={"p"} id="token.intro.nodownload" defaultMessage="Please note: <b>you will not be able to download</b> the signed document(s) after signing." values={{ b: boldedText }} />
             }
             {props.requestDocumentReadConfirm &&
-            <p className="form-check">
-                <input type="checkbox" onChange={(e) => {
-                    props.doSendLogInfo('UI - documentReadCheckbox - ' + e.target.checked);
-                    setChecked(e.target.checked);
-                }} className="form-check-input" id="documentReadCheckbox" data-testid="documentReadCheckbox" value={checked} defaultChecked={checked}/>
-                <label className="form-check-label" htmlFor="documentReadCheckbox">
-                    <FormattedMessage id={ props.isMultifile ? "token.intro.check.multiFile.read" : "token.intro.check.read" }
-                        defaultMessage={ props.isMultifile ? "I have read these documents" : "I have read this document." }/><sup>*</sup></label>
-            </p>
+                <p className="form-check">
+                    <input type="checkbox" onChange={(e) => {
+                        props.doSendLogInfo('UI - documentReadCheckbox - ' + e.target.checked);
+                        setChecked(e.target.checked);
+                    }} className="form-check-input" id="documentReadCheckbox" data-testid="documentReadCheckbox" value={checked} defaultChecked={checked} />
+                    <label className="form-check-label" htmlFor="documentReadCheckbox">
+                        <FormattedMessage id={props.isMultifile ? "token.intro.check.multiFile.read" : "token.intro.check.read"}
+                            defaultMessage={props.isMultifile ? "I have read these documents" : "I have read this document."} /><sup>*</sup></label>
+                </p>
             }
             <p>
                 <button
-                    className={(checked||!props.requestDocumentReadConfirm) && certificatesRead?"btn btn-primary text-uppercase":"btn btn-secondary text-uppercase"}
-                    disabled={!((checked||!props.requestDocumentReadConfirm) && certificatesRead)}
+                    className={(checked || !props.requestDocumentReadConfirm) && certificatesRead ? "btn btn-primary text-uppercase" : "btn btn-secondary text-uppercase"}
+                    disabled={!((checked || !props.requestDocumentReadConfirm) && certificatesRead)}
                     onClick={() => {
                         props.doSendLogInfo('UI - SIGN_BUTTON CLICKED')
                         props.setPreview(false)
@@ -73,41 +73,41 @@ const TokenWizardIntroContainer = (props, setPreview) => {
                     }}
                     id="button_next"
                 >
-                    <FormattedMessage id="buttons.sign" defaultMessage="sign"/>
+                    <FormattedMessage id="buttons.sign" defaultMessage="sign" />
                 </button>
-                <span style={{padding : 30}}>&nbsp;</span>
+                <span style={{ padding: 30 }}>&nbsp;</span>
                 <ReadCertificates getCertificates={props.getCertificates} onCertificatesRead={setCertificatesRead} />
             </p>
-            <hr/>
+            <hr />
             <FormattedMessage tagName={"p"}
-                        id={ props.isMultifile ? "token.intro.multiFile.reject" :  "token.intro.reject" }
-                        defaultMessage={ props.isMultifile ? "<b>Don't want to sign these documents?</b>{newLine}Click <b>{rejectButtonText}</b> to reject signing the documents" :
-                          "<b>Don't want to sign this document?</b>{newLine}Click <b>{rejectButtonText}</b> to reject signing the document" }
-                          values={{b : boldedText, newLine : <br/>, rejectButtonText : <FormattedMessage id="buttons.reject" defaultMessage="reject"/>}}
+                id={props.isMultifile ? "token.intro.multiFile.reject" : "token.intro.reject"}
+                defaultMessage={props.isMultifile ? "<b>Don't want to sign these documents?</b>{newLine}Click <b>{rejectButtonText}</b> to reject signing the documents" :
+                    "<b>Don't want to sign this document?</b>{newLine}Click <b>{rejectButtonText}</b> to reject signing the document"}
+                values={{ b: boldedText, newLine: <br />, rejectButtonText: <FormattedMessage id="buttons.reject" defaultMessage="reject" /> }}
             />
             <button
                 className="btn btn-danger text-uppercase"
                 onClick={() => { props.resetWizard() }}
                 id="button_cancel"
             >
-                <FormattedMessage id="buttons.reject" defaultMessage="reject"/>
+                <FormattedMessage id="buttons.reject" defaultMessage="reject" />
             </button>
         </CardContainer>
     );
 }
 
-function mapStateToProps(state){
+function mapStateToProps(state) {
     return {
         isMultifile: state.tokenFile.inputs.length > 1,
         filename: state.tokenFile.inputs[0].fileName,
-        disallowSignedDownloads : state.tokenFile.disallowSignedDownloads,
-        requestDocumentReadConfirm : state.tokenFile.requestDocumentReadConfirm
+        disallowSignedDownloads: state.tokenFile.disallowSignedDownloads,
+        requestDocumentReadConfirm: state.tokenFile.requestDocumentReadConfirm
     };
 }
 const mapDispatchToProps = ({
-    navigateToNextStep : () => (navigateToStep(WIZARD_STATE_VALIDATE_LOADING)),
+    navigateToNextStep: () => (navigateToStep(WIZARD_STATE_VALIDATE_LOADING)),
     selectCertificate,
-    getCertificates : getCertificatesWithCallback,
+    getCertificates: getCertificatesWithCallback,
     resetWizard,
     doSendLogInfo,
     setPreview
