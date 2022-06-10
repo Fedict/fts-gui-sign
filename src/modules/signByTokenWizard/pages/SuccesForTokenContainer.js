@@ -13,6 +13,10 @@ const messages = defineMessages({
         id : "succes.title",
         defaultMessage : "Your document has been successfully signed!"
     },
+    multiFileTitle : {
+        id : "succes.multiFile.title",
+        defaultMessage : "Your documents have been successfully signed!"
+    },
     doneButton : {
         id : "succes.next",
         defaultMessage : "Close"
@@ -64,37 +68,34 @@ export class SuccesContainerForToken extends React.Component {
     }
 
     render() {
-        const { nextButtonClicked, redirectUrl, intl, disallowSignedDownloads } = this.props
+        const { nextButtonClicked, redirectUrl, intl, disallowSignedDownloads, multipleDocuments } = this.props
+
+        let bodyTextId = this.props.autoDownloadDocument ? 
+                        (multipleDocuments ? "succes.multiFile.autodownload" : "succes.autodownload") :
+                        "succes.documentNotAutoDownloaded"
+
+        let bodyText = this.props.autoDownloadDocument ? 
+                        (multipleDocuments ? 
+                            "The signed version of your documents will be automatically downloaded. If the download doesn't start, click <b>download document.</b>" :
+                            "Your document will be automatically downloaded. If this is not the case, you can start the download manually"
+                        ) : "You can download the document by clicking on <b>{succesButtonDownload}</b>."
 
         return (
-
             <CardContainer
-                title={intl.formatMessage(messages.title)}
+                title={intl.formatMessage(multipleDocuments ? messages.multiFileTitle : messages.title )}
                 hasCancelButton={false}
                 cancelButtonText={intl.formatMessage(messages.doneButton)}
                 onClickCancel={() => nextButtonClicked(redirectUrl)}
             >
                 <div className="form-group">
                     {disallowSignedDownloads?
-                        false && <FormattedMessage id="succes.signed.downloadNotAllowed"
-                                          defaultMessage=""
-                                          values={{b : boldedText}}
-                        />
+                        false && <FormattedMessage id="succes.signed.downloadNotAllowed" defaultMessage="" values={{b : boldedText}} />
                     :
                         <Fragment>
-                            <p>
-                                {this.props.autoDownloadDocument ?
-                                    <FormattedMessage id="succes.autodownload"
-                                                      defaultMessage="Your document will be automatically downloaded. If this is not the case, you can start the download manually"
-                                                      values={{b : boldedText, newLine : <br/>, succesButtonDownload : intl.formatMessage({id : "succes.button.download", defaultMessage : "Download document"})}}
-                                    />
-                                    :
-                                    <FormattedMessage id="succes.documentNotAutoDownloaded"
-                                                      defaultMessage="<b>Your document has been successfully signed</b>{newLine}"
-                                                      values={{b : boldedText, newLine : <br/>, succesButtonDownload : intl.formatMessage({id : "succes.button.download", defaultMessage : "Download document"})}}
-                                    />
-                                }
-                            </p>
+                            <p><FormattedMessage id={bodyTextId} defaultMessage={bodyText}
+                                            values={{b : boldedText, newLine : <br/>, succesButtonDownload : intl.formatMessage({id : "succes.button.download", defaultMessage : "Download document"})}}
+                            /></p>
+
                             <p>
                                 <button
                                     className="btn btn-primary text-uppercase"
@@ -106,7 +107,7 @@ export class SuccesContainerForToken extends React.Component {
                         </Fragment>
                     }
                     <p>
-                        <Ticker autoClickNextTimeout={3} onTimeout={() => nextButtonClicked(redirectUrl)}
+                        <Ticker autoClickNextTimeout={30} onTimeout={() => nextButtonClicked(redirectUrl)}
                                 redirectMessageDescriptor={messages.redirectMessage}/>
                     </p>
                 </div>
@@ -121,7 +122,8 @@ const mapStateToProps = (state) => {
         redirectUrl : state.tokenFile.redirectUrl,
         token : state.tokenFile.token,
         autoDownloadDocument : state.wizard.autoDownloadDocument !== false && !state.tokenFile.disallowSignedDownloads,
-        disallowSignedDownloads : state.tokenFile.disallowSignedDownloads
+        disallowSignedDownloads : state.tokenFile.disallowSignedDownloads,
+        multipleDocuments : state.tokenFile.inputs.length > 1
     })
 }
 const mapDispatchToProps = (dispatch) => {
