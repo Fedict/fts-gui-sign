@@ -84,6 +84,7 @@
   "file.download.failed.pdf": "Failed to load pdf.",
   "file.download.link": "Download the file to sign.",
   "file.download.text.1": "The document to sign can't be previewed but you can download it by right-clicking on the link below and selecting the option 'save-link-as'.",
+  "report.download.link": "Download full report",
   "index.title": "Signing Box",
   "index.welcome": "The online signature service 'Signing box' is offered by the Federal Government.",
   "index.content": "With this service you can digitally sign your documents (pdf or xml) or check the validity of a signed document (pdf or xml). With 'Signing box' you are sure that your document is signed correctly!",

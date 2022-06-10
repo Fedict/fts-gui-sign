@@ -29,6 +29,10 @@ function getSignatures(validation) {
     signatures.forEach(sig => {
         var cert = validation.diagnosticData.Certificate.find(cert => cert.Id === sig[1]);
         sig.who = cert.GivenName + ' ' + cert.Surname;
+        sig.class = "alert-warning";
+        sig.when = sig[0];
+        sig.indication = "indication";
+        sig.isQualified = "Q";
     });
     return signatures;
 }
@@ -47,37 +51,48 @@ export class ResultContainer extends React.Component {
                     <div className={"alert " + subIndicationUsed.className}>
                     <FormattedMessage id={subIndicationUsed.id} defaultMessage={subIndicationUsed.message} />
                     </div>
-
                 </div>
             )
         }
+
+
 
         let result = <MessageContainer message={ErrorGeneral} onCancel={() => { resetWizard() }} />
 
         if (indicationKeys.includes(validation.indication)) {
             const indicationUsed = indication[validation.indication]
+            let signatures = getSignatures(validation);
             result = (
                 <CardContainer
                     title={intl.formatMessage(messages.title)}
                     hasNextButton
                     nextButtonText={intl.formatMessage(messages.next)}
                     onClickNext={() => { resetWizard() }}
+                    comment={<a href="#" onClick={() => saveAs(new Blob([validation.report], {type: "application/json;charset=utf-8"}), "report.json")}>
+                        <FormattedMessage id="report.download.link" defaultMessage="Download full report"/></a>}
                 >
                     <div className="text-center">
                         <div className={"alert " + indicationUsed.className}>
-                        <FormattedMessage id={indicationUsed.id} defaultMessage={indicationUsed.message} />
+                            <FormattedMessage id={indicationUsed.id} defaultMessage={indicationUsed.message} />
                         </div>
-
+                        <div className="container text-center">
+                            <div className="row">Signatures :</div>
+                            <div className="row">
+                                <div className="col"><div className="row">Who</div>
+                                    { signatures.map(sig => <div className="row">{sig.who}</div> )}
+                                </div>
+                                <div className="col"><div className="row">When</div>
+                                { signatures.map(sig => <div className="row">{sig.when}</div> )}
+                                </div>
+                                <div className="col"><div className="row">Result</div>
+                                { signatures.map(sig => <div className="row">{sig.indication}</div> )}
+                                </div>
+                                <div className="col"><div className="row">Qualifed</div>
+                                { signatures.map(sig => <div className="row">{sig.isQualified}</div> )}
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
-                    <p>Signed by :  { getSignature(validation) }</p>
-
-                    <lu>
-                        Signed by : { getSignatures(validation).map(sig => <li>{sig.who + ' on ' +sig[0]}</li> ) }
-                   </lu>
-
-
-                    <a href="#" onClick={() => saveAs(new Blob([validation.report], {type: "application/json;charset=utf-8"}), "report.json")}>Download report</a>
                     {subIndicationResult}
                 </CardContainer>
             )

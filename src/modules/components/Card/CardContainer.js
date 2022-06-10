@@ -27,7 +27,8 @@ export const CardContainer = (
         nextButtonText,
         onClickNext,
         nextButtonIsDisabled,
-        autoClickNextTimeout
+        autoClickNextTimeout,
+        comment
     }
 ) => {
     const [autoClickTime, setAutoClickTime] = useState(autoClickNextTimeout);
@@ -74,6 +75,7 @@ export const CardContainer = (
                 {(title)
                     ? (
                         <div className="card-footer text-muted">
+                            { comment }
                             {
                                 (hasNextButton)
                                     ? (

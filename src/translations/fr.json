@@ -84,6 +84,7 @@
   "file.download.failed.pdf": "Impossible de charger le PDF.",
   "file.download.link": "Télécharger le fichier à signer.",
   "file.download.text.1": "Le document à signer ne peut pas être prévisualisé mais vous pouvez le télécharger en cliquant avec le bouton droit de la souris sur le lien ci-dessous et en sélectionnant l'option 'enregistrer le lien sous'.",
+  "report.download.link": "Télécharger le rapport complet",
   "index.title": "Signing Box",
   "index.welcome": "Le service de signature en ligne 'Signing box' est proposé par le gouvernement fédéral.",
   "index.content": "Avec ce service, vous pouvez signer numériquement vos documents (pdf ou xml) ou vérifier la validité d'un document signé (pdf ou xml). Avec 'Signing box', vous êtes sûr que votre document est signé correctement !",

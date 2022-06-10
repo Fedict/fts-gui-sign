@@ -84,6 +84,7 @@
   "file.download.failed.pdf": "Kan pdf niet laden.",
   "file.download.link": "Download het bestand om te ondertekenen.",
   "file.download.text.1": "Er kan geen voorbeeld van het te ondertekenen document opgehaald worden. Je kan het document downloaden door met de rechtermuisknop op onderstaande link te klikken en de optie 'link-opslaan-als' te selecteren.",
+  "report.download.link": "Volledig verslag downloaden",
   "index.title": "Signing Box",
   "index.welcome": "De online handtekendienst 'Signing box' wordt aangeboden door de Federale overheid.",
   "index.content": "Je kan via deze dienst jouw documenten (pdf of xml) digitaal ondertekenen of de geldigheid van een ondertekend documenten (pdf of xml) controleren. Met 'Signing box' ben je zeker dat je document correct ondertekend is!",
