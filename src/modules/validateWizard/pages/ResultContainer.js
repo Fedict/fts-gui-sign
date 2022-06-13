@@ -25,12 +25,11 @@ function getSignature(validation) {
 }
 
 function getSignatures(validation) {
-    var signatures = validation.diagnosticData.Signature.map(sig => [sig.ClaimedSigningTime, sig.ChainItem[0].Certificate]);
+    var signatures = validation.diagnosticData.Signature.map(sig => ({ when:sig.ClaimedSigningTime, certId: sig.ChainItem[0].Certificate}) );
     signatures.forEach(sig => {
-        var cert = validation.diagnosticData.Certificate.find(cert => cert.Id === sig[1]);
+        var cert = validation.diagnosticData.Certificate.find(cert => cert.Id === sig.certId);
         sig.who = cert.GivenName + ' ' + cert.Surname;
         sig.class = "alert-warning";
-        sig.when = sig[0];
         sig.indication = "indication";
         sig.isQualified = "Q";
     });
@@ -76,21 +75,18 @@ export class ResultContainer extends React.Component {
                             <FormattedMessage id={indicationUsed.id} defaultMessage={indicationUsed.message} />
                         </div>
                         <div className="container text-center">
-                            <div className="row">Signatures :</div>
                             <div className="row">
-                                <div className="col"><div className="row">Who</div>
-                                    { signatures.map(sig => <div className="row">{sig.who}</div> )}
-                                </div>
-                                <div className="col"><div className="row">When</div>
-                                { signatures.map(sig => <div className="row">{sig.when}</div> )}
-                                </div>
-                                <div className="col"><div className="row">Result</div>
-                                { signatures.map(sig => <div className="row">{sig.indication}</div> )}
-                                </div>
-                                <div className="col"><div className="row">Qualifed</div>
-                                { signatures.map(sig => <div className="row">{sig.isQualified}</div> )}
-                                </div>
+                                <div className="col">Who</div>
+                                <div className="col">When</div>
+                                <div className="col">Result</div>
+                                <div className="col">Qualification</div>
                             </div>
+                            { signatures.map(sig => <div className="row">
+                                <div className="col">{sig.who}</div>
+                                <div className="col">{sig.when}</div>
+                                <div className="col">{sig.indication}</div>
+                                <div className="col">{sig.isQualified}</div>
+                            </div> )}
                         </div>
                     </div>
                     {subIndicationResult}
