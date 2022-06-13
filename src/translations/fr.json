@@ -111,6 +111,7 @@
   "signing.loading.title": "Signature du document",
   "signing.pininput.button.sign": "Signer avec l'eID",
   "signing.pininput.text": "<b>Saisissez le code PIN</b> et cliquez sur  <b>{signingButton}</b> pour signer le document.",
+  "signing.pininput.multiFile.text": "<b>Saisissez le code PIN</b> et cliquez sur <b>{signingButton}</b> pour signer les documents.",
   "signing.pininput.textCommonName": "Saisissez le code PIN de {commonName}",
   "signing.pininput.title": "Saisissez le code PIN",
   "signing.presign.text": "<b>Saisissez le code PIN</b> de {certificateName} lorsqu'on vous le demande et cliquez OK pour signer le document.",

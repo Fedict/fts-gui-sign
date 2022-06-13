@@ -111,6 +111,7 @@
   "signing.loading.title": "Document ondertekenen",
   "signing.pininput.button.sign": "Ondertekenen met eID",
   "signing.pininput.text": "<b>Geef de pincode in</b> en klik op <b>{signingButton}</b> om het document te ondertekenen.",
+  "signing.pininput.multiFile.text": "<b>Geef de pincode in</b> en klik op <b>{signingButton}</b> om de documenten te ondertekenen.",
   "signing.pininput.textCommonName": "Voer de pincode in voor {commonName}",
   "signing.pininput.title": "Voer pincode in",
   "signing.presign.text": "<b>Voer de pincode in </b> voor {certificateName} wanneer dat wordt gevraagd en druk op OK om het document te ondertekenen.",
