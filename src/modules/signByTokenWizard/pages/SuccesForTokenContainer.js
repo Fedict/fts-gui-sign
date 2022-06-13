@@ -107,7 +107,7 @@ export class SuccesContainerForToken extends React.Component {
                         </Fragment>
                     }
                     <p>
-                        <Ticker autoClickNextTimeout={30} onTimeout={() => nextButtonClicked(redirectUrl)}
+                        <Ticker autoClickNextTimeout={3} onTimeout={() => nextButtonClicked(redirectUrl)}
                                 redirectMessageDescriptor={messages.redirectMessage}/>
                     </p>
                 </div>
