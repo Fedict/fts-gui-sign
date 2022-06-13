@@ -24,7 +24,7 @@ export const validateDocument = () => (dispatch, getStore) => {
         .then((val) => {
             dispatch(validationSetIndication(val.indication))
             dispatch(validationSetSubIndication(val.subIndication))
-            dispatch(validationSetReport(JSON.stringify(val.report)))
+            dispatch(validationSetReport(val.report))
             dispatch(validationSetDiagnosticData(val.diagnosticData))
             dispatch(navigateToStep(WIZARD_STATE_RESULT))
         })

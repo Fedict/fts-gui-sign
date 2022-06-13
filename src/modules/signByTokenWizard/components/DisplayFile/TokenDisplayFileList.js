@@ -39,7 +39,7 @@ export const TokenDisplayFileList = ({ list, previewDocuments, previewFileId, fi
     <div className="col">
         <p><b><FormattedMessage id = "token.documents.list" defaultMessage="DOCUMENTS TO SIGN"/></b></p>
         {(list.map((item, index) => ( 
-            <div className="m-2 p-2" style={{ border: "1px solid lightGrey", backgroundColor: "whiteSmoke", maxWidth: "100%" }}>
+            <div className="m-2 p-2" key={index} style={{ border: "1px solid lightGrey", backgroundColor: "whiteSmoke", maxWidth: "100%" }}>
                 <div className="row">
                     <div className="col">
                         <img  className="p-2" src={"/img/Icon" + item.iconType + ".png"} alt={item.iconType}></img>
