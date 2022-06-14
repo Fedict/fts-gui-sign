@@ -42,8 +42,8 @@ const TokenWizardIntroContainer = (props, setPreview) => {
             <FormattedMessage tagName={"p"}
                 id={props.isMultifile ? "token.intro.multiFile.txt" : "token.intro.txt"}
                 defaultMessage={props.isMultifile ?
-                    "<b>Welcome</b> {newLine}{newLine} You are about to sign the documents on the left.{newLine}{newLine}You can now insert your eID card into the card reader (make sure you know its PIN code) and then press the Start button to start signing the documents."
-                    : "<b>Welcome</b> {newLine}{newLine} You are about to sign the document on the left.{newLine}{newLine}You can now insert your eID card into the card reader (make sure you know its PIN code) and then press the Start button to start signing the document."
+                    "Welcome,{newLine}{newLine}You are about to sign the documents on the left.{newLine}{newLine}After reading the documents, connect your card reader to the computer, insert the eID card into the card reader and press the <b>{signButtonText}</b> button to digitally sign the documents. {newLine} {newLine} To sign the documents, enter your eID PIN code. Make sure you have it to hand."
+                    : "<b>Welcome</b>{newLine}{newLine}You are about to sign the document on the left.{newLine}{newLine}You can now insert your eID card into the card reader (make sure you know its PIN code) and then press the Start button to start signing the document."
 
                 }
                 values={{ newLine: <br />, fileName: props.fileName, b: boldedText, signButtonText: <FormattedMessage id="buttons.sign" defaultMessage="sign" /> }} />
