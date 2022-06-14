@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { CardContainer } from '../../components/Card/CardContainer';
 import { resetWizard } from '../actions/WizardLogicActions';
-import { indication, indicationKeys, subIndication, subIndicationKeys } from '../constants/indicationConstants';
 import { MessageContainer } from '../../message/MessageContainer';
 import { ErrorGeneral } from '../../message/MessageConstants';
 import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
@@ -20,23 +19,39 @@ const messages = defineMessages({
     }
 })
 
-function getSignature(validation) {
-    var sig = getSignatures(validation)[0];
-    return sig.who + '  on ' + sig[0];
-}
-
-let alerts = [ "danger", "warning", "info", "success"];
-
 function getSignatures(validation) {
-    var signatures = validation.diagnosticData.Signature.map(sig => ({ when:sig.ClaimedSigningTime, certId: sig.ChainItem[0].Certificate}) );
-    var count = 0;
+    if (!validation.diagnosticData) return null
+
+    var signatures = validation.diagnosticData.Signature.map(sig => (
+        {
+            date: sig.ClaimedSigningTime,
+            certId: sig.ChainItem[0].Certificate,
+            isValid: sig.BasicSignature.SignatureValid
+        }) );
+    
+    if (!signatures || signatures.size === 0) return null;
+
+    var xmlDoc = new DOMParser().parseFromString(validation.report,"text/xml");
+    var certQuals = xmlDoc.getElementsByTagNameNS("http://dss.esig.europa.eu/validation/detailed-report", "ValidationCertificateQualification")
+
     signatures.forEach(sig => {
         var cert = validation.diagnosticData.Certificate.find(cert => cert.Id === sig.certId);
-        sig.who = cert.GivenName + ' ' + cert.Surname;
-        sig.class = "alert-" + alerts[count++];
-        if (count === alerts.length) count = 0;
-        sig.indication = "indication";
-        sig.isQualified = (count % 2 == 0 ? "Not q" : "Q") + "ualified";
+        if (!cert) return null;
+
+        sig.signer =  cert.GivenName + ' ' + cert.Surname;
+
+        var qualification = "" 
+        if (certQuals) {
+            for (var certQual of certQuals) {
+                if (certQual.parentElement && certQual.getAttribute('Id') === sig.certId) {
+                    qualification = certQual.parentElement.getAttribute('SignatureQualification')
+                    break;
+                }
+            }
+        }
+        
+        sig.isQualified = cert && cert.KeyUsage && qualification === 'QESig' && cert.KeyUsage.includes('nonRepudiation')
+        sig.class = "alert-" + (sig.isValid ? (sig.isQualified ? "success" : "warning") : "danger")
     });
     return signatures;
 }
@@ -45,64 +60,38 @@ export class ResultContainer extends React.Component {
 
     render() {
         const { validation, resetWizard, intl } = this.props
-
-        let subIndicationResult = "";
-
-        if (validation && validation.subIndication && subIndicationKeys.includes(validation.subIndication)) {
-            const subIndicationUsed = subIndication[validation.subIndication]
-            subIndicationResult = (
-                <div className="text-center">
-                    <div className={"alert " + subIndicationUsed.className}>
-                    <FormattedMessage id={subIndicationUsed.id} defaultMessage={subIndicationUsed.message} />
-                    </div>
-                </div>
-            )
+        
+        let signatures = getSignatures(validation);
+        if (!signatures) {
+            return <MessageContainer message={ErrorGeneral} onCancel={() => { resetWizard() }} />
         }
 
-
-
-        let result = <MessageContainer message={ErrorGeneral} onCancel={() => { resetWizard() }} />
-
-        if (indicationKeys.includes(validation.indication)) {
-            const indicationUsed = indication[validation.indication]
-            let signatures = getSignatures(validation);
-            result = (
-                <CardContainer
+        return (<CardContainer
                     title={intl.formatMessage(messages.title)}
                     hasNextButton
                     nextButtonText={intl.formatMessage(messages.next)}
                     onClickNext={() => { resetWizard() }}
-                    comment={<a href="#" onClick={() => saveAs(new Blob([validation.report], {type: "application/xml;charset=utf-8"}), "report.xml")}>
-                        <FormattedMessage id="report.download.link" defaultMessage="Download full report"/></a>}
+                    leftButtonText={ <FormattedMessage id="report.download.link" defaultMessage="Download full report"/> }
+                    onClickLeft={() => saveAs(new Blob([validation.report], {type: "application/xml;charset=utf-8"}), "report.xml")}
                 >
                     <div className="text-center">
-                        <div className={"alert " + indicationUsed.className}>
-                            <FormattedMessage id={indicationUsed.id} defaultMessage={indicationUsed.message} />
-                        </div>
                         <div className="container">
-                            <div className="row alert alert-success">
-                                <div className="col">Who</div>
-                                <div className="col">When</div>
-                                <div className="col">Result</div>
-                                <div className="col">Qualification</div>
-                            </div>
+                            <div className="row">
+                                <div className="col"><b>Who</b></div>
+                                <div className="col"><b>When</b></div>
+                                <div className="col"><b>Valid</b></div>
+                                <div className="col"><b>Qualified</b></div>
+                            </div><br/>
                             { signatures.map(sig => <div className={ "row alert " + sig.class }>
-                                <div className="col">{sig.who}</div>
-                                <div className="col">{moment(sig.when).format('DD/MM/YYYY - h:mm:ss')}</div>
-                                <div className="col">{sig.indication}</div>
-                                <div className="col">{sig.isQualified}</div>
+                                <div className="col">{sig.signer}</div>
+                                <div className="col">{moment(sig.date).format('DD/MM/YYYY - h:mm:ss')}</div>
+                                <div className="col">{sig.isValid ? 'Yes' : 'No'}</div>
+                                <div className="col">{sig.isQualified ? 'Yes' : 'No'}</div>
                             </div> )}
                         </div>
                     </div>
-                    {subIndicationResult}
                 </CardContainer>
             )
-        }
-
-        return (
-            <div>{result}</div>
-
-        )
     }
 }
 
