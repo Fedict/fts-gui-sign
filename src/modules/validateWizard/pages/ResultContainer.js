@@ -38,7 +38,12 @@ function getSignatures(validation) {
         var cert = validation.diagnosticData.Certificate.find(cert => cert.Id === sig.certId);
         if (!cert) return null;
 
-        sig.signer =  cert.GivenName + ' ' + cert.Surname;
+        sig.signer =  cert.Surname
+        if (sig.signer) {
+            if (cert.GivenName) sig.signer = cert.GivenName + ' ' + sig.signer
+        } else {
+            sig.signer = cert.CommonName
+        }
 
         var qualification = "" 
         if (certQuals) {
