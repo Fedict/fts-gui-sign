@@ -82,7 +82,7 @@ export class ResultContainer extends React.Component {
                                 <div className="col"><b>Valid</b></div>
                                 <div className="col"><b>Qualified</b></div>
                             </div><br/>
-                            { signatures.map(sig => <div className={ "row alert " + sig.class }>
+                            { signatures.map((sig,index) => <div key={index} className={ "row alert " + sig.class }>
                                 <div className="col">{sig.signer}</div>
                                 <div className="col">{moment(sig.date).format('DD/MM/YYYY - h:mm:ss')}</div>
                                 <div className="col">{sig.isValid ? 'Yes' : 'No'}</div>
