@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { CardContainer } from '../../components/Card/CardContainer';
 import { resetWizard } from '../actions/WizardLogicActions';
+import { subIndication } from '../constants/indicationConstants';
 import { MessageContainer } from '../../message/MessageContainer';
 import { ErrorGeneral } from '../../message/MessageConstants';
 import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
@@ -19,20 +20,24 @@ const messages = defineMessages({
     }
 })
 
+
+const NS = "http://dss.esig.europa.eu/validation/detailed-report";
+
 function getSignatures(validation) {
     if (!validation.diagnosticData) return null
 
     var signatures = validation.diagnosticData.Signature.map(sig => (
         {
+            id: sig.Id,
             date: sig.ClaimedSigningTime,
-            certId: sig.ChainItem[0].Certificate,
-            isValid: sig.BasicSignature.SignatureValid
+            certId: sig.ChainItem[0].Certificate
         }) );
     
     if (!signatures || signatures.size === 0) return null;
 
     var xmlDoc = new DOMParser().parseFromString(validation.report,"text/xml");
-    var certQuals = xmlDoc.getElementsByTagNameNS("http://dss.esig.europa.eu/validation/detailed-report", "ValidationCertificateQualification")
+    var certQuals = xmlDoc.getElementsByTagNameNS(NS, "ValidationCertificateQualification")
+    var sigValidations = xmlDoc.getElementsByTagNameNS(NS, "ValidationProcessBasicSignature")
 
     signatures.forEach(sig => {
         var cert = validation.diagnosticData.Certificate.find(cert => cert.Id === sig.certId);
@@ -43,6 +48,24 @@ function getSignatures(validation) {
             if (cert.GivenName) sig.signer = cert.GivenName + ' ' + sig.signer
         } else {
             sig.signer = cert.CommonName
+        }
+
+        if (sigValidations) {
+            for (var sigValidation of sigValidations) {
+                var id = sigValidation.parentElement.getAttribute('Id');
+                if (id == sig.id) {
+                    var conclusions = sigValidation.getElementsByTagNameNS(NS, "Conclusion")
+                    if (conclusions && conclusions.length > 0) {
+                        var indications = conclusions[0].getElementsByTagNameNS(NS, "Indication")
+                        if (indications && indications.length > 0)
+                        sig.isValid = indications[0].textContent === 'PASSED'
+                        if (!sig.isValid) {
+                            sig.subIndication = subIndication[conclusions[0].getElementsByTagNameNS(NS, "SubIndication")[0].textContent]
+                        }
+                    }
+                    break;
+                }
+            }
         }
 
         var qualification = "" 
@@ -90,7 +113,7 @@ export class ResultContainer extends React.Component {
                             { signatures.map((sig,index) => <div key={index} className={ "row alert " + sig.class }>
                                 <div className="col">{sig.signer}</div>
                                 <div className="col">{moment(sig.date).format('DD/MM/YYYY - h:mm:ss')}</div>
-                                <div className="col">{sig.isValid ? 'Yes' : 'No'}</div>
+                                <div className="col" title={sig.subIndication && intl.formatMessage({ id: sig.subIndication.id, defaultMessage: sig.subIndication.message })}>{sig.isValid ? 'Yes' : 'No'}</div>
                                 <div className="col">{sig.isQualified ? 'Yes' : 'No'}</div>
                             </div> )}
                         </div>
