@@ -52,13 +52,18 @@ export class VersionCheckInstallContainer extends React.Component {
     handleOnClick() {
         const usedOs = getOS()
         if (usedOs === OS.WINDOWS && window.configData && window.configData.eIDLinkUrls && window.configData.eIDLinkUrls.windows) {
+            if (navigator.userAgent.includes("WOW64") || navigator.userAgent.includes("Win64")) {
+                let url = defaults(window.configData.eIDLinkUrls.windowsX64[this.props.intl.locale], window.configData.eIDLinkUrls.windows)
+                window.open(url + '?dt=' + new Date().getTime(), "_blank")
+            } else {
             let url = defaults(window.configData.eIDLinkUrls.windows[this.props.intl.locale], window.configData.eIDLinkUrls.windows)
             window.open(url + '?dt=' + new Date().getTime(), "_blank")
+            }
         }
         if (usedOs === OS.MACOS && window.configData && window.configData.eIDLinkUrls && window.configData.eIDLinkUrls.macOs) {
             window.open(window.configData.eIDLinkUrls.macOs + '?dt=' + new Date().getTime(), "_blank")
         }
-
+        
         this.setState({installButtonClicked : true})
     }
 

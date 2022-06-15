@@ -1,21 +1,27 @@
 window.configData = {
-    eIDLinkMinimumVersion: "2.3",
+    eIDLinkMinimumVersion: "2.6",
     eIDLinkExtensionUrls: {
         chrome: "https://chrome.google.com/webstore/detail/beidconnect/pencgnkbgaekikmiahiaakjdgaibiipp",
         edge:   "https://chrome.google.com/webstore/detail/beidconnect/pencgnkbgaekikmiahiaakjdgaibiipp",
         firefox: "https://eid.static.bosa.fgov.be/beidconnect-fx.xpi",
-        safari: "https://eid.static.bosa.fgov.be/BeIDConnect%20Extension.dmg",
-        IE: "https://eid.static.bosa.fgov.be/beidconnect.msi"
+        safari: "https://eid.static.bosa.fgov.be/BeIDConnect_Extension_2.6.dmg",
+        IE: "https://eid.static.bosa.fgov.be/beidconnect_2.6.msi"
     },
 
     eIDLinkUrls: {
         windows: {
-            en : "https://eid.static.bosa.fgov.be/beidconnect.msi",
-            de : "https://eid.static.bosa.fgov.be/beidconnect.msi",
-            nl : "https://eid.static.bosa.fgov.be/beidconnect_nl.msi",
-            fr : "https://eid.static.bosa.fgov.be/beidconnect_fr.msi",
+            en : "https://eid.static.bosa.fgov.be/beidconnect_2.6.msi",
+            de : "https://eid.static.bosa.fgov.be/beidconnect_2.6_de.msi",
+            nl : "https://eid.static.bosa.fgov.be/beidconnect_2.6_nl.msi",
+            fr : "https://eid.static.bosa.fgov.be/beidconnect_2.6_fr.msi",
         },
-        macOs: "https://eid.static.bosa.fgov.be/beidconnect.dmg",
+        windowsX64: {
+            en : "https://eid.static.bosa.fgov.be/beidconnect_x64_2.6.msi",
+            de : "https://eid.static.bosa.fgov.be/beidconnect_x64_2.6_de.msi",
+            nl : "https://eid.static.bosa.fgov.be/beidconnect_x64_2.6_nl.msi",
+            fr : "https://eid.static.bosa.fgov.be/beidconnect_x64_2.6_fr.msi",
+        },
+        macOs: "https://eid.static.bosa.fgov.be/beidconnect_2.6.dmg",
         linux: {
             debian: {
                 url: "https://eid.static.bosa.fgov.be/beidconnect-archive.deb",
