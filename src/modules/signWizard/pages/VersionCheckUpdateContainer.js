@@ -57,8 +57,13 @@ export class VersionCheckUpdateContainer extends React.Component {
             if (intl.locale!==null && intl.locale!==undefined && (intl.locale==="fr" ||intl.locale==="nl" ||intl.locale==="de"))
             {
                 language = intl.locale;
-            }            console.log(window.configData.eIDLinkUrls.windows[language] + '?dt=' + new Date().getTime(), "_blank");
-            window.open(window.configData.eIDLinkUrls.windows[language] + '?dt=' + new Date().getTime(), "_blank")
+            }
+            console.log(window.configData.eIDLinkUrls.windows[language] + '?dt=' + new Date().getTime(), "_blank");
+            if (navigator.userAgent.includes("WOW64") || navigator.userAgent.includes("Win64")) {
+                window.open(window.configData.eIDLinkUrls.windowsX64[language] + '?dt=' + new Date().getTime(), "_blank")
+            } else {
+                window.open(window.configData.eIDLinkUrls.windows[language] + '?dt=' + new Date().getTime(), "_blank")
+            }
         }
         if (usedOs === OS.MACOS) {
             if (usedBrowser === browser.SAFARI && window.configData && window.configData.eIDLinkExtensionUrls && window.configData.eIDLinkExtensionUrls.safari) {
