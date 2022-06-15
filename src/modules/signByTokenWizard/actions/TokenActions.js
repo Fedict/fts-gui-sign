@@ -12,7 +12,10 @@ import {setDateSigning} from "../../signWizard/actions/SignatureActions";
 import {getBEUrl, parseErrorMessage} from "../../utils/helper";
 
 export const TOKEN_RECEIVED = "TOKEN_RECEIVED"
+export const SET_TOKEN_PREVIEW = "SET_TOKEN_PREVIEW"
+export const SET_PREVIEW_FILE_ID = "SET_PREVIEW_FILE_ID"
 export const SET_DOCUMENT_TOKEN_METADATA = "SET_DOCUMENT_TOKEN_METADATA"
+
 /**
  * function (action) to get the digest by token
  */
@@ -83,7 +86,7 @@ export const getDocumentMetadataForToken = () => (dispatch, getStore) => {
             .then(handleFlowIdError(flowId, getStore))
             .then((resp) => {
                 //console.log('getDocumentMetadataForTokenAPI', resp)
-                if(resp.mimetype && resp.filename){
+                if(resp.inputs){
                     dispatch(setDocumentMetadata(resp))
                     dispatch(navigateToStep(WIZARD_STATE_UPLOAD))
                 }else{
@@ -129,13 +132,25 @@ const replaceBEURL = (url) => {
 export const setDocumentMetadata = (metadata) => ({
     type : SET_DOCUMENT_TOKEN_METADATA,
     payload : {
-        fileName : metadata.filename,
         inputs : metadata.inputs,
-        isPdf : metadata.mimetype && metadata.mimetype.indexOf('application/pdf') > -1,
-        isXml : metadata.mimetype && (metadata.mimetype.indexOf('application/xml') > -1 || metadata.mimetype.indexOf('text/xml') > -1),
-        xsltUrl: replaceBEURL(metadata.xsltUrl),
         readPhoto : metadata.readPhoto,
+        previewDocuments : metadata.previewDocuments,
         disallowSignedDownloads : metadata.disallowSignedDownloads,
-        requestDocumentReadConfirm : metadata.requestDocumentReadConfirm && metadata.requestDocumentReadConfirm === true
+        requestDocumentReadConfirm : metadata.requestDocumentReadConfirm
     }
 })
+
+export const setPreviewFileId = (index) => (dispatch) => {
+    dispatch({
+        type : SET_PREVIEW_FILE_ID,
+        payload : {index}
+    })
+}
+
+export const setPreview = (previewDocuments) => (dispatch) => {
+    dispatch({
+        type : SET_TOKEN_PREVIEW,
+        payload : { previewDocuments }
+    })
+}
+

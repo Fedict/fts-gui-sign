@@ -17,6 +17,7 @@ import ValidationReducer from "../modules/validateWizard/reducers/ValidationRedu
 import ControlIdReducer from "../modules/controlIds/common/ControlIdReducer";
 import i18nReducer from "../modules/i18n/reducers/i18nReducer";
 import TokenReducer from "../modules/signByTokenWizard/reducers/tokenReducers";
+import FilePreviewReducer from "../modules/signByTokenWizard/reducers/FilePreviewReducers";
 /*
 Middleware to accept an array as action, quite useful sometimes
  */
@@ -43,6 +44,7 @@ export default function configureStore(initialState = {}) {
         wizard: wizardReducer,
         uploadFile: UploadFileReducer,
         tokenFile: TokenReducer,
+        filePreview: FilePreviewReducer,
         i18n: i18nReducer,
         message: MessageReducer,
         certificate: CertificateReducer,

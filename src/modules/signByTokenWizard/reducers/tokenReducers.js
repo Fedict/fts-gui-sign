@@ -1,5 +1,6 @@
 import {STORE_RESET} from "../../../store/storeActions";
-import {SET_DOCUMENT_TOKEN_METADATA, TOKEN_RECEIVED} from "../actions/TokenActions";
+import {SET_DOCUMENT_TOKEN_METADATA, TOKEN_RECEIVED, SET_TOKEN_PREVIEW} from "../actions/TokenActions";
+import {defaults} from "../../utils/helper";
 
 export const initialState = {
 
@@ -21,10 +22,17 @@ const TokenReducer = (state = initialState, action) => {
         case SET_DOCUMENT_TOKEN_METADATA : {
             return {
                 ...state,
+                inputs : action.payload.inputs,
                 readPhoto : action.payload.readPhoto,
+                previewDocuments : action.payload.previewDocuments,
                 disallowSignedDownloads : action.payload.disallowSignedDownloads,
-                requestDocumentReadConfirm : action.payload.requestDocumentReadConfirm,
-                inputs : action.payload.inputs
+                requestDocumentReadConfirm : action.payload.requestDocumentReadConfirm
+            }
+        }
+        case SET_TOKEN_PREVIEW : {
+            return {
+                ...state,
+                previewDocuments : action.payload.previewDocuments,
             }
         }
         case STORE_RESET:

@@ -21,6 +21,7 @@ const XmlDataViewer = (props) => {
     const [xml, setXml] = useState(undefined);
     const iframeEl = useRef(null);
     const intl = useIntl();
+
     useEffect(() => {
         if(!props.xslt){
             function xmlLoadingFailed(){
@@ -77,7 +78,7 @@ const XmlDataViewer = (props) => {
             maxHeight : window.innerHeight - 200,
             overflow: "scroll"
         }}>
-            <XMLViewer xml={xml} collapsible={true} invalidXml={()=>false}/>
+            <XMLViewer xml={xml} collapsible={true} invalidXml={<p>Invalid Xml</p>}/>
         </div>}
 
         <div style={previewSkipped || loading || xml?{display:'none'}:{

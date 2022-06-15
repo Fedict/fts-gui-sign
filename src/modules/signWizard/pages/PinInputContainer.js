@@ -161,8 +161,9 @@ const PinInputContainer = (props) => {
                     {(certificate && certificate.certificateSelected && certificate.certificateSelected.commonName && false)
                         ? <FormattedMessage id="signing.pininput.textCommonName" defaultMessage="Enter the PIN for {commonName}" values={{commonName : certificate.certificateSelected.commonName}}/>
                         : <FormattedMessage
-                            id="signing.pininput.text"
-                            defaultMessage="Enter the PIN"
+                            id={ props.isMultifile ? "signing.pininput.multiFile.text" : "signing.pininput.text" }
+                            defaultMessage={ props.isMultifile ? "<b>Enter the PIN</b> and click on  <b>{signingButton}</b> to sign the documents." :
+                                "<b>Enter the PIN</b> and click on  <b>{signingButton}</b> to sign the documents." }
                             values={{b: boldedText,
                                 newLine : <br/>,
                                 signingButton : intl.formatMessage(messages.next)
@@ -198,6 +199,7 @@ const PinInputContainer = (props) => {
 
 const mapStateToProps = (state) => {
     return (state) => ({
+        isMultifile: state.tokenFile.inputs.length > 1,
         pinError: state.pinError,
         certificate: state.certificate
     })
