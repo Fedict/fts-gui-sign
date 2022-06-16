@@ -105,10 +105,10 @@ export class ResultContainer extends React.Component {
                     <div className="text-center">
                         <div className="container">
                             <div className="row">
-                                <div className="col"><b>Who</b></div>
-                                <div className="col"><b>When</b></div>
-                                <div className="col"><b>Valid</b></div>
-                                <div className="col"><b>Qualified</b></div>
+                                <div className="col"><b><FormattedMessage id="validation.signer.name" defaultMessage="Signer"/></b></div>
+                                <div className="col"><b><FormattedMessage id="validation.sign.moment" defaultMessage="Date"/></b></div>
+                                <div className="col"><b><FormattedMessage id="validation.sign.valid" defaultMessage="Valid"/></b></div>
+                                <div className="col"><b><FormattedMessage id="validation.sign.qualif" defaultMessage="Qualified"/></b></div>
                             </div><br/>
                             { signatures.map((sig,index) => <div key={index} className={ "row alert " + sig.class }>
                                 <div className="col">{sig.signer}</div>

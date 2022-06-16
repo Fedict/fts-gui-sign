@@ -182,8 +182,8 @@
   "validate.upload.text.step.2": "Klicken Sie auf die Schaltfläche <b>{validateButton}</b>, um die Validierung zu starten.",
   "validate.upload.title": "Ein elektronisch unterschriebenes Dokument validieren",
   "validate.upload.validateButton": "Das Dokument validieren",
-  "xmlpreview.button.download": "Original xml herunterladen",
-  "xmlpreview.button.print": "Drucken",
-  "xmlpreview.error": "Die Vorschau des zu unterschreibenden Dokuments konnte nicht erstellt werden.",
-  "xmlpreview.loading": "Laden der Vorschau des Dokuments..."
+  "validation.signer.name": "Unterzeichner",
+  "validation.sign.moment": "Datum",
+  "validation.sign.valid": "Gültig",
+  "validation.sign.qualif": "Qualifiziert"
 }

@@ -184,5 +184,9 @@
   "xmlpreview.button.download": "Télécharger le fichier xml original",
   "xmlpreview.button.print": "Imprimez",
   "xmlpreview.error": "Impossible de créer l'aperçu du document à signer.",
-  "xmlpreview.loading": "Chargement de l'aperçu du document..."
+  "xmlpreview.loading": "Chargement de l'aperçu du document...",
+  "validation.signer.name": "Signataire",
+  "validation.sign.moment": "Date",
+  "validation.sign.valid": "Valide",
+  "validation.sign.qualif": "Qualifiée"
 }

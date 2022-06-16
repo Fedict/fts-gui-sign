@@ -185,5 +185,9 @@
   "xmlpreview.button.download": "Download origineel xml-bestand",
   "xmlpreview.button.print": "Print",
   "xmlpreview.error": "Er kon geen preview opgehaald worden van het te tekenen document.",
-  "xmlpreview.loading": "Preview van het document aan het laden…"
+  "xmlpreview.loading": "Preview van het document aan het laden…",
+  "validation.signer.name": "Ondertekenaar",
+  "validation.sign.moment": "Datum",
+  "validation.sign.valid": "Geldig",
+  "validation.sign.qualif": "Gekwalificeerd"
 }

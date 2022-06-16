@@ -185,5 +185,9 @@
   "xmlpreview.button.download": "Download original xml",
   "xmlpreview.button.print": "Print",
   "xmlpreview.error": "Couldn't create the preview of the document to sign.",
-  "xmlpreview.loading": "Loading the preview of the document..."
+  "xmlpreview.loading": "Loading the preview of the document...",
+  "validation.signer.name": "Signer",
+  "validation.sign.moment": "Date",
+  "validation.sign.valid": "Valid",
+  "validation.sign.qualif": "Qualified"
 }
