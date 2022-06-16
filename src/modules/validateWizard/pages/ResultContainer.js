@@ -104,16 +104,16 @@ export class ResultContainer extends React.Component {
                 >
                 <div className="container text-center">
                     <div className="row alert py-0 mt-0">
-                            <div className="col"><b><FormattedMessage id="validation.signer.name" defaultMessage="Signer"/></b></div>
-                            <div className="col-4"><b><FormattedMessage id="validation.sign.moment" defaultMessage="Date"/></b></div>
-                            <div className="col-2"><b><FormattedMessage id="validation.sign.valid" defaultMessage="Valid"/></b></div>
-                            <div className="col-2"><b><FormattedMessage id="validation.sign.qualif" defaultMessage="Qualified"/></b></div>
+                            <div className="col px-0"><b><FormattedMessage id="validation.signer.name" defaultMessage="Signer"/></b></div>
+                            <div className="col-4 px-0"><b><FormattedMessage id="validation.sign.moment" defaultMessage="Date"/></b></div>
+                            <div className="col-2 px-0"><b><FormattedMessage id="validation.sign.valid" defaultMessage="Valid"/></b></div>
+                            <div className="col-2 px-0"><b><FormattedMessage id="validation.sign.qualif" defaultMessage="Qualified"/></b></div>
                         </div>
                         { signatures.map((sig,index) => <div key={index} className={ "row alert " + sig.class }>
-                            <div className="col">{sig.signer}</div>
-                            <div className="col-4">{moment(sig.date).format('DD/MM/YYYY - h:mm:ss')}</div>
-                            <div className="col-2" title={sig.subIndication && intl.formatMessage({ id: sig.subIndication.id, defaultMessage: sig.subIndication.message })}>{sig.isValid ? 'Yes' : 'No'}</div>
-                            <div className="col-2">{sig.isQualified ? 'Yes' : 'No'}</div>
+                            <div className="col px-0">{sig.signer}</div>
+                            <div className="col-4 px-0">{moment(sig.date).format('DD/MM/YYYY - h:mm:ss')}</div>
+                            <div className="col-2 px-0" title={sig.subIndication && intl.formatMessage({ id: sig.subIndication.id, defaultMessage: sig.subIndication.message })}>{sig.isValid ? 'Yes' : 'No'}</div>
+                            <div className="col-2 px-0">{sig.isQualified ? 'Yes' : 'No'}</div>
                         </div> )}
                     </div>
                 </CardContainer>
