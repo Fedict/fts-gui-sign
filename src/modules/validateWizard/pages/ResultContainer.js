@@ -93,7 +93,7 @@ export class ResultContainer extends React.Component {
         if (!signatures) {
             return <MessageContainer message={ErrorGeneral} onCancel={() => { resetWizard() }} />
         }
-
+        
         return (<CardContainer
                     title={intl.formatMessage(messages.title)}
                     hasNextButton
@@ -102,21 +102,19 @@ export class ResultContainer extends React.Component {
                     leftButtonText={ <FormattedMessage id="report.download.link" defaultMessage="Download full report"/> }
                     onClickLeft={() => saveAs(new Blob([validation.report], {type: "application/xml;charset=utf-8"}), "report.xml")}
                 >
-                    <div className="text-center">
-                        <div className="container">
-                            <div className="row">
-                                <div className="col"><b><FormattedMessage id="validation.signer.name" defaultMessage="Signer"/></b></div>
-                                <div className="col"><b><FormattedMessage id="validation.sign.moment" defaultMessage="Date"/></b></div>
-                                <div className="col"><b><FormattedMessage id="validation.sign.valid" defaultMessage="Valid"/></b></div>
-                                <div className="col"><b><FormattedMessage id="validation.sign.qualif" defaultMessage="Qualified"/></b></div>
-                            </div><br/>
-                            { signatures.map((sig,index) => <div key={index} className={ "row alert " + sig.class }>
-                                <div className="col">{sig.signer}</div>
-                                <div className="col">{moment(sig.date).format('DD/MM/YYYY - h:mm:ss')}</div>
-                                <div className="col" title={sig.subIndication && intl.formatMessage({ id: sig.subIndication.id, defaultMessage: sig.subIndication.message })}>{sig.isValid ? 'Yes' : 'No'}</div>
-                                <div className="col">{sig.isQualified ? 'Yes' : 'No'}</div>
-                            </div> )}
+                <div className="container text-center">
+                    <div className="row alert py-0 mt-0">
+                            <div className="col"><b><FormattedMessage id="validation.signer.name" defaultMessage="Signer"/></b></div>
+                            <div className="col-4"><b><FormattedMessage id="validation.sign.moment" defaultMessage="Date"/></b></div>
+                            <div className="col-2"><b><FormattedMessage id="validation.sign.valid" defaultMessage="Valid"/></b></div>
+                            <div className="col-2"><b><FormattedMessage id="validation.sign.qualif" defaultMessage="Qualified"/></b></div>
                         </div>
+                        { signatures.map((sig,index) => <div key={index} className={ "row alert " + sig.class }>
+                            <div className="col">{sig.signer}</div>
+                            <div className="col-4">{moment(sig.date).format('DD/MM/YYYY - h:mm:ss')}</div>
+                            <div className="col-2" title={sig.subIndication && intl.formatMessage({ id: sig.subIndication.id, defaultMessage: sig.subIndication.message })}>{sig.isValid ? 'Yes' : 'No'}</div>
+                            <div className="col-2">{sig.isQualified ? 'Yes' : 'No'}</div>
+                        </div> )}
                     </div>
                 </CardContainer>
             )
