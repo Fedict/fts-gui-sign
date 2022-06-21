@@ -42,13 +42,7 @@ function getSignatures(validation) {
     signatures.forEach(sig => {
         var cert = validation.diagnosticData.Certificate.find(cert => cert.Id === sig.certId);
         if (!cert) return null;
-
-        sig.signer =  cert.Surname
-        if (sig.signer) {
-            if (cert.GivenName) sig.signer = cert.GivenName + ' ' + sig.signer
-        } else {
-            sig.signer = cert.CommonName
-        }
+        sig.signer = cert.CommonName
 
         if (sigValidations) {
             for (var sigValidation of sigValidations) {
