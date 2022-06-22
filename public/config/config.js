@@ -3,7 +3,7 @@ window.configData = {
     eIDLinkExtensionUrls: {
         chrome: "https://chrome.google.com/webstore/detail/beidconnect/pencgnkbgaekikmiahiaakjdgaibiipp",
         edge:   "https://chrome.google.com/webstore/detail/beidconnect/pencgnkbgaekikmiahiaakjdgaibiipp",
-        firefox: "https://eid.static.bosa.fgov.be/beidconnect-fx.xpi",
+        firefox: "https://eid.static.bosa.fgov.be/beidconnect-fx-0.0.11.xpi",
         safari: "https://eid.static.bosa.fgov.be/BeIDConnect_Extension_2.6.dmg",
         IE: "https://eid.static.bosa.fgov.be/beidconnect_2.6.msi"
     },
@@ -28,34 +28,26 @@ window.configData = {
                 distributions: [
                     'Debian 9 "Stretch"',
                     'Debian 10 "Buster"',
+                    'Debian 11 "Bullseye"',
                     'Ubuntu 18.04 LTS "Bionic Beaver"',
-                    'Ubuntu 20.04 LTS',
+                    'Ubuntu 20.04 LTS "Focal Fossa"',
+                    'Ubuntu 22.04 LTS "Jammy Jellyfish"',
                 ]
             },
             fedora: {
                 url: "https://eid.static.bosa.fgov.be/beidconnect-archive-fedora.rpm",
                 distributions: [
-                    'Fedora 31',
-                    'Fedora 32'
+                    'Fedora 35',
+                    'Fedora 36'
                 ]
             },
-            redHat: {
+            centos: {
                 url: "https://eid.static.bosa.fgov.be/beidconnect-archive-el.rpm",
-                distributions:  [
-                    'Red Hat Enterprise Linux 7 "Maipo"',
-                    'Red Hat Enterprise Linux 8 "Ootpa"',
-                    'Similar distributions, such as CentOS'
-                ]
-            }
-            ,
-            openSUSE: {
-                url: "https://eid.static.bosa.fgov.be/beidconnect-archive-suse.rpm",
                 distributions: [
-                    'OpenSUSE Leap 15.0',
-                    'OpenSUSE Leap 15.1'
+                    'CentOS 7',
+                    'CentOS Stream 9'
                 ]
             },
-
         }
     },
 
