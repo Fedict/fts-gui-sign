@@ -29,7 +29,7 @@ export const TokenDisplayFileList = ({ list, previewDocuments, previewFileId, fi
                     <div style={{ paddingTop: -20, border: "solid 1px lightgrey", width: 100, height:70, backgroundColor: "white", position: "relative" }}>
                         <img src={"/img/Icon" + item.iconType + ".png"} style={{ position: "absolute", margin: "auto", left: 0, right: 0, bottom: 8 }} alt={item.iconType}></img>
                     </div>
-                    {item.fileName.replace(/\.[^\.]*$/, '')}
+                    {item.fileName.replace(/\.[^.]*$/, '')}
                 </div>
             )))}
         </div>);
@@ -43,7 +43,7 @@ export const TokenDisplayFileList = ({ list, previewDocuments, previewFileId, fi
                 <div className="row">
                     <div className="col">
                         <img  className="p-2" src={"/img/Icon" + item.iconType + ".png"} alt={item.iconType}></img>
-                        <a href={ item.url + "?forceDownload" } download>{item.fileName.replace(/\.[^\.]*$/, '')}</a>
+                        <a href={ item.url + "?forceDownload" } download>{item.fileName.replace(/\.[^.]*$/, '')}</a>
                     </div>
                     { filesAreSigned && (<div className="col-md-auto py-1">
                         <div className="px-3" style={{ width: "auto", maxWidth: "100%", borderRadius: "20px", backgroundColor: "#01c301" }}>
