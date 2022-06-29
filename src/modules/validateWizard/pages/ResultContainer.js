@@ -47,7 +47,7 @@ function getSignatures(validation) {
         if (sigValidations) {
             for (var sigValidation of sigValidations) {
                 var id = sigValidation.parentElement.getAttribute('Id');
-                if (id == sig.id) {
+                if (id === sig.id) {
                     var conclusions = sigValidation.getElementsByTagNameNS(NS, "Conclusion")
                     if (conclusions && conclusions.length > 0) {
                         var indications = conclusions[0].getElementsByTagNameNS(NS, "Indication")
