@@ -199,7 +199,7 @@ const PinInputContainer = (props) => {
 
 const mapStateToProps = (state) => {
     return (state) => ({
-        isMultifile: state.tokenFile.inputs.length > 1,
+        isMultifile: state.tokenFile.inputs != undefined && state.tokenFile.inputs.length > 1,
         pinError: state.pinError,
         certificate: state.certificate
     })
