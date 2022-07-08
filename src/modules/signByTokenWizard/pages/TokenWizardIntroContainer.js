@@ -68,7 +68,7 @@ const TokenWizardIntroContainer = (props, setPreview) => {
                     disabled={!((checked || !props.requestDocumentReadConfirm) && certificatesRead)}
                     onClick={() => {
                         props.doSendLogInfo('UI - SIGN_BUTTON CLICKED')
-                        props.setPreview(false)
+                        props.setPreview(!props.isMultifile)
                         props.navigateToNextStep()
                     }}
                     id="button_next"
