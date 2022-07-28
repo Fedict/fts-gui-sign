@@ -105,6 +105,8 @@
   "pin_too_short": "Le code PIN est trop court.",
   "pinpad.error.title": "Erreur de saisie du code PIN",
   "retrieve.certificates.title": "Récupération des certificats",
+  "yes": "Oui",
+  "no": "Non",
   "sign.token.1": "Lire et connecter l'eID",
   "sign.token.2": "Saisissez le code PIN et signez",
   "sign.token.4": "Prêt",

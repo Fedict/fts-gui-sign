@@ -105,6 +105,8 @@
   "pin_too_short": "PIN is to short.",
   "pinpad.error.title": "PIN entry error",
   "retrieve.certificates.title": "Retrieving certificates",
+  "yes": "Yes",
+  "no": "No",
   "sign.token.1": "Read and connect eID",
   "sign.token.2": "Enter PIN  and sign",
   "sign.token.4": "Ready",

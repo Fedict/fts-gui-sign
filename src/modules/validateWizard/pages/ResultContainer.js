@@ -82,6 +82,9 @@ export class ResultContainer extends React.Component {
 
     render() {
         const { validation, resetWizard, intl } = this.props
+
+        let no = <FormattedMessage id="no" defaultMessage="No"/>
+        let yes = <FormattedMessage id="yes" defaultMessage="Yes"/>
         
         let signatures = getSignatures(validation);
         if (!signatures) {
@@ -106,8 +109,8 @@ export class ResultContainer extends React.Component {
                         { signatures.map((sig,index) => <div key={index} className={ "row alert " + sig.class }>
                             <div className="col px-0">{sig.signer}</div>
                             <div className="col-4 px-0">{moment(sig.date).format('DD/MM/YYYY - h:mm:ss')}</div>
-                            <div className="col-2 px-0" title={sig.subIndication && intl.formatMessage({ id: sig.subIndication.id, defaultMessage: sig.subIndication.message })}>{sig.isValid ? 'Yes' : 'No'}</div>
-                            <div className="col-2 px-0">{sig.isQualified ? 'Yes' : 'No'}</div>
+                            <div className="col-2 px-0" title={sig.subIndication && intl.formatMessage({ id: sig.subIndication.id, defaultMessage: sig.subIndication.message })}>{sig.isValid ? yes : no}</div>
+                            <div className="col-2 px-0">{sig.isQualified ? yes : no }</div>
                         </div> )}
                     </div>
                 </CardContainer>

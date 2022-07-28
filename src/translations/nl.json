@@ -105,6 +105,8 @@
   "pin_too_short": "De pincode is te kort.",
   "pinpad.error.title": "Fout bij het invoeren van de pincode",
   "retrieve.certificates.title": "Certificaten ophalen",
+  "yes": "Ja",
+  "no": "Nee",
   "sign.token.1": "Lees en verbind eID",
   "sign.token.2": "Voer pincode in en onderteken",
   "sign.token.4": "Klaar",
