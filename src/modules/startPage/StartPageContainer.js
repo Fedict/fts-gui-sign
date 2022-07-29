@@ -38,7 +38,6 @@ export class StartPageContainer extends React.Component {
                                     <br />
                                     <div className="row mx-5 mt-3">
                                         <div className="col col-6">
-                                            
                                             <p align="center"><button style={{ minWidth: 115 }} className="btn btn-primary" id="button_install_eID" onClick={() => { resetWizard(); history.push({pathname:'/sign', search: "?language=" + language })}}><FormattedMessage id="buttons.sign" defaultMessage="I want to sign" /></button></p>
                                         </div>
                                         <div className="col col-6">
