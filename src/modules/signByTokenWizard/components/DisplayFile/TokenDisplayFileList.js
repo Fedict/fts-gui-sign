@@ -14,7 +14,7 @@ import {setPreviewFileId} from "../../actions/TokenActions";
  * @param {array} previewDocuments - display mode : if true display selectable icon list, else display list of downloadble urls
  * @param {array} previewFileId - the curently selected icon
  */
-export const TokenDisplayFileList = ({ list, previewDocuments, previewFileId, filesAreSigned, setPreviewFileId }) => {
+export const TokenDisplayFileList = ({ list, previewDocuments, previewFileId, setPreviewFileId }) => {
     if (previewDocuments) {
         const hilightBorderStyle = {
             backgroundColor: "grey",
@@ -45,7 +45,7 @@ export const TokenDisplayFileList = ({ list, previewDocuments, previewFileId, fi
                         <img  className="p-2" src={"/img/Icon" + item.iconType + ".png"} alt={item.iconType}></img>
                         <a href={ item.url + "?forceDownload" } download>{item.fileName.replace(/\.[^.]*$/, '')}</a>
                     </div>
-                    { filesAreSigned && (<div className="col-md-auto py-1">
+                    { item.isSigned && (<div className="col-md-auto py-1">
                         <div className="px-3" style={{ width: "auto", maxWidth: "100%", borderRadius: "20px", backgroundColor: "#01c301" }}>
                             <img className="mb-1 mr-1" style={{ width: "12px", height:"12px" }} src="/img/check.png" alt="PDF"/>
                             <FormattedMessage id = "succes.title.short" defaultMessage="Signed" />
@@ -60,13 +60,14 @@ export const TokenDisplayFileList = ({ list, previewDocuments, previewFileId, fi
 
 export const mapStateToProps = (state) => {
     var list = [];
-    state.tokenFile.inputs.forEach((item, index) => {
+    state.tokenFile.inputs.forEach((input, index) => {
         var iconType = "UNK";
-        if (item.mimeType === "application/pdf") iconType = "PDF";
-        else if (item.mimeType === "application/xml") iconType = "XML";
+        if (input.mimeType === "application/pdf") iconType = "PDF";
+        else if (input.mimeType === "application/xml") iconType = "XML";
         list.push({
             iconType: iconType,
-            fileName: item.fileName,
+            fileName: input.fileName,
+            isSigned: input.isSigned,
             url: getBEUrl() + '/signing/getFileForToken/' + state.tokenFile.token + "/DOC/" + index
      })
     });

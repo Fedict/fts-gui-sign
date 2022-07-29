@@ -715,8 +715,10 @@ export const signDocument = () => (dispatch, getStore) => {
                 .then((resp) => {
                     //console.log('signDocumentForTokenAPI response', resp)
 
-                    if (resp && resp.name && resp.bytes) {
-                        tokenFile.inputs[fileIdToSign].isSigned = true
+   *********                 if (resp && resp.name && resp.bytes) {
+                        if (tokenFile.signType === 'XadesMultiFile') {
+                            tokenFile.inputs.forEach(input => input.isSigned = true)
+                        } else tokenFile.inputs[fileIdToSign].isSigned = true
                         if(!tokenFile.disallowSignedDownloads){
                             dispatch(setDownloadFile(resp))
                         }

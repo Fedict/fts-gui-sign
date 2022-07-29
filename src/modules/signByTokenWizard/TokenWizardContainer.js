@@ -31,7 +31,6 @@ import {ErrorGeneral} from "../message/MessageConstants";
 import {doSetToken, getDocumentMetadataForToken} from "./actions/TokenActions";
 import {FormattedMessage} from 'react-intl';
 import {boldedText} from "../utils/reactIntlUtils";
-import PinPadError from "../signWizard/pages/PinPadError";
 import TokenDisplayFile from "./components/DisplayFile/TokenDisplayFile";
 import TokenDisplayFileList from "./components/DisplayFile/TokenDisplayFileList";
 import DigestForTokenLoadingContainer from "./pages/DigestForTokenLoadingContainer";
@@ -168,7 +167,7 @@ export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, 
                     {inputs && 
                         <div className="row">
                             { inputs.length > 1 && (
-                                <TokenDisplayFileList filesAreSigned = { currentIndexStep === 3 } />
+                                <TokenDisplayFileList/>
                             )}
                             { previewDocuments && (
                                 <div className="col">
