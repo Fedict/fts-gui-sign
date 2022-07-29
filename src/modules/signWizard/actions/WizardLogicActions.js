@@ -702,9 +702,11 @@ export const signDocument = () => (dispatch, getStore) => {
             if(tokenFile.readPhoto){
                 photo = certificate.certificateSelected.photo;
             }
+            var fileIdToSign = tokenFile.inputs.findIndex(input => !input.isSigned);
             signDocumentForTokenAPI(
                 certificate.certificateSelected.APIBody,
                 tokenFile.token,
+                fileIdToSign,
                 signature.signature,
                 signature.signingDate,
                 photo,
@@ -712,13 +714,14 @@ export const signDocument = () => (dispatch, getStore) => {
                 .then(handleFlowIdError(flowId, getStore))
                 .then((resp) => {
                     //console.log('signDocumentForTokenAPI response', resp)
-                    if(tokenFile.disallowSignedDownloads){
-                        dispatch(navigateToStep(WIZARD_STATE_SUCCES))
-                    }else if (resp
-                        && resp.name
-                        && resp.bytes) {
-                        dispatch(setDownloadFile(resp))
-                        dispatch(navigateToStep(WIZARD_STATE_SUCCES))
+
+                    if (resp && resp.name && resp.bytes) {
+                        tokenFile.inputs[fileIdToSign].isSigned = true
+                        if(!tokenFile.disallowSignedDownloads){
+                            dispatch(setDownloadFile(resp))
+                        }
+                        fileIdToSign = tokenFile.inputs.findIndex(input => !input.isSigned);
+                        dispatch(navigateToStep(fileIdToSign === -1 ? WIZARD_STATE_SUCCES : WIZARD_STATE_DIGEST_LOADING))
                     } else {
                         const parsedError = parseErrorMessage(resp.message);
                         if(parsedError && errorMessages[parsedError.type]){

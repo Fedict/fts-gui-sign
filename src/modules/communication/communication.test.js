@@ -633,7 +633,7 @@ describe('getDataToSignForTokenAPI', () => {
         const mockPromiseFunction = jest.fn(() => Promise.resolve(mockResponse))
         global.fetch = jest.fn().mockImplementation(mockPromiseFunction);
 
-        const result = await getDataToSignForTokenAPI(startCertificateObject, startToken, "Any Value", "picture bytes")
+        const result = await getDataToSignForTokenAPI(startCertificateObject, startToken, fileIdToSign, "Any Value", "picture bytes")
 
         expect(global.fetch).toHaveBeenCalledTimes(1)
         expect(global.fetch.mock.calls[0][0]).toEqual("/signing/getDataToSignForToken")

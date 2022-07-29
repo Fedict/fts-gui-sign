@@ -24,7 +24,7 @@ export const getDigestForToken = () => (dispatch, getStore) => {
     const { certificate } = store
     const { tokenFile } = store
     const signingDate = moment().format();
-    dispatch(setDateSigning(signingDate))
+    dispatch(setDateSigning(signingDate)) 
 
     if (certificate
         && certificate.certificateSelected
@@ -36,7 +36,9 @@ export const getDigestForToken = () => (dispatch, getStore) => {
         if(tokenFile.readPhoto){
             photo = certificate.certificateSelected.photo;
         }
-        getDataToSignForTokenAPI(certificate.certificateSelected.APIBody, tokenFile.token, signingDate, photo)
+
+        var fileIdToSign = tokenFile.inputs.findIndex(input => !input.isSigned);
+        getDataToSignForTokenAPI(certificate.certificateSelected.APIBody, tokenFile.token, fileIdToSign, signingDate, photo)
             .then(handleFlowIdError(flowId, getStore))
             .then((resp) => {
                 if(resp.digest && resp.digestAlgorithm && resp.signingDate){
