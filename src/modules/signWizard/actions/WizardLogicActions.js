@@ -702,7 +702,7 @@ export const signDocument = () => (dispatch, getStore) => {
             if(tokenFile.readPhoto){
                 photo = certificate.certificateSelected.photo;
             }
-            var fileIdToSign = tokenFile.inputs.findIndex(input => !input.isSigned);
+            var fileIdToSign = tokenFile.inputs.findIndex(input => !input.isSigned && input.isSelected);
             signDocumentForTokenAPI(
                 certificate.certificateSelected.APIBody,
                 tokenFile.token,
@@ -714,15 +714,11 @@ export const signDocument = () => (dispatch, getStore) => {
                 .then(handleFlowIdError(flowId, getStore))
                 .then((resp) => {
                     //console.log('signDocumentForTokenAPI response', resp)
-
-   *********                 if (resp && resp.name && resp.bytes) {
+                    if (resp === true || (resp && resp.name && resp.bytes)) {
                         if (tokenFile.signType === 'XadesMultiFile') {
                             tokenFile.inputs.forEach(input => input.isSigned = true)
                         } else tokenFile.inputs[fileIdToSign].isSigned = true
-                        if(!tokenFile.disallowSignedDownloads){
-                            dispatch(setDownloadFile(resp))
-                        }
-                        fileIdToSign = tokenFile.inputs.findIndex(input => !input.isSigned);
+                        fileIdToSign = tokenFile.inputs.findIndex(input => !input.isSigned && input.isSelected);
                         dispatch(navigateToStep(fileIdToSign === -1 ? WIZARD_STATE_SUCCES : WIZARD_STATE_DIGEST_LOADING))
                     } else {
                         const parsedError = parseErrorMessage(resp.message);

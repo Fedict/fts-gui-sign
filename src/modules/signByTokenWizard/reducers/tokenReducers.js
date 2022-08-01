@@ -1,5 +1,5 @@
 import {STORE_RESET} from "../../../store/storeActions";
-import {SET_DOCUMENT_TOKEN_METADATA, TOKEN_RECEIVED, SET_TOKEN_PREVIEW} from "../actions/TokenActions";
+import {SET_DOCUMENT_TOKEN_METADATA, TOKEN_RECEIVED, SET_TOKEN_PREVIEW, SET_INPUT_SELECTION} from "../actions/TokenActions";
 import {defaults} from "../../utils/helper";
 
 export const initialState = {
@@ -35,6 +35,13 @@ const TokenReducer = (state = initialState, action) => {
                 previewDocuments : action.payload.previewDocuments,
             }
         }
+        case SET_INPUT_SELECTION: {
+            return {
+                ...state,
+                inputs: state.inputs.map(
+                    (input, i) => i === action.payload.index ? {...input, isSelected: action.payload.value} : { ...input }
+                )}
+            }
         case STORE_RESET:
             return initialState
         default:

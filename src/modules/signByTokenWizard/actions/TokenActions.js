@@ -14,6 +14,7 @@ import {getBEUrl, parseErrorMessage} from "../../utils/helper";
 export const TOKEN_RECEIVED = "TOKEN_RECEIVED"
 export const SET_TOKEN_PREVIEW = "SET_TOKEN_PREVIEW"
 export const SET_PREVIEW_FILE_ID = "SET_PREVIEW_FILE_ID"
+export const SET_INPUT_SELECTION = "SET_INPUT_SELECTION"
 export const SET_DOCUMENT_TOKEN_METADATA = "SET_DOCUMENT_TOKEN_METADATA"
 
 /**
@@ -37,7 +38,7 @@ export const getDigestForToken = () => (dispatch, getStore) => {
             photo = certificate.certificateSelected.photo;
         }
 
-        var fileIdToSign = tokenFile.inputs.findIndex(input => !input.isSigned);
+        var fileIdToSign = tokenFile.inputs.findIndex(input => !input.isSigned && input.isSelected);
         getDataToSignForTokenAPI(certificate.certificateSelected.APIBody, tokenFile.token, fileIdToSign, signingDate, photo)
             .then(handleFlowIdError(flowId, getStore))
             .then((resp) => {
@@ -89,6 +90,10 @@ export const getDocumentMetadataForToken = () => (dispatch, getStore) => {
             .then((resp) => {
                 //console.log('getDocumentMetadataForTokenAPI', resp)
                 if(resp.inputs){
+                    //  TODO RELACE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    resp.inputs.forEach((input) => { input.isSelected = true })
+                    //  TODO RELACE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    
                     dispatch(setDocumentMetadata(resp))
                     dispatch(navigateToStep(WIZARD_STATE_UPLOAD))
                 }else{
@@ -153,6 +158,13 @@ export const setPreview = (previewDocuments) => (dispatch) => {
     dispatch({
         type : SET_TOKEN_PREVIEW,
         payload : { previewDocuments }
+    })
+}
+
+export const switchInputSelection = (index, value) => (dispatch) => {
+    dispatch({
+        type : SET_INPUT_SELECTION,
+        payload : {index: index, value:value}
     })
 }
 

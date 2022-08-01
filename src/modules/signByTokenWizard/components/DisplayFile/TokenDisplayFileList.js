@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import {FormattedMessage} from 'react-intl';
 
 import {getBEUrl} from "../../../utils/helper";
-import {setPreviewFileId} from "../../actions/TokenActions";
+import {setPreviewFileId, switchInputSelection} from "../../actions/TokenActions";
 
 /**
  * Component to display list of filenames 
@@ -14,8 +14,8 @@ import {setPreviewFileId} from "../../actions/TokenActions";
  * @param {array} previewDocuments - display mode : if true display selectable icon list, else display list of downloadble urls
  * @param {array} previewFileId - the curently selected icon
  */
-export const TokenDisplayFileList = ({ list, previewDocuments, previewFileId, setPreviewFileId }) => {
-    if (previewDocuments) {
+export const TokenDisplayFileList = ({ tokenFile, previewFileId, setPreviewFileId, switchInputSelection }) => {
+    if (tokenFile.previewDocuments) {
         const hilightBorderStyle = {
             backgroundColor: "grey",
             borderRadius: "3px",
@@ -24,12 +24,13 @@ export const TokenDisplayFileList = ({ list, previewDocuments, previewFileId, se
     
         return (
         <div className="col-md-auto">
-            {(list.map((item, index) => ( 
+            {(tokenFile.inputs.map((input, index) => ( 
                 <div className="text-center m-2 p-2" style={ previewFileId !== index ?  null :  hilightBorderStyle} key={index} onClick={() => setPreviewFileId(index)}>
                     <div style={{ paddingTop: -20, border: "solid 1px lightgrey", width: 100, height:70, backgroundColor: "white", position: "relative" }}>
-                        <img src={"/img/Icon" + item.iconType + ".png"} style={{ position: "absolute", margin: "auto", left: 0, right: 0, bottom: 8 }} alt={item.iconType}></img>
+                    <input type="checkbox" className="form-check-input" style={{ width: 15, height: 15, marignTop: "0.3rem", marginLeft: "-2.5rem" }}  checked={input.isSelected} onChange={ () => { switchInputSelection(index, !input.isSelected) }}/>
+                        <img src={"/img/Icon" + input.iconType + ".png"} style={{ position: "absolute", margin: "auto", left: 0, right: 0, bottom: 8 }} alt={input.iconType}></img>
                     </div>
-                    {item.fileName.replace(/\.[^.]*$/, '')}
+                    {input.fileName.replace(/\.[^.]*$/, '')}
                 </div>
             )))}
         </div>);
@@ -38,14 +39,15 @@ export const TokenDisplayFileList = ({ list, previewDocuments, previewFileId, se
     return (
     <div className="col">
         <p><b><FormattedMessage id = "token.documents.list" defaultMessage="DOCUMENTS TO SIGN"/></b></p>
-        {(list.map((item, index) => ( 
+        {(tokenFile.inputs.map((input, index) => ( 
             <div className="m-2 p-2" key={index} style={{ border: "1px solid lightGrey", backgroundColor: "whiteSmoke", maxWidth: "100%" }}>
                 <div className="row">
                     <div className="col">
-                        <img  className="p-2" src={"/img/Icon" + item.iconType + ".png"} alt={item.iconType}></img>
-                        <a href={ item.url + "?forceDownload" } download>{item.fileName.replace(/\.[^.]*$/, '')}</a>
+                        <input type="checkbox" className="form-check-input" style={{ width: 15, height: 15, margin: 9, position: "relative" }} checked={input.isSelected} onChange={ () => { switchInputSelection(index, !input.isSelected) }}/>
+                        <img  className="p-2" src={"/img/Icon" + input.iconType + ".png"} alt={input.iconType} style={{ marginTop: -7 }} ></img>
+                        <a href={ input.url + "?forceDownload" } download>{input.fileName.replace(/\.[^.]*$/, '')}</a>
                     </div>
-                    { item.isSigned && (<div className="col-md-auto py-1">
+                    { input.isSigned && (<div className="col-md-auto py-1">
                         <div className="px-3" style={{ width: "auto", maxWidth: "100%", borderRadius: "20px", backgroundColor: "#01c301" }}>
                             <img className="mb-1 mr-1" style={{ width: "12px", height:"12px" }} src="/img/check.png" alt="PDF"/>
                             <FormattedMessage id = "succes.title.short" defaultMessage="Signed" />
@@ -59,29 +61,23 @@ export const TokenDisplayFileList = ({ list, previewDocuments, previewFileId, se
 }
 
 export const mapStateToProps = (state) => {
-    var list = [];
     state.tokenFile.inputs.forEach((input, index) => {
         var iconType = "UNK";
         if (input.mimeType === "application/pdf") iconType = "PDF";
         else if (input.mimeType === "application/xml") iconType = "XML";
-        list.push({
-            iconType: iconType,
-            fileName: input.fileName,
-            isSigned: input.isSigned,
-            url: getBEUrl() + '/signing/getFileForToken/' + state.tokenFile.token + "/DOC/" + index
-     })
-    });
-
+        input.iconType = iconType;
+        input.url = getBEUrl() + '/signing/getFileForToken/' + state.tokenFile.token + "/DOC/" + index
+     });
     
     return {
-        list : list,
         previewFileId : state.filePreview.index,
-        previewDocuments : state.tokenFile.previewDocuments
+        tokenFile: state.tokenFile
     }
 }
 
 const mapDispatchToProps = ({
-    setPreviewFileId
+    setPreviewFileId,
+    switchInputSelection
 })
 
 export default connect(mapStateToProps,mapDispatchToProps)(TokenDisplayFileList)

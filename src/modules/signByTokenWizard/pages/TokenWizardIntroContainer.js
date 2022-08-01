@@ -16,7 +16,7 @@ import { setPreview } from "../actions/TokenActions";
 const messages = defineMessages({
     title: {
         id: "token.intro.title",
-        defaultMessage: "Digital signing of '{fileNames}'"
+        defaultMessage: "Digital signing of '{fileName}'"
     },
     multiFileTitle: {
         id: "token.intro.multiFile.title",
@@ -25,12 +25,14 @@ const messages = defineMessages({
 })
 
 const TokenWizardIntroContainer = (props, setPreview) => {
-    const [checked, setChecked] = useState(false);
+    const [readConfirmed, setReadConfirmed] = useState(false);
     const [certificatesRead, setCertificatesRead] = useState(false);
 
+
+    let readyToSign = certificatesRead && (readConfirmed || !props.tokenFile.requestDocumentReadConfirm) && props.tokenFile.inputs.findIndex(i => i.isSelected) !== -1;
     return (
         <CardContainer
-            title={props.intl.formatMessage(props.isMultifile ? messages.multiFileTitle : messages.title, { fileName: `'${props.filename}'` })}
+            title={props.intl.formatMessage(props.isMultifile ? messages.multiFileTitle : messages.title, { fileName: `'${props.fileName}'` })}
             hasCancelButton={false}
             cancelButtonText={props.intl.formatMessage(definedMessages.cancel)}
             onClickCancel={() => { props.resetWizard() }}
@@ -48,15 +50,15 @@ const TokenWizardIntroContainer = (props, setPreview) => {
                 }
                 values={{ newLine: <br />, fileName: props.fileName, b: boldedText, signButtonText: <FormattedMessage id="buttons.sign" defaultMessage="sign" /> }} />
 
-            {props.disallowSignedDownloads &&
+            {props.tokenFile.disallowSignedDownloads &&
                 <FormattedMessage tagName={"p"} id="token.intro.nodownload" defaultMessage="Please note: <b>you will not be able to download</b> the signed document(s) after signing." values={{ b: boldedText }} />
             }
-            {props.requestDocumentReadConfirm &&
+            {props.tokenFile.requestDocumentReadConfirm &&
                 <p className="form-check">
                     <input type="checkbox" onChange={(e) => {
-                        props.doSendLogInfo('UI - documentReadCheckbox - ' + e.target.checked);
-                        setChecked(e.target.checked);
-                    }} className="form-check-input" id="documentReadCheckbox" data-testid="documentReadCheckbox" value={checked} defaultChecked={checked} />
+                        props.doSendLogInfo('UI - documentReadCheckbox - ' + e.target.readConfirmed);
+                        setReadConfirmed(e.target.checked);
+                    }} className="form-check-input" id="documentReadCheckbox" data-testid="documentReadCheckbox" value={readConfirmed} defaultChecked={readConfirmed} />
                     <label className="form-check-label" htmlFor="documentReadCheckbox">
                         <FormattedMessage id={props.isMultifile ? "token.intro.check.multiFile.read" : "token.intro.check.read"}
                             defaultMessage={props.isMultifile ? "I have read these documents" : "I have read this document."} /><sup>*</sup></label>
@@ -64,8 +66,7 @@ const TokenWizardIntroContainer = (props, setPreview) => {
             }
             <p>
                 <button
-                    className={(checked || !props.requestDocumentReadConfirm) && certificatesRead ? "btn btn-primary text-uppercase" : "btn btn-secondary text-uppercase"}
-                    disabled={!((checked || !props.requestDocumentReadConfirm) && certificatesRead)}
+                    className={ readyToSign ? "btn btn-primary text-uppercase" : "btn btn-secondary text-uppercase"} disabled={!readyToSign}
                     onClick={() => {
                         props.doSendLogInfo('UI - SIGN_BUTTON CLICKED')
                         props.setPreview(!props.isMultifile)
@@ -73,7 +74,7 @@ const TokenWizardIntroContainer = (props, setPreview) => {
                     }}
                     id="button_next"
                 >
-                    <FormattedMessage id="buttons.sign" defaultMessage="sign" />
+                    <FormattedMessage id="buttons.sign" defaultMessage="sign"/>
                 </button>
                 <span style={{ padding: 30 }}>&nbsp;</span>
                 <ReadCertificates getCertificates={props.getCertificates} onCertificatesRead={setCertificatesRead} />
@@ -99,9 +100,8 @@ const TokenWizardIntroContainer = (props, setPreview) => {
 function mapStateToProps(state) {
     return {
         isMultifile: state.tokenFile.inputs.length > 1,
-        filename: state.tokenFile.inputs[0].fileName,
-        disallowSignedDownloads: state.tokenFile.disallowSignedDownloads,
-        requestDocumentReadConfirm: state.tokenFile.requestDocumentReadConfirm
+        fileName: state.tokenFile.inputs[0].fileName,
+        tokenFile: state.tokenFile
     };
 }
 const mapDispatchToProps = ({
