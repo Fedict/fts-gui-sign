@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import {FormattedMessage} from 'react-intl';
 
 import {getBEUrl} from "../../../utils/helper";
-import {setPreviewFileId, switchInputSelection} from "../../actions/TokenActions";
+import {setPreviewFileId, setInputSelection} from "../../actions/TokenActions";
 
 /**
  * Component to display list of filenames 
@@ -14,7 +14,7 @@ import {setPreviewFileId, switchInputSelection} from "../../actions/TokenActions
  * @param {array} previewDocuments - display mode : if true display selectable icon list, else display list of downloadble urls
  * @param {array} previewFileId - the curently selected icon
  */
-export const TokenDisplayFileList = ({ tokenFile, previewFileId, setPreviewFileId, switchInputSelection }) => {
+export const TokenDisplayFileList = ({ tokenFile, previewFileId, setPreviewFileId, setInputSelection }) => {
     if (tokenFile.previewDocuments) {
         const hilightBorderStyle = {
             backgroundColor: "grey",
@@ -27,7 +27,7 @@ export const TokenDisplayFileList = ({ tokenFile, previewFileId, setPreviewFileI
             {(tokenFile.inputs.map((input, index) => ( 
                 <div className="text-center m-2 p-2" style={ previewFileId !== index ?  null :  hilightBorderStyle} key={index} onClick={() => setPreviewFileId(index)}>
                     <div style={{ paddingTop: -20, border: "solid 1px lightgrey", width: 100, height:70, backgroundColor: "white", position: "relative" }}>
-                    <input type="checkbox" className="form-check-input" style={{ width: 15, height: 15, marignTop: "0.3rem", marginLeft: "-2.5rem" }}  checked={input.isSelected} onChange={ () => { switchInputSelection(index, !input.isSelected) }}/>
+                    <input type="checkbox" className="form-check-input" style={{ width: 15, height: 15, marignTop: "0.3rem", marginLeft: "-2.5rem" }}  checked={input.isSelected} onChange={ () => { setInputSelection(index, !input.isSelected) }}/>
                         <img src={"/img/Icon" + input.iconType + ".png"} style={{ position: "absolute", margin: "auto", left: 0, right: 0, bottom: 8 }} alt={input.iconType}></img>
                     </div>
                     {input.fileName.replace(/\.[^.]*$/, '')}
@@ -43,7 +43,7 @@ export const TokenDisplayFileList = ({ tokenFile, previewFileId, setPreviewFileI
             <div className="m-2 p-2" key={index} style={{ border: "1px solid lightGrey", backgroundColor: "whiteSmoke", maxWidth: "100%" }}>
                 <div className="row">
                     <div className="col">
-                        <input type="checkbox" className="form-check-input" style={{ width: 15, height: 15, margin: 9, position: "relative" }} checked={input.isSelected} onChange={ () => { switchInputSelection(index, !input.isSelected) }}/>
+                        <input type="checkbox" className="form-check-input" style={{ width: 15, height: 15, margin: 9, position: "relative" }} checked={input.isSelected} onChange={ () => { setInputSelection(index, !input.isSelected) }}/>
                         <img  className="p-2" src={"/img/Icon" + input.iconType + ".png"} alt={input.iconType} style={{ marginTop: -7 }} ></img>
                         <a href={ input.url + "?forceDownload" } download>{input.fileName.replace(/\.[^.]*$/, '')}</a>
                     </div>
@@ -77,7 +77,7 @@ export const mapStateToProps = (state) => {
 
 const mapDispatchToProps = ({
     setPreviewFileId,
-    switchInputSelection
+    setInputSelection
 })
 
 export default connect(mapStateToProps,mapDispatchToProps)(TokenDisplayFileList)

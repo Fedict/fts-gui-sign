@@ -7,6 +7,7 @@ import {sendLogInfo, sendLogInfoIgnoreResult} from "../../communication/communic
 import {doWithToken} from "../../utils/helper";
 import {Ticker} from "../../components/Ticker/Ticker";
 import {boldedText} from "../../utils/reactIntlUtils";
+import {getBEUrl} from "../../utils/helper";
 
 const messages = defineMessages({
     title : {
@@ -30,45 +31,31 @@ const messages = defineMessages({
 export class SuccesContainerForToken extends React.Component {
 
     downloadFile() {
-        const { uploadFile, token } = this.props
+        const { tokenFile } = this.props
 
-        if (uploadFile
-            && uploadFile.downloadFile
-            && uploadFile.downloadFile.name
-            && uploadFile.downloadFile.bytes
-        ) {
-
-            if (typeof window.navigator.msSaveOrOpenBlob === 'function') {
-                const blobData = getBlobFromBase64(uploadFile.downloadFile.bytes);
-                window.navigator.msSaveOrOpenBlob(blobData,uploadFile.downloadFile.name);
-            }
-            else {
-                let linkSource = `data:application/octet-stream;base64,${uploadFile.downloadFile.bytes}`;
-                const downloadLink = document.createElement("a");
-
-                downloadLink.href = linkSource;
-                downloadLink.download = uploadFile.downloadFile.name;
-                if(token){
-                    downloadLink.addEventListener("click", () => {
-                        sendLogInfoIgnoreResult('UI - DOWNLOAD_BUTTON CLICKED', token);
-                    });
-                }
-
-                downloadLink.click();
-            }
+        const downloadLink = document.createElement("a");
+        let filesToDownload = ""
+        tokenFile.inputs.forEach((input, index) => { if (input.isSigned ) filesToDownload += ',' + index })
+        downloadLink.href = getBEUrl() + '/signing/getFileForToken/' + tokenFile.token + "/OUT/" + filesToDownload.substring(1) + "?forceDownload"
+        if(tokenFile.token){
+            downloadLink.addEventListener("click", () => {
+                sendLogInfoIgnoreResult('UI - DOWNLOAD_BUTTON CLICKED', tokenFile.token);
+            });
         }
+
+        downloadLink.click();
     }
     componentDidMount() {
         if(this.props.autoDownloadDocument) {
             this.downloadFile()
         }
-        if(false && this.props.disallowSignedDownloads){
+        if(false && this.props.tokenFile.disallowSignedDownloads){
             this.props.nextButtonClicked(this.props.redirectUrl);
         }
     }
 
     render() {
-        const { nextButtonClicked, redirectUrl, intl, disallowSignedDownloads, multipleDocuments } = this.props
+        const { nextButtonClicked, redirectUrl, intl, tokenFile, multipleDocuments } = this.props
 
         let bodyTextId = this.props.autoDownloadDocument ? 
                         (multipleDocuments ? "succes.multiFile.autodownload" : "succes.autodownload") :
@@ -88,7 +75,7 @@ export class SuccesContainerForToken extends React.Component {
                 onClickCancel={() => nextButtonClicked(redirectUrl)}
             >
                 <div className="form-group">
-                    {disallowSignedDownloads?
+                    {tokenFile.disallowSignedDownloads?
                         false && <FormattedMessage id="succes.signed.downloadNotAllowed" defaultMessage="" values={{b : boldedText}} />
                     :
                         <Fragment>
@@ -120,9 +107,8 @@ const mapStateToProps = (state) => {
     return (state) => ({
         uploadFile: state.uploadFile,
         redirectUrl : state.tokenFile.redirectUrl,
-        token : state.tokenFile.token,
+        tokenFile : state.tokenFile,
         autoDownloadDocument : state.wizard.autoDownloadDocument !== false && !state.tokenFile.disallowSignedDownloads,
-        disallowSignedDownloads : state.tokenFile.disallowSignedDownloads,
         multipleDocuments : state.tokenFile.inputs.length > 1
     })
 }

@@ -710,11 +710,11 @@ export const signDocument = () => (dispatch, getStore) => {
                 signature.signature,
                 signature.signingDate,
                 photo,
-                tokenFile.disallowSignedDownloads)
+                true)
                 .then(handleFlowIdError(flowId, getStore))
                 .then((resp) => {
                     //console.log('signDocumentForTokenAPI response', resp)
-                    if (resp === true || (resp && resp.name && resp.bytes)) {
+                    if (resp === true) {
                         if (tokenFile.signType === 'XadesMultiFile') {
                             tokenFile.inputs.forEach(input => input.isSigned = true)
                         } else tokenFile.inputs[fileIdToSign].isSigned = true

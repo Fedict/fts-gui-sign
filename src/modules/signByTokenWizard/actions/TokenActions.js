@@ -90,10 +90,6 @@ export const getDocumentMetadataForToken = () => (dispatch, getStore) => {
             .then((resp) => {
                 //console.log('getDocumentMetadataForTokenAPI', resp)
                 if(resp.inputs){
-                    //  TODO RELACE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    resp.inputs.forEach((input) => { input.isSelected = true })
-                    //  TODO RELACE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    
                     dispatch(setDocumentMetadata(resp))
                     dispatch(navigateToStep(WIZARD_STATE_UPLOAD))
                 }else{
@@ -139,7 +135,7 @@ const replaceBEURL = (url) => {
 export const setDocumentMetadata = (metadata) => ({
     type : SET_DOCUMENT_TOKEN_METADATA,
     payload : {
-        inputs : metadata.inputs,
+        inputs : metadata.inputs.map(input => { return { ...input, isSelected: true } }),
         readPhoto : metadata.readPhoto,
         previewDocuments : metadata.previewDocuments,
         disallowSignedDownloads : metadata.disallowSignedDownloads,
@@ -161,7 +157,7 @@ export const setPreview = (previewDocuments) => (dispatch) => {
     })
 }
 
-export const switchInputSelection = (index, value) => (dispatch) => {
+export const setInputSelection = (index, value) => (dispatch) => {
     dispatch({
         type : SET_INPUT_SELECTION,
         payload : {index: index, value:value}
