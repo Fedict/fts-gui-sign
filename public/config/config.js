@@ -5,23 +5,26 @@ window.configData = {
         edge:   "https://chrome.google.com/webstore/detail/beidconnect/pencgnkbgaekikmiahiaakjdgaibiipp",
         firefox: "https://eid.static.bosa.fgov.be/beidconnect-fx-0.0.11.xpi",
         safari: "https://eid.static.bosa.fgov.be/BeIDConnect_Extension_2.6.dmg",
-        IE: "https://eid.static.bosa.fgov.be/beidconnect_2.6.msi"
+        IE: "https://eid.static.bosa.fgov.be/beidconnect_2.7.msi"
     },
 
     eIDLinkUrls: {
         windows: {
-            en : "https://eid.static.bosa.fgov.be/beidconnect_2.6.msi",
-            de : "https://eid.static.bosa.fgov.be/beidconnect_2.6_de.msi",
-            nl : "https://eid.static.bosa.fgov.be/beidconnect_2.6_nl.msi",
-            fr : "https://eid.static.bosa.fgov.be/beidconnect_2.6_fr.msi",
+            en : "https://eid.static.bosa.fgov.be/beidconnect_2.7.msi",
+            de : "https://eid.static.bosa.fgov.be/beidconnect_2.7_de.msi",
+            nl : "https://eid.static.bosa.fgov.be/beidconnect_2.7_nl.msi",
+            fr : "https://eid.static.bosa.fgov.be/beidconnect_2.7_fr.msi",
         },
         windowsX64: {
-            en : "https://eid.static.bosa.fgov.be/beidconnect_x64_2.6.msi",
-            de : "https://eid.static.bosa.fgov.be/beidconnect_x64_2.6_de.msi",
-            nl : "https://eid.static.bosa.fgov.be/beidconnect_x64_2.6_nl.msi",
-            fr : "https://eid.static.bosa.fgov.be/beidconnect_x64_2.6_fr.msi",
+            en : "https://eid.static.bosa.fgov.be/beidconnect_x64_2.7.msi",
+            de : "https://eid.static.bosa.fgov.be/beidconnect_x64_2.7_de.msi",
+            nl : "https://eid.static.bosa.fgov.be/beidconnect_x64_2.7_nl.msi",
+            fr : "https://eid.static.bosa.fgov.be/beidconnect_x64_2.7_fr.msi",
         },
-        macOs: "https://eid.static.bosa.fgov.be/beidconnect_2.6.dmg",
+        windowsAdmin: {
+            en : "https://eid.static.bosa.fgov.be/beidconnect_admin_2.7.msi",
+        },
+        macOs: "https://eid.static.bosa.fgov.be/beidconnect_2.7.dmg",
         linux: {
             debian: {
                 url: "https://eid.static.bosa.fgov.be/beidconnect-archive.deb",

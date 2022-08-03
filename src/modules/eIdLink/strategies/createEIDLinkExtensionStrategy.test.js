@@ -1,10 +1,11 @@
+import { MESSAGE_SET_ERROR } from "../../message/actions/MessageActions"
 import { createEIDLinkExtensionStrategy } from "./createEIDLinkExtensionStrategy"
 
 describe("unit tests for createEIDLinExtensionStrategy", () => {
 
     describe("tests for getVersion", () => {
 
-        let api = { checkVersion: () => { } }
+        let api = { getVersion: () => { } }
 
         test("createEIDLinkExtensionStrategy returns function getVersion", () => {
             const result = createEIDLinkExtensionStrategy(api)
@@ -16,13 +17,17 @@ describe("unit tests for createEIDLinExtensionStrategy", () => {
 
         describe("onCorrectVersion", () => {
 
-            test("onCorrectVersion is valid function", () => {
-                const value = 'testvalue'
-                api.checkVersion = jest.fn((minimumVersion, onCorrectVersion, onNotInstalled, onNeedsUpdate) => { onCorrectVersion(value) })
+            test("onCorrectVersion is valid function", async () => {
+                const value = {version:"2.0"}
+                api.getVersion = jest.fn(()=>{return new Promise((resolve, reject) => {
+                    resolve({version:"2.0"})
+                })})
                 const onMock = jest.fn()
 
                 const strategy = createEIDLinkExtensionStrategy(api)
-                strategy.getVersion(null, onMock, null, null)
+                strategy.getVersion("2.0", onMock, null, null)
+
+                await new Promise(process.nextTick);
 
                 expect(onMock.mock.calls.length).toBe(1);
                 expect(onMock.mock.calls[0][0]).toEqual(value)
@@ -30,36 +35,41 @@ describe("unit tests for createEIDLinExtensionStrategy", () => {
 
             test("onCorrectVersion is NOT valid function", () => {
                 const value = 'testvalue'
-                api.checkVersion = jest.fn((minimumVersion, onCorrectVersion, onNotInstalled, onNeedsUpdate) => { onCorrectVersion(value) })
+                api.getVersion = jest.fn().mockResolvedValue({ version:"2.0"})
                 const onMock1 = "not a function"
                 const onMock2 = undefined
                 const onMock3 = null
 
                 const strategy = createEIDLinkExtensionStrategy(api)
-                strategy.getVersion(null, onMock1, null, null)
-                strategy.getVersion(null, onMock2, null, null)
-                strategy.getVersion(null, onMock3, null, null)
+                strategy.getVersion("2.0", onMock1, null, null)
+                strategy.getVersion("2.0", onMock2, null, null)
+                strategy.getVersion("2.0", onMock3, null, null)
 
             })
         })
 
         describe("onNotInstalled", () => {
 
-            test("onNotInstalled is valid function", () => {
+            test("onNotInstalled is valid function", async () => {
                 const value = 'testvalue'
-                api.checkVersion = jest.fn((minimumVersion, onCorrectVersion, onNotInstalled, onNeedsUpdate) => { onNotInstalled(value) })
+                api.getVersion = jest.fn().mockRejectedValue(value)
                 const onMock = jest.fn()
 
                 const strategy = createEIDLinkExtensionStrategy(api)
                 strategy.getVersion(null, null, onMock, null)
 
+                await new Promise(process.nextTick);
+
                 expect(onMock.mock.calls.length).toBe(1);
-                expect(onMock.mock.calls[0][0]).toEqual(value)
+                expect(onMock.mock.calls[0][0]).toEqual(undefined)
             })
 
             test("onCorrectVersion is NOT valid function", () => {
                 const value = 'testvalue'
-                api.checkVersion = jest.fn((minimumVersion, onCorrectVersion, onNotInstalled, onNeedsUpdate) => { onNotInstalled(value) })
+                api.getVersion = jest.fn(()=>{return new Promise((resolve, reject) => {
+                    //reject ({message : 'unsupported_reader', report : 'Card error from mock'})
+                    resolve({version:"2.0"})
+                })})
                 const onMock1 = "not a function"
                 const onMock2 = undefined
                 const onMock3 = null
@@ -74,13 +84,17 @@ describe("unit tests for createEIDLinExtensionStrategy", () => {
 
         describe("onNeedsUpdate", () => {
 
-            test("onNeedsUpdate is valid function", () => {
-                const value = 'testvalue'
-                api.checkVersion = jest.fn((minimumVersion, onCorrectVersion, onNotInstalled, onNeedsUpdate) => { onNeedsUpdate(value) })
+            test("onNeedsUpdate is valid function", async () => {
+                const value = {version:"2.0"}
+                api.getVersion = jest.fn(()=>{return new Promise((resolve, reject) => {
+                    resolve({version:"2.0"})
+                })})
                 const onMock = jest.fn()
 
                 const strategy = createEIDLinkExtensionStrategy(api)
-                strategy.getVersion(null, null, null, onMock)
+                strategy.getVersion("3.0", null, null, onMock)
+                
+                await new Promise(process.nextTick);
 
                 expect(onMock.mock.calls.length).toBe(1);
                 expect(onMock.mock.calls[0][0]).toEqual(value)
@@ -88,15 +102,15 @@ describe("unit tests for createEIDLinExtensionStrategy", () => {
 
             test("onCorrectVersion is NOT valid function", () => {
                 const value = 'testvalue'
-                api.checkVersion = jest.fn((minimumVersion, onCorrectVersion, onNotInstalled, onNeedsUpdate) => { onNeedsUpdate(value) })
+                api.getVersion = jest.fn().mockResolvedValue({ version:"2.0"}) 
                 const onMock1 = "not a function"
                 const onMock2 = undefined
                 const onMock3 = null
 
                 const strategy = createEIDLinkExtensionStrategy(api)
-                strategy.getVersion(null, null, null, onMock1)
-                strategy.getVersion(null, null, null, onMock2)
-                strategy.getVersion(null, null, null, onMock3)
+                strategy.getVersion("3.0", null, null, onMock1)
+                strategy.getVersion("3.0", null, null, onMock2)
+                strategy.getVersion("3.0", null, null, onMock3)
 
             })
         })

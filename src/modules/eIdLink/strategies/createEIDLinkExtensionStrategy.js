@@ -14,6 +14,17 @@ export const ID_FLAGS = {
     ID_FLAG_INCLUDE_ROOTCERT    : 256
 }
 
+function isUptodate(minimumVersion, installedVersion) {
+    try{
+        var expected = minimumVersion.split(".");
+        var actual = installedVersion.split(".");
+        return (actual[0] > expected[0]) || (actual[0] === expected[0] && actual[1] >= expected[1]);
+    }
+    catch{
+        return false;
+    }
+}
+
 /**
  * function that creates a strategy when the extension is active
  * returns a object with the following functions:
@@ -36,27 +47,30 @@ export const createEIDLinkExtensionStrategy = (api) => {
     * @param {function} onNoExtensionInstalled - callback when eIDLink extension in not installed
     */
     const getVersion = (minimumVersion, onCorrectVersion, onNotInstalled, onNeedsUpdate, onNoExtensionInstalled) => {
+        api.getVersion().then(
+            function (msg) {
+                var installedVersion = {version:msg.version};
+                //console.log("BeIDConnect version is " + installedVersion);
+                if (msg.windowsInstallType && msg.windowsInstallType==="admin")
+                {
+                    installedVersion.IsAdmin = true;
+                }
 
-        api.checkVersion(minimumVersion,
-            function (installedVersion) {
-
-                if (onCorrectVersion && typeof onCorrectVersion === "function") {
-                    onCorrectVersion(installedVersion)
+                if (isUptodate(minimumVersion, installedVersion.version)) {
+                    if (onCorrectVersion && typeof onCorrectVersion === "function"){
+                        onCorrectVersion(installedVersion);
+                    }
+                } else {
+                    if (onNeedsUpdate && typeof onNeedsUpdate === "function"){
+                        onNeedsUpdate(installedVersion);
+                    }
                 }
             },
-            (msg) => {
-
-                if (onNotInstalled && typeof onNotInstalled === "function") {
-                    onNotInstalled(msg)
+            function (err) {
+                if (onNotInstalled && typeof onNotInstalled === "function"){
+                    onNotInstalled();
                 }
-            },
-            (installedVersion) => {
-
-                if (onNeedsUpdate && typeof onNeedsUpdate === "function") {
-                    onNeedsUpdate(installedVersion)
-                }
-            }
-        );
+            });
     }
 
     /**

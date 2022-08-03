@@ -66,6 +66,13 @@ export class EIDChromeExtMock {
         onCorrectVersion(minimumVersion);
     }
 
+    getVersion(){
+        return new Promise((resolve, reject) => {
+            //reject ({message : 'unsupported_reader', report : 'Card error from mock'})
+            resolve({version:"2.0"})
+        })
+    }
+
     getUserCertificates(lang, mac){
         return new Promise((resolve, reject) => {
             if(window.confirm('Is error to getUserCertificates?')){
