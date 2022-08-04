@@ -11,7 +11,8 @@ import { boldedText } from "../../utils/reactIntlUtils";
 import { ReadCertificates } from "../../components/ReadCertificates/ReadCertificates";
 import { doWithToken } from "../../utils/helper";
 import { sendLogInfoIgnoreResult } from "../../communication/communication";
-import { setPreview } from "../actions/TokenActions";
+import { setPreview, setInputsSignState, setPreviewFileId } from "../../signByTokenWizard/actions/TokenActions"
+import { signingType, signState } from '../constants';
 
 const messages = defineMessages({
     title: {
@@ -24,12 +25,12 @@ const messages = defineMessages({
     }
 })
 
-const TokenWizardIntroContainer = (props, setPreview) => {
+const TokenWizardIntroContainer = (props) => {
     const [readConfirmed, setReadConfirmed] = useState(false);
     const [certificatesRead, setCertificatesRead] = useState(false);
 
 
-    let readyToSign = certificatesRead && (readConfirmed || !props.tokenFile.requestDocumentReadConfirm) && props.tokenFile.inputs.findIndex(i => i.isSelected) !== -1;
+    let readyToSign = certificatesRead && (readConfirmed || !props.tokenFile.requestDocumentReadConfirm) && props.tokenFile.inputs.findIndex(i => i.signState === signState.SIGN_REQUESTED) !== -1;
     return (
         <CardContainer
             title={props.intl.formatMessage(props.isMultifile ? messages.multiFileTitle : messages.title, { fileName: `'${props.fileName}'` })}
@@ -68,6 +69,8 @@ const TokenWizardIntroContainer = (props, setPreview) => {
                 <button
                     className={ readyToSign ? "btn btn-primary text-uppercase" : "btn btn-secondary text-uppercase"} disabled={!readyToSign}
                     onClick={() => {
+                        if (props.tokenFile.signingType !== signingType.SingleFile) props.setPreviewFileId(-1)
+                        props.setInputsSignState(signState.SIGN_REQUESTED, signState.TO_BE_SIGNED)
                         props.doSendLogInfo('UI - SIGN_BUTTON CLICKED')
                         props.setPreview(!props.isMultifile)
                         props.navigateToNextStep()
@@ -110,9 +113,11 @@ const mapDispatchToProps = ({
     getCertificates: getCertificatesWithCallback,
     resetWizard,
     doSendLogInfo,
-    setPreview
+    setPreview,
+    setInputsSignState,
+    setPreviewFileId
 })
 
-export const TokenWizardIntroComponent = injectIntl(TokenWizardIntroContainer, setPreview)
+export const TokenWizardIntroComponent = injectIntl(TokenWizardIntroContainer)
 
 export default connect(mapStateToProps, mapDispatchToProps)(TokenWizardIntroComponent);

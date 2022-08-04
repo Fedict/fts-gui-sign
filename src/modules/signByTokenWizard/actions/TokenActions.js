@@ -10,9 +10,11 @@ import {WIZARD_STATE_UPLOAD} from "../../wizard/WizardConstants";
 import moment from "moment";
 import {setDateSigning} from "../../signWizard/actions/SignatureActions";
 import {getBEUrl, parseErrorMessage} from "../../utils/helper";
+import {signingType, signState} from "../constants";
 
 export const TOKEN_RECEIVED = "TOKEN_RECEIVED"
 export const SET_TOKEN_PREVIEW = "SET_TOKEN_PREVIEW"
+export const SET_INPUTS_SIGN_STATE = "SET_INPUTS_SIGN_STATE"
 export const SET_PREVIEW_FILE_ID = "SET_PREVIEW_FILE_ID"
 export const SET_INPUT_SELECTION = "SET_INPUT_SELECTION"
 export const SET_DOCUMENT_TOKEN_METADATA = "SET_DOCUMENT_TOKEN_METADATA"
@@ -38,7 +40,11 @@ export const getDigestForToken = () => (dispatch, getStore) => {
             photo = certificate.certificateSelected.photo;
         }
 
-        var fileIdToSign = tokenFile.inputs.findIndex(input => !input.isSigned && input.isSelected);
+        var fileIdToSign = tokenFile.inputs.findIndex(input => input.signState === signState.TO_BE_SIGNED);
+        if (tokenFile.signingType === signingType.Bulk || tokenFile.signingType === signingType.XadesMultiFile) {
+            dispatch(setPreviewFileId(tokenFile.signingType === signingType.Bulk ? fileIdToSign : -1));
+        }
+        
         getDataToSignForTokenAPI(certificate.certificateSelected.APIBody, tokenFile.token, fileIdToSign, signingDate, photo)
             .then(handleFlowIdError(flowId, getStore))
             .then((resp) => {
@@ -91,6 +97,9 @@ export const getDocumentMetadataForToken = () => (dispatch, getStore) => {
                 //console.log('getDocumentMetadataForTokenAPI', resp)
                 if(resp.inputs){
                     dispatch(setDocumentMetadata(resp))
+                    if (store.tokenFile.signingType !== signingType.SingleFile) {
+                        dispatch(setPreviewFileId(resp.previewDocuments ? 0 : -1))
+                    }
                     dispatch(navigateToStep(WIZARD_STATE_UPLOAD))
                 }else{
                     const parsedError = parseErrorMessage(resp.message);
@@ -134,15 +143,10 @@ const replaceBEURL = (url) => {
 
 export const setDocumentMetadata = (metadata) => ({
     type : SET_DOCUMENT_TOKEN_METADATA,
-    payload : {
-        inputs : metadata.inputs.map(input => { return { ...input, isSelected: true } }),
-        readPhoto : metadata.readPhoto,
-        previewDocuments : metadata.previewDocuments,
-        disallowSignedDownloads : metadata.disallowSignedDownloads,
-        requestDocumentReadConfirm : metadata.requestDocumentReadConfirm
-    }
+    payload : metadata
 })
 
+// FilePreview Action !!!!!
 export const setPreviewFileId = (index) => (dispatch) => {
     dispatch({
         type : SET_PREVIEW_FILE_ID,
@@ -157,10 +161,11 @@ export const setPreview = (previewDocuments) => (dispatch) => {
     })
 }
 
-export const setInputSelection = (index, value) => (dispatch) => {
+export const setInputsSignState = (selector, newState) => (dispatch) => {
     dispatch({
-        type : SET_INPUT_SELECTION,
-        payload : {index: index, value:value}
+        type : SET_INPUTS_SIGN_STATE,
+        payload : { selector: selector, newState: newState }
     })
 }
+export const SET_ALL_INPUTS = 'all'
 

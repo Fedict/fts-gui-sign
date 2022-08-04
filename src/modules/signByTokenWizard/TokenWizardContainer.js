@@ -59,7 +59,7 @@ const messages = defineMessages({
     }
 })
 
-export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, certificate, intl, inputs, previewDocuments, filePreviewIndex }) => {
+export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, certificate, intl, inputs, previewDocuments, selectedInputId }) => {
     const [currentIndexStep, setCurrentIndexStep] = useState(1);
 
     const router = useRouter();
@@ -164,7 +164,7 @@ export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, 
         <div >
             <div className={"row mx-5 mt-3"}>
                 <div className={"col col-7"}>
-                    {inputs && 
+                    { inputs &&
                         <div className="row">
                             { inputs.length > 1 && (
                                 <TokenDisplayFileList/>
@@ -172,9 +172,9 @@ export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, 
                             { previewDocuments && (
                                 <div className="col">
                                     { inputs.length > 1 && (
-                                        <p><FormattedMessage id = "token.documents.title.name"defaultMessage="<b>DOCUMENT PREVIEW:</b> {docName}" values={{b : boldedText, docName: inputs[filePreviewIndex].fileName.toUpperCase() }}/></p>
+                                        <p><FormattedMessage id = "token.documents.title.name"defaultMessage="<b>DOCUMENT PREVIEW:</b> {docName}" values={{b : boldedText, docName: inputs[selectedInputId].fileName.toUpperCase() }}/></p>
                                     )}
-                                    <TokenDisplayFile index={filePreviewIndex} />
+                                    <TokenDisplayFile index={selectedInputId} />
                                 </div>
                             )}
                         </div>
@@ -205,7 +205,7 @@ const mapStateToProps = (state, ownProps) => {
         inputs: state.tokenFile.inputs,
         certificate : state.certificate,
         reader: state.reader,
-        filePreviewIndex : state.filePreview.index,
+        selectedInputId : state.filePreview.index,
         previewDocuments: state.tokenFile.previewDocuments
     })
 }

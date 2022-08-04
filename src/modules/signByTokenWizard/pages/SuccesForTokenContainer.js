@@ -8,6 +8,7 @@ import {doWithToken} from "../../utils/helper";
 import {Ticker} from "../../components/Ticker/Ticker";
 import {boldedText} from "../../utils/reactIntlUtils";
 import {getBEUrl} from "../../utils/helper";
+import {signState} from "../constants";
 
 const messages = defineMessages({
     title : {
@@ -34,8 +35,8 @@ export class SuccesContainerForToken extends React.Component {
         const { tokenFile } = this.props
 
         const downloadLink = document.createElement("a");
-        let filesToDownload = ""
-        tokenFile.inputs.forEach((input, index) => { if (input.isSigned ) filesToDownload += ',' + index })
+        var filesToDownload = ""
+        tokenFile.inputs.forEach((input, index) => { if (input.signState === signState.SIGNED) filesToDownload += ',' + index })
         downloadLink.href = getBEUrl() + '/signing/getFileForToken/' + tokenFile.token + "/OUT/" + filesToDownload.substring(1) + "?forceDownload"
         if(tokenFile.token){
             downloadLink.addEventListener("click", () => {

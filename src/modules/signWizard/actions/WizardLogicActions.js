@@ -50,6 +50,8 @@ import {redirectErrorCodes} from "../../../const";
 import moment from 'moment'
 import {defaults, parseErrorMessage} from "../../utils/helper";
 import {ID_FLAGS} from "../../eIdLink/strategies/createEIDLinkExtensionStrategy";
+import { SET_ALL_INPUTS, setInputsSignState } from "../../signByTokenWizard/actions/TokenActions"
+import { signingType, signState } from "../../signByTokenWizard/constants"
 
 //----------------------------------
 // helpers                    
@@ -702,7 +704,7 @@ export const signDocument = () => (dispatch, getStore) => {
             if(tokenFile.readPhoto){
                 photo = certificate.certificateSelected.photo;
             }
-            var fileIdToSign = tokenFile.inputs.findIndex(input => !input.isSigned && input.isSelected);
+            var fileIdToSign = tokenFile.inputs.findIndex(input => input.signState === signState.TO_BE_SIGNED);
             signDocumentForTokenAPI(
                 certificate.certificateSelected.APIBody,
                 tokenFile.token,
@@ -715,11 +717,9 @@ export const signDocument = () => (dispatch, getStore) => {
                 .then((resp) => {
                     //console.log('signDocumentForTokenAPI response', resp)
                     if (resp === true) {
-                        if (tokenFile.signType === 'XadesMultiFile') {
-                            tokenFile.inputs.forEach(input => input.isSigned = true)
-                        } else tokenFile.inputs[fileIdToSign].isSigned = true
-                        fileIdToSign = tokenFile.inputs.findIndex(input => !input.isSigned && input.isSelected);
-                        dispatch(navigateToStep(fileIdToSign === -1 ? WIZARD_STATE_SUCCES : WIZARD_STATE_DIGEST_LOADING))
+                        dispatch(setInputsSignState(tokenFile.signingType === signingType.XadesMultiFile ? SET_ALL_INPUTS : fileIdToSign, signState.SIGNED));
+                        var moreToSign = getStore().tokenFile.inputs.find(input => input.signState === signState.TO_BE_SIGNED);
+                        dispatch(navigateToStep(moreToSign ? WIZARD_STATE_DIGEST_LOADING: WIZARD_STATE_SUCCES))
                     } else {
                         const parsedError = parseErrorMessage(resp.message);
                         if(parsedError && errorMessages[parsedError.type]){

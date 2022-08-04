@@ -1,6 +1,7 @@
 import {STORE_RESET} from "../../../store/storeActions";
-import {SET_DOCUMENT_TOKEN_METADATA, TOKEN_RECEIVED, SET_TOKEN_PREVIEW, SET_INPUT_SELECTION} from "../actions/TokenActions";
+import {SET_DOCUMENT_TOKEN_METADATA, TOKEN_RECEIVED, SET_TOKEN_PREVIEW, SET_INPUTS_SIGN_STATE, SET_ALL_INPUTS} from "../actions/TokenActions";
 import {defaults} from "../../utils/helper";
+import { signState } from "../constants";
 
 export const initialState = {
 
@@ -22,11 +23,12 @@ const TokenReducer = (state = initialState, action) => {
         case SET_DOCUMENT_TOKEN_METADATA : {
             return {
                 ...state,
-                inputs : action.payload.inputs,
+                inputs : action.payload.inputs.map(input => { return { ...input, signState: signState.SIGN_REQUESTED } }),
                 readPhoto : action.payload.readPhoto,
                 previewDocuments : action.payload.previewDocuments,
                 disallowSignedDownloads : action.payload.disallowSignedDownloads,
-                requestDocumentReadConfirm : action.payload.requestDocumentReadConfirm
+                requestDocumentReadConfirm : action.payload.requestDocumentReadConfirm,
+                signingType: action.payload.signingType
             }
         }
         case SET_TOKEN_PREVIEW : {
@@ -35,11 +37,11 @@ const TokenReducer = (state = initialState, action) => {
                 previewDocuments : action.payload.previewDocuments,
             }
         }
-        case SET_INPUT_SELECTION: {
+        case SET_INPUTS_SIGN_STATE: {
             return {
                 ...state,
                 inputs: state.inputs.map(
-                    (input, i) => i === action.payload.index ? {...input, isSelected: action.payload.value} : { ...input }
+                    (input, i) => i === action.payload.selector || action.payload.selector === SET_ALL_INPUTS || action.payload.selector === input.signState ? {...input, signState: action.payload.newState } : input
                 )}
             }
         case STORE_RESET:
