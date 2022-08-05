@@ -109,7 +109,9 @@ export class ResultContainer extends React.Component {
                         { signatures.map((sig,index) => <div key={index} className={ "row alert " + sig.class }>
                             <div className="col px-0">{sig.signer}</div>
                             <div className="col-4 px-0">{moment(sig.date).format('DD/MM/YYYY - h:mm:ss')}</div>
-                            <div className="col-2 px-0" title={sig.subIndication && intl.formatMessage({ id: sig.subIndication.id, defaultMessage: sig.subIndication.message })}>{sig.isValid ? yes : no}</div>
+                            <div className="col-2 px-0">{sig.isValid ? yes : no}
+                                { sig.subIndication && <img title={intl.formatMessage({ id: sig.subIndication.id, defaultMessage: sig.subIndication.message })} style={{ width:16, height:16, marginBottom: 3, marginLeft: 4 }} src="/img/questionMark.svg"/> }
+                             </div>
                             <div className="col-2 px-0">{sig.isQualified ? yes : no }</div>
                         </div> )}
                     </div>
