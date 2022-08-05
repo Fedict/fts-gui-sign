@@ -41,9 +41,9 @@ export const getDigestForToken = () => (dispatch, getStore) => {
         }
 
         var fileIdToSign = tokenFile.inputs.findIndex(input => input.signState === signState.TO_BE_SIGNED);
-        if (tokenFile.signingType === signingType.Bulk || tokenFile.signingType === signingType.XadesMultiFile) {
-            dispatch(setPreviewFileId(tokenFile.signingType === signingType.Bulk ? fileIdToSign : -1));
-        }
+//        if (tokenFile.inputs.length > 1 ) {
+            dispatch(setPreviewFileId(tokenFile.signingType === signingType.XadesMultiFile ? -1 : fileIdToSign));
+//XXX        }
         
         getDataToSignForTokenAPI(certificate.certificateSelected.APIBody, tokenFile.token, fileIdToSign, signingDate, photo)
             .then(handleFlowIdError(flowId, getStore))
@@ -97,9 +97,7 @@ export const getDocumentMetadataForToken = () => (dispatch, getStore) => {
                 //console.log('getDocumentMetadataForTokenAPI', resp)
                 if(resp.inputs){
                     dispatch(setDocumentMetadata(resp))
-                    if (store.tokenFile.signingType !== signingType.SingleFile) {
-                        dispatch(setPreviewFileId(resp.previewDocuments ? 0 : -1))
-                    }
+                    dispatch(setPreviewFileId(resp.previewDocuments || resp.inputs.length === 1 ? 0 : -1))
                     dispatch(navigateToStep(WIZARD_STATE_UPLOAD))
                 }else{
                     const parsedError = parseErrorMessage(resp.message);

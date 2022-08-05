@@ -6,8 +6,7 @@ export const signState = {
 }
 
 export const signingType = {
-    Bulk: 'Bulk',
     XadesMultiFile: 'XadesMultiFile',
-    SingleFile: 'SingleFile'
+    Standard: 'Standard'
 }
 

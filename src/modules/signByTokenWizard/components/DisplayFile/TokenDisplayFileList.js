@@ -81,7 +81,7 @@ export const mapStateToProps = (state) => {
     return {
         selectedInputId : state.filePreview.index,
         tokenFile: state.tokenFile,
-        fileSelection: state.tokenFile.signingType === signingType.Bulk
+        fileSelection: state.tokenFile.signingType !== signingType.XadesMultiFile
     }
 }
 
