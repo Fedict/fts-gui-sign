@@ -41,9 +41,7 @@ export const getDigestForToken = () => (dispatch, getStore) => {
         }
 
         var fileIdToSign = tokenFile.inputs.findIndex(input => input.signState === signState.TO_BE_SIGNED);
-//        if (tokenFile.inputs.length > 1 ) {
-            dispatch(setPreviewFileId(tokenFile.signingType === signingType.XadesMultiFile ? -1 : fileIdToSign));
-//XXX        }
+        dispatch(setPreviewFileId(tokenFile.signingType === signingType.XadesMultiFile ? -1 : fileIdToSign));
         
         getDataToSignForTokenAPI(certificate.certificateSelected.APIBody, tokenFile.token, fileIdToSign, signingDate, photo)
             .then(handleFlowIdError(flowId, getStore))

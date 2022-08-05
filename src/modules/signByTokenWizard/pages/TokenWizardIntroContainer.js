@@ -69,10 +69,12 @@ const TokenWizardIntroContainer = (props) => {
                 <button
                     className={ readyToSign ? "btn btn-primary text-uppercase" : "btn btn-secondary text-uppercase"} disabled={!readyToSign}
                     onClick={() => {
-                        if (props.tokenFile.signingType === signingType.XadesMultiFile || props.isMultifile) props.setPreviewFileId(-1)
                         props.setInputsSignState(signState.SIGN_REQUESTED, signState.TO_BE_SIGNED)
+                        if (props.tokenFile.signingType === signingType.XadesMultiFile || props.isMultifile) {
+                            props.setPreview(false)
+                            props.setPreviewFileId(-1)
+                        }
                         props.doSendLogInfo('UI - SIGN_BUTTON CLICKED')
-                        props.setPreview(!props.isMultifile)
                         props.navigateToNextStep()
                     }}
                     id="button_next"
