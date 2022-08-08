@@ -8,7 +8,7 @@ const SuccesContainerForTokenWithIntl = injectIntl(SuccesContainerForToken)
 
 describe("SuccesForTokenContainer", () => {
     test("Has Download document button", () => {
-        const { getByRole } = render(<SuccesContainerForTokenWithIntl />);
+        const { getByRole } = render(<SuccesContainerForTokenWithIntl tokenFile={{ noSigendDownload: true }} />);
 
         expect(getByRole('button', {name : /Download document/i})).toBeInTheDocument();
     })

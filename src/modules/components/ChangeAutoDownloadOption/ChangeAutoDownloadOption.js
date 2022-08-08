@@ -38,7 +38,7 @@ const ChangeAutoDownloadOption = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        allowSignedDownloads : !(state.tokenFile?state.tokenFile.disallowSignedDownloads:false),
+        allowSignedDownloads : !(state.tokenFile?state.tokenFile.noSignedDownloads:false),
     }
 }
 const mapDispatchToProps = ({

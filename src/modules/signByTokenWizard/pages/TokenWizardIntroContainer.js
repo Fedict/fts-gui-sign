@@ -51,7 +51,7 @@ const TokenWizardIntroContainer = (props) => {
                 }
                 values={{ newLine: <br />, fileName: props.fileName, b: boldedText, signButtonText: <FormattedMessage id="buttons.sign" defaultMessage="sign" /> }} />
 
-            {props.tokenFile.disallowSignedDownloads &&
+            {props.tokenFile.noSignedDownloads &&
                 <FormattedMessage tagName={"p"} id="token.intro.nodownload" defaultMessage="Please note: <b>you will not be able to download</b> the signed document(s) after signing." values={{ b: boldedText }} />
             }
             {props.tokenFile.requestDocumentReadConfirm &&

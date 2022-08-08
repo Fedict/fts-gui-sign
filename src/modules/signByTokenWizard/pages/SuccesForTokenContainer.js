@@ -50,7 +50,7 @@ export class SuccesContainerForToken extends React.Component {
         if(this.props.autoDownloadDocument) {
             this.downloadFile()
         }
-        if(false && this.props.tokenFile.disallowSignedDownloads){
+        if(false && this.props.tokenFile.noSignedDownloads){
             this.props.nextButtonClicked(this.props.redirectUrl);
         }
     }
@@ -76,7 +76,7 @@ export class SuccesContainerForToken extends React.Component {
                 onClickCancel={() => nextButtonClicked(redirectUrl)}
             >
                 <div className="form-group">
-                    {tokenFile.disallowSignedDownloads?
+                    {tokenFile.noSignedDownloads?
                         false && <FormattedMessage id="succes.signed.downloadNotAllowed" defaultMessage="" values={{b : boldedText}} />
                     :
                         <Fragment>
@@ -109,7 +109,7 @@ const mapStateToProps = (state) => {
         uploadFile: state.uploadFile,
         redirectUrl : state.tokenFile.redirectUrl,
         tokenFile : state.tokenFile,
-        autoDownloadDocument : state.wizard.autoDownloadDocument !== false && !state.tokenFile.disallowSignedDownloads,
+        autoDownloadDocument : state.wizard.autoDownloadDocument !== false && !state.tokenFile.noSignedDownloads,
         multipleDocuments : state.tokenFile.inputs.length > 1
     })
 }

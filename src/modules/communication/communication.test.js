@@ -595,6 +595,9 @@ describe('validateSignatureAPI', () => {
 })
 
 describe('getDataToSignForTokenAPI', () => {
+    const startToken = '12345456';
+    const fileIdToSign = 0;
+
     const startCertificateObject = {
         certificateChain: [
             { encodedCertificate: "certificatestring" },
@@ -614,9 +617,9 @@ describe('getDataToSignForTokenAPI', () => {
             "signingDate": "this value will be replaced later",
             "photo" : "picture bytes"
         },
-        token : '12345456'
+        "fileIdToSign": fileIdToSign,
+        token : startToken
     }
-    const startToken = '12345456';
     test("fetch called", async () => {
         //mocking
         global.fetch.resetMocks();
@@ -672,6 +675,7 @@ describe('signDocumentForTokenAPI', () => {
                 "signingDate": "2021-06-23T11:53:33+02:00",
                 "photo": "/9j/4AAQSk"
             },
+            "fileIdToSign": 0,
             "token": "eyJraWQiO",
             "signatureValue": "q42MZUa"
         }
@@ -698,7 +702,7 @@ describe('signDocumentForTokenAPI', () => {
             certificate : {
                 "encodedCertificate": "MIIG"
             }
-        }, "eyJraWQiO", "q42MZUa", "2021-06-23T11:53:33+02:00", "/9j/4AAQSk")
+        }, "eyJraWQiO", 0, "q42MZUa", "2021-06-23T11:53:33+02:00", "/9j/4AAQSk")
 
         //assertions
         expect(global.fetch).toHaveBeenCalledTimes(1)
