@@ -4,7 +4,9 @@ import {FormattedMessage} from 'react-intl';
 
 import {getBEUrl} from "../../../utils/helper";
 import {setPreviewFileId, setInputsSignState} from "../../actions/TokenActions";
-import {signingType, signState} from "../../constants";
+import {signState} from "../../constants";
+import {doSendLogInfo} from "../../../signWizard/actions/WizardLogicActions";
+
 
 /**
  * Component to display list of filenames 
@@ -15,7 +17,7 @@ import {signingType, signState} from "../../constants";
  * @param {array} previewDocuments - display mode : if true display selectable icon list, else display list of downloadble urls
  * @param {array} selectedInputId - the curently selected icon
  */
-export const TokenDisplayFileList = ({ tokenFile, selectedInputId, setPreviewFileId, setInputsSignState }) => {
+export const TokenDisplayFileList = ({ tokenFile, selectedInputId, setPreviewFileId, setInputsSignState, doSendLogInfo }) => {
     if (tokenFile.previewDocuments) {
         const hilightBorderStyle = {
             backgroundColor: "grey",
@@ -31,7 +33,9 @@ export const TokenDisplayFileList = ({ tokenFile, selectedInputId, setPreviewFil
                     { tokenFile.selectDocuments &&
                         <input type="checkbox" className="form-check-input" style={{ width: 15, height: 15, marignTop: "0.3rem", marginLeft: "-2.5rem" }} 
                             disabled={!(input.signState === signState.DONT_SIGN || input.signState === signState.SIGN_REQUESTED)} checked={input.signState !== signState.DONT_SIGN}
-                            onChange={ () => { setInputsSignState(index, input.signState === signState.SIGN_REQUESTED ? signState.DONT_SIGN : signState.SIGN_REQUESTED) }}/>
+                            onChange={ () => { setInputsSignState(index, input.signState === signState.SIGN_REQUESTED ? signState.DONT_SIGN : signState.SIGN_REQUESTED)
+                                doSendLogInfo('UI - CHECK FILE : ' + input.fileName + " : " + (input.signState === signState.DONT_SIGN))
+                            }}/>
                     }
                         <img src={"/img/Icon" + input.iconType + ".png"} style={{ position: "absolute", margin: "auto", left: 0, right: 0, bottom: 8 }} alt={input.iconType}></img>
                     </div>
@@ -51,7 +55,9 @@ export const TokenDisplayFileList = ({ tokenFile, selectedInputId, setPreviewFil
                     { tokenFile.selectDocuments &&
                         <input type="checkbox" className="form-check-input" style={{ width: 15, height: 15, margin: 9, position: "relative" }}
                             disabled={!(input.signState === signState.DONT_SIGN || input.signState === signState.SIGN_REQUESTED)} checked={input.signState !== signState.DONT_SIGN}
-                            onChange={ () => { setInputsSignState(index, input.signState === signState.SIGN_REQUESTED ? signState.DONT_SIGN : signState.SIGN_REQUESTED) }}/>
+                            onChange={ () => { setInputsSignState(index, input.signState === signState.SIGN_REQUESTED ? signState.DONT_SIGN : signState.SIGN_REQUESTED)
+                                doSendLogInfo('UI - CHECK FILE : ' + input.fileName + " : " + (input.signState === signState.DONT_SIGN))
+                             }}/>
                     }
                         <img  className="p-2" src={"/img/Icon" + input.iconType + ".png"} alt={input.iconType} style={{ marginTop: -7 }} ></img>
                         <a href={ input.url + "?forceDownload" } download>{input.fileName.replace(/\.[^.]*$/, '')}</a>
@@ -86,7 +92,8 @@ export const mapStateToProps = (state) => {
 
 const mapDispatchToProps = ({
     setPreviewFileId,
-    setInputsSignState
+    setInputsSignState,
+    doSendLogInfo
 })
 
 export default connect(mapStateToProps,mapDispatchToProps)(TokenDisplayFileList)
