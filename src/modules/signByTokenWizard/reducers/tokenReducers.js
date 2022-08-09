@@ -26,6 +26,7 @@ const TokenReducer = (state = initialState, action) => {
                 inputs : action.payload.inputs.map(input => { return { ...input, signState: signState.SIGN_REQUESTED } }),
                 readPhoto : action.payload.readPhoto,
                 previewDocuments : action.payload.previewDocuments,
+                selectDocuments: action.payload.selectDocuments,
                 noSignedDownloads : action.payload.noSignedDownloads,
                 requestDocumentReadConfirm : action.payload.requestDocumentReadConfirm,
                 signingType: action.payload.signingType

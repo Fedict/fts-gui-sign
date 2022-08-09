@@ -15,7 +15,7 @@ import {signingType, signState} from "../../constants";
  * @param {array} previewDocuments - display mode : if true display selectable icon list, else display list of downloadble urls
  * @param {array} selectedInputId - the curently selected icon
  */
-export const TokenDisplayFileList = ({ tokenFile, selectedInputId, fileSelection, setPreviewFileId, setInputsSignState }) => {
+export const TokenDisplayFileList = ({ tokenFile, selectedInputId, setPreviewFileId, setInputsSignState }) => {
     if (tokenFile.previewDocuments) {
         const hilightBorderStyle = {
             backgroundColor: "grey",
@@ -28,7 +28,7 @@ export const TokenDisplayFileList = ({ tokenFile, selectedInputId, fileSelection
             {(tokenFile.inputs.map((input, index) => ( 
                 <div className="text-center m-2 p-2" style={ selectedInputId !== index ?  null :  hilightBorderStyle} key={index} onClick={() => setPreviewFileId(index)}>
                     <div style={{ paddingTop: -20, border: "solid 1px lightgrey", width: 100, height:70, backgroundColor: "white", position: "relative" }}>
-                    { fileSelection &&
+                    { tokenFile.selectDocuments &&
                         <input type="checkbox" className="form-check-input" style={{ width: 15, height: 15, marignTop: "0.3rem", marginLeft: "-2.5rem" }} 
                             disabled={!(input.signState === signState.DONT_SIGN || input.signState === signState.SIGN_REQUESTED)} checked={input.signState !== signState.DONT_SIGN}
                             onChange={ () => { setInputsSignState(index, input.signState === signState.SIGN_REQUESTED ? signState.DONT_SIGN : signState.SIGN_REQUESTED) }}/>
@@ -48,7 +48,7 @@ export const TokenDisplayFileList = ({ tokenFile, selectedInputId, fileSelection
             <div className="m-2 p-2" key={index} style={{ border:  selectedInputId === index ?  "3px solid blue" : "1px solid lightGrey", backgroundColor: "whiteSmoke", maxWidth: "100%" }}>
                 <div className="row">
                     <div className="col">
-                    { fileSelection &&
+                    { tokenFile.selectDocuments &&
                         <input type="checkbox" className="form-check-input" style={{ width: 15, height: 15, margin: 9, position: "relative" }}
                             disabled={!(input.signState === signState.DONT_SIGN || input.signState === signState.SIGN_REQUESTED)} checked={input.signState !== signState.DONT_SIGN}
                             onChange={ () => { setInputsSignState(index, input.signState === signState.SIGN_REQUESTED ? signState.DONT_SIGN : signState.SIGN_REQUESTED) }}/>
@@ -81,7 +81,6 @@ export const mapStateToProps = (state) => {
     return {
         selectedInputId : state.filePreview.index,
         tokenFile: state.tokenFile,
-        fileSelection: state.tokenFile.signingType !== signingType.XadesMultiFile
     }
 }
 
