@@ -32,7 +32,8 @@ import {setDateSigning, setSignature} from "./SignatureActions"
 import { setDownloadFile } from "../../fileUpload/actions/UploadFileActions"
 import {
     readerSetCheck,
-    readerSetOk
+    readerSetOk,
+    readerSetBeidConnectVersion
 } from "./ReaderActions"
 import { resetStore } from "../../../store/storeActions"
 import { ErrorGeneral } from "../../message/MessageConstants"
@@ -189,8 +190,9 @@ export const checkVersion = (isErrorCheck) => (dispatch, getStore) => {
     const requestId = dispatch(createRequestId(4000, requestTimeOutFunctionChecVersion))
 
     eIDLink.getVersion(window.configData.eIDLinkMinimumVersion,
-        () => {
+        (installedVersion) => {
             dispatch(removeRequestId(requestId))
+            dispatch(readerSetBeidConnectVersion(installedVersion))
             dispatch(readerSetCheck(true))
             dispatch(readerSetOk(true))
             if (isErrorCheck) {
@@ -202,18 +204,21 @@ export const checkVersion = (isErrorCheck) => (dispatch, getStore) => {
         },
         () => {
             dispatch(removeRequestId(requestId))
+            dispatch(readerSetBeidConnectVersion(undefined))
             dispatch(readerSetCheck(true))
             dispatch(readerSetOk(false))
             dispatch(navigateToStep(WIZARD_STATE_VERSION_CHECK_INSTALL))
         },
-        () => {
+        (installedVersion) => {
             dispatch(removeRequestId(requestId))
+            dispatch(readerSetBeidConnectVersion(installedVersion))
             dispatch(readerSetCheck(true))
             dispatch(readerSetOk(false))
             dispatch(navigateToStep(WIZARD_STATE_VERSION_CHECK_UPDATE))
         },
         () => {
             dispatch(removeRequestId(requestId))
+            dispatch(readerSetBeidConnectVersion(undefined))
             dispatch(readerSetCheck(true))
             dispatch(readerSetOk(false))
             dispatch(navigateToStep(WIZARD_STATE_VERSION_CHECK_INSTALL_EXTENSION))

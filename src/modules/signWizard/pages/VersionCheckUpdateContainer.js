@@ -49,7 +49,7 @@ export class VersionCheckUpdateContainer extends React.Component {
     handleOnClick() {
         const usedOs = getOS()
         const usedBrowser = getBrowser()
-
+        const IsAdminWindows = this.props.reader && this.props.reader.beidConnectVersion && this.props.reader.beidConnectVersion.IsAdmin;
         if (usedOs === OS.WINDOWS && window.configData && window.configData.eIDLinkUrls && window.configData.eIDLinkUrls.windows) {
             const { intl } = this.props;
             var language="en";
@@ -58,11 +58,17 @@ export class VersionCheckUpdateContainer extends React.Component {
             {
                 language = intl.locale;
             }
-            console.log(window.configData.eIDLinkUrls.windows[language] + '?dt=' + new Date().getTime(), "_blank");
-            if (navigator.userAgent.includes("WOW64") || navigator.userAgent.includes("Win64")) {
-                window.open(window.configData.eIDLinkUrls.windowsX64[language] + '?dt=' + new Date().getTime(), "_blank")
-            } else {
-                window.open(window.configData.eIDLinkUrls.windows[language] + '?dt=' + new Date().getTime(), "_blank")
+            if (IsAdminWindows){
+                console.log(window.configData.eIDLinkUrls.windowsAdmin.en + '?dt=' + new Date().getTime(), "_blank");
+                window.open(window.configData.eIDLinkUrls.windowsAdmin.en + '?dt=' + new Date().getTime(), "_blank")
+            }
+            else {
+                console.log(window.configData.eIDLinkUrls.windows[language] + '?dt=' + new Date().getTime(), "_blank");
+                if (navigator.userAgent.includes("WOW64") || navigator.userAgent.includes("Win64")) {
+                    window.open(window.configData.eIDLinkUrls.windowsX64[language] + '?dt=' + new Date().getTime(), "_blank")
+                } else {
+                    window.open(window.configData.eIDLinkUrls.windows[language] + '?dt=' + new Date().getTime(), "_blank")
+                }
             }
         }
         if (usedOs === OS.MACOS) {
@@ -83,8 +89,8 @@ export class VersionCheckUpdateContainer extends React.Component {
         const usedOs = getOS()
         const usedBrowser = getBrowser()
 
-        console.log(usedOs);
-        console.log(usedBrowser);
+        // console.log(usedOs);
+        // console.log(usedBrowser);
 
         return (
             <CardContainer title={intl.formatMessage(messages.title)}
@@ -117,10 +123,16 @@ const linuxDistributions = (hasLinuxUrls)
     ? Object.values(window.configData.eIDLinkUrls.linux)
     : [];
 
+const mapStateToProps = (state) => {
+    return (state) => ({
+        reader: state.reader,
+    })
+}
+
 const mapDispatchToProps = ({
     navigateToStep,
     resetWizard,
     checkVersion
 })
 
-export default connect(null, mapDispatchToProps)(injectIntl(VersionCheckUpdateContainer))
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(VersionCheckUpdateContainer))

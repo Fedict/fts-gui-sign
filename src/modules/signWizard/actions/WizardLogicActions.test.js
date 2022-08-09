@@ -496,7 +496,7 @@ describe("WizardLogicActions", () => {
             const versionCorrectCallback = mockCheckVersion.mock.calls[0][1]
 
             versionCorrectCallback()
-            expect(mockDispatch).toBeCalledTimes(5)
+            expect(mockDispatch).toBeCalledTimes(6)
             expect(RequestIdActions.removeRequestId).toBeCalled()
             expect(RequestIdActions.removeRequestId).toBeCalledWith(requestId)
             expect(ReaderActions.readerSetCheck).toBeCalled()
@@ -523,7 +523,7 @@ describe("WizardLogicActions", () => {
             const versionCorrectCallback = mockCheckVersion.mock.calls[0][1]
 
             versionCorrectCallback()
-            expect(mockDispatch).toBeCalledTimes(5)
+            expect(mockDispatch).toBeCalledTimes(6)
             expect(RequestIdActions.removeRequestId).toBeCalled()
             expect(RequestIdActions.removeRequestId).toBeCalledWith(requestId)
             expect(ReaderActions.readerSetCheck).toBeCalled()
@@ -552,7 +552,7 @@ describe("WizardLogicActions", () => {
             const versionCorrectCallback = mockCheckVersion.mock.calls[0][2]
 
             versionCorrectCallback()
-            expect(mockDispatch).toBeCalledTimes(5)
+            expect(mockDispatch).toBeCalledTimes(6)
             expect(RequestIdActions.removeRequestId).toBeCalled()
             expect(RequestIdActions.removeRequestId).toBeCalledWith(requestId)
             expect(ReaderActions.readerSetCheck).toBeCalled()
@@ -579,7 +579,7 @@ describe("WizardLogicActions", () => {
             const versionCorrectCallback = mockCheckVersion.mock.calls[0][3]
 
             versionCorrectCallback()
-            expect(mockDispatch).toBeCalledTimes(5)
+            expect(mockDispatch).toBeCalledTimes(6)
             expect(RequestIdActions.removeRequestId).toBeCalled()
             expect(RequestIdActions.removeRequestId).toBeCalledWith(requestId)
             expect(ReaderActions.readerSetCheck).toBeCalled()
@@ -606,7 +606,7 @@ describe("WizardLogicActions", () => {
             const versionCorrectCallback = mockCheckVersion.mock.calls[0][4]
 
             versionCorrectCallback()
-            expect(mockDispatch).toBeCalledTimes(5)
+            expect(mockDispatch).toBeCalledTimes(6)
             expect(RequestIdActions.removeRequestId).toBeCalled()
             expect(RequestIdActions.removeRequestId).toBeCalledWith(requestId)
             expect(ReaderActions.readerSetCheck).toBeCalled()

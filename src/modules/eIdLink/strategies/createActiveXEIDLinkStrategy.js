@@ -7,18 +7,27 @@ export const createActiveXEIDLinkStrategy = () => {
     }
 
     const isUptodate = (minimumVersion, installedVersion) => {
-        var expected = minimumVersion.split(".");
-        var actual = installedVersion.split(".");
-        return (actual[0] > expected[0]) || (actual[0] === expected[0] && actual[1] >= expected[1]);
+        try{
+            var expected = minimumVersion.split(".");
+            var actual = installedVersion.split(".");
+            return (actual[0] > expected[0]) || (actual[0] === expected[0] && actual[1] >= expected[1]);
+        }
+        catch{
+            return false;
+        }
     }
 
     const getVersion = (minimumVersion, onSuccess, onNotInstalled, onNeedsUpdate) => {
         messagePromise({ operation: 'VERSION' }).then(
             function (msg) {
-                var installedVersion = msg.version;
+                var installedVersion = {version:msg.version};
                 //console.log("BeIDConnect version is " + installedVersion);
+                if (msg.windowsInstallType && msg.windowsInstallType==="admin")
+                {
+                    installedVersion.IsAdmin = true;
+                }
 
-                if (isUptodate(minimumVersion, installedVersion)) {
+                if (isUptodate(minimumVersion, installedVersion.version)) {
                     onSuccess(installedVersion);
                 } else {
                     onNeedsUpdate(installedVersion);

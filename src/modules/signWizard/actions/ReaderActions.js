@@ -18,4 +18,15 @@ export const READER_SET_OK = "READER_SET_OK"
  * function to change the reader ok status
  * @param {boolean} state - boolean that represents if the reader is ok
  **/
-export const readerSetOk = (state) => ({ type: READER_SET_OK, payload: state })
+export const readerSetOk = (state) => ({ type: READER_SET_OK, payload: state })/**
+
+/**
+ * action type to change the reader ok status
+ */
+export const READER_SET_BEIDCONNECT_VERSION = "READER_SET_BEIDCONNECT_VERSION"
+
+/**
+ * function to change the beidconnect version
+ * @param {boolean} state - boolean that represents if the reader is ok
+ **/
+export const readerSetBeidConnectVersion = (state) => ({ type: READER_SET_BEIDCONNECT_VERSION, payload: state })
