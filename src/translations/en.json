@@ -149,6 +149,8 @@
   "token.intro.txt": "<b>Welcome</b> {newLine}{newLine} You are about to sign the document on the left. {newLine}{newLine} When you have read the document, connect your eID reader to your computer, insert the eID card and click <b>{signButtonText}</b> to digitally sign it.  {newLine} {newLine} You will sign the document with the PIN of your eID, please make sure that you know this PIN.",
   "token.intro.multiFile.txt": "Welcome,{newLine}{newLine}You are about to sign the documents on the left.{newLine}{newLine}After reading the documents, connect your card reader to the computer, insert the eID card into the card reader and press the <b>{signButtonText}</b> button to digitally sign the documents. {newLine} {newLine} To sign the documents, enter your eID PIN code. Make sure you have it to hand.",
   "token.documents.list": "DOCUMENTS TO SIGN",
+  "token.documents.select.all": "SELECT ALL",
+  "token.documents.select.none": "UNSELECT ALL",
   "token.documents.title.name": "<b>DOCUMENT PREVIEW:</b> {docName}",
   "validate.certificate.info": "The certificate is being validated, this operation can take some time.",
   "validate.loading.title" : "Validate document",

@@ -97,7 +97,6 @@ export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, 
     }, [wizard.state])
     let content = null;
 
-    console.log("***************************** " + wizard.state)
     switch (wizard.state) {
         case WIZARD_STATE_START:
             content = <MetadataLoadingContainer />

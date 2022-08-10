@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import {FormattedMessage} from 'react-intl';
 
 import {getBEUrl} from "../../../utils/helper";
-import {setPreviewFileId, setInputsSignState} from "../../actions/TokenActions";
+import {setPreviewFileId, setInputsSignState, SET_ALL_INPUTS} from "../../actions/TokenActions";
 import {signState} from "../../constants";
 import {doSendLogInfo} from "../../../signWizard/actions/WizardLogicActions";
 
@@ -19,17 +19,17 @@ import {doSendLogInfo} from "../../../signWizard/actions/WizardLogicActions";
  */
 export const TokenDisplayFileList = ({ tokenFile, selectedInputId, setPreviewFileId, setInputsSignState, doSendLogInfo }) => {
     if (tokenFile.previewDocuments) {
-        const hilightBorderStyle = {
-            backgroundColor: "grey",
-            borderRadius: "3px",
-            border: "1px solid"
-        };
-    
+        let allNone = tokenFile.inputs.find((input) => (input.signState === signState.DONT_SIGN)) ?
+                { set: signState.SIGN_REQUESTED, id: "all", txt: "SELECT ALL" } :
+                { set: signState.DONT_SIGN, id: "none", txt: "UNSELECT ALL" }
         return (
-        <div className="col-md-auto">
-            {(tokenFile.inputs.map((input, index) => ( 
-                <div className="text-center m-2 p-2" style={ selectedInputId !== index ?  null :  hilightBorderStyle} key={index} onClick={() => setPreviewFileId(index)}>
-                    <div style={{ paddingTop: -20, border: "solid 1px lightgrey", width: 100, height:70, backgroundColor: "white", position: "relative" }}>
+        <div className="col-md-auto text-center">
+            <a href="#" onClick={ () => setInputsSignState(SET_ALL_INPUTS, allNone.set) }><b><FormattedMessage id = { "token.documents.select." + allNone.id } defaultMessage={ allNone.txt }/></b></a>
+            {( tokenFile.inputs.map((input, index) => ( 
+                <div className="m-2 p-2"  key={index} onClick={() => setPreviewFileId(index)}
+                       style={ selectedInputId !== index ?  { width: 110 } : 
+                         { width: 110, backgroundColor: "grey", borderRadius: "3px", border: "1px solid" }}>
+                    <div style={{ paddingTop: -20, border: "solid 1px lightgrey", height:70, backgroundColor: "white", position: "relative" }}>
                     { tokenFile.selectDocuments &&
                         <input type="checkbox" className="form-check-input" style={{ width: 15, height: 15, marignTop: "0.3rem", marginLeft: "-2.5rem" }} 
                             disabled={!(input.signState === signState.DONT_SIGN || input.signState === signState.SIGN_REQUESTED)} checked={input.signState !== signState.DONT_SIGN}

@@ -149,6 +149,8 @@
   "token.intro.txt": "<b>Willkommen</b>{newLine}{newLine} Sie sind dabei, das Dokument auf der linken Seite zu unterschreiben.{newLine}{newLine}Sie können nun Ihre eID-Karte in den Kartenleser einführen (vergewissern Sie sich, dass Sie den PIN-Code kennen) und dann die Schaltfläche <b>{signButtonText}</b> drücken, um mit dem Unterschreiben des Dokuments zu beginnen.",
   "token.intro.multiFile.txt": "Willkommen,{newLine}{newLine} Sie sind dabei, die Dokumente auf der linken Seite zu unterschreiben. {newLine} {newLine} Nachdem Sie die Dokumente gelesen haben, verbinden Sie Ihren Kartenleser mit dem Computer, stecken Sie die eID-Karte in den Kartenleser und drücken Sie auf die Schaltfläche <b>{signButtonText}</b>, um die Dokumente digital zu unterschreiben. {newLine} {newLine} Um die Dokumente zu unterschreiben, geben Sie den PIN-Code Ihrer eID ein. Achten Sie darauf, dass Sie ihn zur Hand haben.",
   "token.documents.list": "ZU UNTERSCHREIBENDE DOKUMENTE",
+  "token.documents.select.all": "ALLE AUSWÄHLEN",
+  "token.documents.select.none": "ALLE ABWÄHLEN",
   "token.documents.title.name": "<b>DOKUMENTVORSCHAU:</b> {docName}",
   "validate.certificate.info": "Das Zertifikat wird gerade validiert. Diese Prüfung kann eine Weile dauern.",
   "validate.loading.title" : "Das Dokument validieren",
