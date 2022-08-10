@@ -24,7 +24,8 @@ export const TokenDisplayFileList = ({ tokenFile, selectedInputId, setPreviewFil
                 { set: signState.DONT_SIGN, id: "none", txt: "UNSELECT ALL" }
         return (
         <div className="col-md-auto text-center">
-            <a href="#" onClick={ () => setInputsSignState(SET_ALL_INPUTS, allNone.set) }><b><FormattedMessage id = { "token.documents.select." + allNone.id } defaultMessage={ allNone.txt }/></b></a>
+            { tokenFile.selectDocuments && 
+                <a href="#" onClick={ () => setInputsSignState(SET_ALL_INPUTS, allNone.set) }><b><FormattedMessage id = { "token.documents.select." + allNone.id } defaultMessage={ allNone.txt }/></b></a> }
             {( tokenFile.inputs.map((input, index) => ( 
                 <div className="m-2 p-2"  key={index} onClick={() => setPreviewFileId(index)}
                        style={ selectedInputId !== index ?  { width: 110 } : 
