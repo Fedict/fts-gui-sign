@@ -27,7 +27,7 @@ export const TokenDisplayFileList = ({ tokenFile, selectedInputId, setPreviewFil
             { tokenFile.selectDocuments && 
                 <a href="#" onClick={ () => setInputsSignState(SET_ALL_INPUTS, allNone.set) }><b><FormattedMessage id = { "token.documents.select." + allNone.id } defaultMessage={ allNone.txt }/></b></a> }
             {( tokenFile.inputs.map((input, index) => ( 
-                <div className="m-2 p-2"  key={index} onClick={() => setPreviewFileId(index)}
+                <div className="m-2 p-2 text-break" key={index} onClick={() => setPreviewFileId(index)}
                        style={ selectedInputId !== index ?  { width: 110 } : 
                          { width: 110, backgroundColor: "grey", borderRadius: "3px", border: "1px solid" }}>
                     <div style={{ paddingTop: -20, border: "solid 1px lightgrey", height:70, backgroundColor: "white", position: "relative" }}>
@@ -40,7 +40,7 @@ export const TokenDisplayFileList = ({ tokenFile, selectedInputId, setPreviewFil
                     }
                         <img src={"/img/Icon" + input.iconType + ".png"} style={{ position: "absolute", margin: "auto", left: 0, right: 0, bottom: 8 }} alt={input.iconType}></img>
                     </div>
-                    {input.fileName.replace(/\.[^.]*$/, '')}
+                    {input.cleanFileName}
                 </div>
             )))}
         </div>);
@@ -61,7 +61,7 @@ export const TokenDisplayFileList = ({ tokenFile, selectedInputId, setPreviewFil
                              }}/>
                     }
                         <img  className="p-2" src={"/img/Icon" + input.iconType + ".png"} alt={input.iconType} style={{ marginTop: -7 }} ></img>
-                        <a href={ input.url + "?forceDownload" } download>{input.fileName.replace(/\.[^.]*$/, '')}</a>
+                        <a href={ input.url + "?forceDownload" } download>{input.cleanFileName}</a>
                     </div>
                     { input.signState === signState.SIGNED && (<div className="col-md-auto py-1">
                         <div className="px-3" style={{ width: "auto", maxWidth: "100%", borderRadius: "20px", backgroundColor: "#01c301" }}>
@@ -83,6 +83,7 @@ export const mapStateToProps = (state) => {
         else if (input.mimeType === "application/xml") iconType = "XML"
         input.iconType = iconType
         input.url = getBEUrl() + '/signing/getFileForToken/' + state.tokenFile.token + "/DOC/" + index
+        input.cleanFileName = input.fileName.replace(/\.[^.]*$/, '')
      });
     
     return {
