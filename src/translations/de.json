@@ -133,6 +133,7 @@
   "succes.documentNotAutoDownloaded": "Sie können das Dokument herunterladen, indem Sie auf <b>{succesButtonDownload}</b>.",
   "succes.next": "Schließen",
   "succes.redirect": "Sie werden in {timeLeft} Sekunden weitergeleitet.",
+  "succes.redirect.to": "Sie werden in {timeLeft} Sekunden zu {clientName} weitergeleitet.",
   "succes.signed.downloadNotAllowed": "",
   "succes.title": "Ihr Dokument wurde erfolgreich unterschrieben!",
   "succes.multiFile.title": "Ihre Dokumente wurden erfolgreich signiert!",

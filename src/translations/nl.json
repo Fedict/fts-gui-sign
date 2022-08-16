@@ -133,6 +133,7 @@
   "succes.documentNotAutoDownloaded": "Je kan het document downloaden door te klikken op <b>{succesButtonDownload}</b>.",
   "succes.next": "Sluiten",
   "succes.redirect": "Je wordt doorgestuurd in {timeLeft} seconden.",
+  "succes.redirect.to": "Je wordt doorgestuurd naar {clientName} in {timeLeft} seconden.",
   "succes.signed.downloadNotAllowed": "",
   "succes.signNext": "Sign next document",
   "succes.title": "Het document werd succesvol ondertekend!",
