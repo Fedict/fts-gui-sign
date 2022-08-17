@@ -133,10 +133,6 @@ export const doSetToken = (token, redirectUrl, xsltUrl) => (dispatch) => {
     })
 }
 
-const replaceBEURL = (url) => {
-    return url && url.replace('${BEurl}', getBEUrl());
-}
-
 export const setDocumentMetadata = (metadata) => ({
     type : SET_DOCUMENT_TOKEN_METADATA,
     payload : metadata
