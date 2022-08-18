@@ -17,16 +17,15 @@ describe("TokenWizardIntroContainer", () => {
         render(<TokenWizardIntroComponent navigateToNextStep={done} getCertificates={getCertificates} doSendLogInfo={doSendLogInfo} setPreview={setPreview}
              setInputsSignState={setInputsSignState} fileName={'aFile'} tokenFile={{ noSignedDownloads: true, inputs: [ {signState: signState.SIGN_REQUESTED} ] }} />);
 
-        const downloadTextElement = screen.getByText(/^Please note:/);
-        expect(downloadTextElement).toBeInTheDocument();
+        expect(screen.getByText(/^Please note:/)).toBeInTheDocument();
 
-        const signOneFileElement = screen.getByText(/^Digital signature of 'aFile'/);
-        expect(signOneFileElement).toBeInTheDocument();
+        expect(screen.getByText(/^Digital signature of 'aFile'/)).toBeInTheDocument();
 
         const buttonElement = screen.getByRole('button', {name : /SIGN/i});
-
         expect(buttonElement).toBeInTheDocument();
         expect(buttonElement.id).toEqual("button_next");
+
+        expect(screen.queryByTestId( "documentReadCheckbox")).not.toBeInTheDocument();
 
         expect(getCertificates).toBeCalled();
 
@@ -51,14 +50,9 @@ describe("TokenWizardIntroContainer", () => {
         render(<TokenWizardIntroComponent navigateToNextStep={done} getCertificates={getCertificates} doSendLogInfo={doSendLogInfo} setPreview={setPreview} setPreviewFileId={setPreviewFileId}
              setInputsSignState={setInputsSignState} isMultifile={true} tokenFile={{ requestDocumentReadConfirm: true, inputs: [ {signState: signState.SIGN_REQUESTED} , {signState: signState.SIGN_REQUESTED} ] }} />);
 
-        var elt = screen.getByText(/^Digitally sign multiple documents/);
-        expect(elt).toBeInTheDocument();
-
-        elt = screen.getByText(/to digitally sign the documents/);
-        expect(elt).toBeInTheDocument();
-
-        elt = screen.getByText(/sign these documents\?/);
-        expect(elt).toBeInTheDocument();
+        expect(screen.getByText(/^Digitally sign multiple documents/)).toBeInTheDocument();
+        expect(screen.getByText(/to digitally sign the documents/)).toBeInTheDocument();
+        expect(screen.getByText(/sign these documents\?/)).toBeInTheDocument();
 
         const buttonElement = screen.getByRole('button', {name : /SIGN/i});
         expect(buttonElement).toBeInTheDocument();
