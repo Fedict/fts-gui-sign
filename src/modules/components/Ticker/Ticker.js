@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {FormattedMessage, useIntl} from "react-intl";
 
-export const Ticker = ({autoClickNextTimeout, onTimeout, redirectMessageDescriptor}) => {
+export const Ticker = ({autoClickNextTimeout, onTimeout, redirectMessageDescriptor, clientName}) => {
     const [autoClickTime, setAutoClickTime] = useState(autoClickNextTimeout);
     const [abortAutoNext, setAbortAutoNext] = useState(false);
     const intl = useIntl();
@@ -33,7 +33,7 @@ export const Ticker = ({autoClickNextTimeout, onTimeout, redirectMessageDescript
         return false;
     }
     return <React.Fragment>
-        {redirectMessageDescriptor && intl.formatMessage(redirectMessageDescriptor, {timeLeft : autoClickTime})}
+        {redirectMessageDescriptor && intl.formatMessage(redirectMessageDescriptor, {timeLeft : autoClickTime, clientName: clientName})}
         &nbsp;
         {false && (<a href="#" onClick={setAbortAutoNext.bind(undefined, true)} className="text-lowercase"><FormattedMessage id="button.cancel" defaultMessage="cancel"/></a>)}
     </React.Fragment>

@@ -16,7 +16,7 @@ const messages = defineMessages({
     },
     next: {
         id: "validate.result.validateNextButton",
-        defaultMessage: "Validate next document"
+        defaultMessage: "Check another document"
     }
 })
 

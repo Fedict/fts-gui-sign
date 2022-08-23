@@ -17,8 +17,8 @@ const TokenReducer = (state = initialState, action) => {
                 ...state,
                 token : action.payload.token,
                 redirectUrl : action.payload.redirectUrl,
-                xsltUrl : action.payload.xsltUrl
-            }
+                clientName : action.payload.clientName
+                }
         }
         case SET_DOCUMENT_TOKEN_METADATA : {
             return {

@@ -31,9 +31,9 @@ export class StartPageContainer extends React.Component {
                             <div className="card">
                                 <div className="card-header"><FormattedMessage id="index.title" defaultMessage="Signing Box" /></div>
                                 <div className="card-body">
-                                    <FormattedMessage id="index.welcome" defaultMessage="The online signature service 'Signing box' is offered by the Federal Government." />
+                                    <FormattedMessage id="index.welcome" defaultMessage="The online signature service 'Signing box' is offered by the Federal Public Service Policy and Support. " />
                                     <br /><br />
-                                    <FormattedMessage id="index.content" defaultMessage="With this service you can digitally sign your documents (pdf or xml) or check the validity of a signed document (pdf or xml). With 'Signing box' you are sure that your document is signed correctly!" />
+                                    <FormattedMessage id="index.content" defaultMessage="With this service you can digitally sign your documents (pdf or xml) or check the validity of the signature on a document (pdf or xml). With 'Signing box' you are sure that your document is signed correctly!" />
                                     <br />
                                     <br />
                                     <div className="row mx-5 mt-3">

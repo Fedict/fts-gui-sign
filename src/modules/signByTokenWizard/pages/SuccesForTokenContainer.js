@@ -26,6 +26,10 @@ const messages = defineMessages({
     redirectMessage : {
         id : "succes.redirect",
         defaultMessage : "You'll be redirected in {timeLeft} seconds"
+    },
+    redirectToMessage : {
+        id : "succes.redirect.to",
+        defaultMessage : "You'll be redirected to {clientName} in {timeLeft} seconds"
     }
 })
 
@@ -96,7 +100,7 @@ export class SuccesContainerForToken extends React.Component {
                     }
                     <p>
                         <Ticker autoClickNextTimeout={3} onTimeout={() => nextButtonClicked(redirectUrl)}
-                                redirectMessageDescriptor={messages.redirectMessage}/>
+                                redirectMessageDescriptor={tokenFile.clientName ? messages.redirectToMessage : messages.redirectMessage} clientName={tokenFile.clientName}/>
                     </p>
                 </div>
             </CardContainer>

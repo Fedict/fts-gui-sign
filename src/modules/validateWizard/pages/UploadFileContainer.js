@@ -11,11 +11,11 @@ import {boldedText} from "../../utils/reactIntlUtils";
 const messages = defineMessages({
     title: {
         id: "validate.upload.title",
-        defaultMessage: "Validate signed document"
+        defaultMessage: "Validate digital signatures"
     },
     next: {
         id: "validate.upload.validateButton",
-        defaultMessage: "Validate document"
+        defaultMessage: "Validate"
     }
 })
 
@@ -55,8 +55,8 @@ export class UploadFileContainer extends React.Component {
                                                       values={{b : boldedText, selectDocumentButton : intl.formatMessage({id : "signing.upload.selectDocument", defaultMessage : "Select a document"})}}
                                                       /></NumberdText>
                         <NumberdText number="2"><FormattedMessage id="validate.upload.text.step.2"
-                                                      defaultMessage="Click on the button 'Validate document' to start the validation."
-                                                      values={{b : boldedText, validateButton : intl.formatMessage({id : "validate.upload.validateButton", defaultMessage : "Validate document"})}}
+                                                      defaultMessage="Click on the button 'Validate' to start the validation."
+                                                      values={{b : boldedText, validateButton : intl.formatMessage({id : "validate.upload.validateButton", defaultMessage : "Validate"})}}
                                                       /></NumberdText>
 
                         <div className="row">

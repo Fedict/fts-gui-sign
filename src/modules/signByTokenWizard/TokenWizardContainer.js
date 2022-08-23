@@ -64,7 +64,7 @@ export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, 
 
     const router = useRouter();
     useEffect(() => {
-        doSetToken(router.query.token, defaults(router.query.callbackUrl, router.query.redirectUrl), router.query.xsltUrl);
+        doSetToken(router.query.token, defaults(router.query.callbackUrl, router.query.redirectUrl), router.query.name);
     }, [router.query.token]);
     useEffect(() => {
         switch (wizard.state) {

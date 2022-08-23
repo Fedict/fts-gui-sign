@@ -141,7 +141,7 @@ export const subIndication =
     NO_POE: {
         key: "NO_POE",
         className: "alert-warning",
-        message: "A proof of existence is missing.",
+        message: "The necessary proof of the existence of the signature(s), needed for validation, is missing. Please reload the page and try again. Contact servicedesk.DTO@bosa.fgov.be if this error continues to appear. Please include the error message 'proof of existence' in your report.",
         id: "validate.result.messages.noPOE"
     },
     TRY_LATER: {
@@ -159,7 +159,7 @@ export const subIndication =
     GENERIC: {
         key: "GENERIC",
         className: "alert-warning",
-        message: "Something went wrong.",
+        message: "An error occurred during validation. Please reload the signed document and try again.",
         id: "validate.result.messages.generic"
     }
 }
