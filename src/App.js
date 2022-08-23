@@ -11,6 +11,7 @@ import { browserIsAccepted } from './modules/browserDetection/BrowserDetection';
 import MessageContainer from './modules/message/MessageContainer';
 import { ErrorNotSupported } from './modules/message/MessageConstants';
 import Footer from './modules/footer/Footer';
+import { GeneralTerms, PrivacyStatement } from './modules/info/InformationPages';
 import StartPageContainer from './modules/startPage/StartPageContainer';
 import MainI18nWrapper from "./modules/i18n/MainI18nWrapper";
 import TokenWizardContainer from "./modules/signByTokenWizard/TokenWizardContainer";
@@ -34,6 +35,16 @@ export const BaseApp = ({browserIsSupported, notSupportedMessage}) => (
                 <Route path="/validate">
                     <div className="container-fluid">
                         <ValidateWizardContainer />
+                    </div>
+                </Route>
+                <Route path="/gtou">
+                    <div className="container-fluid">
+                        <GeneralTerms/>
+                    </div>
+                </Route>
+                <Route path="/ps">
+                    <div className="container-fluid">
+                        <PrivacyStatement/>
                     </div>
                 </Route>
                 <Route path="/">

@@ -189,5 +189,9 @@
   "validation.signer.name": "Unterzeichner",
   "validation.sign.moment": "Datum",
   "validation.sign.valid": "Gültig",
-  "validation.sign.qualif": "Qualifiziert"
+  "validation.sign.qualif": "Qualifiziert",
+  "footer.genTerms": "Allgemeine Nutzungsbedingungen",
+  "footer.genPrivacy": "Datenschutzerklärung",
+  "info.genTerms": "Allgemeine Nutzungsbedingungen",
+  "info.genPrivacy": "Datenschutzerklärung"
 }
