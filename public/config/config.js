@@ -54,11 +54,11 @@ window.configData = {
         }
     },
 
-    defaultSigningProfileId: "CADES_LTA", /* CADES_1*/
+    defaultSigningProfileId: "XADES_LTA",
     signingProfileIds: {
-        "application/pdf":"PADES_LTA" , /*"PADES_1", */
-        "application/xml": "XADES_LTA",  /*"XADES_1",*/
-        "text/xml": "XADES_LTA" /*XADES_1*/
+        "application/pdf":"PADES_LTA" ,
+        "application/xml": "XADES_LTA",
+        "text/xml": "XADES_LTA"
     },
 
     BEurl: "https://validate.ta.fts.bosa.belgium.be/signandvalidation",

@@ -21,39 +21,16 @@ export const BaseApp = ({browserIsSupported, notSupportedMessage}) => (
     <div >
         {isInIframe()?false:<Navbar />}
         {(browserIsSupported) ?
-            (<Switch>
-                <Route path="/sign/:token">
-                    <div className="container-fluid">
-                        <TokenWizardContainer />
-                    </div>
-                </Route>
-                <Route path="/sign" exact strict>
-                    <div className="container-fluid">
-                        <WizardContainer />
-                    </div>
-                </Route>
-                <Route path="/validate">
-                    <div className="container-fluid">
-                        <ValidateWizardContainer />
-                    </div>
-                </Route>
-                <Route path="/gtou">
-                    <div className="container-fluid">
-                        <GeneralTerms/>
-                    </div>
-                </Route>
-                <Route path="/ps">
-                    <div className="container-fluid">
-                        <PrivacyStatement/>
-                    </div>
-                </Route>
-                <Route path="/">
-                    <div className="container-fluid">   
-                        <StartPageContainer />
-                    </div>
-                </Route>
-
-            </Switch>)
+            (<div className="container-fluid" style={{ marginBottom: '64px' }} >
+            <Switch>
+                <Route path="/sign/:token"><TokenWizardContainer /></Route>
+                <Route path="/sign" exact strict><WizardContainer /></Route>
+                <Route path="/validate"><ValidateWizardContainer /></Route>
+                <Route path="/gtou"><GeneralTerms/></Route>
+                <Route path="/ps"><PrivacyStatement/></Route>
+                <Route path="/"><StartPageContainer /></Route>
+            </Switch>
+            </div>)
             : (
                 <div className="container">
                     <div className="col col-12 col-md-8 mx-auto align-middle">

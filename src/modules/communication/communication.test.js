@@ -19,24 +19,24 @@ describe("getsigningProfileId", () => {
 
     beforeAll(() => {
         window.configData = {
-            defaultSigningProfileId: "XADES_1",
+            defaultSigningProfileId: "XADES_LTA",
             signingProfileIds: {
-                "application/pdf": "PADES_1",
-                "application/xml": "XADES_1",
-                "text/xml": "XADES_1"
+                "application/pdf": "PADES_LTA",
+                "application/xml": "XADES_LTA",
+                "text/xml": "XADES_LTA"
             },
         }
     })
 
     test("getsigningProfileId returns correct signingprofileId based on MIME-type", () => {
-        const expected = "PADES_1"
+        const expected = "PADES_LTA"
         const result = getsigningProfileId("application/pdf");
 
         expect(result).toEqual(expected)
     })
 
     test("getsigningProfileId returns default signingprofileId", () => {
-        const expected = "XADES_1"
+        const expected = "XADES_LTA"
         const result = getsigningProfileId("does not exists");
 
         expect(result).toEqual(expected)
@@ -48,10 +48,10 @@ describe("createBody", () => {
 
     beforeAll(() => {
         window.configData = {
-            defaultSigningProfileId: "XADES_1",
+            defaultSigningProfileId: "XADES_LTA",
             signingProfileIds: {
-                "application/pdf": "PADES_1",
-                "application/xml": "XADES_1",
+                "application/pdf": "PADES_LTA",
+                "application/xml": "XADES_LTA",
                 "text/xml": "XADES_1"
             },
         }
@@ -75,7 +75,7 @@ describe("createBody", () => {
                 "signingCertificate": startCertificateObject.certificate,
                 "signingDate": null,
             },
-            "signingProfileId": "XADES_1",
+            "signingProfileId": "XADES_LTA",
             "toSignDocument": {
                 "bytes": startDocumentBase64,
                 "name": startDocumentName
