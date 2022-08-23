@@ -193,5 +193,7 @@
   "validation.signer.name": "Signataire",
   "validation.sign.moment": "Date",
   "validation.sign.valid": "Valide",
-  "validation.sign.qualif": "Qualifiée"
+  "validation.sign.qualif": "Qualifiée",
+  "footer.genTerms":  "Conditions générales d’utilisation",
+  "footer.genPrivacy": "Déclaration de confidentialité"
 }

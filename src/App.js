@@ -11,6 +11,7 @@ import { browserIsAccepted } from './modules/browserDetection/BrowserDetection';
 import MessageContainer from './modules/message/MessageContainer';
 import { ErrorNotSupported } from './modules/message/MessageConstants';
 import Footer from './modules/footer/Footer';
+import { GeneralTerms, PrivacyStatement } from './modules/info/InformationPages';
 import StartPageContainer from './modules/startPage/StartPageContainer';
 import MainI18nWrapper from "./modules/i18n/MainI18nWrapper";
 import TokenWizardContainer from "./modules/signByTokenWizard/TokenWizardContainer";
@@ -20,29 +21,16 @@ export const BaseApp = ({browserIsSupported, notSupportedMessage}) => (
     <div >
         {isInIframe()?false:<Navbar />}
         {(browserIsSupported) ?
-            (<Switch>
-                <Route path="/sign/:token">
-                    <div className="container-fluid">
-                        <TokenWizardContainer />
-                    </div>
-                </Route>
-                <Route path="/sign" exact strict>
-                    <div className="container-fluid">
-                        <WizardContainer />
-                    </div>
-                </Route>
-                <Route path="/validate">
-                    <div className="container-fluid">
-                        <ValidateWizardContainer />
-                    </div>
-                </Route>
-                <Route path="/">
-                    <div className="container-fluid">   
-                        <StartPageContainer />
-                    </div>
-                </Route>
-
-            </Switch>)
+            (<div className="container-fluid" style={{ marginBottom: '64px' }} >
+            <Switch>
+                <Route path="/sign/:token"><TokenWizardContainer /></Route>
+                <Route path="/sign" exact strict><WizardContainer /></Route>
+                <Route path="/validate"><ValidateWizardContainer /></Route>
+                <Route path="/gtou"><GeneralTerms/></Route>
+                <Route path="/ps"><PrivacyStatement/></Route>
+                <Route path="/"><StartPageContainer /></Route>
+            </Switch>
+            </div>)
             : (
                 <div className="container">
                     <div className="col col-12 col-md-8 mx-auto align-middle">

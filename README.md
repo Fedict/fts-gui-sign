@@ -54,12 +54,12 @@ window.configData = {
         linux: ""
     },
 
-     defaultSigningProfileId: "XADES_1",//default profile that is used for document of a minetype that is not in the list of signingProfileIds.
+     defaultSigningProfileId: "XADES_LTA",//default profile that is used for document of a minetype that is not in the list of signingProfileIds.
      
     signingProfileIds: { //list of signingprofiles based on MIME-TYPE of a document
-        "application/pdf" : "PADES_1",
-        "application/xml" : "XADES_1",
-        "text/xml" : "XADES_1"
+        "application/pdf" : "PADES_LTA",
+        "application/xml" : "XADES_LTA",
+        "text/xml" : "XADES_LTA"
     },
 
 

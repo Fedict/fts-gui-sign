@@ -194,5 +194,7 @@
   "validation.signer.name": "Ondertekenaar",
   "validation.sign.moment": "Datum",
   "validation.sign.valid": "Geldig",
-  "validation.sign.qualif": "Gekwalificeerd"
+  "validation.sign.qualif": "Gekwalificeerd",
+  "footer.genTerms":  "Gebruikersvoorwaarden",
+  "footer.genPrivacy": "Privacyclausule"
 }
