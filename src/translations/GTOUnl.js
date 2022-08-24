@@ -38,7 +38,7 @@ U mag bovendien de dienst niet gebruiken op een manier die deze zou kunnen uitsc
 De FOD BOSA behoudt zich het recht voor om deze gebruiksvoorwaarden steeds te veranderen. Het is uw verantwoordelijkheid om zelf regelmatig de toepasselijke voorwaarden door te nemen. Deze gebruiksvoorwaarden werden het laatst gewijzigd en herzien op 16 januari 2022.
 
 <b>8. Bescherming van uw persoonsgegevens</b>
-De FOD BOSA respecteert uw privacy. De gegevens die u op de website invoert, worden vertrouwelijk behandeld. Voor meer inlichtingen kan u onze <a href="/ps">Privacyverklaring</a> raadplegen.
+De FOD BOSA respecteert uw privacy. De gegevens die u op de website invoert, worden vertrouwelijk behandeld. Voor meer inlichtingen kan u onze <a href="/ps?language=nl">Privacyverklaring</a> raadplegen.
 
 <b>9. Toepasselijk recht en toepasselijke rechtbank</b>
 Deze Gebruiksvoorwaarden en de Privacyverklaring worden beheerst door het Belgisch recht. Door gebruik van deze website gaat U ermee akkoord dat in geval van een geschil uitsluitend de hoven en rechtbanken van Brussel bevoegd zijn.
