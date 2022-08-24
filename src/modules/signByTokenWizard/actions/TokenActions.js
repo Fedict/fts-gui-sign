@@ -126,29 +126,17 @@ export const getDocumentMetadataForToken = () => (dispatch, getStore) => {
     }
 }
 
-export const doSetToken = (token, redirectUrl, clientName) => (dispatch) => {
+export const doSetToken = (token, redirectUrl, clientNames) => (dispatch) => {
     dispatch({
         type : TOKEN_RECEIVED,
-        payload : {token, redirectUrl, clientName}
+        payload : {token, redirectUrl, clientNames}
     })
-}
-
-const replaceBEURL = (url) => {
-    return url && url.replace('${BEurl}', getBEUrl());
 }
 
 export const setDocumentMetadata = (metadata) => ({
     type : SET_DOCUMENT_TOKEN_METADATA,
     payload : metadata
 })
-
-// FilePreview Action !!!!!
-export const setPreviewFileId = (index) => (dispatch) => {
-    dispatch({
-        type : SET_PREVIEW_FILE_ID,
-        payload : {index}
-    })
-}
 
 export const setPreview = (previewDocuments) => (dispatch) => {
     dispatch({
@@ -165,3 +153,10 @@ export const setInputsSignState = (selector, newState) => (dispatch) => {
 }
 export const SET_ALL_INPUTS = 'all'
 
+// FilePreview Action in the "TokenAction.js" !!!!!
+export const setPreviewFileId = (index) => (dispatch) => {
+    dispatch({
+        type : SET_PREVIEW_FILE_ID,
+        payload : {index}
+    })
+}

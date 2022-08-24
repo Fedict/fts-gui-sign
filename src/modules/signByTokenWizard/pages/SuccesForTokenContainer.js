@@ -63,14 +63,20 @@ export class SuccesContainerForToken extends React.Component {
         const { nextButtonClicked, redirectUrl, intl, tokenFile, multipleDocuments } = this.props
 
         let bodyTextId = this.props.autoDownloadDocument ? 
-                        (multipleDocuments ? "succes.multiFile.autodownload" : "succes.autodownload") :
-                        "succes.documentNotAutoDownloaded"
+                        (multipleDocuments ?
+                            "succes.multiFile.autodownload" :
+                            "succes.autodownload"
+                        ) : "succes.documentNotAutoDownloaded"
 
         let bodyText = this.props.autoDownloadDocument ? 
                         (multipleDocuments ? 
                             "The signed version of your documents will be automatically downloaded. If the download doesn't start, click <b>download document.</b>" :
                             "Your document will be automatically downloaded. If this is not the case, you can start the download manually"
                         ) : "You can download the document by clicking on <b>{succesButtonDownload}</b>."
+
+
+        let clientName = tokenFile.clientNames['name_' + intl.locale];
+        if (!clientName) clientName = tokenFile.clientNames.name;
 
         return (
             <CardContainer
@@ -100,7 +106,7 @@ export class SuccesContainerForToken extends React.Component {
                     }
                     <p>
                         <Ticker autoClickNextTimeout={3} onTimeout={() => nextButtonClicked(redirectUrl)}
-                                redirectMessageDescriptor={tokenFile.clientName ? messages.redirectToMessage : messages.redirectMessage} clientName={tokenFile.clientName}/>
+                                redirectMessageDescriptor={clientName ? messages.redirectToMessage : messages.redirectMessage} clientName={clientName}/>
                     </p>
                 </div>
             </CardContainer>

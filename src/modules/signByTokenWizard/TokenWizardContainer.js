@@ -64,7 +64,15 @@ export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, 
 
     const router = useRouter();
     useEffect(() => {
-        doSetToken(router.query.token, defaults(router.query.callbackUrl, router.query.redirectUrl), router.query.name);
+        const clientNames = {
+            name: router.query.name, 
+            name_fr: router.query.name_fr,
+            name_nl: router.query.name_nl,
+            name_de: router.query.name_de,
+            name_en: router.query.name_en
+        }
+            
+        doSetToken(router.query.token, defaults(router.query.callbackUrl, router.query.redirectUrl), clientNames);
     }, [router.query.token]);
     useEffect(() => {
         switch (wizard.state) {
