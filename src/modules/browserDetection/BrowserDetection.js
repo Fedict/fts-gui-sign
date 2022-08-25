@@ -18,7 +18,6 @@ export const browser = {
  * @return {string} Returns a string with a value out of browser enum
  */
 export const getBrowser = () => {
-
     // FIREFOX
     if (navigator.userAgent.indexOf("Firefox") !== -1) {
         return (browser.FIREFOX)
@@ -34,10 +33,12 @@ export const getBrowser = () => {
     else if (navigator.userAgent.indexOf("Edge") !== -1) {
         return (browser.EDGE)
     }
+    else if (navigator.userAgent.indexOf("Edg") !== -1) {
+        return (browser.EDGE)
+    }
     else if (navigator.userAgent.indexOf("edg") !== -1) {
         return (browser.CHROMIUMEDGE)
-    }
-    // CHROME
+    }// CHROME
     else if (navigator.userAgent.indexOf("Chrome") !== -1) {
         return (browser.CHROME)
     }
@@ -68,6 +69,7 @@ export const browserIsAccepted = () => {
     const usedBrowser = getBrowser()
     
     if (usedBrowser !== browser.IE
+        && usedBrowser !== browser.EDGE
         && usedBrowser !== browser.CHROMIUMEDGE
         && usedBrowser !== browser.FIREFOX
         && usedBrowser !== browser.SAFARI
