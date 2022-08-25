@@ -76,7 +76,7 @@ export class UploadFileContainer extends React.Component {
 
                                             <input
                                                 type="file"
-                                                accept=".pdf,.xml,application/pdf,application/xml,text/xml"
+                                                accept=".pdf,.xml"
                                                 style={{ display: "none" }}
                                                 id="input_hidden_select_file"
                                                 onChange={(e) => { 
