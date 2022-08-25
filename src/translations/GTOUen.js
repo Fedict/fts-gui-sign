@@ -38,7 +38,7 @@ Moreover, you are not allowed to use the service  in any way that might disconne
 FPS P&S reserves the right to make changes to these Terms of Use at any time. It is your responsibility to consult the relevant conditions from time to time. These Terms of Use were last amended and revised on 16 January 2022.
 
 <b>8. Protection of your personal data</b>
-FPS P&S respects your privacy. The details that you enter into the website will be treated confidentially. For more information, please consult our <a href="/ps?language=en">Privacy Statement</a>.
+FPS P&S respects your privacy. The details that you enter into the website will be treated confidentially. For more information, please consult our <PS>Privacy Statement</PS>.
 
 <b>9. Applicable law and applicable court</b>
 These Terms of Use and the Privacy Statement are governed by Belgian law. By using this website, you agree that in the event of a dispute, only the courts and tribunals of Brussels are competent.

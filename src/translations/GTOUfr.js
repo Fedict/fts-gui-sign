@@ -38,7 +38,7 @@ En outre, vous ne pouvez pas utiliser le service d’une manière qui pourrait l
 Le SPF BOSA se réserve le droit de modifier en tout temps les présentes conditions d’utilisation. Il est de votre responsabilité de parcourir régulièrement les conditions en vigueur. Ces conditions d’utilisation ont été modifiées et révisées pour la dernière fois le 16 janvier 2022.
 
 <b>8. Protection de vos données à caractère personnel</b>
-Le SPF BOSA respecte votre vie privée. Les données que vous communiquez sur le site web sont traitées confidentiellement. Pour plus de renseignements, vous pouvez consulter notre <a href="/ps?language=fr">Déclaration de confidentialité</a>.
+Le SPF BOSA respecte votre vie privée. Les données que vous communiquez sur le site web sont traitées confidentiellement. Pour plus de renseignements, vous pouvez consulter notre <PS>Déclaration de confidentialité</PS>.
 
 <b>9. Droit applicable et tribunal compétent</b>
 Les présentes conditions d’utilisation et la déclaration de confidentialité sont régies par le droit belge. En utilisant ce site web, vous approuvez le fait que seuls les cours et tribunaux de Bruxelles sont compétents en cas de différend.

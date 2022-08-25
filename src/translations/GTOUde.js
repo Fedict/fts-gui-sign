@@ -38,7 +38,7 @@ Sie dürfen außerdem den Dienst nicht in einer Weise nutzen, die diesen Dienst 
 Der FÖD BOSA behält sich das Recht vor, diese Nutzungsbedingungen jederzeit zu ändern. Sie müssen die anwendbaren Bedingungen regelmäßig zur Kenntnis nehmen. Diese Nutzungsbedingungen wurden zuletzt am 16. Januar 2022 geändert und überarbeitet.
 
 <b>8. Schutz Ihrer personenbezogenen Daten</b>
-Der FÖD BOSA schützt Ihre Privatsphäre. Daten, die Sie auf der Website angeben, werden vertraulich behandelt. Weitere Informationen finden Sie in unserer <a href="/ps?language=de">Datenschutzerklärung</a>.
+Der FÖD BOSA schützt Ihre Privatsphäre. Daten, die Sie auf der Website angeben, werden vertraulich behandelt. Weitere Informationen finden Sie in unserer <PS>Datenschutzerklärung</PS>.
 
 <b>9. Geltendes Recht und Gerichtsstand</b>
 Auf diese Nutzungsbedingungen und die Datenschutzerklärung ist belgisches Recht anwendbar. Durch die Nutzung dieser Website erklären Sie sich damit einverstanden, dass bei Streitfragen ausschließlich die Brüsseler Gerichte zuständig sind.

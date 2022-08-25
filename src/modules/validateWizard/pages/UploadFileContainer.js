@@ -76,9 +76,18 @@ export class UploadFileContainer extends React.Component {
 
                                             <input
                                                 type="file"
+                                                accept=".pdf,.xml,application/pdf,application/xml,text/xml"
                                                 style={{ display: "none" }}
                                                 id="input_hidden_select_file"
-                                                onChange={(e) => { this.onchange(e) }} />
+                                                onChange={(e) => { 
+                                                    var ext = e.target.value.match(/.([^.]+)$/)[1];
+                                                    switch (ext) {
+                                                        case 'xml':
+                                                        case 'pdf':
+                                                            this.onchange(e)
+                                                          break;
+                                                      }
+                                                }} />
                                         </div>
                                         <div className="col col-auto align-self-center ">
                                             <p className="btn m-0" >

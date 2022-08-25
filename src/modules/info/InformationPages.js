@@ -1,5 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { Link } from "react-router-dom";
+import { useDispatch } from 'react-redux'
 import { useIntl } from 'react-intl';
+
+import { doSendLogInfo } from "../signWizard/actions/WizardLogicActions";
+
 import GTOU_nl from '../../translations/GTOUnl';
 import GTOU_fr from '../../translations/GTOUfr';
 import GTOU_en from '../../translations/GTOUen';
@@ -9,7 +14,7 @@ import PS_fr from '../../translations/PSfr';
 import PS_en from '../../translations/PSen';
 import PS_de from '../../translations/PSde';
 
-const GTOU = {
+const GTOUs = {
     nl: GTOU_nl,
     fr: GTOU_fr,
     de: GTOU_de,
@@ -17,12 +22,24 @@ const GTOU = {
 }
 
 export const GeneralTerms = () => {
+
+    const dispatch = useDispatch();
+    useEffect(() => (dispatch(doSendLogInfo('UI - GENERAL_TERMS'))), [])
+
+    const locale = useIntl().locale;
+    const GTOU = GTOUs[locale];
+    const psPos = GTOU.indexOf("<PS>");
+    const psEndPos = GTOU.indexOf("</PS>");
     return (
-        <text margin-bottom='412' dangerouslySetInnerHTML={ { __html: GTOU[useIntl().locale].replaceAll("\n", "<br>") }}></text>
+        <div style={{whiteSpace: 'pre-line'}} >
+            <div style={{ display: 'contents' }} dangerouslySetInnerHTML={ { __html: GTOU.substring(0, psPos) }}></div>
+            <Link style={{ display: 'contents' }} to={'/ps?language=' + locale}>{GTOU.substring(psPos + 4, psEndPos)}</Link>
+            <div style={{ display: 'contents' }} dangerouslySetInnerHTML={ { __html: GTOU.substring(psEndPos + 5) }}></div>
+        </div>
     )
 }
 
-const PS = {
+const PSs = {
     nl: PS_nl,
     fr: PS_fr,
     de: PS_de,
@@ -30,7 +47,11 @@ const PS = {
 }
 
 export const PrivacyStatement = () => {
+    
+    const dispatch = useDispatch();
+    useEffect(() => (dispatch(doSendLogInfo('UI - PRIVACY_STATEMENT'))), [])
     return (
-        <text dangerouslySetInnerHTML={ { __html: PS[useIntl().locale].replaceAll("\n", "<br>") }}></text>
+        <div style={{whiteSpace: 'pre-line'}} dangerouslySetInnerHTML={ { __html: PSs[useIntl().locale] }}></div>
     )
 }
+
