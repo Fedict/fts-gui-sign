@@ -169,7 +169,7 @@ export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, 
     return (
         <div >
             <div className={"row mx-5 mt-3"}>
-                <div className={"col col-7"}>
+                <div className={"col col-sm-7"}>
                     { inputs &&
                         <div className="row">
                             { inputs.length > 1 && (
@@ -186,7 +186,7 @@ export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, 
                         </div>
                     }
                 </div>
-                <div className={"col col-5"}>
+                <div className={"col col-sm-5"}>
                     <ReactStepper style={{marginBottom : 20}}>
                         <ReactStepper.Header>
                             {Object.keys(messages).map((key, index) => (
