@@ -35,10 +35,10 @@ export const ValidateWizardContainer = ({ wizard, reader, resetWizard }) => {
     return (
         <div >
             <div className={"row mx-5 mt-3"}>
-                <div className={"col col-7"}>
+                <div className={"col col-sm-7"} style={{ minWidth: '320px' }}>
                     <DisplayFile />
                 </div>
-                <div className={"col col-5"}>
+                <div className={"col col-sm-5"}>
                     {content}
                 </div>
             </div>
