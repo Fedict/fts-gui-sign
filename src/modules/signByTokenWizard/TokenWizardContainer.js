@@ -1,5 +1,5 @@
-import {resetWizard} from "../signWizard/actions/WizardLogicActions";
-import {connect} from "react-redux";
+import {doSendLogInfo, resetWizard} from "../signWizard/actions/WizardLogicActions";
+import {connect, useDispatch} from "react-redux";
 import React, {useEffect, useState} from "react";
 import {
     WIZARD_STATE_CERTIFICATES_CHOOSE,
@@ -28,7 +28,7 @@ import PinInputContainer from "../signWizard/pages/PinInputContainer";
 import TokenWizardIntroContainer from "./pages/TokenWizardIntroContainer";
 import MessageContainerWithStore, {MessageContainer} from "../message/MessageContainer";
 import {ErrorGeneral} from "../message/MessageConstants";
-import {doSetToken, getDocumentMetadataForToken} from "./actions/TokenActions";
+import {doSetToken} from "./actions/TokenActions";
 import {FormattedMessage} from 'react-intl';
 import {boldedText} from "../utils/reactIntlUtils";
 import TokenDisplayFile from "./components/DisplayFile/TokenDisplayFile";
@@ -62,10 +62,17 @@ const messages = defineMessages({
 export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, certificate, intl, inputs, previewDocuments, selectedInputId }) => {
     const [currentIndexStep, setCurrentIndexStep] = useState(1);
 
+    const dispatch = useDispatch();
     const router = useRouter();
     useEffect(() => {
         doSetToken(router.query.token, defaults(router.query.callbackUrl, router.query.redirectUrl), router.query.name);
+
+        let params = { ...router.query }
+        delete params.token
+        dispatch(doSendLogInfo("UI PARAMS :" + JSON.stringify(params)), [])
+
     }, [router.query.token]);
+
     useEffect(() => {
         switch (wizard.state) {
             case WIZARD_STATE_START:
