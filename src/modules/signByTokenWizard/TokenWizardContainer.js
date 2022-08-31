@@ -73,7 +73,7 @@ export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, 
             name_en: router.query.name_en
         }
         
-        doSetToken(router.query.token, defaults(router.query.callbackUrl, router.query.redirectUrl), clientNames);
+        doSetToken(router.query.token, defaults(router.query.callbackUrl, router.query.redirectUrl), clientNames, router.query.HookURL);
 
         let params = { ...router.query }
         delete params.token

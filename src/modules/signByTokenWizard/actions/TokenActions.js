@@ -126,10 +126,10 @@ export const getDocumentMetadataForToken = () => (dispatch, getStore) => {
     }
 }
 
-export const doSetToken = (token, redirectUrl, clientNames) => (dispatch) => {
+export const doSetToken = (token, redirectUrl, clientNames, hookURL) => (dispatch) => {
     dispatch({
         type : TOKEN_RECEIVED,
-        payload : {token, redirectUrl, clientNames}
+        payload : {token, redirectUrl, clientNames, hookURL}
     })
 }
 

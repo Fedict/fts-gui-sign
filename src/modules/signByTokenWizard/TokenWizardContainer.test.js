@@ -39,7 +39,7 @@ describe('TokenWizardContainer', () => {
             body: {
                 "filename" : "This file is cool.pdf",
                 "mimetype" : "application/pdf",
-                "inputs"   : [ { "fileName": "afile", "display" : "Content" }]
+                "inputs"   : [ { "fileName": "afile" }]
             },
             status: 200
         });
@@ -91,7 +91,7 @@ describe('TokenWizardContainer', () => {
 
         act(() => {
             render(<Provider store={store}>
-                <MemoryRouter initialIndex={0} initialEntries={[`/sign/${token}`]}>
+                <MemoryRouter initialIndex={0} initialEntries={[`/sign/${token}?HookUrl=/hook`]}>
                     <Switch>
                         <Route path="/sign/:token">
                             <TokenWizardContainer browserIsSupported={true} />
@@ -158,7 +158,7 @@ describe('TokenWizardContainer', () => {
             body: {
                 "filename" : "This file is cool.pdf",
                 "mimetype" : "application/pdf",
-                "inputs"   : [ { "fileName": "afile", "display" : "Content" }]
+                "inputs"   : [ { "fileName": "afile" }]
             },
             status: 200
         });
@@ -209,7 +209,7 @@ describe('TokenWizardContainer', () => {
         })
 
         render(<Provider store={store}>
-            <MemoryRouter initialIndex={0} initialEntries={[`/sign/${token}`]}>
+            <MemoryRouter initialIndex={0} initialEntries={[`/sign/${token}?HookUrl=/hook`]}>
                 <Switch>
                     <Route path="/sign/:token">
                         <TokenWizardContainer browserIsSupported={true} />
@@ -278,7 +278,7 @@ describe('TokenWizardContainer', () => {
             body: {
                 "filename" : "This file is cool.pdf",
                 "mimetype" : "application/pdf",
-                "inputs"   : [ { "fileName": "afile", "display" : "Content" }]
+                "inputs"   : [ { "fileName": "afile" }]
             },
             status: 200
         });
@@ -325,7 +325,7 @@ describe('TokenWizardContainer', () => {
         })
 
         act(() => {render(<Provider store={store}>
-            <MemoryRouter initialIndex={0} initialEntries={[`/sign/${token}`]}>
+            <MemoryRouter initialIndex={0} initialEntries={[`/sign/${token}?HookUrl=/hook`]}>
                 <Switch>
                     <Route path="/sign/:token">
                         <TokenWizardContainer browserIsSupported={true} />

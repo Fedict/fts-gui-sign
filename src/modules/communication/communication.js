@@ -296,6 +296,22 @@ let lastLogInfo = {
     amount : 0
 };
 
+export const sendHookInfoAPI = async (o, tokenFile) => {
+
+        const body = JSON.stringify(o)
+        return fetch(tokenFile.hookURL, {
+            method: 'POST',
+            body: body,
+            headers: { 'Content-Type': 'application/json' }
+        })
+            .then(() => {
+                sendLogInfoIgnoreResult('HOOK : ' + body, tokenFile.token)
+            })
+            .catch((e) => {
+                sendLogInfoIgnoreResult('HOOK_ERROR : ' + body, tokenFile.token)
+            })
+}
+
 export const sendLogInfoIgnoreResult = (message, token) => {
     sendLogInfo(message, () =>{}, token);
 }
