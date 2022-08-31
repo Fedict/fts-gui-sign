@@ -82,6 +82,12 @@ describe('TokenWizardContainer', () => {
             "digestAlgorithm" : null,
             "name" : "20201223121854-signed-pades-baseline-lta.pdf"
         })
+
+        fetchMock.post(`/hook`, {
+            "id": 'FILE_SIGNED',
+            "fileName": "fileName"
+        });
+
         fetchMock.post('/logging/log', (url, opts) => {
             console.log('/logging/log', opts && opts.body?JSON.parse(opts.body).message:opts);
             if(opts && opts.body){
@@ -91,7 +97,7 @@ describe('TokenWizardContainer', () => {
 
         act(() => {
             render(<Provider store={store}>
-                <MemoryRouter initialIndex={0} initialEntries={[`/sign/${token}?HookUrl=/hook`]}>
+                <MemoryRouter initialIndex={0} initialEntries={[`/sign/${token}?HookURL=/hook`]}>
                     <Switch>
                         <Route path="/sign/:token">
                             <TokenWizardContainer browserIsSupported={true} />
@@ -201,6 +207,12 @@ describe('TokenWizardContainer', () => {
             "digestAlgorithm" : null,
             "name" : "20201223121854-signed-pades-baseline-lta.pdf"
         })
+
+        fetchMock.post(`/hook`, {
+            "id": 'FILE_SIGNED',
+            "fileName": "fileName"
+        });
+
         fetchMock.post('/logging/log', (url, opts) => {
             console.log('/logging/log', opts && opts.body?JSON.parse(opts.body).message:opts);
             if(opts && opts.body){
@@ -209,7 +221,7 @@ describe('TokenWizardContainer', () => {
         })
 
         render(<Provider store={store}>
-            <MemoryRouter initialIndex={0} initialEntries={[`/sign/${token}?HookUrl=/hook`]}>
+            <MemoryRouter initialIndex={0} initialEntries={[`/sign/${token}?HookURL=/hook`]}>
                 <Switch>
                     <Route path="/sign/:token">
                         <TokenWizardContainer browserIsSupported={true} />
@@ -320,12 +332,18 @@ describe('TokenWizardContainer', () => {
             "digestAlgorithm" : null,
             "name" : "20201223121854-signed-pades-baseline-lta.pdf"
         })
+
+        fetchMock.post(`/hook`, {
+            "id": 'FILE_SIGNED',
+            "fileName": "fileName"
+        });
+
         fetchMock.post('/logging/log', (url, opts) => {
             lastLogMessage = JSON.parse(opts.body).message;
         })
 
         act(() => {render(<Provider store={store}>
-            <MemoryRouter initialIndex={0} initialEntries={[`/sign/${token}?HookUrl=/hook`]}>
+            <MemoryRouter initialIndex={0} initialEntries={[`/sign/${token}?HookURL=/hook`]}>
                 <Switch>
                     <Route path="/sign/:token">
                         <TokenWizardContainer browserIsSupported={true} />
