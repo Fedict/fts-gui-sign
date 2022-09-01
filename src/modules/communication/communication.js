@@ -297,19 +297,23 @@ let lastLogInfo = {
 };
 
 export const sendHookInfoAPI = async (o, tokenFile) => {
-
-        const body = JSON.stringify(o)
-        return fetch(tokenFile.hookURL, {
-            method: 'POST',
-            body: body,
-            headers: { 'Content-Type': 'application/json' }
+    let logHook = {
+        hookData: o,
+        hookURL: tokenFile.hookURL
+    }
+    return fetch(tokenFile.hookURL, {
+        method: 'POST',
+        body: JSON.stringify(o),
+        headers: { 'Content-Type': 'application/json' }
+    })
+        .then((response) => {
+            logHook.status = response.status
+            sendLogInfoIgnoreResult(JSON.stringify(logHook), tokenFile.token)
         })
-            .then(() => {
-                sendLogInfoIgnoreResult('HOOK : ' + body, tokenFile.token)
-            })
-            .catch((e) => {
-                sendLogInfoIgnoreResult('HOOK_ERROR : ' + body, tokenFile.token)
-            })
+        .catch((e) => {
+            logHook.status = e.message
+            sendLogInfoIgnoreResult(JSON.stringify(logHook), tokenFile.token)
+        })
 }
 
 export const sendLogInfoIgnoreResult = (message, token) => {
