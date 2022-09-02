@@ -65,7 +65,6 @@
   "error.WRONG_RESULT_SIGN_TOKEN": "Impossible de signer le document",
   "error.browser_not_supported.supported.1": "Chrome",
   "error.browser_not_supported.supported.2": "Edge (basé sur Chromium)",
-  "error.browser_not_supported.supported.3": "Internet Explorer",
   "error.browser_not_supported.supported.4": "Firefox",
   "error.browser_not_supported.supported.5": "Opera (basé sur Chromium)",
   "error.browser_not_supported.text": "Votre navigateur web n'est pas pris en charge. Veuillez utiliser l'un des navigateurs web suivants :",

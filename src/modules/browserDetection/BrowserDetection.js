@@ -68,8 +68,7 @@ export const browserIsAccepted = () => {
 
     const usedBrowser = getBrowser()
     
-    if (usedBrowser !== browser.IE
-        && usedBrowser !== browser.EDGE
+    if (usedBrowser !== browser.EDGE
         && usedBrowser !== browser.CHROMIUMEDGE
         && usedBrowser !== browser.FIREFOX
         && usedBrowser !== browser.SAFARI

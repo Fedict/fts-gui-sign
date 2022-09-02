@@ -1,6 +1,5 @@
 import { createEIDLinkExtensionStrategy } from "./createEIDLinkExtensionStrategy";
 import { createDefaultStrategy } from "./createDefaultStrategy";
-import { createActiveXEIDLinkStrategy } from "./createActiveXEIDLinkStrategy";
 
 /**
  * function to get the strategy when eIDLink extension is active
@@ -26,18 +25,5 @@ export const getEIDLinkExtensionStrategy = () => {
  */
 export const getDefaultStrategy = () => {
     var strategy = createDefaultStrategy()
-    return strategy
-}
-/**
- * function to get the strategy when eIDLink extension is not active
- * - getVersion
- * - getCertificate
- * - getCertificateChain
- * - sign
- * - stop
- */
-export const getActiveXStrategy = () => {
-    //console.log("create activeX Strategy")
-    var strategy = createActiveXEIDLinkStrategy()
     return strategy
 }

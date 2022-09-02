@@ -53,7 +53,6 @@ export const ErrorNotSupported = {
                 <ul className="text-left">
                     <li><FormattedMessage id="error.browser_not_supported.supported.1" defaultMessage="Chrome"/></li>
                     <li><FormattedMessage id="error.browser_not_supported.supported.2" defaultMessage="Edge (based on Chromium)"/></li>
-                    <li><FormattedMessage id="error.browser_not_supported.supported.3" defaultMessage="Internet explorer" /></li>
                     <li><FormattedMessage id="error.browser_not_supported.supported.4" defaultMessage="Firefox" /></li>
                     <li><FormattedMessage id="error.browser_not_supported.supported.5" defaultMessage="Opera (based on Chromium)"/></li>
                 </ul>
