@@ -69,6 +69,7 @@
   "error.browser_not_supported.supported.5": "Opera (gebaseerd op Chromium)",
   "error.browser_not_supported.text": "Deze browser wordt niet ondersteund. Gebruik een van de volgende browsers:",
   "error.browser_not_supported.title": "Browser wordt niet ondersteund",
+  "error.browser_not_supported.IE": "U gebruikt nog de webbrowser Internet Explorer. Weet dat Microsoft grotendeels is gestopt met de ondersteuning van deze webbrowser. Ook deze handtekendienst kan Internet Explorer niet meer ondersteunen. We raden u aan een andere browser te gebruiken.",
   "error.certificates.not_found.next": "Opnieuw zoeken",
   "error.certificates.not_found.text": "Er zijn geen (geldige) handtekeningcertificaten gevonden.",
   "error.certificates.not_found.title": "Geen geldige certificaten gevonden",

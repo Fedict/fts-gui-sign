@@ -69,6 +69,7 @@
   "error.browser_not_supported.supported.5": "Opera (based on Chromium)",
   "error.browser_not_supported.text": "Your browser is not supported. Please use one of the following browsers:",
   "error.browser_not_supported.title": "Browser is not supported",
+  "error.browser_not_supported.IE": "You are still using the web browser Internet Explorer. Please know that Microsoft progressively stopped supporting this web browser. In addition, this signature service can no longer support Internet Explorer. We recommend that you use another browser.",
   "error.certificates.not_found.next": "Search again",
   "error.certificates.not_found.text": "There are no (valid) signing certificates found.",
   "error.certificates.not_found.title": "No valid certificates found",

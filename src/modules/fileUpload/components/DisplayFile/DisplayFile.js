@@ -1,9 +1,5 @@
 import React, {Fragment} from 'react'
-import { connect } from 'react-redux'
-import { getBrowser, browser } from '../../../browserDetection/BrowserDetection'
-import PDFViewerInternetExplorer from '../PDFViewerInternetExplorer/PDFViewerInternetExplorer'
 import {FormattedMessage} from "react-intl";
-import {defaults} from "../../../utils/helper";
 import XmlDataViewer from "../XmlDataViewer/XmlDataViewer";
 
 /**
@@ -22,16 +18,6 @@ export const DisplayFile = ({ uploadFile }) => {
         const data = uploadFile.displayFile
         if (data && data.url) {
             if (data.isPdf) {
-                if (getBrowser() === browser.IE) {
-                    if (data.url) {
-                        return (
-                            <Fragment>
-                                <PDFViewerInternetExplorer displayFile={uploadFile.displayFile}/>
-                            </Fragment>
-                        )
-                    }
-                    return null
-                }
                 return (
 
                     <object style={{height: "85vh", width: "100%"}} type="application/pdf" data={data.url} name={data.fileName}>

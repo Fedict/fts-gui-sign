@@ -7,9 +7,6 @@ import { CardInfo } from '../components/Card/CardInfo'
 import {doSendLogInfo, resetWizard} from '../signWizard/actions/WizardLogicActions'
 import {injectIntl, useIntl} from "react-intl";
 import {definedMessages} from "../i18n/translations";
-import {WIZARD_STATE_CERTIFICATES_LOADING} from "../wizard/WizardConstants";
-import {doWithToken} from "../utils/helper";
-import {sendLogInfo, sendLogInfoIgnoreResult} from "../communication/communication";
 
 /**
  * a card that shows a message and has a cancel and next button

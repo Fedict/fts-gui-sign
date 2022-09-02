@@ -66,3 +66,22 @@ export const ErrorNotSupported = {
     },
     hasCancelButton: false
 }
+
+/**
+ * @constant {object} ErrorNotSupported - object of a "browser not supported" error.
+ */
+ export const ErrorIE11NotSupported = {
+    type: messageTypes.ERROR,
+    title: errorMessages.not_supported_error,
+    message: (
+        <div>
+            <p><FormattedMessage id="error.browser_not_supported.IE" defaultMessage="You are still using the web browser Internet Explorer. Please know that Microsoft progressively stopped supporting this web browser. In addition, this signature service can no longer support Internet Explorer. We recommend that you use another browser."/></p>
+        </div>),
+    body: null,
+    nextButton: {
+        text: null,
+        isVisible: false,
+        nextPage: null
+    },
+    hasCancelButton: false
+}

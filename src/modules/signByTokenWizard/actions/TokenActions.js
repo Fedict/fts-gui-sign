@@ -9,7 +9,7 @@ import {navigateToStep} from "../../wizard/WizardActions";
 import {WIZARD_STATE_UPLOAD} from "../../wizard/WizardConstants";
 import moment from "moment";
 import {setDateSigning} from "../../signWizard/actions/SignatureActions";
-import {getBEUrl, parseErrorMessage} from "../../utils/helper";
+import {parseErrorMessage} from "../../utils/helper";
 import {signingType, signState} from "../constants";
 
 export const TOKEN_RECEIVED = "TOKEN_RECEIVED"

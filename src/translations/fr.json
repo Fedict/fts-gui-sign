@@ -69,6 +69,7 @@
   "error.browser_not_supported.supported.5": "Opera (basé sur Chromium)",
   "error.browser_not_supported.text": "Votre navigateur web n'est pas pris en charge. Veuillez utiliser l'un des navigateurs web suivants :",
   "error.browser_not_supported.title": "Le navigateur web n'est pas pris en charge",
+  "error.browser_not_supported.IE": "Si vous utilisez encore le navigateur web Internet Explorer, sachez que Microsoft a cessé d’en assurer le support. C'est également le cas pour ce service de signature, qui n'est donc plus compatible avec Internet Explorer. Nous vous recommandons d'utiliser un autre navigateur.",
   "error.certificates.not_found.next": "Effectuer une nouvelle recherche",
   "error.certificates.not_found.text": "Aucun certificat de signature (valide) n'a été trouvé.",
   "error.certificates.not_found.title": "Aucun certificat valide trouvé",

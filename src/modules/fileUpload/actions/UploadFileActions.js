@@ -1,8 +1,3 @@
-import { GetDataUrlFromFile } from "../helpers/FileHelper"
-import { getBrowser, browser } from "../../browserDetection/BrowserDetection"
-import {showErrorMessage} from "../../message/actions/MessageActions";
-import {ErrorGeneral} from "../../message/MessageConstants";
-
 export const FILE_DISPLAY_FILE = "FILE_DISPLAY_FILE"
 export const FILE_UPLOAD_CHANGE_FILE = "FILE_UPLOAD_CHANGE_FILE"
 export const FILE_SET_DOWNLOAD_FILE = "FILE_SET_DOWNLOAD_FILE"
@@ -13,15 +8,7 @@ export const FILE_SET_DOWNLOAD_FILE = "FILE_SET_DOWNLOAD_FILE"
  */
 export const displayFile = (file) => async (dispatch) => {
     let url = ""
-    if (getBrowser() === browser.IE) {
-        GetDataUrlFromFile(file).then((url) => {
-            dispatch({ type: FILE_DISPLAY_FILE, payload: file, url: url })
-        }, () => {
-            dispatch(showErrorMessage(ErrorGeneral))
-        })
-    }else{
-        dispatch({ type: FILE_DISPLAY_FILE, payload: file, url: url })
-    }
+    dispatch({ type: FILE_DISPLAY_FILE, payload: file, url: url })
 }
 
 /**

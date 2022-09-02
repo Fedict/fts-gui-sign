@@ -69,6 +69,7 @@
   "error.browser_not_supported.supported.5": "Opera (auf Chrome basierend)",
   "error.browser_not_supported.text": "Ihr Browser wird nicht unterstützt. Bitte verwenden Sie einen der folgenden Browser:",
   "error.browser_not_supported.title": "Der Browser wird nicht unterstützt",
+  "error.browser_not_supported.IE": "Sie verwenden immer noch den Webbrowser Internet Explorer. Bitte beachten Sie, dass Microsoft die Unterstützung für diesen Webbrowser weitgehend eingestellt hat. Dieser Signaturdienst kann den Internet Explorer auch nicht mehr unterstützen. Wir empfehlen Ihnen, einen anderen Browser zu verwenden.",
   "error.certificates.not_found.next": "Erneut suchen",
   "error.certificates.not_found.text": "Es wurden keine (gültigen) Signierzertifikate gefunden.",
   "error.certificates.not_found.title": "Keine gültigen Zertifikate gefunden",
