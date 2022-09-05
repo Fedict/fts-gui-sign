@@ -2,9 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { CardContainer } from '../../components/Card/CardContainer';
 import { resetWizard } from '../actions/WizardLogicActions';
-import { subIndication } from '../constants/indicationConstants';
-import { MessageContainer } from '../../message/MessageContainer';
-import { ErrorGeneral } from '../../message/MessageConstants';
+import { indication, subIndication } from '../constants/indicationConstants';
 import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
 import { saveAs } from 'file-saver';
 import moment from "moment";
@@ -33,7 +31,7 @@ function getSignatures(validation) {
             certId: sig.ChainItem[0].Certificate
         }) );
     
-    if (!signatures || signatures.size === 0) return null;
+    if (!signatures || signatures.length === 0) return null;
 
     var xmlDoc = new DOMParser().parseFromString(validation.report,"text/xml");
     var certQuals = xmlDoc.getElementsByTagNameNS(NS, "ValidationCertificateQualification")
@@ -44,7 +42,7 @@ function getSignatures(validation) {
         if (!cert) return null;
         sig.signer = cert.CommonName
 
-        if (sigValidations) {
+        if (sigValidations ) {
             for (var sigValidation of sigValidations) {
                 var id = sigValidation.parentElement.getAttribute('Id');
                 if (id === sig.id) {
@@ -87,10 +85,7 @@ export class ResultContainer extends React.Component {
         let yes = <FormattedMessage id="yes" defaultMessage="Yes"/>
         
         let signatures = getSignatures(validation);
-        if (!signatures) {
-            return <MessageContainer message={ErrorGeneral} onCancel={() => { resetWizard() }} />
-        }
-        
+
         return (<CardContainer
                     title={intl.formatMessage(messages.title)}
                     hasNextButton
@@ -106,7 +101,7 @@ export class ResultContainer extends React.Component {
                             <div className="col-2 px-0"><b><FormattedMessage id="validation.sign.valid" defaultMessage="Valid"/></b></div>
                             <div className="col-2 px-0"><b><FormattedMessage id="validation.sign.qualif" defaultMessage="Qualified"/></b></div>
                         </div>
-                        { signatures.map((sig,index) => <div key={index} className={ "row alert " + sig.class }>
+                        { signatures && signatures.map((sig,index) => <div key={index} className={ "row alert " + sig.class }>
                             <div className="col px-0">{sig.signer}</div>
                             <div className="col-4 px-0">{moment(sig.date).format('DD/MM/YYYY - h:mm:ss')}</div>
                             <div className="col-2 px-0">{sig.isValid ? yes : no}
@@ -114,6 +109,11 @@ export class ResultContainer extends React.Component {
                              </div>
                             <div className="col-2 px-0">{sig.isQualified ? yes : no }</div>
                         </div> )}
+                        { !signatures && <div className="text-center">
+                            <div className="alert alert-warning">
+                                <FormattedMessage id={indication.INDETERMINATE.id} defaultMessage={indication.INDETERMINATE.message} />
+                            </div>
+                        </div> }
                     </div>
                 </CardContainer>
             )
@@ -131,3 +131,68 @@ const mapDispatchToProps = ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(ResultContainer))
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+export class ResultContainer extends React.Component {
+
+    render() {
+        const { validation, resetWizard, intl } = this.props
+
+        let subIndicationResult = "";
+
+        if (validation && validation.subIndication && subIndicationKeys.includes(validation.subIndication)) {
+            const subIndicationUsed = subIndication[validation.subIndication]
+            subIndicationResult = (
+                <div className="text-center">
+                    <div className={"alert " + subIndicationUsed.className}>
+                    <FormattedMessage id={subIndicationUsed.id} defaultMessage={subIndicationUsed.message} />
+                    </div>
+
+                </div>
+            )
+        }
+
+        let result = <MessageContainer message={ErrorGeneral} onCancel={() => { resetWizard() }} />
+
+        if (indicationKeys.includes(validation.indication)) {
+            const indicationUsed = indication[validation.indication]
+            result = (
+                <CardContainer
+                    title={intl.formatMessage(messages.title)}
+                    hasNextButton
+                    nextButtonText={intl.formatMessage(messages.next)}
+                    onClickNext={() => { resetWizard() }}
+                >
+                    <div className="text-center">
+                        <div className={"alert " + indicationUsed.className}>
+                        <FormattedMessage id={indicationUsed.id} defaultMessage={indicationUsed.message} />
+                        </div>
+
+                    </div>
+                    <a href={"data:text/plain;charset=utf-8," + validation.report} download="report.json">Download report</a>
+                    {subIndicationResult}
+                </CardContainer>
+            )
+        }
+
+        return (
+            <div>{result}</div>
+
+        )
+    }
+}
+
+*/

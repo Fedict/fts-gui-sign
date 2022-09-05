@@ -1,6 +1,5 @@
 import {STORE_RESET} from "../../../store/storeActions";
 import {SET_DOCUMENT_TOKEN_METADATA, TOKEN_RECEIVED, SET_TOKEN_PREVIEW, SET_INPUTS_SIGN_STATE, SET_ALL_INPUTS} from "../actions/TokenActions";
-import {defaults} from "../../utils/helper";
 import { signState } from "../constants";
 
 export const initialState = {

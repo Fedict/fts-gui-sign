@@ -1,7 +1,6 @@
 import React, {Fragment} from 'react'
 import { connect } from 'react-redux';
 import { CardContainer } from '../../components/Card/CardContainer';
-import { getBlobFromBase64 } from '../../fileUpload/helpers/FileHelper';
 import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
 import {sendLogInfo, sendLogInfoIgnoreResult} from "../../communication/communication";
 import {doWithToken} from "../../utils/helper";

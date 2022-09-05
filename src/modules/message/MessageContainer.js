@@ -7,9 +7,6 @@ import { CardInfo } from '../components/Card/CardInfo'
 import {doSendLogInfo, resetWizard} from '../signWizard/actions/WizardLogicActions'
 import {injectIntl, useIntl} from "react-intl";
 import {definedMessages} from "../i18n/translations";
-import {WIZARD_STATE_CERTIFICATES_LOADING} from "../wizard/WizardConstants";
-import {doWithToken} from "../utils/helper";
-import {sendLogInfo, sendLogInfoIgnoreResult} from "../communication/communication";
 
 /**
  * a card that shows a message and has a cancel and next button
@@ -26,7 +23,7 @@ import {sendLogInfo, sendLogInfoIgnoreResult} from "../communication/communicati
  * @param {function} [props.navigateToStep] - action to navigate to a page
  * @param {function} [props.onCancel] - onCancel callback
  */
-export const MessageContainer = ({ message, navigateToStep, onCancel,  doSendLogInfo }) => {
+export const MessageContainer = ({ message, messageInStore, navigateToStep, onCancel,  doSendLogInfo }) => {
     const intl = useIntl();
     const handleButtonNextClick = () => {
         if (message && message.nextButton && message.nextButton.nextPage) {
@@ -40,6 +37,17 @@ export const MessageContainer = ({ message, navigateToStep, onCancel,  doSendLog
     if (message) {
         shownMessage = {
             ...message
+        }
+        if (message.nextButton) {
+            shownMessage.nextButton = { ...message.nextButton }
+        }
+        else {
+            shownMessage.nextButton = { isVisible: false }
+        }
+    }
+    else if (messageInStore) {
+        shownMessage = {
+            ...messageInStore
         }
         if (message.nextButton) {
             shownMessage.nextButton = { ...message.nextButton }
@@ -82,7 +90,7 @@ export const MessageContainer = ({ message, navigateToStep, onCancel,  doSendLog
 
 const mapStateToProps = (state) => {
     return (state) => ({
-        message: state.message
+        messageInStore: state.message
     })
 }
 

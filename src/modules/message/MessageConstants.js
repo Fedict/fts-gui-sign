@@ -53,11 +53,29 @@ export const ErrorNotSupported = {
                 <ul className="text-left">
                     <li><FormattedMessage id="error.browser_not_supported.supported.1" defaultMessage="Chrome"/></li>
                     <li><FormattedMessage id="error.browser_not_supported.supported.2" defaultMessage="Edge (based on Chromium)"/></li>
-                    <li><FormattedMessage id="error.browser_not_supported.supported.3" defaultMessage="Internet explorer" /></li>
                     <li><FormattedMessage id="error.browser_not_supported.supported.4" defaultMessage="Firefox" /></li>
                     <li><FormattedMessage id="error.browser_not_supported.supported.5" defaultMessage="Opera (based on Chromium)"/></li>
                 </ul>
             </div>
+        </div>),
+    body: null,
+    nextButton: {
+        text: null,
+        isVisible: false,
+        nextPage: null
+    },
+    hasCancelButton: false
+}
+
+/**
+ * @constant {object} ErrorNotSupported - object of a "browser not supported" error.
+ */
+ export const ErrorIE11NotSupported = {
+    type: messageTypes.ERROR,
+    title: errorMessages.not_supported_error,
+    message: (
+        <div>
+            <p><FormattedMessage id="error.browser_not_supported.IE" defaultMessage="You are still using the web browser Internet Explorer. Please know that Microsoft progressively stopped supporting this web browser. In addition, this signature service can no longer support Internet Explorer. We recommend that you use another browser."/></p>
         </div>),
     body: null,
     nextButton: {
