@@ -94,14 +94,14 @@ export class ResultContainer extends React.Component {
                     leftButtonText={ <FormattedMessage id="report.download.link" defaultMessage="Download full report"/> }
                     onClickLeft={() => saveAs(new Blob([validation.report], {type: "application/xml;charset=utf-8"}), "report.xml")}
                 >
-                <div className="container text-center">
+                { signatures ? <div className="container text-center">
                     <div className="row alert py-0 mt-0">
                             <div className="col px-0"><b><FormattedMessage id="validation.signer.name" defaultMessage="Signer"/></b></div>
                             <div className="col-4 px-0"><b><FormattedMessage id="validation.sign.moment" defaultMessage="Date"/></b></div>
                             <div className="col-2 px-0"><b><FormattedMessage id="validation.sign.valid" defaultMessage="Valid"/></b></div>
                             <div className="col-2 px-0"><b><FormattedMessage id="validation.sign.qualif" defaultMessage="Qualified"/></b></div>
                         </div>
-                        { signatures && signatures.map((sig,index) => <div key={index} className={ "row alert " + sig.class }>
+                        { signatures.map((sig,index) => <div key={index} className={ "row alert " + sig.class }>
                             <div className="col px-0">{sig.signer}</div>
                             <div className="col-4 px-0">{moment(sig.date).format('DD/MM/YYYY - h:mm:ss')}</div>
                             <div className="col-2 px-0">{sig.isValid ? yes : no}
@@ -109,12 +109,11 @@ export class ResultContainer extends React.Component {
                              </div>
                             <div className="col-2 px-0">{sig.isQualified ? yes : no }</div>
                         </div> )}
-                        { !signatures && <div className="text-center">
-                            <div className="alert alert-warning">
-                                <FormattedMessage id={indication.INDETERMINATE.id} defaultMessage={indication.INDETERMINATE.message} />
-                            </div>
-                        </div> }
-                    </div>
+                    </div> : <div className="text-center">
+                        <div className="alert alert-warning">
+                            <FormattedMessage id={indication.INDETERMINATE.id} defaultMessage={indication.INDETERMINATE.message} />
+                        </div>
+                    </div> }
                 </CardContainer>
             )
     }
@@ -131,68 +130,3 @@ const mapDispatchToProps = ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(ResultContainer))
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-export class ResultContainer extends React.Component {
-
-    render() {
-        const { validation, resetWizard, intl } = this.props
-
-        let subIndicationResult = "";
-
-        if (validation && validation.subIndication && subIndicationKeys.includes(validation.subIndication)) {
-            const subIndicationUsed = subIndication[validation.subIndication]
-            subIndicationResult = (
-                <div className="text-center">
-                    <div className={"alert " + subIndicationUsed.className}>
-                    <FormattedMessage id={subIndicationUsed.id} defaultMessage={subIndicationUsed.message} />
-                    </div>
-
-                </div>
-            )
-        }
-
-        let result = <MessageContainer message={ErrorGeneral} onCancel={() => { resetWizard() }} />
-
-        if (indicationKeys.includes(validation.indication)) {
-            const indicationUsed = indication[validation.indication]
-            result = (
-                <CardContainer
-                    title={intl.formatMessage(messages.title)}
-                    hasNextButton
-                    nextButtonText={intl.formatMessage(messages.next)}
-                    onClickNext={() => { resetWizard() }}
-                >
-                    <div className="text-center">
-                        <div className={"alert " + indicationUsed.className}>
-                        <FormattedMessage id={indicationUsed.id} defaultMessage={indicationUsed.message} />
-                        </div>
-
-                    </div>
-                    <a href={"data:text/plain;charset=utf-8," + validation.report} download="report.json">Download report</a>
-                    {subIndicationResult}
-                </CardContainer>
-            )
-        }
-
-        return (
-            <div>{result}</div>
-
-        )
-    }
-}
-
-*/
