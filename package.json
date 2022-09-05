@@ -39,9 +39,9 @@
     "@svgr/webpack": "$@svgr/webpack"
   },
   "scripts": {
-    "css": "./node_modules/.bin/node-sass ./style/custom.scss ./public/style/custom.css",
+    "css": "./node_modules/.bin/sass ./style/custom.scss ./public/style/custom.css",
     "start": "react-scripts start",
-    "build": "./node_modules/.bin/node-sass ./style/custom.scss ./public/style/custom.css && react-scripts build",
+    "build": "./node_modules/.bin/sass ./style/custom.scss ./public/style/custom.css && react-scripts build",
     "test": "react-scripts test",
     "testOld": "react-scripts test --watchAll=false --coverage=true",
     "tests": "react-scripts test",
