@@ -181,6 +181,7 @@
   "validate.result.messages.timestampOrderFailure" : "Beim Signieren eines Dokuments werden ein oder mehrere Zeitstempel hinzugefügt, um den offiziellen Zeitpunkt und/oder die Form der Unterzeichnung zu registrieren. In diesem Dokument wird die Reihenfolge der Zeitstempel nicht beachtet. ",
   "validate.result.messages.totalFailed" : "Die Unterschrift kann nicht validiert werden.",
   "validate.result.messages.tryLater" : "Es sind nicht genügend Signaturinformationen verfügbar, um alle Einschränkungen zu prüfen.",
+  "validate.result.messages.noSignature" : "In dem Dokument konnte keine Signatur gefunden werden.",
   "validate.result.title": "Ergebnis der Validierung",
   "validate.result.validateNextButton": "Anderes Dokument prüfen",
   "validate.upload.text.step.1": "Wählen Sie das elektronisch unterschriebene Dokument (pdf oder xml) aus, indem Sie auf die Schaltfläche <b>{selectDocumentButton}</b> klicken.",

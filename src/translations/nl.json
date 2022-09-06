@@ -181,6 +181,7 @@
   "validate.result.messages.timestampOrderFailure" : "Bij de ondertekening van een document worden een of meer tijdstempels toegevoegd om de officiële ondertekeningstijd en -vorm te registreren. In dit document lijkt de beperking op de volgorde van de tijdstempels niet gerespecteerd.",
   "validate.result.messages.totalFailed" : "De handtekening kan niet gevalideerd worden.",
   "validate.result.messages.tryLater" : "Er is niet voldoende informatie over de handtekening beschikbaar om alle beperkingen te controleren.",
+  "validate.result.messages.noSignature" : "In het document kon geen handtekening teruggevonden worden.",
   "validate.result.title": "Resultaat van de validatie",
   "validate.result.validateNextButton": "Ander document nakijken",
   "validate.upload.text.step.1": "Selecteer het digitaal ondertekende document (pdf of xml) via de knop <b>{selectDocumentButton}</b>.",

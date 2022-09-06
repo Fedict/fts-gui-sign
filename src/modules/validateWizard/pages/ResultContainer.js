@@ -111,7 +111,7 @@ export class ResultContainer extends React.Component {
                         </div> )}
                     </div> : <div className="text-center">
                         <div className="alert alert-warning">
-                            <FormattedMessage id={indication.INDETERMINATE.id} defaultMessage={indication.INDETERMINATE.message} />
+                            <FormattedMessage id='validate.result.messages.noSignature' defaultMessage='No signature could be found in the document.' />
                         </div>
                     </div> }
                 </CardContainer>

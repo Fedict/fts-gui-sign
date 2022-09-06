@@ -181,6 +181,7 @@
   "validate.result.messages.timestampOrderFailure" : "When signing a document one or more time stamps are added to register the official time and/or form of the signature. In this document the constraint on the order of the time stamps does not appear to be respected. ",
   "validate.result.messages.totalFailed" : "The signature cannot be validated.",
   "validate.result.messages.tryLater" : "Not enough signature information is available to check all constraints.",
+  "validate.result.messages.noSignature" : "No signature could be found in the document.",
   "validate.result.title": "Result of the validation",
   "validate.result.validateNextButton": "Check another document",
   "validate.upload.text.step.1": "Select the digitally signed document (pdf or xml) by clicking on the button <b>{selectDocumentButton}</b>.",

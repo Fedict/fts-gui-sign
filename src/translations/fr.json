@@ -180,6 +180,7 @@
   "validate.result.messages.timestampOrderFailure" : "Lors de la signature d'un document, un ou plusieurs horodatages sont ajoutés pour enregistrer l'heure et/ou la forme officielle de la signature. Dans ce document, la restriction relative à l'ordre des horodatages semble ne pas être respectée. ",
   "validate.result.messages.totalFailed" : "La signature ne peut pas être validée.",
   "validate.result.messages.tryLater" : "Les informations sur la signature ne sont pas suffisantes pour vérifier toutes les restrictions.",
+  "validate.result.messages.noSignature" : "Aucune signature n'a pu être trouvée dans le document.",
   "validate.result.title": "Résultat de la validation",
   "validate.result.validateNextButton": "Vérifier un autre document",
   "validate.upload.text.step.1": "Sélectionnez le document signé numériquement (pdf ou xml) en cliquant sur le bouton <b>{selectDocumentButton}</b>.",
