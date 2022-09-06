@@ -10,9 +10,10 @@ export const Footer = (props) => {
         <div className="fixed-bottom  bg-light text-muted">
             <div><p className="m-1 ml-3">version: {process.env.REACT_APP_VERSION} - {props.token}</p></div>
             <div className="text-center">
-                <Link to={'/gtou' + httpParams}>
+                { !props.token && <><Link to={'/gtou' + httpParams}>
                     <FormattedMessage id="footer.genTerms" defaultMessage="General terms of use"/>
-                </Link>  -  <Link to={'/ps' + httpParams}>
+                </Link>  -  </>}
+                <Link to={'/ps' + httpParams}>
                     <FormattedMessage id="footer.genPrivacy" defaultMessage="Privacy Statement"/>
                 </Link>
             </div>
