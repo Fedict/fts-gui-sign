@@ -7,7 +7,6 @@ import { WIZARD_STATE_UPLOAD, WIZARD_STATE_START, WIZARD_STATE_VALIDATE_LOADING,
 import UploadFileContainer from './pages/UploadFileContainer'
 import ValidateLoadingContainer from './pages/ValidateLoadingContainer'
 import ResultContainer from './pages/ResultContainer'
-import MessageContainerWithStore from '../message/MessageContainer'
 import DisplayFile from '../fileUpload/components/UploadDisplayFile/UploadDisplayFile'
 
 export const ValidateWizardContainer = ({ wizard, reader, resetWizard }) => {
@@ -26,7 +25,7 @@ export const ValidateWizardContainer = ({ wizard, reader, resetWizard }) => {
             content = <ResultContainer />
             break;
         case WIZARD_STATE_MESSAGE:
-            content = <MessageContainerWithStore onCancel={() => { (resetWizard()) }} />
+            content = <MessageContainer onCancel={() => { (resetWizard()) }} />
             break;
         default:
             content = <MessageContainer message={ErrorGeneral} onCancel={() => { resetWizard() }} />

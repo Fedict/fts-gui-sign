@@ -29,7 +29,6 @@ import DigestLoadingContainer from './pages/DigestLoadingContainer'
 import PinInputContainer from './pages/PinInputContainer'
 import SuccesContainer from './pages/SuccesContainer'
 import SigningLoadingContainer from './pages/SigningLoading'
-import MessageContainerWithStore from '../message/MessageContainer'
 import { MessageContainer } from '../message/MessageContainer'
 import CertificateChooseContainer from './pages/CertificateChooseContainer'
 import SigningPreSignLoading from './pages/SigningPreSignLoading'
@@ -91,7 +90,7 @@ export const WizardContainer = ({ wizard, reader, resetWizard }) => {
             content = <SuccesContainer />;
             break;
         case WIZARD_STATE_MESSAGE:
-            content = <MessageContainerWithStore onCancel={() => { (resetWizard()) }} />;
+            content = <MessageContainer onCancel={() => { (resetWizard()) }} />;
             break;
         case WIZARD_STATE_SIGNING_PRESIGN_LOADING:
             content = <SigningPreSignLoading />;

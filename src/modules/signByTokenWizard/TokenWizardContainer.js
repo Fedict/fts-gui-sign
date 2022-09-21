@@ -26,7 +26,6 @@ import CertificateValidateChainContainer from "../signWizard/pages/CertificateVa
 import ValidateLoadingContainer from "../signWizard/pages/ValidateLoadingContainer";
 import PinInputContainer from "../signWizard/pages/PinInputContainer";
 import TokenWizardIntroContainer from "./pages/TokenWizardIntroContainer";
-import MessageContainerWithStore, {MessageContainer} from "../message/MessageContainer";
 import {ErrorGeneral} from "../message/MessageConstants";
 import {doSetToken} from "./actions/TokenActions";
 import {FormattedMessage} from 'react-intl';
@@ -167,7 +166,7 @@ export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, 
             content = <SuccesForTokenContainer />;
             break;
         case WIZARD_STATE_MESSAGE:
-            content = <MessageContainerWithStore onCancel={() => { (resetWizard()) }} />;
+            content = <MessageContainer onCancel={() => { (resetWizard()) }} />;
             break;
         default:
             content = <MessageContainer message={ErrorGeneral} onCancel={() => { (resetWizard()) }} />

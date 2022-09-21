@@ -34,23 +34,14 @@ export const MessageContainer = ({ message, messageInStore, navigateToStep, onCa
     }
 
     let shownMessage = {}
-    if (message) {
+    
+    let actualMessage = message ? message : messageInStore;
+    if (actualMessage) {
         shownMessage = {
-            ...message
+            ...actualMessage
         }
-        if (message.nextButton) {
-            shownMessage.nextButton = { ...message.nextButton }
-        }
-        else {
-            shownMessage.nextButton = { isVisible: false }
-        }
-    }
-    else if (messageInStore) {
-        shownMessage = {
-            ...messageInStore
-        }
-        if (message.nextButton) {
-            shownMessage.nextButton = { ...message.nextButton }
+        if (actualMessage.nextButton) {
+            shownMessage.nextButton = { ...actualMessage.nextButton }
         }
         else {
             shownMessage.nextButton = { isVisible: false }
