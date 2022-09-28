@@ -23,7 +23,7 @@ import {definedMessages} from "../i18n/translations";
  * @param {function} [props.navigateToStep] - action to navigate to a page
  * @param {function} [props.onCancel] - onCancel callback
  */
-export const MessageContainer = ({ message, messageInStore, navigateToStep, onCancel,  doSendLogInfo }) => {
+const MessageContainer = ({ message, messageInStore, navigateToStep, onCancel,  doSendLogInfo }) => {
     const intl = useIntl();
     const handleButtonNextClick = () => {
         if (message && message.nextButton && message.nextButton.nextPage) {
