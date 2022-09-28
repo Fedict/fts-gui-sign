@@ -26,7 +26,7 @@ import CertificateValidateChainContainer from "../signWizard/pages/CertificateVa
 import ValidateLoadingContainer from "../signWizard/pages/ValidateLoadingContainer";
 import PinInputContainer from "../signWizard/pages/PinInputContainer";
 import TokenWizardIntroContainer from "./pages/TokenWizardIntroContainer";
-import {MessageContainer} from "../message/MessageContainer";
+import MessageContainer from "../message/MessageContainer";
 import {ErrorGeneral} from "../message/MessageConstants";
 import {doSetToken} from "./actions/TokenActions";
 import {FormattedMessage} from 'react-intl';

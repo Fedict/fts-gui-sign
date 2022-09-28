@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { MessageContainer } from '../message/MessageContainer'
+import MessageContainer from '../message/MessageContainer'
 import { ErrorGeneral } from '../message/MessageConstants'
 import { resetWizard } from "./actions/WizardLogicActions"
 import { WIZARD_STATE_UPLOAD, WIZARD_STATE_START, WIZARD_STATE_VALIDATE_LOADING, WIZARD_STATE_RESULT, WIZARD_STATE_MESSAGE } from '../wizard/WizardConstants'
