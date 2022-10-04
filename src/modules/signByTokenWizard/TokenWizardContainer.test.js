@@ -156,6 +156,44 @@ describe('TokenWizardContainer', () => {
         expect(await screen.findByText(/Your document will be automatically downloaded./i)).toBeInTheDocument();
     })
 
+    test("sign for token with getMetadata giving error", async () => {
+        const token = '20201223121854';
+        let lastLogMessage;
+
+        fetchMock.mock(`/signing/getMetadataForToken?token=${token}`, {
+            body: {
+                message: "20221004092453351||NOT_ALLOWED_TO_SIGN||NN not allowed to sign"
+            },
+            status: 500
+        });
+
+        fetchMock.post('/logging/log', (url, opts) => {
+            console.log('/logging/log', opts && opts.body?JSON.parse(opts.body).message:opts);
+            if(opts && opts.body){
+                lastLogMessage = JSON.parse(opts.body).message;
+            }
+        })
+
+        act(() => {
+            render(<Provider store={store}>
+                <MemoryRouter initialIndex={0} initialEntries={[`/sign/${token}?HookURL=/hook`]}>
+                    <Switch>
+                        <Route path="/sign/:token">
+                            <TokenWizardContainer browserIsSupported={true} />
+                        </Route>
+                    </Switch>
+                </MemoryRouter>
+            </Provider>)
+        });
+
+        console.log("RENDERED")
+
+        await new Promise(process.nextTick);
+
+        expect(screen.getByText(/Failed to fetch the metadata of the document/)).toBeInTheDocument();
+        expect(screen.getByText(/You do not have permission to sign this specific document. Please contact the owner of the document for more information./)).toBeInTheDocument();
+    })
+
 
     test("sign for token flow don't auto download document", async () => {
         const token = '20201223121854';
