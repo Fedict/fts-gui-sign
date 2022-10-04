@@ -99,7 +99,7 @@ export class ResultContainer extends React.Component {
                             <div className="col px-0"><b><FormattedMessage id="validation.signer.name" defaultMessage="Signer"/></b></div>
                             <div className="col-4 px-0"><b><FormattedMessage id="validation.sign.moment" defaultMessage="Date"/></b></div>
                             <div className="col-2 px-0"><b><FormattedMessage id="validation.sign.valid" defaultMessage="Valid"/></b></div>
-                            <div className="col-2 px-0"><b><FormattedMessage id="validation.sign.qualif" defaultMessage="Qualified"/></b></div>
+                            <div className="col-2 px-0 text-nowrap"><b><FormattedMessage id="validation.sign.qualif" defaultMessage="Qualified"/></b></div>
                         </div>
                         { signatures.map((sig,index) => <div key={index} className={ "row alert " + sig.class }>
                             <div className="col px-0">{sig.signer}</div>
