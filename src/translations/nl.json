@@ -187,7 +187,7 @@
   "validate.upload.text.step.1": "Selecteer het digitaal ondertekende document (pdf of xml) via de knop <b>{selectDocumentButton}</b>.",
   "validate.upload.text.step.2": "Klik op de knop '<b>{validateButton}</b>' om de validatie  te starten.",
   "validate.upload.title": "Digitale handtekeningen valideren",
-  "validate.upload.validateButton": "Valideeren",
+  "validate.upload.validateButton": "Valideren",
   "xmlpreview.button.download": "Download origineel xml-bestand",
   "xmlpreview.button.print": "Print",
   "xmlpreview.error": "Er kon geen preview opgehaald worden van het te tekenen document.",
