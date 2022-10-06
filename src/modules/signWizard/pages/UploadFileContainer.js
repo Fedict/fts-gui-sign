@@ -7,6 +7,7 @@ import { NumberdText } from '../../components/NumberedText/NumberdText';
 import { WIZARD_STATE_CERTIFICATES_LOADING } from '../../wizard/WizardConstants';
 import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
 import {boldedText} from "../../utils/reactIntlUtils";
+import { sendLogInfo } from "../../communication/communication"
 
 const messages = defineMessages({
     title: {
@@ -88,6 +89,7 @@ export class UploadFileContainer extends React.Component {
                                                     switch (ext) {
                                                         case 'xml':
                                                         case 'pdf':
+                                                            sendLogInfo('UI - Upload file to Sign');
                                                             this.onchange(e)
                                                           break;
                                                       }

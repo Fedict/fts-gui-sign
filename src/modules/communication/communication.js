@@ -325,7 +325,7 @@ export const sendLogInfoIgnoreResult = (message, token) => {
 export const sendLogInfo = (message, callback, token) => {
     //console.log('sendLogInfo', message, token);
     if(defaultsExcludeEmpty(message, '______') === '______'
-        || defaultsExcludeEmpty(token, '______') === '______'
+//        || defaultsExcludeEmpty(token, '______') === '______'
         || (lastLogInfo.message === message && lastLogInfo.token === token && lastLogInfo.amount++ > 5)){
         //ignore if message is empty or when sending the same message more than 5 times to the CS
         if(typeof callback === 'function'){

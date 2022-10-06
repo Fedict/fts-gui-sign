@@ -1,6 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
+import { sendLogInfo } from "../communication/communication"
 import { resetWizard } from "../validateWizard/actions/WizardLogicActions";
 import DisplayFile from '../fileUpload/components/UploadDisplayFile/UploadDisplayFile'
 import { defineMessages, FormattedMessage, injectIntl } from "react-intl";
@@ -38,10 +39,14 @@ export class StartPageContainer extends React.Component {
                                     <br />
                                     <div className="row mx-5 mt-3">
                                         <div className="col col-6">
-                                            <p align="center"><button style={{ minWidth: 115 }} className="btn btn-primary" id="button_install_eID" onClick={() => { resetWizard(); history.push({pathname:'/sign', search: "?language=" + language })}}><FormattedMessage id="buttons.sign" defaultMessage="I want to sign" /></button></p>
+                                            <p align="center"><button style={{ minWidth: 115 }} className="btn btn-primary" id="button_install_eID"
+                                            onClick={() => { resetWizard(); history.push({pathname:'/sign', search: "?language=" + language });sendLogInfo('UI - I WANT TO SIGN Click')}}>
+                                                <FormattedMessage id="buttons.sign" defaultMessage="I want to sign" /></button></p>
                                         </div>
                                         <div className="col col-6">
-                                            <p align="center"><button style={{ minWidth: 115 }} className="btn btn-primary" id="button_install_eID" onClick={() => { resetWizard(); history.push({pathname:'/validate', search: "?language=" + language }) }}><FormattedMessage id="buttons.validate" defaultMessage="I want to validate" /></button></p>
+                                            <p align="center"><button style={{ minWidth: 115 }} className="btn btn-primary" id="button_install_eID"
+                                            onClick={() => { resetWizard(); history.push({pathname:'/validate', search: "?language=" + language }); sendLogInfo('UI - I WANT TO VALIDATE Click')}}>
+                                                <FormattedMessage id="buttons.validate" defaultMessage="I want to validate" /></button></p>
                                         </div>
                                     </div>
                                 </div>
