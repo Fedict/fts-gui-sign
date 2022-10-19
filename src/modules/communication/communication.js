@@ -297,13 +297,17 @@ let lastLogInfo = {
 };
 
 export const sendHookInfoAPI = async (o, tokenFile) => {
-    if (!tokenFile.hookURL) return;
+    var hookURL = tokenFile.hookURL;
+    if (!hookURL) return;
 
+    var tokenId = tokenFile.token;
+    if (tokenId) tokenId = tokenId.substring(tokenId.length - 16);
+    o.tokenId = tokenId;
     let logHook = {
         hookData: o,
-        hookURL: tokenFile.hookURL
+        hookURL: hookURL
     }
-    return fetch(tokenFile.hookURL, {
+    return fetch(hookURL, {
         method: 'POST',
         body: JSON.stringify(o),
         headers: { 'Content-Type': 'application/json' }
