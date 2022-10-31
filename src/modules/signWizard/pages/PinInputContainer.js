@@ -173,11 +173,7 @@ const PinInputContainer = (props) => {
                 </p>
                 <ChangeAutoDownloadOption />
                 <div className="form-inline">
-                    <div
-                        className="form-control"
-                        id="input_code"
-                        data-testid="input_code"
-                        style={{width:150, marginRight:30}}
+                    <div className="form-control" id="input_code" data-testid="input_code" translate="no" style={{width:150, marginRight:30}}
                     >{pinstring.substr(0, indexCursor)}<span className="blinking-cursor">|</span>{pinstring.substr(indexCursor)}</div>
 
                     <button className={"btn btn-primary"} onClick={() => { handleSubmit(pin) }} id="button_next" disabled={pin.length < 4}><FormattedMessage id={"signing.pininput.button.sign"} defaultMessage={"Sign with eId"}/></button>
