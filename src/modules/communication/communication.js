@@ -297,6 +297,8 @@ let lastLogInfo = {
 };
 
 export const sendHookInfoAPI = async (o, tokenFile) => {
+    if (!tokenFile.hookURL) return;
+
     let logHook = {
         hookData: o,
         hookURL: tokenFile.hookURL
