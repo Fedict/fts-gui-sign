@@ -7,6 +7,7 @@ import { CardContainer } from '../../components/Card/CardContainer';
 import { NumberdText } from '../../components/NumberedText/NumberdText';
 import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
 import {boldedText} from "../../utils/reactIntlUtils";
+import { sendLogInfo } from "../../communication/communication"
 
 const messages = defineMessages({
     title: {
@@ -84,6 +85,7 @@ export class UploadFileContainer extends React.Component {
                                                     switch (ext) {
                                                         case 'xml':
                                                         case 'pdf':
+                                                            sendLogInfo('UI - Upload file to Validate');
                                                             this.onchange(e)
                                                           break;
                                                       }
