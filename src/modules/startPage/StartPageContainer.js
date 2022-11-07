@@ -5,7 +5,6 @@ import { sendLogInfo } from "../communication/communication"
 import { resetWizard } from "../validateWizard/actions/WizardLogicActions";
 import DisplayFile from '../fileUpload/components/UploadDisplayFile/UploadDisplayFile'
 import { defineMessages, FormattedMessage, injectIntl } from "react-intl";
-import { sendLogInfo } from "../communication/communication"
 
 const messages = defineMessages({
     "language" : {
