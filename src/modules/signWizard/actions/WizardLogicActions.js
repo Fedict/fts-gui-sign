@@ -709,7 +709,6 @@ export const signDocument = () => (dispatch, getStore) => {
             if(tokenFile.readPhoto){
                 photo = certificate.certificateSelected.photo;
             }
-            var hookInfo = { id: 'FILE_SIGNED', fileId: fileIdToSign };
             var fileIdToSign = tokenFile.inputs.findIndex(input => input.signState === signState.TO_BE_SIGNED);
             var hookInfo = { id: 'FILE_SIGNED', fileId: fileIdToSign };
             signDocumentForTokenAPI(
