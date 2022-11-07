@@ -2701,6 +2701,7 @@ describe("WizardLogicActions", () => {
             storeActions.resetStore = jest.fn(() => { })
             FlowIdActions.setNewFlowId = jest.fn(() => { })
             navigation.navigateToStep = jest.fn()
+            communication.sendLogInfo = jest.fn(() => {  FlowIdActions.setNewFlowId(); storeActions.resetStore(); })
         })
 
         test("resetWizard resetStore and creates new flowId", () => {
