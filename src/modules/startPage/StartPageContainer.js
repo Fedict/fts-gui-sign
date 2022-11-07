@@ -5,6 +5,7 @@ import { sendLogInfo } from "../communication/communication"
 import { resetWizard } from "../validateWizard/actions/WizardLogicActions";
 import DisplayFile from '../fileUpload/components/UploadDisplayFile/UploadDisplayFile'
 import { defineMessages, FormattedMessage, injectIntl } from "react-intl";
+import { sendLogInfo } from "../communication/communication"
 
 const messages = defineMessages({
     "language" : {
@@ -38,17 +39,17 @@ export class StartPageContainer extends React.Component {
                                     <br />
                                     <br />
                                     <div className="row mx-5 mt-3">
-                                        <div className="col col-6">
+                                         <div className="col col-6">
                                             <p align="center"><button style={{ minWidth: 115 }} className="btn btn-primary" id="button_install_eID"
                                             onClick={() => { resetWizard(); history.push({pathname:'/sign', search: "?language=" + language });sendLogInfo('UI - I WANT TO SIGN Click')}}>
                                                 <FormattedMessage id="buttons.sign" defaultMessage="I want to sign" /></button></p>
-                                        </div>
-                                        <div className="col col-6">
+                                         </div>
+                                         <div className="col col-6">
                                             <p align="center"><button style={{ minWidth: 115 }} className="btn btn-primary" id="button_install_eID"
                                             onClick={() => { resetWizard(); history.push({pathname:'/validate', search: "?language=" + language }); sendLogInfo('UI - I WANT TO VALIDATE Click')}}>
                                                 <FormattedMessage id="buttons.validate" defaultMessage="I want to validate" /></button></p>
-                                        </div>
-                                    </div>
+                                         </div>
+                                     </div>
                                 </div>
                                 <div className="card-footer">
                                     <FormattedMessage id="index.footer" defaultMessage="If you want more information about eID cards and card readers, you can find it here: <a>Frequently asked questions signing service<a>" /><a href="https://eid.belgium.be/">eid.belgium.be</a>

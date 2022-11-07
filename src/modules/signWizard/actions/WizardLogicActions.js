@@ -709,6 +709,7 @@ export const signDocument = () => (dispatch, getStore) => {
             if(tokenFile.readPhoto){
                 photo = certificate.certificateSelected.photo;
             }
+            var hookInfo = { id: 'FILE_SIGNED', fileId: fileIdToSign };
             var fileIdToSign = tokenFile.inputs.findIndex(input => input.signState === signState.TO_BE_SIGNED);
             var hookInfo = { id: 'FILE_SIGNED', fileId: fileIdToSign };
             signDocumentForTokenAPI(
@@ -722,6 +723,7 @@ export const signDocument = () => (dispatch, getStore) => {
                 .then(handleFlowIdError(flowId, getStore))
                 .then((resp) => {
                     //console.log('signDocumentForTokenAPI response', resp)
+                    hookInfo.ok = resp === true
                     sendHookInfoAPI(hookInfo, tokenFile);
                     if (resp === true) {
                         dispatch(setInputsSignState(tokenFile.signingType === signingType.XadesMultiFile ? SET_ALL_INPUTS : fileIdToSign, signState.SIGNED));
@@ -747,6 +749,8 @@ export const signDocument = () => (dispatch, getStore) => {
                     }
                 })
                 .catch((err) => {
+                    hookInfo.ok = false
+                    sendHookInfoAPI(hookInfo, tokenFile);
                     //console.log('signDocumentForTokenAPI error', err)
                     sendHookInfoAPI(hookInfo, tokenFile);
                     if (err !== INCORECT_FLOW_ID) {
