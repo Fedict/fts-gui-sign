@@ -22,11 +22,15 @@ export const validateDocument = () => (dispatch, getStore) => {
     validateSignatureAPI(uploadFile.file)
         .then(handleFlowIdError(flowId, getStore))
         .then((val) => {
-            dispatch(validationSetIndication(val.indication))
-            dispatch(validationSetSubIndication(val.subIndication))
-            dispatch(validationSetReport(val.report))
-            dispatch(validationSetDiagnosticData(val.diagnosticData))
-            dispatch(navigateToStep(WIZARD_STATE_RESULT))
+            if (val.error || !val.diagnosticData || !val.report) {
+                    dispatch(showErrorMessage(ErrorGeneral))
+            } else {
+                dispatch(validationSetIndication(val.indication))
+                dispatch(validationSetSubIndication(val.subIndication))
+                dispatch(validationSetReport(val.report))
+                dispatch(validationSetDiagnosticData(val.diagnosticData))
+                dispatch(navigateToStep(WIZARD_STATE_RESULT))
+            }
         })
         .catch((err) => {
             if (err !== INCORECT_FLOW_ID) {

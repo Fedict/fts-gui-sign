@@ -126,7 +126,9 @@ describe("WizardLogicActions", () => {
         test("validateDocument success set validation Indications", async () => {
             const response = {
                 indication: "testvalue",
-                subIndication: "testValue"
+                subIndication: "testValue",
+                report: "testvalue",
+                diagnosticData: "testValue"
             }
             communication.validateSignatureAPI = jest.fn(() => { return Promise.resolve(response) })
 
@@ -150,7 +152,9 @@ describe("WizardLogicActions", () => {
         test("validateDocument success navigates to WIZARD_STATE_RESULT", async () => {
             const response = {
                 indication: "testvalue",
-                subIndication: "testValue"
+                subIndication: "testValue",
+                report: "testvalue",
+                diagnosticData: "testValue"
             }
             communication.validateSignatureAPI = jest.fn(() => { return Promise.resolve(response) })
 
