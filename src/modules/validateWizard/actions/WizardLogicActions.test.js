@@ -10,7 +10,7 @@ import { validateSignatureAPI } from "../../communication/communication";
 import * as communication from "../../communication/communication";
 import { handleFlowIdError, INCORECT_FLOW_ID } from "../../controlIds/flowId/FlowIdHelpers";
 import * as FlowIdHelpers from "../../controlIds/flowId/FlowIdHelpers";
-import { validationSetIndication, validationSetSubIndication } from "./ValidationActions";
+import { validationSetReport, validationSetDiagnosticData } from "./ValidationActions";
 import * as ValidationActions from "./ValidationActions";
 import { showErrorMessage } from "../../message/actions/MessageActions";
 import * as  MessageActions from "../../message/actions/MessageActions";
@@ -22,8 +22,8 @@ const ORIGINAL_setNewFlowId = setNewFlowId
 const ORIGINAL_navigateToStep = navigateToStep
 const ORIGINAL_validateSignatureAPI = validateSignatureAPI
 const ORIGINAL_handleFlowIdError = handleFlowIdError
-const ORIGINAL_validationSetIndication = validationSetIndication
-const ORIGINAL_validationSetSubIndication = validationSetSubIndication
+const ORIGINAL_validationSetReport = validationSetReport
+const ORIGINAL_validationSetDiagnosticData = validationSetDiagnosticData
 const ORIGINAL_showErrorMessage = showErrorMessage
 
 function flushPromises() {
@@ -72,16 +72,16 @@ describe("WizardLogicActions", () => {
         beforeEach(() => {
             communication.validateSignatureAPI = jest.fn()
             FlowIdHelpers.handleFlowIdError = jest.fn()
-            ValidationActions.validationSetIndication = jest.fn()
-            ValidationActions.validationSetSubIndication = jest.fn()
+            ValidationActions.validationSetReport = jest.fn()
+            ValidationActions.validationSetDiagnosticData = jest.fn()
             wizardActions.navigateToStep = jest.fn()
             MessageActions.showErrorMessage = jest.fn()
         })
         afterEach(() => {
             communication.validateSignatureAPI = ORIGINAL_validateSignatureAPI
             FlowIdHelpers.handleFlowIdError = ORIGINAL_handleFlowIdError
-            ValidationActions.validationSetIndication = ORIGINAL_validationSetIndication
-            ValidationActions.validationSetSubIndication = ORIGINAL_validationSetSubIndication
+            ValidationActions.validationSetReport = ORIGINAL_validationSetReport
+            ValidationActions.validationSetDiagnosticData = ORIGINAL_validationSetDiagnosticData
             wizardActions.navigateToStep = ORIGINAL_navigateToStep
             MessageActions.showErrorMessage = ORIGINAL_showErrorMessage
         })
@@ -125,10 +125,8 @@ describe("WizardLogicActions", () => {
         })
         test("validateDocument success set validation Indications", async () => {
             const response = {
-                indication: "testvalue",
-                subIndication: "testValue",
-                report: "testvalue",
-                diagnosticData: "testValue"
+                report: "report",
+                diagnosticData: "diagnosticData"
             }
             communication.validateSignatureAPI = jest.fn(() => { return Promise.resolve(response) })
 
@@ -144,15 +142,13 @@ describe("WizardLogicActions", () => {
             validateDocument()(mockDispatch, mockGetStore)
             await flushPromises()
 
-            expect(ValidationActions.validationSetIndication).toBeCalledTimes(1)
-            expect(ValidationActions.validationSetIndication).toHaveBeenCalledWith(response.indication)
-            expect(ValidationActions.validationSetSubIndication).toBeCalledTimes(1)
-            expect(ValidationActions.validationSetSubIndication).toHaveBeenCalledWith(response.subIndication)
+            expect(ValidationActions.validationSetDiagnosticData).toBeCalledTimes(1)
+            expect(ValidationActions.validationSetDiagnosticData).toHaveBeenCalledWith(response.diagnosticData)
+            expect(ValidationActions.validationSetReport).toBeCalledTimes(1)
+            expect(ValidationActions.validationSetReport).toHaveBeenCalledWith(response.report)
         })
         test("validateDocument success navigates to WIZARD_STATE_RESULT", async () => {
             const response = {
-                indication: "testvalue",
-                subIndication: "testValue",
                 report: "testvalue",
                 diagnosticData: "testValue"
             }
@@ -192,8 +188,8 @@ describe("WizardLogicActions", () => {
 
             expect(MessageActions.showErrorMessage).toBeCalledTimes(1)
             expect(MessageActions.showErrorMessage).toHaveBeenCalledWith(ErrorGeneral)
-            expect(ValidationActions.validationSetIndication).toBeCalledTimes(0)
-            expect(ValidationActions.validationSetSubIndication).toBeCalledTimes(0)
+            expect(ValidationActions.validationSetDiagnosticData).toBeCalledTimes(0)
+            expect(ValidationActions.validationSetReport).toBeCalledTimes(0)
 
         })
         test("signDocument error INCORECT_FLOW_ID does nothing", async () => {
@@ -212,8 +208,8 @@ describe("WizardLogicActions", () => {
             await flushPromises()
 
             expect(MessageActions.showErrorMessage).toBeCalledTimes(0)
-            expect(ValidationActions.validationSetIndication).toBeCalledTimes(0)
-            expect(ValidationActions.validationSetSubIndication).toBeCalledTimes(0)
+            expect(ValidationActions.validationSetDiagnosticData).toBeCalledTimes(0)
+            expect(ValidationActions.validationSetReport).toBeCalledTimes(0)
          })
     })
 

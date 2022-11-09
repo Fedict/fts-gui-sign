@@ -1,20 +1,20 @@
-import { validationSetIndication, VALIDATION_SET_INDICATION, validationSetSubIndication, VALIDATION_SET_SUBINDICATION } from "./ValidationActions"
+import { validationSetReport, VALIDATION_SET_REPORT, validationSetDiagnosticData, VALIDATION_SET_DIAGNOSTICDATA } from "./ValidationActions"
 
 describe("ValidationActions", () => {
 
-    test("validationSetIndication returns a action with type VALIDATION_SET_INDICATION and payload indication", () => {
-        const payload = "first indication"
-        const result = validationSetIndication(payload)
+    test("validationSetReport returns a action with type VALIDATION_SET_REPORT and payload report", () => {
+        const payload = "first report"
+        const result = validationSetReport(payload)
 
-        expect(result.type).toBe(VALIDATION_SET_INDICATION)
+        expect(result.type).toBe(VALIDATION_SET_REPORT)
         expect(result.payload).toEqual(payload)
     })
     
-    test("validationSetSubIndication returns a action with type VALIDATION_SET_SUBINDICATION and payload subIndication", () => {
-        const payload = "sub indication"
-        const result = validationSetSubIndication(payload)
+    test("validationSetDiagnosticData returns a action with type VALIDATION_SET_DIAGNOSTICDATA and payload Diagnostic data", () => {
+        const payload = "Diagnostic data"
+        const result = validationSetDiagnosticData(payload)
 
-        expect(result.type).toBe(VALIDATION_SET_SUBINDICATION)
+        expect(result.type).toBe(VALIDATION_SET_DIAGNOSTICDATA)
         expect(result.payload).toEqual(payload)
     })
 })

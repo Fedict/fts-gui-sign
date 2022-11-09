@@ -2,7 +2,7 @@ import { WIZARD_STATE_START, WIZARD_STATE_RESULT } from "../../wizard/WizardCons
 import { resetStore } from "../../../store/storeActions"
 import { navigateToStep} from "../../wizard/WizardActions"
 import { validateSignatureAPI } from "../../communication/communication"
-import { validationSetIndication, validationSetSubIndication, validationSetReport, validationSetDiagnosticData } from "./ValidationActions"
+import { validationSetReport, validationSetDiagnosticData } from "./ValidationActions"
 import { showErrorMessage } from "../../message/actions/MessageActions"
 import { ErrorGeneral } from "../../message/MessageConstants"
 import { setNewFlowId } from "../../controlIds/flowId/FlowIdActions"
@@ -25,8 +25,6 @@ export const validateDocument = () => (dispatch, getStore) => {
             if (val.error || !val.diagnosticData || !val.report) {
                     dispatch(showErrorMessage(ErrorGeneral))
             } else {
-                dispatch(validationSetIndication(val.indication))
-                dispatch(validationSetSubIndication(val.subIndication))
                 dispatch(validationSetReport(val.report))
                 dispatch(validationSetDiagnosticData(val.diagnosticData))
                 dispatch(navigateToStep(WIZARD_STATE_RESULT))
