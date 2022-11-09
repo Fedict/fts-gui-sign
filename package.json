@@ -16,7 +16,6 @@
     "jquery": "3.5.1",
     "moment": "^2.29.1",
     "sass": "^1.49.9",
-    "pdfjs-dist": "2.4.456",
     "popper.js": "1.16.1",
     "prop-types": "15.7.2",
     "query-string": "^7.1.1",
