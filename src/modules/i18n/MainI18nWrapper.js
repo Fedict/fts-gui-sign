@@ -31,9 +31,6 @@ const MainI18nWrapper = (props) => {
 					setLoading(false);
 					setStateLocale(localeToFetch);
 					props.chooseLanguage(localeToFetch);
-					if(window && window.document){
-						window.document.title = messages[dMessages.windowTitle.id];
-					}
 				}
 			});
 			setCookie('language', localeToFetch);
