@@ -64,9 +64,7 @@ export const CardContainer = (
                 {
                     (title)
                         ? (
-                            <div className="card-header">
-                                {title}
-                            </div>
+                            <div className="card-header"><h1>{title}</h1></div>
                         )
                         : null
                 }
