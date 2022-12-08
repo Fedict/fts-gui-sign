@@ -29,7 +29,7 @@ export class StartPageContainer extends React.Component {
                     <div className={"col col-sm-5"}>
 
                         <div className={"container"}>
-                            <div className="card">
+                            <main className="card">
                                 <div className="card-header"><FormattedMessage id="index.title" defaultMessage="Signing Box" /></div>
                                 <div className="card-body">
                                     <FormattedMessage id="index.welcome" defaultMessage="The online signature service 'Signing box' is offered by the Federal Public Service Policy and Support. " />
@@ -59,7 +59,7 @@ export class StartPageContainer extends React.Component {
                                                 <FormattedMessage id="index.footer2b"/>
                                             </a>}</FormattedMessage>
                                 </div>
-                            </div>
+                            </main>
                         </div>
                     </div>
                 </div>

@@ -60,7 +60,7 @@ export const CardContainer = (
     }, [autoClickTime, abortAutoNext])
     return (
         <div className="col col-12 mx-auto align-middle">
-            <div className="card " >
+            <main className="card" >
                 {
                     (title)
                         ? (
@@ -102,7 +102,7 @@ export const CardContainer = (
                             }
                         </div>
                     ):false}
-            </div>
+            </main>
             {
                 (hasCancelButton)
                     ? (
