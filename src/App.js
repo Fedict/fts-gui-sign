@@ -1,4 +1,5 @@
 import React from 'react';
+import { useIntl } from 'react-intl';
 import Navbar from './modules/Navbar/Navbar';
 import WizardContainer from './modules/signWizard/WizardContainer';
 import {
@@ -22,7 +23,7 @@ export const BaseApp = () => {
     const browserIsSupported = browserIsAccepted();
     const usedBrowser = getBrowser();
     return (
-        <div >
+        <div lang={ useIntl().locale } >
             {isInIframe() ? false : <Navbar />}
             {browserIsSupported ?
                 (<div className="container-fluid" style={{ marginBottom: '64px' }} >
