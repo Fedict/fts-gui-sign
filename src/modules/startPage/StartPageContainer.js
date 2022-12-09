@@ -13,6 +13,9 @@ const messages = defineMessages({
     }
 })
 export class StartPageContainer extends React.Component {
+    componentDidMount(){
+        document.title = "BOSA - Signing Box"
+    }
 
     render() {
         

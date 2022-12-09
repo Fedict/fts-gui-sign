@@ -58,6 +58,14 @@ export const CardContainer = (
             mounted = false
         }
     }, [autoClickTime, abortAutoNext])
+    useEffect(() => {
+        if (window && window.document){
+            console.log("title", title)
+            if (title && title.length > 0){
+                document.title = "BOSA - " + title;
+            }
+        }
+      }, [title]);
     return (
         <div className="col col-12 mx-auto align-middle">
             <main className="card" >
