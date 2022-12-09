@@ -51,15 +51,16 @@ export class UploadFileContainer extends React.Component {
 
                 <div className="form-group">
                     <div className="container" >
-                        <NumberdText number="1"><FormattedMessage id="validate.upload.text.step.1"
+                        <ol className="invisibleOL">
+                            <li><NumberdText number="1"><FormattedMessage id="validate.upload.text.step.1"
                                                       defaultMessage="Select the digitally signed document (pdf or xml) by clicking on the button 'Select a document'."
                                                       values={{b : boldedText, selectDocumentButton : intl.formatMessage({id : "signing.upload.selectDocument", defaultMessage : "Select a document"})}}
-                                                      /></NumberdText>
-                        <NumberdText number="2"><FormattedMessage id="validate.upload.text.step.2"
+                                                      /></NumberdText></li>
+                            <li><NumberdText number="2"><FormattedMessage id="validate.upload.text.step.2"
                                                       defaultMessage="Click on the button 'Validate' to start the validation."
                                                       values={{b : boldedText, validateButton : intl.formatMessage({id : "validate.upload.validateButton", defaultMessage : "Validate"})}}
-                                                      /></NumberdText>
-
+                                                      /></NumberdText></li>
+                        </ol>
                         <div className="row">
                             <div className="card col col-12">
                                 <div className="card-body ">

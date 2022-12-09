@@ -482,6 +482,12 @@ pre {
   .container, .container-sm, .container-md, .container-lg, .container-xl {
     max-width: 1140px; } }
 
+/*Added for accessibility */
+.invisibleOL {
+  list-style: none;
+  padding-left: 0;
+}
+
 .row {
   display: flex;
   flex-wrap: wrap;
