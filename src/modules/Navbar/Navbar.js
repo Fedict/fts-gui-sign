@@ -8,7 +8,7 @@ import { navigateToStep } from "../wizard/WizardActions"
 import { resetStore } from "../../store/storeActions"
 import { WIZARD_STATE_START } from '../wizard/WizardConstants';
 import { setNewFlowId } from "../controlIds/flowId/FlowIdActions"
-import {languages} from "../../const";
+import {languages, languagesNames} from "../../const";
 import {defineMessages, injectIntl, useIntl} from "react-intl";
 
 const messages = defineMessages({
@@ -76,8 +76,8 @@ export const Navbar = injectIntl(({ location, resetStore, navigateToStep, setNew
                     {links}
                 </div>}
                 <nav className="nav ml-auto">
-                    {languages.map((language) => (
-                        <a key={language} className="nav-link" href={'#'} onClick={() => {
+                    {languages.map((language, index) => (
+                        <a key={language} className="nav-link" href={'#'} aria-label={ languagesNames[index]} onClick={() => {
                             history.push(getChangeLanguageLink(language))
                         }}>{language.toUpperCase()}</a>
                     ))}
