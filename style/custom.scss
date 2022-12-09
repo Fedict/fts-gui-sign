@@ -114,3 +114,15 @@ $theme-colors: (
   }
 }
 
+/*Added for accessibility */
+.invisibleOL {
+  list-style: none;
+  padding-left: 0;
+}
+/*
+  This is needed "ETS-405 : Change (specific) bold text in heading"
+  H1 Tags should be used for accessibilty of titles 
+*/
+.card-header > h1 {
+   all: unset;
+}

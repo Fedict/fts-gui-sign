@@ -482,12 +482,6 @@ pre {
   .container, .container-sm, .container-md, .container-lg, .container-xl {
     max-width: 1140px; } }
 
-/*Added for accessibility */
-.invisibleOL {
-  list-style: none;
-  padding-left: 0;
-}
-
 .row {
   display: flex;
   flex-wrap: wrap;
@@ -3348,13 +3342,6 @@ input[type="button"].btn-block {
     border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0; }
   .card-header + .list-group .list-group-item:first-child {
     border-top: 0; }
-  /*
-    This is needed "ETS-405 : Change (specific) bold text in heading"
-    H1 Tags should be used for accessibilty of titles 
-  */
-  .card-header > h1 {
-    all: unset;
-    }
   
 .card-footer {
   padding: 0.75rem 1.25rem;
