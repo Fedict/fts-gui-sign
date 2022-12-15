@@ -34,7 +34,7 @@ function getSignatures(validation) {
     if (!signatures || signatures.length === 0) return null;
 
     var xmlDoc = new DOMParser().parseFromString(validation.report,"text/xml");
-    var certQuals = xmlDoc.getElementsByTagNameNS(NS, "ValidationCertificateQualification")
+    var signQuals = xmlDoc.getElementsByTagNameNS(NS, "ValidationSignatureQualification")
     var sigValidations = xmlDoc.getElementsByTagNameNS(NS, "ValidationProcessBasicSignature")
 
     signatures.forEach(sig => {
@@ -61,10 +61,10 @@ function getSignatures(validation) {
         }
 
         var qualification = "" 
-        if (certQuals) {
-            for (var certQual of certQuals) {
-                if (certQual.parentElement && certQual.getAttribute('Id') === sig.certId) {
-                    qualification = certQual.parentElement.getAttribute('SignatureQualification')
+        if (signQuals) {
+            for (var signQual of signQuals) {
+                if (signQual.parentElement && signQual.parentElement.getAttribute('Id') === sig.id) {
+                    qualification = signQual.getAttribute('SignatureQualification')
                     break;
                 }
             }
