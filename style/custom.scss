@@ -126,3 +126,18 @@ $theme-colors: (
 .card-header > h1 {
    all: unset;
 }
+
+.validateResult {
+  position: relative;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+}
+
+.light-success {
+  background-color: #d4edda }
+.light-warning {
+  background-color: #fff3cd }
+.light-danger {
+  background-color: #f8d7da }

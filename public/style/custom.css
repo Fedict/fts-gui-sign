@@ -7221,3 +7221,31 @@ a.text-dark:hover, a.text-dark:focus {
     color: transparent; }
   50% {
     color: black; } }
+
+    /*Added for accessibility */
+.invisibleOL {
+  list-style: none;
+  padding-left: 0;
+}
+/*
+  This is needed "ETS-405 : Change (specific) bold text in heading"
+  H1 Tags should be used for accessibilty of titles 
+*/
+.card-header > h1 {
+   all: unset;
+}
+
+.validateResult {
+  position: relative;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+}
+
+.light-success {
+  background-color: #d4edda }
+.light-warning {
+  background-color: #fff3cd }
+.light-danger {
+  background-color: #f8d7da }
