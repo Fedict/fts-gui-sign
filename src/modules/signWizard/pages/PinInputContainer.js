@@ -62,6 +62,8 @@ const PinInputContainer = (props) => {
                 </p>
                 <ChangeAutoDownloadOption />
                 <div className="form-inline">
+                    {/* block_autofill1 is there to block password managers from storing ID card pin. To be regularly testsed with all browsers */}
+                    <input id="block_autofill1" name="block_autofill1" tabIndex="-1" style={{height:0, width:0, background:"transparent",border:"none",padding:"0.3px",margin:0,display:"block"}} type="password"/>
                     <input type="password" className="form-control" id="input_code" data-testid="input_code" translate="no" style={{width:150, marginRight:30}}
                             onChange={ (e) => {
                                 var value = e.target.value;
