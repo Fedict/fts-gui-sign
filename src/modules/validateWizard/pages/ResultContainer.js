@@ -33,29 +33,30 @@ function getSignatures(validation) {
     
     if (!signatures || signatures.length === 0) return null;
 
-    var xmlDoc = new DOMParser().parseFromString(validation.report,"text/xml");
+    let xmlDoc = new DOMParser().parseFromString(validation.report,"text/xml");
+    let conclusions = xmlDoc.getElementsByTagNameNS(NS, "Conclusion")
     var signQuals = xmlDoc.getElementsByTagNameNS(NS, "ValidationSignatureQualification")
-    var sigValidations = xmlDoc.getElementsByTagNameNS(NS, "ValidationProcessBasicSignature")
 
     signatures.forEach(sig => {
-        var cert = validation.diagnosticData.Certificate.find(cert => cert.Id === sig.certId);
+        let cert = validation.diagnosticData.Certificate.find(cert => cert.Id === sig.certId);
         if (!cert) return null;
         sig.signer = cert.CommonName
 
-        if (sigValidations ) {
-            for (var sigValidation of sigValidations) {
-                var id = sigValidation.parentElement.getAttribute('Id');
-                if (id === sig.id) {
-                    var conclusions = sigValidation.getElementsByTagNameNS(NS, "Conclusion")
-                    if (conclusions && conclusions.length > 0) {
-                        var indications = conclusions[0].getElementsByTagNameNS(NS, "Indication")
-                        if (indications && indications.length > 0)
-                        sig.isValid = indications[0].textContent === 'PASSED'
-                        if (!sig.isValid) {
-                            sig.subIndication = subIndication[conclusions[0].getElementsByTagNameNS(NS, "SubIndication")[0].textContent]
+        if (conclusions) {
+            for(let conclusion of conclusions) {
+                var xmlSignature = conclusion.parentElement
+                if (xmlSignature.localName === "Signature" && xmlSignature.attributes['Id'].value === sig.id) {
+                    for (let indication of conclusion.children) {
+                        switch(indication.localName) {
+                            case 'Indication':
+                                sig.isValid = indication.textContent === 'TOTAL_PASSED'
+                                break;
+                            case 'SubIndication':
+                                sig.subIndication = subIndication[indication.textContent]
+                                break;
                         }
                     }
-                    break;
+                    break
                 }
             }
         }
@@ -71,7 +72,7 @@ function getSignatures(validation) {
         }
         
         sig.isQualified = cert && cert.KeyUsage && qualification === 'QESig' && cert.KeyUsage.includes('nonRepudiation')
-        sig.class = "light-" + (sig.isValid ? (sig.isQualified ? "success" : "warning") : "danger")
+        sig.class = "alert-" + (sig.isValid ? (sig.isQualified ? "success" : "warning") : "danger")
     });
     return signatures;
 }
@@ -95,13 +96,13 @@ export class ResultContainer extends React.Component {
                     onClickLeft={() => saveAs(new Blob([validation.report], {type: "application/xml;charset=utf-8"}), "report.xml")}
                 >
                 { signatures ? <div className="container text-center">
-                    <div className="row validateResult py-0 mt-0">
+                    <div className="row alert py-0 mt-0">
                             <div className="col px-0"><b><FormattedMessage id="validation.signer.name" defaultMessage="Signer"/></b></div>
                             <div className="col-4 px-0"><b><FormattedMessage id="validation.sign.moment" defaultMessage="Date"/></b></div>
                             <div className="col-2 px-0"><b><FormattedMessage id="validation.sign.valid" defaultMessage="Valid"/></b></div>
                             <div className="col-2 px-0 text-nowrap"><b><FormattedMessage id="validation.sign.qualif" defaultMessage="Qualified"/></b></div>
                         </div>
-                        { signatures.map((sig,index) => <div key={index} className={ "row validateResult " + sig.class }>
+                        { signatures.map((sig,index) => <div key={index} className={ "row alert " + sig.class }>
                             <div className="col px-0">{sig.signer}</div>
                             <div className="col-4 px-0">{moment(sig.date).format('DD/MM/YYYY - h:mm:ss')}</div>
                             <div className="col-2 px-0">{sig.isValid ? yes : no}

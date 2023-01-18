@@ -42,15 +42,16 @@ describe("ResultContainer", () => {
                 Signature: [ { Id: "S_1", ClaimedSigningTime: "Now", ChainItem: [ { Certificate: "C_1" } ]} ],
                 Certificate: [ { Id: "C_1", CommonName: "Jeff Musk", KeyUsage: ['nonRepudiation'] } ]
              },
-            report: '<report xmlns:ns1="http://dss.esig.europa.eu/validation/detailed-report">' +
+             report: '<report xmlns:ns1="http://dss.esig.europa.eu/validation/detailed-report">' +
                         '<ns1:Signature Id="S_1">' +
-                            '<ns1:ValidationProcessBasicSignature>' +
-                                '<ns1:Conclusion><ns1:Indication>PASSED</ns1:Indication></ns1:Conclusion>' +
-                            '</ns1:ValidationProcessBasicSignature>' +
                             '<ns1:ValidationSignatureQualification SignatureQualification="QESig"/>' +
+                            '<ns1:Conclusion>' +
+                                '<ns1:Indication>TOTAL_PASSED</ns1:Indication>' +
+                            '</ns1:Conclusion>' +
                         '</ns1:Signature>' +
-                    '</report>'
-            }} />);
+                    '</report>' 
+           }} />);
+
         expect(screen.getByText('Result of the validation')).toBeInTheDocument();
         expect(screen.getByText('Jeff Musk')).toBeInTheDocument();
         expect(screen.getByText('Invalid date')).toBeInTheDocument();
@@ -66,18 +67,19 @@ describe("ResultContainer", () => {
                 Signature: [ { Id: "S_1", ClaimedSigningTime: "Now", ChainItem: [ { Certificate: "C_2" } ]}, { Id: "S_2", ClaimedSigningTime: "NotNow", ChainItem: [ { Certificate: "C_1" } ]} ],
                 Certificate: [ { Id: "C_1", CommonName: "Jeff Musk", KeyUsage: ['nonRepudiation'] }, { Id: "C_2", CommonName: "Elon Bezos", KeyUsage: ['nonRepudiation'] } ]
              },
-            report: '<report xmlns:ns1="http://dss.esig.europa.eu/validation/detailed-report">' +
+
+             report: '<report xmlns:ns1="http://dss.esig.europa.eu/validation/detailed-report">' +
                         '<ns1:Signature Id="S_1">' +
-                            '<ns1:ValidationProcessBasicSignature>' +
-                                '<ns1:Conclusion><ns1:Indication>PASSED</ns1:Indication></ns1:Conclusion>' +
-                            '</ns1:ValidationProcessBasicSignature>' +
                             '<ns1:ValidationSignatureQualification SignatureQualification="QESig"/>' +
+                            '<ns1:Conclusion>' +
+                                '<ns1:Indication>TOTAL_PASSED</ns1:Indication>' +
+                            '</ns1:Conclusion>' +
                         '</ns1:Signature>' +
                         '<ns1:Signature Id="S_2">' +
-                            '<ns1:ValidationProcessBasicSignature>' +
-                                '<ns1:Conclusion><ns1:Indication>PASSED</ns1:Indication></ns1:Conclusion>' +
-                            '</ns1:ValidationProcessBasicSignature>' +
                             '<ns1:ValidationSignatureQualification SignatureQualification="Invalid QESig"/>' +
+                            '<ns1:Conclusion>' +
+                                '<ns1:Indication>TOTAL_PASSED</ns1:Indication>' +
+                            '</ns1:Conclusion>' +
                         '</ns1:Signature>' +
                     '</report>' 
             }} />);
@@ -95,18 +97,19 @@ describe("ResultContainer", () => {
                 Signature: [ { Id: "S_1", ClaimedSigningTime: "Now", ChainItem: [ { Certificate: "C_1" } ]}, { Id: "S_2", ClaimedSigningTime: "NotNow", ChainItem: [ { Certificate: "C_1" } ]} ],
                 Certificate: [ { Id: "C_1", CommonName: "Jeff Musk", KeyUsage: ['nonRepudiation'] } ]
              },
-            report: '<report xmlns:ns1="http://dss.esig.europa.eu/validation/detailed-report">' +
+             report: '<report xmlns:ns1="http://dss.esig.europa.eu/validation/detailed-report">' +
                         '<ns1:Signature Id="S_1">' +
-                            '<ns1:ValidationProcessBasicSignature>' +
-                                '<ns1:Conclusion><ns1:Indication>PASSED</ns1:Indication></ns1:Conclusion>' +
-                            '</ns1:ValidationProcessBasicSignature>' +
                             '<ns1:ValidationSignatureQualification SignatureQualification="QESig"/>' +
+                            '<ns1:Conclusion>' +
+                                '<ns1:Indication>TOTAL_PASSED</ns1:Indication>' +
+                            '</ns1:Conclusion>' +
                         '</ns1:Signature>' +
                         '<ns1:Signature Id="S_2">' +
-                            '<ns1:ValidationProcessBasicSignature>' +
-                                '<ns1:Conclusion><ns1:Indication>FAILED</ns1:Indication><ns1:SubIndication>Miserably</ns1:SubIndication></ns1:Conclusion>' +
-                            '</ns1:ValidationProcessBasicSignature>' +
                             '<ns1:ValidationSignatureQualification SignatureQualification="Invalid QESig"/>' +
+                            '<ns1:Conclusion>' +
+                                '<ns1:Indication>TOTAL_FAILED</ns1:Indication>' +
+                                '<ns1:SubIndication>NO_CERTIFICATE_CHAIN_FOUND</ns1:SubIndication>' +
+                            '</ns1:Conclusion>' +
                         '</ns1:Signature>' +
                     '</report>' 
             }} />);
