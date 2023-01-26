@@ -61,15 +61,15 @@ const PinInputContainer = (props) => {
                     }
                 </p>
                 <ChangeAutoDownloadOption />
-                <div className="form-inline">
-                    <input type="password" className="form-control" id="input_code" data-testid="input_code" translate="no" style={{width:150, marginRight:30}}
+                <form className="form-inline" onSubmit={() => { handleSubmit(pin) }} >
+                    <input type="password" autoFocus className="form-control" id="input_code" data-testid="input_code" translate="no" style={{width:150, marginRight:30}}
                             onChange={ (e) => {
                                 var value = e.target.value;
                                 if (/^\d*$/.test(value)) setPin(value)
                                 else e.target.value = pin
                             }} />
-                    <button className={"btn btn-primary"} onClick={() => { handleSubmit(pin) }} id="button_next" disabled={pin.length < 4}><FormattedMessage id={"signing.pininput.button.sign"} defaultMessage={"Sign with eId"}/></button>
-                </div>
+                    <button type="submit" className={"btn btn-primary"} id="button_next" disabled={pin.length < 4}><FormattedMessage id={"signing.pininput.button.sign"} defaultMessage={"Sign with eId"}/></button>
+                </form>
 
                 {(pinError && pinError.message)
                     ? (
