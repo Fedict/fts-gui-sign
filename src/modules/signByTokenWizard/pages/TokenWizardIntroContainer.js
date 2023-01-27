@@ -17,7 +17,7 @@ import { signingType, signState } from '../constants';
 const messages = defineMessages({
     title: {
         id: "token.intro.title",
-        defaultMessage: "Digital signing of '{fileName}'"
+        defaultMessage: "Digital signature of '{fileName}'"
     },
     multiFileTitle: {
         id: "token.intro.multiFile.title",
@@ -46,10 +46,10 @@ const TokenWizardIntroContainer = (props) => {
                 id={props.isMultifile ? "token.intro.multiFile.txt" : "token.intro.txt"}
                 defaultMessage={props.isMultifile ?
                     "Welcome,{newLine}{newLine}You are about to sign the documents on the left.{newLine}{newLine}After reading the documents, connect your card reader to the computer, insert the eID card into the card reader and press the <b>{signButtonText}</b> button to digitally sign the documents. {newLine} {newLine} To sign the documents, enter your eID PIN code. Make sure you have it to hand."
-                    : "<b>Welcome</b>{newLine}{newLine}You are about to sign the document on the left.{newLine}{newLine}You can now insert your eID card into the card reader (make sure you know its PIN code) and then press the Start button to start signing the document."
+                    : "<b>Welcome</b> {newLine}{newLine} You are about to sign the document on the left. {newLine}{newLine} When you have read the document, connect your eID reader to your computer, insert the eID card and click <b>{signButtonText}</b> to digitally sign it.  {newLine} {newLine} You will sign the document with the PIN of your eID, please make sure that you know this PIN."
 
                 }
-                values={{ newLine: <br />, fileName: props.fileName, b: boldedText, signButtonText: <FormattedMessage id="buttons.sign" defaultMessage="sign" /> }} />
+                values={{ newLine: <br />, fileName: props.fileName, b: boldedText, signButtonText: <FormattedMessage id="buttons.sign" defaultMessage="I want to sign" /> }} />
 
             {props.tokenFile.noSignedDownloads &&
                 <FormattedMessage tagName={"p"} id="token.intro.nodownload" defaultMessage="Please note: <b>you will not be able to download</b> the signed document(s) after signing." values={{ b: boldedText }} />
@@ -62,7 +62,7 @@ const TokenWizardIntroContainer = (props) => {
                     }} className="form-check-input" id="documentReadCheckbox" data-testid="documentReadCheckbox" value={readConfirmed} defaultChecked={readConfirmed} />
                     <label className="form-check-label" htmlFor="documentReadCheckbox">
                         <FormattedMessage id={props.isMultifile ? "token.intro.check.multiFile.read" : "token.intro.check.read"}
-                            defaultMessage={props.isMultifile ? "I have read these documents" : "I have read this document."} /><sup>*</sup></label>
+                            defaultMessage={props.isMultifile ? "I have read these documents." : "I have read this document."} /><sup>*</sup></label>
                 </p>
             }
             <p>
@@ -79,7 +79,7 @@ const TokenWizardIntroContainer = (props) => {
                     }}
                     id="button_next"
                 >
-                    <FormattedMessage id="buttons.sign" defaultMessage="sign"/>
+                    <FormattedMessage id="buttons.sign" defaultMessage="I want to sign"/>
                 </button>
                 <span style={{ padding: 30 }}>&nbsp;</span>
                 <ReadCertificates getCertificates={props.getCertificates} onCertificatesRead={setCertificatesRead} />
@@ -87,16 +87,16 @@ const TokenWizardIntroContainer = (props) => {
             <hr />
             <FormattedMessage tagName={"p"}
                 id={props.isMultifile ? "token.intro.multiFile.reject" : "token.intro.reject"}
-                defaultMessage={props.isMultifile ? "<b>Don't want to sign these documents?</b>{newLine}Click <b>{rejectButtonText}</b> to reject signing the documents" :
-                    "<b>Don't want to sign this document?</b>{newLine}Click <b>{rejectButtonText}</b> to reject signing the document"}
-                values={{ b: boldedText, newLine: <br />, rejectButtonText: <FormattedMessage id="buttons.reject" defaultMessage="reject" /> }}
+                defaultMessage={props.isMultifile ? "<b>Don't want to sign these documents?</b>{newLine}Click <b>{rejectButtonText}</b> to reject signing the documents." :
+                    "<b>Don't want to sign this document?</b>{newLine}Click <b>{rejectButtonText}</b> to reject signing the document."}
+                values={{ b: boldedText, newLine: <br />, rejectButtonText: <FormattedMessage id="buttons.reject" defaultMessage="Reject" /> }}
             />
             <button
                 className="btn btn-danger text-uppercase"
                 onClick={() => { props.resetWizard() }}
                 id="button_cancel"
             >
-                <FormattedMessage id="buttons.reject" defaultMessage="reject" />
+                <FormattedMessage id="buttons.reject" defaultMessage="Reject" />
             </button>
         </CardContainer>
     );

@@ -7,7 +7,7 @@ import {definedMessages} from "../../i18n/translations";
 const messages = defineMessages({
     title: {
         id: "pinpad.error.title",
-        defaultMessage: "Pin entry error"
+        defaultMessage: "PIN entry error"
     }
 })
 

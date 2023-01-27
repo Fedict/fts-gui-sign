@@ -8,8 +8,8 @@ import {useRouter} from "../utils/useRouter";
 
 const dMessages = defineMessages({
 	windowTitle : {
-		id : 'title',
-		defaultMessage : 'BOSA - Signing Document'
+		id : "title",
+		defaultMessage : "BOSA - Signing Document"
 	}
 })
 

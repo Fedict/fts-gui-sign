@@ -62,7 +62,7 @@ export class SuccesContainer extends React.Component {
                             
                     <div className="alert alert-primary">
                     <FormattedMessage id="succes.autodownload"
-                                                      defaultMessage="Your document will be automatically downloaded. If this is not the case, you can start the download manually"
+                                                      defaultMessage="Your document will be automatically downloaded. If this is not the case, you can start the download manually."
                                                       values={{b : boldedText, newLine : <br/>, succesButtonDownload : intl.formatMessage({id : "succes.button.download", defaultMessage : "Download document"})}}
                                     />
                                     

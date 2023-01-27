@@ -35,7 +35,7 @@ export const Ticker = ({autoClickNextTimeout, onTimeout, redirectMessageDescript
     return <React.Fragment>
         {redirectMessageDescriptor && intl.formatMessage(redirectMessageDescriptor, {timeLeft : autoClickTime, clientName: clientName})}
         &nbsp;
-        {false && (<a href="#" onClick={setAbortAutoNext.bind(undefined, true)} className="text-lowercase"><FormattedMessage id="button.cancel" defaultMessage="cancel"/></a>)}
+        {false && (<a href="#" onClick={setAbortAutoNext.bind(undefined, true)} className="text-lowercase"><FormattedMessage id="button.cancel" defaultMessage="Cancel"/></a>)}
     </React.Fragment>
 
 }

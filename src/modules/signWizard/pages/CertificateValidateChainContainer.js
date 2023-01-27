@@ -25,7 +25,7 @@ export class CertificateValidateChainContainer extends React.Component {
                     cancelButtonText={intl.formatMessage(definedMessages.cancel)}
                     onClickCancel={() => { resetWizard() }}
                 >
-                    <FormattedMessage id="validate.certificate.info" defaultMessage="Validation of the certificate in progress, this operation can take some time." tagName="p"/>
+                    <FormattedMessage id="validate.certificate.info" defaultMessage="The certificate is being validated, this operation can take some time." tagName="p"/>
                 </CardLoading>
         )
     }

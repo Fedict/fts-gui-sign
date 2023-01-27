@@ -32,7 +32,7 @@ const ChangeAutoDownloadOption = (props) => {
             defaultChecked={checked}
             ref={(r) => setCheckbox(r)}
         />
-        <label className="form-check-label" htmlFor="downloadDocument"><FormattedMessage id="signing.autodownload" defaultMessage="Download document after signing"/></label>
+        <label className="form-check-label" htmlFor="downloadDocument"><FormattedMessage id="signing.autodownload" defaultMessage="Download document after signing."/></label>
     </p>
 }
 

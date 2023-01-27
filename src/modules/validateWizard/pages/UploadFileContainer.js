@@ -53,11 +53,11 @@ export class UploadFileContainer extends React.Component {
                     <div className="container" >
                         <ol className="invisibleOL">
                             <li><NumberdText number="1"><FormattedMessage id="validate.upload.text.step.1"
-                                                      defaultMessage="Select the digitally signed document (pdf or xml) by clicking on the button 'Select a document'."
+                                                      defaultMessage="Select the digitally signed document (pdf or xml) by clicking on the button <b>{selectDocumentButton}</b>."
                                                       values={{b : boldedText, selectDocumentButton : intl.formatMessage({id : "signing.upload.selectDocument", defaultMessage : "Select a document"})}}
                                                       /></NumberdText></li>
                             <li><NumberdText number="2"><FormattedMessage id="validate.upload.text.step.2"
-                                                      defaultMessage="Click on the button 'Validate' to start the validation."
+                                                      defaultMessage="Click on the button '<b>{validateButton}</b>' to start the validation."
                                                       values={{b : boldedText, validateButton : intl.formatMessage({id : "validate.upload.validateButton", defaultMessage : "Validate"})}}
                                                       /></NumberdText></li>
                         </ol>

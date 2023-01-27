@@ -4,7 +4,7 @@ import {defineMessages} from "react-intl";
 const messages = defineMessages({
     title : {
         id : 'error.certificates.not_found.title',
-        defaultMessage : "No valid Certificates found"
+        defaultMessage : "No valid certificates found."
     },
     text : {
         id : 'error.certificates.not_found.text',

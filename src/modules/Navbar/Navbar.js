@@ -13,16 +13,16 @@ import {defineMessages, injectIntl, useIntl} from "react-intl";
 
 const messages = defineMessages({
     language : {
-        id : 'language',
-        defaultMessage : 'en'
+        id : "language",
+        defaultMessage : "en"
     },
     sign : {
-        id : 'navigation.sign',
-        defaultMessage : 'Sign'
+        id : "navigation.sign",
+        defaultMessage : "Sign"
     },
     validate : {
-        id : 'navigation.validate',
-        defaultMessage : 'Validate'
+        id : "navigation.validate",
+        defaultMessage : "Validate"
     }
 })
 

@@ -39,7 +39,7 @@ export const SigningPreSignLoading = ({ certificate, resetWizard, intl, pinError
                 ? (
                     <div style={{textAlign:'left'}}>
                         <p>
-                            <FormattedMessage id="signing.presign.text" defaultMessage="Please enter the PIN {certificateName} when prompted" values={{certificateName, b : boldedText, newLine : <br/>}} />
+                            <FormattedMessage id="signing.presign.text" defaultMessage="<b>Please enter the PIN</b> for {certificateName} when prompted and click OK to sign the document." values={{certificateName, b : boldedText, newLine : <br/>}} />
                         </p>
                         <ChangeAutoDownloadOption />
                         {(pinError && pinError.message)

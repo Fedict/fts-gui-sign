@@ -11,15 +11,15 @@ import {WIZARD_STATE_UPLOAD} from "../../wizard/WizardConstants";
 const messages = defineMessages({
     title : {
         id : "extension.install.title",
-        defaultMessage : "Install eIDLink extension"
+        defaultMessage : "Install BeIDConnect extension"
     },
     next : {
         id : "extension.install.next",
-        defaultMessage : "I have installed eIDLink Extension"
+        defaultMessage : "I have installed BeIDConnect Extension"
     },
     altChromeStoreImg : {
         id : 'chrome.store.img.alt',
-        defaultMessage : "button to Chrome webstore"
+        defaultMessage : "Button to Chrome web store"
     }
 })
 export class VersionCheckInstallExtensionContainer extends React.Component {
@@ -79,10 +79,9 @@ export class VersionCheckInstallExtensionContainer extends React.Component {
                 autoClickNextTimeout={undefined}
             >
 
-                <p><FormattedMessage id="extension.install.text.1" defaultMessage="No eIDLink extension found."/></p>
-                <p><FormattedMessage id="extension.install.text.2" defaultMessage="Please install the eIDLink extension to use this application."/></p>
-                <p><FormattedMessage id="extension.install.text.3"
-                                     defaultMessage='After you installed the eIDLink extension you can come back to this page an push the "I have installed eIDLink Extension" button.'
+                <p><FormattedMessage id="extension.install.text.1" defaultMessage="No BeIDConnect extension found."/></p>
+                <p><FormattedMessage id="extension.install.text.2" defaultMessage="Please install the BeIDConnect extension to use this signing application. Each browser type needs an extension to be able to use the function of BeIDConnect optimally. You can find the extension in the web store below."/></p>
+                <p><FormattedMessage id="extension.install.text.3" defaultMessage="After you installed this extension, you can confirm this on this page by clicking on {extensionInstallNext}."
                                      values={{extensionInstallNext : intl.formatMessage(messages.next)}}
                 /></p>
 
@@ -90,7 +89,7 @@ export class VersionCheckInstallExtensionContainer extends React.Component {
                         className={this.state.extensionClicked?"btn btn-secondary":"btn btn-primary"}
                         id="button_install_eID"
                         onClick={() => { this.openExtensionLink() }}>
-                        <FormattedMessage id="extension.install.button" defaultMessage="Install eIDLink extension"/>
+                        <FormattedMessage id="extension.install.button" defaultMessage="Install BeIDConnect extension"/>
                     </button>
 
                 {process.env.NODE_ENV === 'development' &&

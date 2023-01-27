@@ -16,7 +16,7 @@ const messages = defineMessages({
     },
     next: {
         id: "signing.pininput.button.sign",
-        defaultMessage: "Sign with eId"
+        defaultMessage: "Sign with eID"
     }
 })
 
@@ -55,13 +55,13 @@ export class UploadFileContainer extends React.Component {
                     <div className="container" >
                         <ol className="invisibleOL">
                             <li><NumberdText number="1"><FormattedMessage id="signing.upload.text.step.1"
-                                                        defaultMessage="Select a document (pdf or xml) via the button 'Select a document'."
+                                                        defaultMessage="Select a document (pdf or xml) via the button <b>{selectDocumentButton}</b>."
                                                         values={{b : boldedText, selectDocumentButton : intl.formatMessage({id : "signing.upload.selectDocument", defaultMessage : "Select a document"})}}
                                                         /></NumberdText></li>
                             <li><NumberdText number="2"><FormattedMessage id="signing.upload.text.step.2" defaultMessage="Connect your eID reader."/></NumberdText></li>
                             <li><NumberdText number="3"><FormattedMessage id="signing.upload.text.step.3" defaultMessage="Insert your eID card in the card reader."/></NumberdText></li>
                             <li><NumberdText number="4"><FormattedMessage id="signing.upload.text.step.4"
-                                                        defaultMessage="Click on the button 'Sign with eID' and enter your pincode when asked."
+                                                        defaultMessage="Click on the button <b>{signButton}</b> and enter your pincode when asked."
                                                         values={{b : boldedText, signButton : intl.formatMessage({id : "signing.pininput.button.sign", defaultMessage : "Sign with eID"})}}
                                                         /></NumberdText></li>
                         </ol>

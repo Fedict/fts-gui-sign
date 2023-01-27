@@ -100,7 +100,7 @@ export const CardContainer = (
                                             {autoClickTime >= 0 && <Fragment>
                                                 <br/>
                                                 <br/>
-                                                <a href="#" onClick={() => setAbortAutoNext(true)} className="float-right"><FormattedMessage id="abort.autonext" defaultMessage="stay on this screen for a while"/></a>
+                                                <a href="#" onClick={() => setAbortAutoNext(true)} className="float-right"><FormattedMessage id="abort.autonext" defaultMessage="Stay on this screen for a while"/></a>
                                             </Fragment>}
                                         </Fragment>
                                     )

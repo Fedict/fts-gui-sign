@@ -17,7 +17,7 @@ const messages = defineMessages({
     },
     next: {
         id: "signing.pininput.button.sign",
-        defaultMessage: "Sign with eId"
+        defaultMessage: "Sign with eID"
     }
 })
 
@@ -54,7 +54,7 @@ const PinInputContainer = (props) => {
                         : <FormattedMessage
                             id={ props.isMultifile ? "signing.pininput.multiFile.text" : "signing.pininput.text" }
                             defaultMessage={ props.isMultifile ? "<b>Enter the PIN</b> and click on  <b>{signingButton}</b> to sign the documents." :
-                                "<b>Enter the PIN</b> and click on  <b>{signingButton}</b> to sign the documents." }
+                                "<b>Enter the PIN</b> and click on  <b>{signingButton}</b> to sign the document." }
                             values={{b: boldedText, newLine : <br/>, signingButton : intl.formatMessage(messages.next)
                             }}
                         />
@@ -68,7 +68,7 @@ const PinInputContainer = (props) => {
                                 if (/^\d*$/.test(value)) setPin(value)
                                 else e.target.value = pin
                             }} />
-                    <button type="submit" className={"btn btn-primary"} id="button_next" disabled={pin.length < 4}><FormattedMessage id={"signing.pininput.button.sign"} defaultMessage={"Sign with eId"}/></button>
+                    <button type="submit" className={"btn btn-primary"} id="button_next" disabled={pin.length < 4}><FormattedMessage id={"signing.pininput.button.sign"} defaultMessage={"Sign with eID"}/></button>
                 </form>
 
                 {(pinError && pinError.message)

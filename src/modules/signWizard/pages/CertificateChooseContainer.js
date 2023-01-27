@@ -45,7 +45,7 @@ export class CertificateChooseContainer extends React.Component {
                     onClickNext={() => { this.navigateToNextStep() }}
                     nextButtonIsDisabled={(certificate && !certificate.certificateSelected)}
                 >
-                    <p><FormattedMessage id="certificate.choose.text.1" defaultMessage="Multiple valid certificates are found. Please select the certificate you want to use."/></p>
+                    <p><FormattedMessage id="certificate.choose.text.1" defaultMessage="Multiple valid certificates were found. Please select the certificate you want to use."/></p>
                     <CertificateSelect
                         id="certificate_select"
                         onChange={(cert) => { this.onChange(cert) }}

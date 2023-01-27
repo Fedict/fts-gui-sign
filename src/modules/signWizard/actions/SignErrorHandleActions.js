@@ -158,13 +158,13 @@ export const showPinError = (message) => (dispatch) => {
  * enum with pin error messages shown in the pin Error
  */
 export const pinErrorText = defineMessages({
-    pin_incorrect: {id : 'pin_incorrect', defaultMessage : "PIN is incorrect"},
-    pin_too_short: {id : 'pin_too_short', defaultMessage : "PIN is to short"},
-    pin_length: {id : 'pin_length', defaultMessage : "PIN doesn't have the correct length"},
-    pin_too_long: {id : 'pin_too_long', defaultMessage : "PIN is too long"},
-    pin_2_attempts_left: {id : 'pin_2_attempts_left', defaultMessage : "PIN is incorrect : 2 attempts remaining"},
-    pin_1_attempt_left: {id : 'pin_1_attempt_left', defaultMessage : "PIN is incorrect : 1 attempt remaining"},
-    pin_timeout: {id : 'pin_timeout', defaultMessage : "entering the PIN took too long."}
+    pin_incorrect: {id : 'pin_incorrect', defaultMessage : "PIN is incorrect."},
+    pin_too_short: {id : 'pin_too_short', defaultMessage : "PIN is to short."},
+    pin_length: {id : 'pin_length', defaultMessage : "PIN doesn't have the correct length."},
+    pin_too_long: {id : 'pin_too_long', defaultMessage : "PIN is too long."},
+    pin_2_attempts_left: {id : 'pin_2_attempts_left', defaultMessage : "PIN is incorrect : 2 attempts remaining."},
+    pin_1_attempt_left: {id : 'pin_1_attempt_left', defaultMessage : "PIN is incorrect : 1 attempt remaining."},
+    pin_timeout: {id : 'pin_timeout', defaultMessage : "Entering the PIN took too long."}
 })
 
 /**

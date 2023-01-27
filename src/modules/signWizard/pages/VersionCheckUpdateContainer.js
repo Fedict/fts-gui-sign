@@ -13,7 +13,7 @@ import {definedMessages} from "../../i18n/translations";
 const messages = defineMessages({
     title : {
         id : 'eid.update.title',
-        defaultMessage : "Update eIDLink"
+        defaultMessage : "Update BeIDConnect"
     }
 })
 
@@ -99,13 +99,13 @@ export class VersionCheckUpdateContainer extends React.Component {
                 nextButtonText={intl.formatMessage(definedMessages.next)}
                 onClickNext={() => { this.handleButtonNextClick() }}
             >
-                <p><FormattedMessage id="eid.update.text.1" defaultMessage="The installed version of eIDLink is not up to date." /></p>
-                <p><FormattedMessage id="eid.update.text.2" defaultMessage="Please install the latest version of eIDLink to use this aplication"/> </p>
+                <p><FormattedMessage id="eid.update.text.1" defaultMessage="The installed version of BeIDConnect is not up to date." /></p>
+                <p><FormattedMessage id="eid.update.text.2" defaultMessage="Please install the latest version of BeIDConnect to use this singing application."/> </p>
                 {
                     (usedOs === OS.LINUX)
                         ? <EIDLinkLinuxInstall linuxDistributions={linuxDistributions} />
                         :  <button className="btn btn-primary" id="button_install_eID" onClick={() => { this.handleOnClick() }}>
-                            <FormattedMessage id="eid.button.download" defaultMessage="Download and install eIDLink" />
+                            <FormattedMessage id="eid.button.download" defaultMessage="Download and install BeIDConnect" />
                             </button>
                 }
                

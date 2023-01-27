@@ -8,8 +8,8 @@ import {getDocumentMetadataForToken} from "../actions/TokenActions";
 
 const messages = defineMessages({
     title : {
-        id : 'metadataLoading.title',
-        defaultMessage : 'Retrieving Metadata'
+        id : "metadataLoading.title",
+        defaultMessage : "Loading and checking document"
     }
 })
 

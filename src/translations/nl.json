@@ -155,7 +155,7 @@
   "token.documents.title.name": "<b>DOCUMENTVOORVERTONING:</b> {docName}",
   "validate.certificate.info": "Het certificaat wordt gevalideerd. Deze controle kan eventjes duren.",
   "validate.loading.title" : "Valideer document",
-  "validate.result.messages.chainConstraintsFailure" : "De keten van ondertekeningscertificaten  (certificaat op eID), die wordt gebruikt om dit document te ondertekenen, voldoet niet aan de validatiebeperkingen. ",
+  "validate.result.messages.chainConstraintsFailure" : "De keten van ondertekeningscertificaten  (certificaat op eID), die wordt gebruikt om dit document te ondertekenen, voldoet niet aan de validatiebeperkingen.",
   "validate.result.messages.chainGeneralFailure" : "Een of meer van de ondertekeningscertificaten (certificaat op eID) uit de certificaatketen, gebruikt om dit document te ondertekenen, geven een niet nader gespecificeerde foutmelding.",
   "validate.result.messages.cryptoConstraintsFailure" : "Het handtekeningalgoritme, of de sleutels die in het algoritme worden gebruikt, liggen onder het vereiste niveau van cryptografische beveiliging.",
   "validate.result.messages.cryptoConstraintsFailureNoPOE" : "Het handtekeningalgoritme, of de sleutels die in het algoritme worden gebruikt, liggen onder het vereiste niveau van cryptografische beveiliging.",

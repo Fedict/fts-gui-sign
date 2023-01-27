@@ -6,31 +6,31 @@ import {definedMessages, errorMessages as globalErrorMessages} from "../../i18n/
 const errorMessages = defineMessages({
     "The eId reader was removed" : {
         id : "eid.link.error.reader.removed",
-        defaultMessage : "The eId reader was removed"
+        defaultMessage : "The eID reader was removed."
     },
     "No eId reader found" : {
         id : "eid.link.error.reader.not_found.title",
-        defaultMessage : "No eId reader found"
+        defaultMessage : "No eID reader found."
     },
     "Please attach your eID reader" : {
         id : "eid.link.error.reader.not_found.text",
-        defaultMessage : "Please attach your eID reader"
+        defaultMessage : "Please attach your eID reader."
     },
     "The eId reader is not supported" : {
         id : "eid.link.error.reader.not_supported.title",
-        defaultMessage : "The eId reader is not supported"
+        defaultMessage : "This eID reader is not supported."
     },
     "This application doesn't support this eID reader type" : {
         id : "eid.link.error.reader.not_supported.text",
-        defaultMessage : "This application doesn't support this eID reader type"
+        defaultMessage : "This application doesn't support this eID reader type."
     },
     "The eId card was removed" : {
         id : "eid.link.error.card.removed",
-        defaultMessage : "The eId card was removed"
+        defaultMessage : "The eID card was removed."
     },
     "No eId card found" : {
         id : "eid.link.error.card.not_found.title",
-        defaultMessage : "No eId card found"
+        defaultMessage : "No eID card found."
     },
     "Please insert your eID card" : {
         id : "eid.link.error.card.not_found.text",

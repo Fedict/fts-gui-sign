@@ -46,16 +46,16 @@ import {defaults} from "../utils/helper";
 
 const messages = defineMessages({
     tokenStep1 : {
-        id : 'sign.token.1',
-        defaultMessage : 'Preparation'
+        id : "sign.token.1",
+        defaultMessage : "Read and connect eID"
     },
     tokenStep2 : {
-        id : 'sign.token.2',
-        defaultMessage : 'Enter PIN code'
+        id : "sign.token.2",
+        defaultMessage : "Enter PIN  and sign"
     },
     tokenStep4 : {
-        id : 'sign.token.4',
-        defaultMessage : 'Ready'
+        id : "sign.token.4",
+        defaultMessage : "Ready"
     }
 })
 

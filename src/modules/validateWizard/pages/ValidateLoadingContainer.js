@@ -7,7 +7,7 @@ import {definedMessages} from "../../i18n/translations";
 const messages = defineMessages({
     title: {
         id: "validate.loading.title",
-        defaultMessage: "Validating document"
+        defaultMessage: "Validate document"
     }
 })
 

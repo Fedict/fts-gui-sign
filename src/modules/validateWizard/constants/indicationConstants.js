@@ -3,19 +3,19 @@ export const indication = {
     TOTAL_PASSED: {
         key: "TOTAL_PASSED",
         className: "alert-success",
-        message: "The signature in the document passed the validate.",
+        message: "The signature in the document passed the validation.",
         id: "validate.result.messages.passed"
     },
     TOTAL_FAILED: {
         key: "TOTAL_FAILED",
         className: "alert-danger",
-        message: "Signature failed the validation",
+        message: "The signature cannot be validated.",
         id: "validate.result.messages.totalFailed"
     },
     INDETERMINATE: {
         key: "INDETERMINATE",
         className: "alert-warning",
-        message: "There was insufficient information to determine if the electronic signature is valid",
+        message: "There was insufficient information to determine if the digital signature is valid.",
         id: "validate.result.messages.indeterminate"
     },
 }
@@ -27,13 +27,13 @@ export const subIndication =
     FORMAT_FAILURE: {
         key: "FORMAT_FAILURE",
         className: "alert-danger",
-        message: "The signature is not the right format. validation was unable to process it.",
+        message: "The signature in this document doesn't have the right format. The validation tool was unable to process the signature.",
         id: "validate.result.messages.formatFailure"
     },
     HASH_FAILURE: {
         key: "HASH_FAILURE",
         className: "alert-danger",
-        message: "At least one hash of the signed document does not match the corresponding hash value in the signature.",
+        message: "At least one hash of the signed document (algorithm) does not match the corresponding hash value (algorithm) in the signature.",
         id: "validate.result.messages.hashFailure"
     },
     SIG_CRYPTO_FAILURE: {
@@ -45,7 +45,7 @@ export const subIndication =
     REVOKED: {
         key: "REVOKED",
         className: "alert-danger",
-        message: "The signing certificate has been revoked. The signature has been created after the revocation time.",
+        message: "The signing certificate (certificate on eID) used to sign this document was already revoked when signing the document.",
         id: "validate.result.messages.rekoved"
     },
     SIG_CONSTRAINTS_FAILURE: {
@@ -57,85 +57,85 @@ export const subIndication =
     CHAIN_CONSTRAINTS_FAILURE: {
         key: "CHAIN_CONSTRAINTS_FAILURE",
         className: "alert-warning",
-        message: "The certificate chain used in the validation process does not match the validation constraints.",
+        message: "The signing certificate chain (certificate on eID) used to sign this document does not meet the validation constraints.",
         id: "validate.result.messages.chainConstraintsFailure"
     },
     CERTIFICATE_CHAIN_GENERAL_FAILURE: {
         key: "CERTIFICATE_CHAIN_GENERAL_FAILURE",
         className: "alert-warning",
-        message: "The set of certificates available for chain validation produced an unspecified error.",
+        message: "One or more of the signing certificates (certificate on eID) found in the certificate chain used to sign this document produce an unspecified error.",
         id: "validate.result.messages.chainGeneralFailure"
     },
     CRYPTO_CONSTRAINTS_FAILURE: {
         key: "CRYPTO_CONSTRAINTS_FAILURE",
         className: "alert-warning",
-        message: "A algorithm used in the signature, or the size of a key used with the algorithm, is below the required cryptographic security level.",
+        message: "The signature algorithm or the keys used in the algoritm are below the required cryptographic security level.",
         id: "validate.result.messages.cryptoConstraintsFailure"
     },
     EXPIRED: {
         key: "EXPIRED",
         className: "alert-warning",
-        message: "The signature has been created after the expiration date of the signing certificate.",
+        message: "The signature seems to be created after the expiration date of the used signing certificate (certificate on eID).",
         id: "validate.result.messages.expired"
     },
     NOT_YET_VALID: {
         key: "NOT_YET_VALID",
         className: "alert-warning",
-        message: "The signing time lies before the issuance date (notBefore) of the signing certificate.",
+        message: "The time of signature of the document is before the date of issue of the used signing certificate (certificate on eID).",
         id: "validate.result.messages.notYetValid"
     },
     POLICY_PROCESSING_ERROR: {
         key: "POLICY_PROCESSING_ERROR",
         className: "alert-warning",
-        message: "A given formal policy file could not be processed.",
+        message: "The formal file with details about the used signature policy cannot be processed during the validation process.",
         id: "validate.result.messages.policyProcessingError"
     },
     SIGNATURE_POLICY_NOT_AVAILABLE: {
         key: "SIGNATURE_POLICY_NOT_AVAILABLE",
         className: "alert-warning",
-        message: "The electronic document containing the details of the policy is not available.",
+        message: "The electronic file with details about the signature policy is not available for the validation process.",
         id: "validate.result.messages.signaturePolicyNotAvailable"
     },
     TIMESTAMP_ORDER_FAILURE: {
         key: "TIMESTAMP_ORDER_FAILURE",
         className: "alert-warning",
-        message: "A constraint on the order of signature time-stamps and/or signed data time-stamps is not respected.",
+        message: "When signing a document one or more time stamps are added to register the official time and/or form of the signature. In this document the constraint on the order of the time stamps does not appear to be respected. ",
         id: "validate.result.messages.timestampOrderFailure"
     },
     NO_SIGNING_CERTIFICATE_FOUND: {
         key: "NO_SIGNING_CERTIFICATE_FOUND",
         className: "alert-warning",
-        message: "The signing certificate cannot be identified.",
+        message: "The signing certificate (certificate on eID) used to sign this document cannot be identified.",
         id: "validate.result.messages.noSigningCertificateFound"
     },
     NO_CERTIFICATE_CHAIN_FOUND: {
         key: "NO_CERTIFICATE_CHAIN_FOUND",
         className: "alert-warning",
-        message: "No certificate chain found.",
+        message: "The signing certificate (certificate on eID) used to sign this document cannot be found.",
         id: "validate.result.messages.noChainFound"
     },
     REVOKED_NO_POE: {
         key: "REVOKED_NO_POE",
         className: "alert-warning",
-        message: "The signing certificate was revoked.",
+        message: "The signing certificate (certificate on eID) used to sign this document has been revoked.",
         id: "validate.result.messages.rekovedNoPOE"
     },
     REVOKED_CA_NO_POE: {
         key: "REVOKED_CA_NO_POE",
         className: "alert-warning",
-        message: "A certificate chain was found but an intermediate CA certificate is revoked.",
+        message: "One of the signing certificates (intermediate CA certificate), found in the certificate chain used to sign this document has been revoked.",
         id: "validate.result.messages.rekovedCANoPOE"
     },
     OUT_OF_BOUNDS_NO_POE: {
         key: "OUT_OF_BOUNDS_NO_POE",
         className: "alert-warning",
-        message: "The signing certificate is expired or not yet valid at the validation date/time.",
+        message: "The signing certificate (certificate on eID) used to sign this document has expired or is not yet valid.",
         id: "validate.result.messages.outOfBoundsNoPOE"
     },
     CRYPTO_CONSTRAINTS_FAILURE_NO_POE: {
         key: "CRYPTO_CONSTRAINTS_FAILURE_NO_POE",
         className: "alert-warning",
-        message: "An algorithm that has been used in the document, or the size of a key used with such an algorithm, is below the required cryptographic security level.",
+        message: "The signature algorithm or the keys used in the algoritm appear to be below the required cryptographic security level.",
             id: "validate.result.messages.cryptoConstraintsFailureNoPOE"
     },
     NO_POE: {
@@ -147,7 +147,7 @@ export const subIndication =
     TRY_LATER: {
         key: "TRY_LATER",
         className: "alert-warning",
-        message: "Not all constraints can be fulfilled using available information.",
+        message: "Not enough signature information is available to check all constraints.",
         id: "validate.result.messages.tryLater"
     },
     SIGNED_DATA_NOT_FOUND: {

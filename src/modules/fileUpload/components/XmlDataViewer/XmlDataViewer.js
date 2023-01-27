@@ -5,12 +5,12 @@ import XMLViewer from "react-xml-viewer";
 
 const messages = defineMessages({
     downloadTitle : {
-        id : 'xmlpreview.button.download',
-        defaultMessage : 'Download original xml'
+        id : "xmlpreview.button.download",
+        defaultMessage : "Download original xml"
     },
     printTitle : {
-        id : 'xmlpreview.button.print',
-        defaultMessage : 'Print'
+        id : "xmlpreview.button.print",
+        defaultMessage : "Print"
     }
 })
 
@@ -64,7 +64,7 @@ const XmlDataViewer = (props) => {
             (
                 props.previewErrorRenderer?
                     props.previewErrorRenderer():
-                <FormattedMessage id="xmlpreview.error" defaultMessage="Couldn't create the preview of the document to sign"/>
+                <FormattedMessage id="xmlpreview.error" defaultMessage="Couldn't create the preview of the document to sign."/>
             )
         :(loading?
                 <FormattedMessage id="xmlpreview.loading" defaultMessage="Loading the preview of the document..."/>

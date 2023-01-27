@@ -26,15 +26,15 @@ export const EIDLinkLinuxInstall = (injectIntl(({ linuxDistributions, intl }) =>
                     <li><NumberdText number={"1"}>
                         <FormattedMessage
                             id="beidconnect.linux.step.1"
-                            defaultMessage={'Install the \'beidconnect-archive\' package so the "beidconnect" package repository becomes available'}
+                            defaultMessage={"Please install the <b>BeIDConnect</b> package to use this signing application. After installation, the signature application can securely connect to your card reader and eID.{newLine}{newLine}By installing and using BeIDConnect, you agree to the software license.{newLine} <b>{licenseLink}</b> {newLine}{newLine} Install the 'beidconnect-archive' package so the 'beidconnect' package repository becomes available."}
                             values={{b : boldedText, newLine : <br />, licenseLink :
                                     <a href={"#"} onClick={setShowLicense.bind(undefined, true)}>
-                                        <FormattedMessage id="beidconnect.linux.license.link" defaultMessage=""/>
+                                        <FormattedMessage id="beidconnect.linux.license.link" defaultMessage="Read the BeIDConnect software license"/>
                                     </a>}}
 
                         />
                     </NumberdText></li>
-                    <li><NumberdText number={"2"}><FormattedMessage id="beidconnect.linux.step.2" defaultMessage={"Install the 'beidconnect' package in the usual way for your distribution. This may require you to first perform an update of the indexes (e.g. using \"apt-get update\")."}/> </NumberdText></li>
+                    <li><NumberdText number={"2"}><FormattedMessage id="beidconnect.linux.step.2" defaultMessage="Install the 'beidconnect' package in the usual way for your distribution. This may require you to first perform an update of the indexes (e.g. using 'apt-get update')."/> </NumberdText></li>
                 </ol>
             </div>
             <div className="col">

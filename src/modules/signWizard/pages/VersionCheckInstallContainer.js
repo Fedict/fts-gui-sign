@@ -11,11 +11,11 @@ import {defaults} from "../../utils/helper";
 const messages = defineMessages({
     title : {
         id : 'eid.install.title',
-        defaultMessage : "Install eIDLink"
+        defaultMessage : "Install BeIDConnect"
     },
     next : {
         id : 'eid.install.next',
-        defaultMessage : "I have installed eIDLink"
+        defaultMessage : "I have installed BeIDConnect"
     }
 })
 export class VersionCheckInstallContainer extends React.Component {
@@ -78,13 +78,13 @@ export class VersionCheckInstallContainer extends React.Component {
                 onClickNext={() => { this.handleButtonNextClick() }}
                 nextButtonIsDisabled={!this.state.installButtonClicked && usedOs !== OS.LINUX}
             >
-                <p><FormattedMessage id="eid.install.text.1" defaultMessage="No eIDLink is found"/></p>
-                <p><FormattedMessage id="eid.install.text.2" defaultMessage="Please install eIDLink to use this application"/></p>
+                <p><FormattedMessage id="eid.install.text.1" defaultMessage="No BeIDConnect was found"/></p>
+                <p><FormattedMessage id="eid.install.text.2" defaultMessage="Please install BeIDConnect to use this signing application. After installation, the signature application can securely connect to your card reader and eID."/></p>
 
                 {
                     (usedOs === OS.LINUX)
                         ? <EIDLinkLinuxInstall linuxDistributions={linuxDistributions} />
-                        : <button className={this.state.installButtonClicked?"btn btn-secondary":"btn btn-primary"} id="button_install_eID" onClick={() => { this.handleOnClick() }}><FormattedMessage id="eid.button.download" defaultMessage="Download and install eIDLink" /></button>
+                        : <button className={this.state.installButtonClicked?"btn btn-secondary":"btn btn-primary"} id="button_install_eID" onClick={() => { this.handleOnClick() }}><FormattedMessage id="eid.button.download" defaultMessage="Download and install BeIDConnect" /></button>
                 }
             </CardContainer>
         )

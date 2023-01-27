@@ -7,7 +7,7 @@ import {definedMessages} from "../../i18n/translations";
 const messages = defineMessages({
     title: {
         id: "signing.loading.title",
-        defaultMessage: "Sign document"
+        defaultMessage: "Digitally Sign Document"
     }
 })
 export const SigningLoadingContainer = ({ resetWizard, intl }) => {
