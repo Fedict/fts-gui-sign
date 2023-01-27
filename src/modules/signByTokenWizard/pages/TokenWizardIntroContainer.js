@@ -17,7 +17,7 @@ import { signingType, signState } from '../constants';
 const messages = defineMessages({
     title: {
         id: "token.intro.title",
-        defaultMessage: "Digital signature of '{fileName}'"
+        defaultMessage: "Digital signature of {fileName}"
     },
     multiFileTitle: {
         id: "token.intro.multiFile.title",
