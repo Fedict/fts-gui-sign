@@ -9,8 +9,6 @@ import { WIZARD_STATE_VALIDATE_LOADING } from "../../wizard/WizardConstants";
 import { definedMessages } from "../../i18n/translations";
 import { boldedText } from "../../utils/reactIntlUtils";
 import { ReadCertificates } from "../../components/ReadCertificates/ReadCertificates";
-import { doWithToken } from "../../utils/helper";
-import { sendLogInfoIgnoreResult } from "../../communication/communication";
 import { setPreview, setInputsSignState, setPreviewFileId } from "../../signByTokenWizard/actions/TokenActions"
 import { signingType, signState } from '../constants';
 
