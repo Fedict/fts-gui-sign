@@ -28,6 +28,8 @@
   "eid.install.text.1": "Geen BeIDConnect gevonden.",
   "eid.install.text.2": "Installeer BeIDConnect om deze handtekenapplicatie te gebruiken. Na de installatie kan de handtekenapplicatie veilig de verbinding maken met je kaartlezer en eID.",
   "eid.install.title": "Installeer BeIDConnect",
+  "eid.link.error.card.busy": "The eId card is busy",
+  "eid.link.error.card.busy2": "The eId card is currently in used by an other application. Complete eId card operation on the other application before retying.",
   "eid.link.error.card.blocked": "De pincode is onjuist: geen poging meer mogelijk. De eID-kaart is geblokkeerd.",
   "eid.link.error.card.not_found.text": "Voer de eID-kaart in.",
   "eid.link.error.card.not_found.title": "Geen eID-kaart gevonden",
