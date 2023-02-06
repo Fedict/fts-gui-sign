@@ -26,9 +26,9 @@ import {definedMessages} from "../i18n/translations";
 const MessageContainer = ({ message, messageInStore, navigateToStep, onCancel,  doSendLogInfo }) => {
     const intl = useIntl();
     const handleButtonNextClick = () => {
-        if (message && message.nextButton && message.nextButton.nextPage) {
+        if (shownMessage && shownMessage.nextButton && shownMessage.nextButton.nextPage) {
             doSendLogInfo('UI - RETRY_BUTTON CLICKED');
-            navigateToStep(message.nextButton.nextPage)
+            navigateToStep(shownMessage.nextButton.nextPage)
         }
 
     }
