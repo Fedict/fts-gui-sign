@@ -144,7 +144,7 @@ describe('TokenWizardContainer', () => {
                 fireEvent.keyUp(inputCode, {key: '1', code: 'NumPad1'});
             }
 
-            const signButton = screen.getByRole('button', {name: /Sign with eid/i})
+            const signButton = screen.getByRole('button', {name: /Sign with eID/i})
             expect(signButton).toBeEnabled();
             signButton.click();
 
@@ -307,7 +307,7 @@ describe('TokenWizardContainer', () => {
                 fireEvent.keyUp(inputCode, {key: '1', code: 'NumPad1'});
             }
 
-            const signButton = screen.getByRole('button', {name: /Sign with eid/i})
+            const signButton = screen.getByRole('button', {name: /Sign with eID/i})
             expect(signButton).toBeEnabled();
             signButton.click();
 
@@ -422,7 +422,7 @@ describe('TokenWizardContainer', () => {
                 fireEvent.keyUp(inputCode, { key: '0', code: 'NumPad0' });
             }
 
-            const signButton = screen.getByRole('button', {name: /Sign with eid/i})
+            const signButton = screen.getByRole('button', {name: /Sign with eID/i})
             expect(signButton).toBeEnabled();
             signButton.click();
         })
