@@ -39,8 +39,15 @@ const errorMessages = defineMessages({
     "Something went wrong" : {
         id : "eid.link.error.general.title",
         defaultMessage : "Something went wrong"
-    }
-})
+    },
+    "The eId card is busy" : {
+        id : "eid.link.error.card.busy",
+        defaultMessage : "The eId card is busy"
+    },
+    "The eId card is in use by an other application" : {
+        id : "eid.link.error.card.busy2",
+        defaultMessage : "The eId card is in use by an other application"
+    }})
 
 const errorRefs = {
     BEID_CONNECT_ERROR : 'BEID_CONNECT_ERROR',
@@ -49,6 +56,7 @@ const errorRefs = {
     SIGNATURE_FAILED: 'SIGNATURE_FAILED',
     CARD_BLOCKED : 'CARD_BLOCKED',
     CARD_ERROR : 'CARD_ERROR',
+    CARD_BUSY : 'CARD_BUSY',
     USER_CANCELLED : 'USER_CANCELLED'
 }
 
@@ -121,4 +129,14 @@ export const Error_EID_card_blocked = {
 export const Error_EID_signature_failed = {
     ...createError(errorMessages["Something went wrong"], globalErrorMessages.BEID_CONNECT_ERROR),
     err : errorRefs.SIGNATURE_FAILED
+}
+
+export const Error_EID_card_busy = {
+    ...createError(errorMessages["The eId card is busy"], errorMessages["The eId card is in use by an other application"]),
+    nextButton: {
+        text: definedMessages.retry,
+        isVisible: true,
+        nextPage: WIZARD_STATE_CERTIFICATES_LOADING
+    },
+    err : errorRefs.CARD_BUSY
 }

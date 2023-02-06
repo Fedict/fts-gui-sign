@@ -28,6 +28,8 @@
   "eid.install.text.1": "BeIDConnect n'a pas été trouvé.",
   "eid.install.text.2": "Veuillez installer BeIDConnect pour utiliser cette application de signature. Après son installation, l'application de signature pourra se connecter en toute sécurité à votre lecteur de cartes et à votre carte eID.",
   "eid.install.title": "Installez le BeIDConnect",
+  "eid.link.error.card.busy": "The eId card is busy",
+  "eid.link.error.card.busy2": "The eId card is currently in used by an other application. Complete eId card operation on the other application before retying.",
   "eid.link.error.card.blocked": "Le code PIN est incorrect: vous ne disposez plus de tentatives. La carte eID a été bloquée.",
   "eid.link.error.card.not_found.text": "Veuillez insérer votre carte eID.",
   "eid.link.error.card.not_found.title": "Aucune carte eID trouvée.",

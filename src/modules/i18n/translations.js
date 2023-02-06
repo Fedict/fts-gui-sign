@@ -33,6 +33,10 @@ export const errorMessages = defineMessages({
         id : "eid.link.error.card.blocked",
         defaultMessage : "PIN is incorrect: no attempts left. The eID card is blocked."
     },
+    CARD_BUSY : {
+        id : "eid.link.error.card.busy",
+        defaultMessage : "The eId card is busy"
+    },
     failedToFetchMetadata: {
         id: "error.METADATA_FETCH",
         defaultMessage: "Failed to fetch the metadata of the document."

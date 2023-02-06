@@ -60,7 +60,6 @@ export const CardContainer = (
     }, [autoClickTime, abortAutoNext])
     useEffect(() => {
         if (window && window.document){
-            console.log("title", title)
             if (title && title.length > 0){
                 document.title = "BOSA - " + title;
             }

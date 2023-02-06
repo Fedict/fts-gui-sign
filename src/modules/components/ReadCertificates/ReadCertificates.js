@@ -19,7 +19,7 @@ export const ReadCertificates = (props) => {
             setInProgress(false);
             if(result && result.message){
                 seteIDReadingMessage(result.message);
-                setTimeout(setRetryCounter.bind(undefined, retryCounter + 1), 2000);
+                setTimeout(setRetryCounter.bind(undefined, retryCounter + 1), 5000);
             }
             if(result === true){
                 if(typeof props.onCertificatesRead === 'function'){

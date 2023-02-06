@@ -187,7 +187,7 @@ export const checkVersion = (isErrorCheck) => (dispatch, getStore) => {
 
     let eIDLink = controller.getNewInstance()
 
-    const requestId = dispatch(createRequestId(4000, requestTimeOutFunctionChecVersion))
+    const requestId = dispatch(createRequestId(5000, requestTimeOutFunctionChecVersion))
 
     eIDLink.getVersion(window.configData.eIDLinkMinimumVersion,
         (installedVersion) => {
@@ -440,7 +440,7 @@ export const validateCertificateChain = () => (dispatch, getStore) => {
         && certificate.certificateSelected.certificate) {
         const usedCertificate = certificate.certificateSelected.certificate
 
-        const requestId = dispatch(createRequestId(15000, requestTimeoutFunction))
+        const requestId = dispatch(createRequestId(20000, requestTimeoutFunction))
         const flowId = getStore().controlId.flowId
 
         eIDLink.getCertificateChain(
@@ -654,9 +654,9 @@ export const sign = (pin) => (dispatch, getStore) => {
         const u_digest = digest.digest
         const algo = digest.digestAlgorithm
 
-        let timeoutTime = 10000
+        let timeoutTime = 20000
         if (certificate.certificateSelected.readerType === "pinpad") {
-            timeoutTime = 30000
+            timeoutTime = 60000
         }
 
         const requestId = dispatch(createRequestId(timeoutTime, requestTimeoutFunction))

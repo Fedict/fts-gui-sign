@@ -7,7 +7,8 @@ import {
     Error_EID_no_reader_NotInSession,
     Error_EID_card_error,
     Error_EID_card_blocked,
-    Error_EID_signature_failed
+    Error_EID_signature_failed,
+    Error_EID_card_busy
 } from "../messages/ErrorsEIDLink";
 import { navigateToPinError, resetWizard } from "./WizardLogicActions";
 import { ErrorGeneral } from "../../message/MessageConstants";
@@ -23,6 +24,7 @@ export const errorStatuses = {
     no_reader: "no_reader",
     unsupported_reader: "unsupported_reader",
     no_card: "no_card",
+    busy: "busy",
     card_error: "card_error",
     pin_incorrect: "pin_incorrect",
     pin_too_short: "pin_too_short",
@@ -98,6 +100,9 @@ export const handleErrorEID = (error, isInSession, token, callback) => (dispatch
         case errorStatuses.card_error:
             message = (Error_EID_card_error);
             reportError = true;
+            break;
+        case errorStatuses.busy:
+            message = (Error_EID_card_busy);
             break;
         case errorStatuses.signature_failed:
             message = (Error_EID_signature_failed);
