@@ -139,7 +139,10 @@ describe('TokenWizardContainer', () => {
             console.log("ENTER PIN")
 
             const inputCode = screen.getByTestId('input_code');
-            fireEvent.change(inputCode, {target: {value: '0000' }});
+            for (let i = 1; i <= 4; i++) {
+                fireEvent.keyDown(inputCode, {key: '1', code: 'NumPad1'});
+                fireEvent.keyUp(inputCode, {key: '1', code: 'NumPad1'});
+            }
 
             const signButton = screen.getByRole('button', {name: /Sign with eid/i})
             expect(signButton).toBeEnabled();
@@ -299,7 +302,10 @@ describe('TokenWizardContainer', () => {
             downloadDocumentCB.click();
 
             const inputCode = screen.getByTestId('input_code');
-            fireEvent.change(inputCode, {target: {value: '0000' }});
+            for (let i = 1; i <= 4; i++) {
+                fireEvent.keyDown(inputCode, {key: '1', code: 'NumPad1'});
+                fireEvent.keyUp(inputCode, {key: '1', code: 'NumPad1'});
+            }
 
             const signButton = screen.getByRole('button', {name: /Sign with eid/i})
             expect(signButton).toBeEnabled();
@@ -411,14 +417,17 @@ describe('TokenWizardContainer', () => {
 
         wait(() => (lastLogMessage.indexOf('WIZARD_STATE_PIN_INPUT') > -1), async () => {
             const inputCode = screen.getByTestId('input_code');
-            fireEvent.change(inputCode, {target: {value: '0000' }});
+            for(let i = 1; i <= 4; i++){
+                fireEvent.keyDown(inputCode, { key: '0', code: 'NumPad0' });
+                fireEvent.keyUp(inputCode, { key: '0', code: 'NumPad0' });
+            }
 
             const signButton = screen.getByRole('button', {name: /Sign with eid/i})
             expect(signButton).toBeEnabled();
             signButton.click();
         })
 
-        //expect(await screen.findByText(/Your document will be automatically downloaded./i)).toBeInTheDocument();
+        expect(await screen.findByText(/Your document will be automatically downloaded./i)).toBeInTheDocument();
 
         //expect(lastLogMessage.indexOf('WIZARD_STATE_PIN_INPUT') > -1).toBeTruthy();
 
