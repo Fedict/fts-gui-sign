@@ -30,10 +30,6 @@ const MessageContainer = ({ message, messageInStore, navigateToStep, onCancel,  
             doSendLogInfo('UI - RETRY_BUTTON CLICKED');
             navigateToStep(shownMessage.nextButton.nextPage)
         }
-        if (messageInStore && messageInStore.nextButton && messageInStore.nextButton.nextPage) {
-            doSendLogInfo('UI - RETRY_BUTTON CLICKED');
-            navigateToStep(messageInStore.nextButton.nextPage)
-        }
     }
 
     let shownMessage = {}

@@ -461,7 +461,7 @@ describe("WizardLogicActions", () => {
 
             checkVersion(false)(mockDispatch)
             expect(RequestIdActions.createRequestId).toBeCalledTimes(1)
-            expect(RequestIdActions.createRequestId).toBeCalledWith(4000, expect.any(Function))
+            expect(RequestIdActions.createRequestId).toBeCalledWith(5000, expect.any(Function))
             expect(mockDispatch).toBeCalledTimes(1)
             expect(mockCheckVersion).toBeCalledTimes(1)
         })
@@ -1399,7 +1399,7 @@ describe("WizardLogicActions", () => {
             validateCertificateChain()(mockDispatch, mockGetStore)
             await flushPromises()
             expect(RequestIdActions.createRequestId).toBeCalledTimes(1)
-            expect(RequestIdActions.createRequestId).toBeCalledWith(15000, requestTimeoutFunction)
+            expect(RequestIdActions.createRequestId).toBeCalledWith(20000, requestTimeoutFunction)
         })
 
         test("validateCertificateChain success calls handleFlowIdError", async () => {
@@ -2196,7 +2196,7 @@ describe("WizardLogicActions", () => {
             const pin = 5632
 
             sign(pin)(mockDispatch, mockGetStore)
-            expect(createRequestId).toBeCalledWith(30000, expect.any(Function))
+            expect(createRequestId).toBeCalledWith(60000, expect.any(Function))
 
         })
 
@@ -2221,7 +2221,7 @@ describe("WizardLogicActions", () => {
             const pin = 5632
 
             sign(pin)(mockDispatch, mockGetStore)
-            expect(createRequestId).toBeCalledWith(10000, expect.any(Function))
+            expect(createRequestId).toBeCalledWith(20000, expect.any(Function))
         })
 
         test("sign calls BeIDConnect sign", () => {
