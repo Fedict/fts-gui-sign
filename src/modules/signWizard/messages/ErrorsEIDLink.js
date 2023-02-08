@@ -40,13 +40,13 @@ const errorMessages = defineMessages({
         id : "eid.link.error.general.title",
         defaultMessage : "Something went wrong"
     },
-    "The eId card is busy" : {
+    "eID card temporarily unavailable" : {
         id : "eid.link.error.card.busy",
-        defaultMessage : "The eId card is busy"
+        defaultMessage : "eID card temporarily unavailable"
     },
-    "The eId card is in use by an other application" : {
+    "Our service can’t reach your eID card because it is being used by another service on your computer. Please close the service or end the process and try again." : {
         id : "eid.link.error.card.busy2",
-        defaultMessage : "The eId card is in use by an other application"
+        defaultMessage : "Our service can’t reach your eID card because it is being used by another service on your computer. Please close the service or end the process and try again."
     }})
 
 const errorRefs = {
@@ -132,7 +132,7 @@ export const Error_EID_signature_failed = {
 }
 
 export const Error_EID_card_busy = {
-    ...createError(errorMessages["The eId card is busy"], errorMessages["The eId card is in use by an other application"]),
+    ...createError(errorMessages["eID card temporarily unavailable"], globalErrorMessages.CARD_BUSY2),
     nextButton: {
         text: definedMessages.retry,
         isVisible: true,

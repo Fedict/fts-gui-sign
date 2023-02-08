@@ -35,7 +35,11 @@ export const errorMessages = defineMessages({
     },
     CARD_BUSY : {
         id : "eid.link.error.card.busy",
-        defaultMessage : "The eId card is busy"
+        defaultMessage : "eID card temporarily unavailable"
+    },
+    CARD_BUSY2 : {
+        id : "eid.link.error.card.busy2",
+        defaultMessage : "Our service can’t reach your eID card because it is being used by another service on your computer. Please close the service or end the process and try again."
     },
     failedToFetchMetadata: {
         id: "error.METADATA_FETCH",
