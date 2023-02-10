@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux';
 import { CardContainer } from '../../components/Card/CardContainer';
 import { resetWizard } from '../actions/WizardLogicActions';
-import { indication, subIndication } from '../constants/indicationConstants';
+import { subIndication } from '../constants/indicationConstants';
 import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
 import { saveAs } from 'file-saver';
 import moment from "moment";
@@ -111,7 +111,7 @@ export class ResultContainer extends React.Component {
                             <div className="col-2 px-0">{sig.isQualified ? yes : no }</div>
                         </div> )}
                     </div> : <div className="text-center">
-                        <div className="alert alert-warning">
+                        <div className="alert alert-warning" role="alert">
                             <FormattedMessage id='validate.result.messages.noSignature' defaultMessage="No signature could be found in the document." />
                         </div>
                     </div> }

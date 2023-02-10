@@ -178,7 +178,7 @@ const PinInputContainer = (props) => {
                 {(pinError && pinError.message)
                     ? (
                         <div className="text-center" style={{marginTop : 10}}>
-                            <div className="alert alert-danger">
+                            <div className="alert alert-danger" role="alert">
                                 {pinError.message.id?intl.formatMessage(pinError.message):pinError.message}
                             </div>
                         </div>)
