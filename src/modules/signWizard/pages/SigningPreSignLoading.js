@@ -45,7 +45,7 @@ export const SigningPreSignLoading = ({ certificate, resetWizard, intl, pinError
                         {(pinError && pinError.message)
                             ? (
                                 <div className="text-center">
-                                    <div className="alert alert-danger">
+                                    <div className="alert alert-danger" role="alert">
                                         {pinError.message.id?intl.formatMessage(pinError.message):pinError.message}
                                     </div>
                                 </div>)

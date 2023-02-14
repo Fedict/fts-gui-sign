@@ -52,7 +52,7 @@ export const CardError = injectIntl((
             nextButtonIsDisabled={nextButtonIsDisabled}
         >
             <div className="text-center">
-                <div className="alert alert-danger">
+                <div className="alert alert-danger" role="alert" >
                     {text && text.id?intl.formatMessage(text):text}
                 </div>
                 {children}

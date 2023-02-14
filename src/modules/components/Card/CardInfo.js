@@ -41,7 +41,7 @@ export const CardInfo = (
             nextButtonIsDisabled={nextButtonIsDisabled}
         >
             <div className="text-center">
-                <div className="alert alert-info">
+                <div className="alert alert-info" role="alert">
                     {text}
                 </div>
                 {children}

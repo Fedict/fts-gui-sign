@@ -27,6 +27,8 @@ export class UploadFileContainer extends React.Component {
         this.state = {
             file: {}
         }
+
+        this.pickFileBtnRef = React.createRef();
     }
 
     onchange(e) {
@@ -37,6 +39,10 @@ export class UploadFileContainer extends React.Component {
     handleSubmit() {
         this.props.uploadFile(this.state.file)
         this.props.navigateToStep(WIZARD_STATE_VALIDATE_LOADING)
+    }
+
+    componentDidMount() {
+        if (this.state.file === undefined || this.state.file.name === undefined) this.pickFileBtnRef.current.focus();
     }
 
     render() {
@@ -74,6 +80,7 @@ export class UploadFileContainer extends React.Component {
                                                 onClick={() => {
                                                     document.getElementById('input_hidden_select_file').click()
                                                 }}
+                                                ref={ this.pickFileBtnRef }
                                             > <FormattedMessage id="signing.upload.selectDocument" defaultMessage="Select a document"/> </button>
 
                                             <input
@@ -95,7 +102,7 @@ export class UploadFileContainer extends React.Component {
                                         <div className="col col-auto align-self-center ">
                                             <p className="btn m-0" >
                                             <i>
-                                            <FormattedMessage id="signing.upload.selectedDocument" defaultMessage="Selected document:"/>
+                                                <FormattedMessage id="signing.upload.selectedDocument" defaultMessage="Selected document:"/>
                                                  <span id='name_select_file'> {(this.state.file && this.state.file.name) || <FormattedMessage id="signing.upload.noDocumentSelected" defaultMessage="no document selected yet"/>}</span>
                                                  </i>
                                             </p>

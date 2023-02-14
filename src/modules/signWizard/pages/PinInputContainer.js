@@ -1,5 +1,4 @@
-import React, {useEffect, useState} from 'react'
-
+import React, {useEffect, useState, useRef} from 'react'
 import { connect } from 'react-redux';
 import { CardContainer } from '../../components/Card/CardContainer';
 import { sign, resetWizard } from '../actions/WizardLogicActions'
@@ -47,6 +46,7 @@ if(!window.PinInputContainerData){
 
 const PinInputContainer = (props) => {
     const { resetWizard, pinError, certificate, intl } = props;
+    const nextBtnRef = useRef(null);
     let [pin, setPin] = useState('');
     let [indexCursor, setIndexCursor] = useState(0);
     const pinstring = "*".repeat(pin.length);
@@ -144,6 +144,10 @@ const PinInputContainer = (props) => {
         }
     }, [pin, indexCursor])
 
+    useEffect(() => {
+        if (nextBtnRef.current) nextBtnRef.current.focus();
+      });
+
     return (
         <CardContainer
             title={intl.formatMessage(messages.title)}
@@ -172,13 +176,15 @@ const PinInputContainer = (props) => {
                     <div className="form-control" id="input_code" data-testid="input_code" translate="no" style={{width:150, marginRight:30}}>
                         {pinstring.substr(0, indexCursor)}<span className="blinking-cursor">|</span>{pinstring.substr(indexCursor)}
                     </div>
-                    <button type="submit" className={"btn btn-primary"} id="button_next" disabled={pin.length < 4}><FormattedMessage id={"signing.pininput.button.sign"} defaultMessage={"Sign with eID"}/></button>
+                    <button type="submit" className={"btn btn-primary"} id="button_next" disabled={pin.length < 4} ref={ nextBtnRef }>
+                        <FormattedMessage id={"signing.pininput.button.sign"} defaultMessage={"Sign with eID"}/>
+                    </button>
                 </form>
 
                 {(pinError && pinError.message)
                     ? (
                         <div className="text-center" style={{marginTop : 10}}>
-                            <div className="alert alert-danger">
+                            <div className="alert alert-danger" role="alert">
                                 {pinError.message.id?intl.formatMessage(pinError.message):pinError.message}
                             </div>
                         </div>)

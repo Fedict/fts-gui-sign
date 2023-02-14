@@ -10,7 +10,10 @@ describe("ResultContainer", () => {
         render(<ResultContainerWithIntl validation={{ diagnosticData: null  }} />);
 
         expect(screen.getByText('Result of the validation')).toBeInTheDocument();
-        expect(screen.getByText('No signature could be found in the document.')).toBeInTheDocument();
+        const noSign = screen.getByText('No signature could be found in the document.');
+        expect(noSign).toBeInTheDocument();
+        
+        expect(noSign.getAttribute('role')).toBe('alert');
     })
 
     test("Has one bad signature", () => {
@@ -116,6 +119,7 @@ describe("ResultContainer", () => {
         expect(screen.getByText('Result of the validation')).toBeInTheDocument();
         expect(screen.getAllByText('Jeff Musk').length).toBe(2);
         expect(screen.getAllByText('Invalid date').length).toBe(2);
+        expect(screen.getAllByText('Yes').length).toBe(2);
         expect(screen.getAllByText('Yes').length).toBe(2);
         expect(screen.getAllByText('No').length).toBe(2);
     })

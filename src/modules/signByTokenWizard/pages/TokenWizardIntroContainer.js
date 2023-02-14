@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useRef,useEffect } from 'react';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { CardContainer } from "../../components/Card/CardContainer";
@@ -26,7 +26,12 @@ const messages = defineMessages({
 const TokenWizardIntroContainer = (props) => {
     const [readConfirmed, setReadConfirmed] = useState(false);
     const [certificatesRead, setCertificatesRead] = useState(false);
+    const nextBtnRef = useRef(null);
 
+    useEffect(() => {
+        if (nextBtnRef.current) nextBtnRef.current.focus();
+      });
+    
 
     let readyToSign = certificatesRead && (readConfirmed || !props.tokenFile.requestDocumentReadConfirm) && props.tokenFile.inputs.findIndex(i => i.signState === signState.SIGN_REQUESTED) !== -1;
     return (
@@ -76,7 +81,8 @@ const TokenWizardIntroContainer = (props) => {
                         props.navigateToNextStep()
                     }}
                     id="button_next"
-                >
+                    ref={nextBtnRef}
+                    >
                     <FormattedMessage id="buttons.sign" defaultMessage="I want to sign"/>
                 </button>
                 <span style={{ padding: 30 }}>&nbsp;</span>

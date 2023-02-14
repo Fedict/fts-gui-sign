@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect, useState} from "react"
+import React, {Fragment, useEffect, useState, useRef} from "react"
 import PropTypes from 'prop-types';
 import {FormattedMessage} from "react-intl";
 
@@ -17,23 +17,25 @@ import {FormattedMessage} from "react-intl";
  * @param {number} [props.autoClickNextTimeout] - auto click on next button after the time expires
  */
 export const CardContainer = (
-    {
-        title,
-        children,
-        hasCancelButton,
-        cancelButtonText,
-        onClickCancel,
-        hasNextButton,
-        nextButtonText,
-        onClickNext,
-        nextButtonIsDisabled,
-        autoClickNextTimeout,
-        leftButtonText,
-        onClickLeft
-    }
-) => {
+        {
+            title,
+            children,
+            hasCancelButton,
+            cancelButtonText,
+            onClickCancel,
+            hasNextButton,
+            nextButtonText,
+            onClickNext,
+            nextButtonIsDisabled,
+            autoClickNextTimeout,
+            leftButtonText,
+            onClickLeft
+        }
+    ) => {
     const [autoClickTime, setAutoClickTime] = useState(autoClickNextTimeout);
     const [abortAutoNext, setAbortAutoNext] = useState(false);
+    const nextBtnRef = useRef(null);
+
     useEffect(() => {
         let mounted = true;
         if(!mounted){
@@ -58,6 +60,7 @@ export const CardContainer = (
             mounted = false
         }
     }, [autoClickTime, abortAutoNext])
+
     useEffect(() => {
         if (window && window.document){
             if (title && title.length > 0){
@@ -65,6 +68,11 @@ export const CardContainer = (
             }
         }
       }, [title]);
+    
+      useEffect(() => {
+        if (nextBtnRef.current) nextBtnRef.current.focus();
+      });
+    
     return (
         <div className="col col-12 mx-auto align-middle">
             <main className="card" >
@@ -92,6 +100,7 @@ export const CardContainer = (
                                             className={"float-right btn " + (nextButtonIsDisabled?"btn-secondary":"btn-primary")}
                                             disabled={nextButtonIsDisabled}
                                             id="button_next"
+                                            ref={nextBtnRef}
                                             onClick={(e) => { if (onClickNext) { onClickNext(e) } }}
                                         >
                                             {nextButtonText} {autoClickTime >= 0 && `(${autoClickTime})`}
