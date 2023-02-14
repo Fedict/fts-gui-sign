@@ -61,8 +61,8 @@ window.configData = {
         "text/xml": "XADES_LTA"
     },
 
-    BEurl: "https://validate.ta.fts.bosa.belgium.be/signandvalidation",
-    //BEurl: "http://localhost:8751",
+    //BEurl: "https://validate.ta.fts.bosa.belgium.be/signandvalidation",
+    BEurl: "http://localhost:8751",
 
     skipCertificateChainValidate : true
     
