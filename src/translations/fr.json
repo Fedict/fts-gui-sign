@@ -198,5 +198,6 @@
   "validation.sign.valid": "Valide",
   "validation.sign.qualif": "Qualifiée",
   "footer.genTerms":  "Conditions générales d’utilisation",
-  "footer.genPrivacy": "Déclaration de confidentialité"
+  "footer.genPrivacy": "Déclaration de confidentialité",
+  "footer.accStatement": "Déclaration d'accessibilité"
 }

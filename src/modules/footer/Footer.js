@@ -5,7 +5,8 @@ import { FormattedMessage } from 'react-intl';
 import { Link } from "react-router-dom";
 
 export const Footer = (props) => {
-    const httpParams = '?language=' + useIntl().locale
+    const locale = useIntl().locale
+    const httpParams = '?language=' + locale
     return (
         <div className="fixed-bottom  bg-light text-muted">
             <div><p className="m-1 ml-3">version: {process.env.REACT_APP_VERSION} - {props.token}</p></div>
@@ -15,7 +16,9 @@ export const Footer = (props) => {
                 </Link>  -  </>}
                 <Link to={'/ps' + httpParams}>
                     <FormattedMessage id="footer.genPrivacy" defaultMessage="Privacy Statement"/>
-                </Link>
+                </Link> - <a href= { locale === "fr" ? "https://bosa.belgium.be/fr/declaration-daccessibilite" : "https://bosa.belgium.be/nl/toegankelijkheidsverklaring" }>
+                    <FormattedMessage id="footer.accStatement" defaultMessage="Accessibility statement"/>
+                </a>
             </div>
         </div>
     )

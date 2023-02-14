@@ -199,5 +199,6 @@
   "validation.sign.valid": "Geldig",
   "validation.sign.qualif": "Gekwalificeerd",
   "footer.genTerms":  "Gebruikersvoorwaarden",
-  "footer.genPrivacy": "Privacyclausule"
+  "footer.genPrivacy": "Privacyclausule",
+  "footer.accStatement": "Toegankelijkheidsverklaring"
 }
