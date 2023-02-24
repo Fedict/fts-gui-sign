@@ -31,63 +31,46 @@ const messagesValidate = defineMessages({
     }
 })
 
-var __read = (this && this.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
-
-var __spread = (this && this.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
-};
-
 export const UploadFileContainer = (props) => {
     const { intl, UploadFileContext } = props;
     const [file, setFile] = React.useState({});
     const [dragging, setDragging] = React.useState(false);
-    var drop = React.useRef();
-    var drag = React.useRef();
+    const [draggingError, setDraggingError] = React.useState(false);
     const messages = UploadFileContext==="sign"?messagesSigning:messagesValidate;
 
     var handleDrop = function (e) {
         e.preventDefault();
         e.stopPropagation();
         setDragging(false);
-        console.log("handleDrop", e);
-        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-            console.log("file", e.dataTransfer.files[0]);
-            setFile(e.dataTransfer.files[0]);
-            if (UploadFileContext==="sign"){
-                props.displayFile(e.dataTransfer.files[0])
+        if (e.dataTransfer.files && e.dataTransfer.files.length === 1 && e.dataTransfer.files[0]) {
+            var ext = e.dataTransfer.files[0].name.match(/.([^.]+)$/)[1];
+            switch (ext) {
+                case 'xml':
+                case 'pdf':
+                    setFile(e.dataTransfer.files[0]);
+                    if (UploadFileContext==="sign"){
+                        props.displayFile(e.dataTransfer.files[0])
+                    }
+                    return;
+                default:
+                    break;
             }
         }
+        setDraggingError(true);
     };
     var handleDrag = function (e) {
         e.preventDefault();
         e.stopPropagation();
-        console.log("handleDrag");
         if (e.type === "dragenter" || e.type === "dragover") {
             setDragging(true);
-          } else if (e.type === "dragleave") {
+          }
+        else if (e.type === "dragleave") {
             setDragging(false);
           }
     };
+
     const onchange = (e) => {
-        console.log("onchange", e);
         const fileSelected = e.target.files[0]
-        console.log("file", fileSelected);
         setFile(fileSelected);
         if (UploadFileContext==="sign"){
             props.displayFile(fileSelected)
@@ -105,6 +88,7 @@ export const UploadFileContainer = (props) => {
     }
 
     console.log("file", file);
+    console.log("dragging", dragging);
 
      return (
         <CardContainer
@@ -178,6 +162,8 @@ export const UploadFileContainer = (props) => {
                                                         }
                                                         onchange(e)
                                                         break;
+                                                    default:
+                                                        break;
                                                     }
                                             }} />
                                     </div>
@@ -188,11 +174,16 @@ export const UploadFileContainer = (props) => {
                                                 <span id='name_select_file'> {(file && file.name) || <FormattedMessage id="signing.upload.noDocumentSelected" defaultMessage="no document selected yet"/>}</span>
                                                 </i>
                                         </p>
+                                        {draggingError && 
+                                        <p className="btn m-0" >
+                                            <span>Warning: Only drop 1 file of type PDF or XML</span>
+                                        </p>
+                                        }
                                     </div>
-                                    { dragging && <div id="drag-file-element" onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}></div> }
                                 </div>
                             </div>
                         </div>
+                        { dragging && <div id="drag-file-element" onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}></div> }
                     </div>
 
                 </div>
