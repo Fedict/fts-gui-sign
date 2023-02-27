@@ -31,6 +31,30 @@ const messagesValidate = defineMessages({
     }
 })
 
+  const styleDragGreen = {
+    backgroundColor : "#00FF0011",
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    borderRadius: "0.25rem",
+    top: "0px",
+    right: "0px",
+    bottom: "0px",
+    left: "0px",
+  };
+
+  const styleDragRed = {
+    backgroundColor : "#FF000011",
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    borderRadius: "0.25rem",
+    top: "0px",
+    right: "0px",
+    bottom: "0px",
+    left: "0px",
+  };
+
 export const UploadFileContainer = (props) => {
     const { intl, UploadFileContext } = props;
     const [file, setFile] = React.useState({});
@@ -63,10 +87,20 @@ export const UploadFileContainer = (props) => {
         e.stopPropagation();
         if (e.type === "dragenter" || e.type === "dragover") {
             setDragging(true);
+            if (e.dataTransfer.items && e.dataTransfer.items.length === 1
+                && e.dataTransfer.items[0].kind==="file"
+                && (e.dataTransfer.items[0].type==="application/pdf" || e.dataTransfer.items[0].type==="application/xml" || e.dataTransfer.items[0].type==="text/xml")) {
+                setDraggingError(false);
+                return;
+            }
+            else{
+                setDraggingError(true);
+            }
           }
         else if (e.type === "dragleave") {
             setDragging(false);
-          }
+            setDraggingError(false);
+        }
     };
 
     const onchange = (e) => {
@@ -129,10 +163,10 @@ export const UploadFileContainer = (props) => {
                             </>
                             }
                     </ol>
-                    <div className="row">
+                    <div className="row" onDragEnter={handleDrag} onDrop={handleDrop}>
                         <div className="card col col-12">
                             <div className="card-body ">
-                                <div className="row " onDragEnter={handleDrag} onDrop={handleDrop}>
+                                <div className="row ">
                                     <div className="col col-auto align-self-center ">
                                         <button
                                             className='btn btn-primary'
@@ -180,10 +214,10 @@ export const UploadFileContainer = (props) => {
                                         </p>
                                         }
                                     </div>
+                                    { dragging && <div onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop} style={draggingError?styleDragRed:styleDragGreen}></div> }
                                 </div>
                             </div>
                         </div>
-                        { dragging && <div id="drag-file-element" onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}></div> }
                     </div>
 
                 </div>
