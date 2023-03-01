@@ -13,6 +13,7 @@ import PS_nl from '../../translations/PSnl';
 import PS_fr from '../../translations/PSfr';
 import PS_en from '../../translations/PSen';
 import PS_de from '../../translations/PSde';
+import CookiePolicies from '../../translations/CookiePolicies';
 
 const GTOUs = {
     nl: GTOU_nl,
@@ -54,4 +55,15 @@ export const PrivacyStatement = () => {
         <div style={{whiteSpace: 'pre-line'}} dangerouslySetInnerHTML={ { __html: PSs[useIntl().locale] }}></div>
     )
 }
+
+export const CookiePolicy = () => {
+    
+    const dispatch = useDispatch();
+    useEffect(() => (dispatch(doSendLogInfo('UI - COOKIE POLICY'))), [])
+    return (
+        <div style={{whiteSpace: 'pre-line'}} dangerouslySetInnerHTML={ { __html: CookiePolicies[useIntl().locale] }}></div>
+    )
+}
+
+
 
