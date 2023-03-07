@@ -201,5 +201,6 @@
   "validation.sign.qualif": "Qualified",
   "footer.genTerms":  "General terms of use",
   "footer.genPrivacy": "Privacy Statement",
-  "footer.accStatement": "Accessibility statement"
+  "footer.accStatement": "Accessibility statement",
+  "footer.cookies": "Cookie Policy"
 }
