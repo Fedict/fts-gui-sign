@@ -109,7 +109,7 @@
   "retrieve.certificates.title": "Abrufen von Zertifikaten",
   "yes": "Ja",
   "no": "Nein",
-  "or": "oder",
+  "or": "ODER",
   "drag.drop.here": "Drag & Drop hierher",
   "drag.drop.error": "Nur ein Dokument im pdf- oder xml-Format kann ausgewählt werden.",
   "sign.token.1": "eID lesen und verbinden",

@@ -199,7 +199,7 @@ export const UploadFileContainer = (props) => {
                                 <div className="row " style={{ justifyContent: "center" }}>
                                     <div className="col col-auto align-self-center ">
                                         <p className="btn m-0" >
-                                            <FormattedMessage id="or" defaultMessage="or" />
+                                            <FormattedMessage id="or" defaultMessage="OR" />
                                         </p>
                                     </div>
                                 </div>
