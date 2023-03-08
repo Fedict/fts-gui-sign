@@ -137,7 +137,7 @@ export const UploadFileContainer = (props) => {
                                 ?
                                 <>
                                     <li><NumberdText number="1"><FormattedMessage id="signing.upload.text.step.1"
-                                        defaultMessage="Select a document (pdf or xml) via the button <b>{selectDocumentButton}</b>, or Drag & Drop the document."
+                                        defaultMessage="Select or 'drag & drop' the document (pdf or xml)."
                                         values={{ b: boldedText, selectDocumentButton: intl.formatMessage({ id: "signing.upload.selectDocument", defaultMessage: "Select a document" }) }}
                                     /></NumberdText></li>
                                     <li><NumberdText number="2"><FormattedMessage id="signing.upload.text.step.2" defaultMessage="Connect your eID reader." /></NumberdText></li>
@@ -150,7 +150,7 @@ export const UploadFileContainer = (props) => {
                                 :
                                 <>
                                     <li><NumberdText number="1"><FormattedMessage id="validate.upload.text.step.1"
-                                        defaultMessage="Select the digitally signed document (pdf or xml) by clicking on the button <b>{selectDocumentButton}</b>, or Drag & Drop the document."
+                                        defaultMessage="Select or 'drag & drop' the digitally signed document (pdf or xml)."
                                         values={{ b: boldedText, selectDocumentButton: intl.formatMessage({ id: "signing.upload.selectDocument", defaultMessage: "Select a document" }) }}
                                     /></NumberdText></li>
                                     <li><NumberdText number="2"><FormattedMessage id="validate.upload.text.step.2"
@@ -199,8 +199,14 @@ export const UploadFileContainer = (props) => {
                                 <div className="row " style={{ justifyContent: "center" }}>
                                     <div className="col col-auto align-self-center ">
                                         <p className="btn m-0" >
-                                            <FormattedMessage id="drag.drop.here" defaultMessage="Or Drag & Drop it here" />
-                                            <span id='name_select_file'></span>
+                                            <FormattedMessage id="or" defaultMessage="or" />
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="row " style={{ justifyContent: "center" }}>
+                                    <div className="col col-auto align-self-center ">
+                                        <p className="btn m-0" >
+                                            <FormattedMessage id="drag.drop.here" defaultMessage="drag & drop it here" />
                                         </p>
                                     </div>
                                 </div>
@@ -218,7 +224,7 @@ export const UploadFileContainer = (props) => {
                                     <div className="row " style={{ justifyContent: "center" }}>
                                         <div className="col col-auto align-self-center ">
                                             <p className="btn m-0" style={{ backgroundColor: "#FF000011" }} >
-                                                <FormattedMessage id="drag.drop.error" defaultMessage="Only dropping one document of type PDF or XML is allowed!" />
+                                                <FormattedMessage id="drag.drop.error" defaultMessage="Only a document in format pdf or xml can be selected." />
                                             </p>
                                         </div>
                                     </div>
