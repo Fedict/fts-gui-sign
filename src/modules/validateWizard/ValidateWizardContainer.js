@@ -4,7 +4,7 @@ import MessageContainer from '../message/MessageContainer'
 import { ErrorGeneral } from '../message/MessageConstants'
 import { resetWizard } from "./actions/WizardLogicActions"
 import { WIZARD_STATE_UPLOAD, WIZARD_STATE_START, WIZARD_STATE_VALIDATE_LOADING, WIZARD_STATE_RESULT, WIZARD_STATE_MESSAGE } from '../wizard/WizardConstants'
-import UploadFileContainer from './pages/UploadFileContainer'
+import UploadFileContainer from '../components/UploadFile/UploadFileContainer'
 import ValidateLoadingContainer from './pages/ValidateLoadingContainer'
 import ResultContainer from './pages/ResultContainer'
 import DisplayFile from '../fileUpload/components/UploadDisplayFile/UploadDisplayFile'
@@ -13,10 +13,10 @@ export const ValidateWizardContainer = ({ wizard, reader, resetWizard }) => {
     let content = null;
     switch (wizard.state) {
         case WIZARD_STATE_START:
-            content = <UploadFileContainer />
+            content = <UploadFileContainer UploadFileContext="validate"/>
             break;
         case WIZARD_STATE_UPLOAD:
-            content = <UploadFileContainer />
+            content = <UploadFileContainer UploadFileContext="validate"/>
             break;
         case WIZARD_STATE_VALIDATE_LOADING:
             content = <ValidateLoadingContainer />

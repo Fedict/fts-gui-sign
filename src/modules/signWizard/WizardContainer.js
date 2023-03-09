@@ -18,7 +18,7 @@ import {
     WIZARD_STATE_START,
     WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN
 } from '../wizard/WizardConstants'
-import UploadFileContainer from './pages/UploadFileContainer'
+import UploadFileContainer from '../components/UploadFile/UploadFileContainer'
 import { connect } from 'react-redux'
 import VersionCheckLoadingContainer from './pages/VersionCheckLoadingContainer'
 import VersionCheckUpdateContainer from './pages/VersionCheckUpdateContainer'
@@ -44,14 +44,14 @@ export const WizardContainer = ({ wizard, reader, resetWizard }) => {
     switch (wizard.state) {
         case WIZARD_STATE_START:
             if (reader && reader.isOk && reader.isChecked) {
-                content = <UploadFileContainer />;
+                content = <UploadFileContainer UploadFileContext="sign"/>;
             }
             else {
                 content = <VersionCheckLoadingContainer />;
             }
             break;
         case WIZARD_STATE_UPLOAD:
-            content = <UploadFileContainer />;
+            content = <UploadFileContainer UploadFileContext="sign"/>;
             break;
         case WIZARD_STATE_VERSION_CHECK_LOADING:
             content = <VersionCheckLoadingContainer />;

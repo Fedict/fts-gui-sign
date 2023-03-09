@@ -43,26 +43,32 @@ describe(("UploadFileReducer"), () => {
             const startFileName = "test.txt"
             const startFileType = "application/xml"
             const startFile = { type: startFileType, name: startFileName }
+            const expectedUrl = "url"
+            URL.createObjectURL = jest.fn(() => { return expectedUrl })
             const result = getDisplayFileData(startFile)
             expect(result.isPdf).toBeFalsy()
             expect(result.isXml).toBeTruthy()
-            expect(result.url).toEqual("")
+            expect(result.url).toEqual(expectedUrl)
             expect(result.name).toBe(startFileName)
 
-            expect(URL.createObjectURL).toHaveBeenCalledTimes(0)
+            expect(URL.createObjectURL).toHaveBeenCalledTimes(1)
+            expect(URL.createObjectURL.mock.calls[0][0]).toEqual(startFile)
         })
 
         test("getDisplayFileData creates correct object with filetype text/xml", () => {
             const startFileName = "test.txt"
             const startFileType = "text/xml"
             const startFile = { type: startFileType, name: startFileName }
+            const expectedUrl = "url"
+            URL.createObjectURL = jest.fn(() => { return expectedUrl })
             const result = getDisplayFileData(startFile)
             expect(result.isPdf).toBeFalsy()
             expect(result.isXml).toBeTruthy()
-            expect(result.url).toEqual("")
+            expect(result.url).toEqual(expectedUrl)
             expect(result.name).toBe(startFileName)
 
-            expect(URL.createObjectURL).toHaveBeenCalledTimes(0)
+            expect(URL.createObjectURL).toHaveBeenCalledTimes(1)
+            expect(URL.createObjectURL.mock.calls[0][0]).toEqual(startFile)
         })
 
         test("getDisplayFileData creates correct object with no file", () => {
