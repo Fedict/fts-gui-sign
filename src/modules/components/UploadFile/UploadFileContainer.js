@@ -166,6 +166,7 @@ export const UploadFileContainer = (props) => {
                                 <div className="row " style={{ justifyContent: "center" }}>
                                     <button
                                         className='btn btn-primary'
+                                        autoFocus
                                         type="button"
                                         id="button_select_file"
                                         value=""
