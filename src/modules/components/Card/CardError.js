@@ -31,6 +31,9 @@ export const CardError = injectIntl((
         intl
     }
 ) => {
+    const faqURLs = { id: "error.faq.URL", defaultMessage: "https://bosa.belgium.be/en/federal-trust-services-frequently-asked-questions"}
+    const faqGeneric = { id: "error.faq.generic", defaultMessage: "I get the message ‘{error}’."}
+
     if(cancelButtonText && cancelButtonText.id){
         cancelButtonText = intl.formatMessage(cancelButtonText)
     }
@@ -40,6 +43,21 @@ export const CardError = injectIntl((
     if(title && title.id){
         title = intl.formatMessage(title);
     }
+
+    let textToDisplay, linkText, linkURL
+    if (text) {
+        textToDisplay = text.id?intl.formatMessage(text):text
+        if (text.link) {
+            linkText = text.linkDefaultMessage
+            if (linkText) {
+                linkText = intl.formatMessage( { id: text.id+".linkText", defaultMessage: linkText} )
+            } else {
+                linkText = intl.formatMessage( faqGeneric, { error: textToDisplay } )
+            }
+            linkURL = intl.formatMessage( faqURLs ) + text.link
+        }
+    }
+
     return (
         <CardContainer
             title={title}
@@ -53,7 +71,8 @@ export const CardError = injectIntl((
         >
             <div className="text-center">
                 <div className="alert alert-danger" role="alert" >
-                    {text && text.id?intl.formatMessage(text):text}
+                    <p>{textToDisplay}</p>
+                    {linkText && <a href={linkURL}>{linkText}</a>}
                 </div>
                 {children}
             </div>

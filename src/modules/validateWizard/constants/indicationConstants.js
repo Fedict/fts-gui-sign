@@ -136,7 +136,7 @@ export const subIndication =
         key: "CRYPTO_CONSTRAINTS_FAILURE_NO_POE",
         className: "alert-warning",
         message: "The signature algorithm or the keys used in the algoritm appear to be below the required cryptographic security level.",
-            id: "validate.result.messages.cryptoConstraintsFailureNoPOE"
+        id: "validate.result.messages.cryptoConstraintsFailureNoPOE"
     },
     NO_POE: {
         key: "NO_POE",

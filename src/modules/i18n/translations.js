@@ -31,7 +31,9 @@ export const errorMessages = defineMessages({
     },
     CARD_BLOCKED_ERROR : {
         id : "eid.link.error.card.blocked",
-        defaultMessage : "PIN is incorrect: no attempts left. The eID card is blocked."
+        defaultMessage : "PIN is incorrect: no attempts left. The eID card is blocked.",
+        link: "#2",
+        linkDefaultMessage: "My PIN code was blocked"
     },
     CARD_BUSY : {
         id : "eid.link.error.card.busy",
@@ -47,19 +49,23 @@ export const errorMessages = defineMessages({
     },
     noToken: {
         id: "error.NO_TOKEN_IN_STATE",
-        defaultMessage: "Token not found or invalid."
+        defaultMessage: "Token not found or invalid.",
+        link: "#10"
     },
     failedToSignWrongResultFromAPI: {
         id: "error.WRONG_RESULT_SIGN_TOKEN",
-        defaultMessage: "Failed to sign the document."
+        defaultMessage: "Failed to sign the document.",
+        link: "#11"
     },
     FAILED_TO_SIGN: {
         id: "error.FAILED_TO_SIGN",
-        defaultMessage: "Failed to sign the document."
+        defaultMessage: "Failed to sign the document.",
+        link: "#11"
     },
     failedToFetchDataToSign: {
         id: "error.FAILED_TO_FETCH_DATA_TO_SIGN",
-        defaultMessage: "Failed to fetch data to sign."
+        defaultMessage: "Failed to fetch data to sign.",
+        link: "#6"
     },
     SIGN_CERT_EXPIRED: {
         id: "error.SIGN_CERT_EXPIRED",
@@ -67,15 +73,18 @@ export const errorMessages = defineMessages({
     },
     CERT_CHAIN_INCOMPLETE: {
         id: "error.CERT_CHAIN_INCOMPLETE",
-        defaultMessage: "The certificate chain is incomplete."
-    },
+        defaultMessage: "The certificate chain is incomplete.",
+        link: "#5"
+        },
     NO_SIGN_CERT: {
         id: "error.NO_SIGN_CERT",
-        defaultMessage: "No signing certificate provided."
+        defaultMessage: "No signing certificate provided.",
+        link: "#9"
     },
     INVALID_SIG_DATE: {
         id: "error.INVALID_SIG_DATE",
-        defaultMessage: "Signing date out of bounds."
+        defaultMessage: "Signing date out of bounds.",
+        link: "#7"
     },
     INVALID_S3_LOGIN: {
         id: "error.INVALID_S3_LOGIN",
@@ -87,15 +96,18 @@ export const errorMessages = defineMessages({
     },
     NO_DOC_TO_VALIDATE: {
         id: "error.NO_DOC_TO_VALIDATE",
-        defaultMessage: "A technical error happened, the document is not present."
+        defaultMessage: "A technical error happened, the document is not present.",
+        link: "#8"
     },
     NO_TOKEN: {
         id: "error.NO_TOKEN",
-        defaultMessage: "Required parameter token not provided."
+        defaultMessage: "Required parameter token not provided.",
+        link: "#10"
     },
     CERT_REVOKED: {
         id: "error.CERT_REVOKED",
-        defaultMessage: "The certificate is revoked."
+        defaultMessage: "The certificate is revoked.",
+        link: "#13"
     },
     INTERNAL_ERR: {
         id: "error.INTERNAL_ERR",
@@ -111,7 +123,8 @@ export const errorMessages = defineMessages({
     },
     INVALID_TOKEN : {
         id: "error.INVALID_TOKEN",
-        defaultMessage: "Invalid token in request."
+        defaultMessage: "Invalid token in request.",
+        link: "#10"
     },
     PARSE_ERROR : {
         id: "error.PARSE_ERROR",
