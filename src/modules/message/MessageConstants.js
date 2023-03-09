@@ -4,7 +4,7 @@ import {defineMessages, FormattedMessage} from "react-intl";
 const errorMessages = defineMessages({
     general_error : {
         id : "error.general.title",
-            defaultMessage : "Something went wrong"
+        defaultMessage : "Something went wrong"
     },
     general_error_text : {
         id : "error.general.text",
@@ -57,6 +57,10 @@ export const ErrorNotSupported = {
                     <li><FormattedMessage id="error.browser_not_supported.supported.5" defaultMessage="Opera (based on Chromium)"/></li>
                 </ul>
             </div>
+            <p><FormattedMessage id="error.browser_not_supported.link" defaultMessage='<a>In which browsers does the signature service work?|https://bosa.belgium.be/en/federal-trust-services-frequently-asked-questions#12</a>'
+                            values = {{ a: msg => ( <a href={msg.split('|')[1]}>{msg.split('|')[0]}</a>
+                            )}}
+                            /></p>
         </div>),
     body: null,
     nextButton: {
