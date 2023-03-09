@@ -37,7 +37,7 @@ export const getDisplayFileData = (file) => {
             case "application/xml":
             case "text/xml":
                 data.isXml = true
-
+                data.url = URL.createObjectURL(file)
                 break;
 
             default:
