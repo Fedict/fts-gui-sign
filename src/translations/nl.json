@@ -46,7 +46,7 @@
   "eid.update.text.1": "De geïnstalleerde versie van BeIDConnect is niet up-to-date.",
   "eid.update.text.2": "Installeer de laatste versie van BeIDConnect om deze handtekenapplicatie te gebruiken.",
   "eid.update.title": "Update BeIDConnect",
-  "error.faq.generic": "Ik krijg de melding ‘{error}’",
+  "error.faq.generic": "Help, ik krijg de melding ‘{error}’",
   "error.faq.URL": "https://bosa.belgium.be/nl/federal-trust-services-vaak-gestelde-vragen",
   "error.CERT_CHAIN_INCOMPLETE": "De certificaatreeks is onvolledig.",
   "error.CERT_REVOKED": "Het certificaat is ingetrokken.",

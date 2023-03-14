@@ -46,7 +46,7 @@
   "eid.update.text.1": "Die installierte Version von BeIDConnect ist nicht auf dem neuesten Stand.",
   "eid.update.text.2": "Bitte installieren Sie die neueste Version von BeIDConnect, um diese Signieranwendung zu nutzen.",
   "eid.update.title": "BeIDConnect aktualisieren",
-  "error.faq.generic": "Ich erhalte die Meldung \"{error}“.",
+  "error.faq.generic": "Hilfe, ich erhalte die Meldung \"{error}“.",
   "error.faq.URL": "https://bosa.belgium.be/de/federal-trust-services-haeufig-gestellte-fragen",
   "error.CERT_CHAIN_INCOMPLETE": "Die Zertifikatskette ist unvollständig.",
   "error.CERT_REVOKED": "Das Zertifikat ist widerrufen.",

@@ -46,7 +46,7 @@
   "eid.update.text.1": "The installed version of BeIDConnect is not up to date.",
   "eid.update.text.2": "Please install the latest version of BeIDConnect to use this singing application.",
   "eid.update.title": "Update BeIDConnect",
-  "error.faq.generic": "I get the message ‘{error}’.",
+  "error.faq.generic": "Help, I get the message ‘{error}’.",
   "error.faq.URL": "https://bosa.belgium.be/en/federal-trust-services-frequently-asked-questions",
   "error.CERT_CHAIN_INCOMPLETE": "The certificate chain is incomplete.",
   "error.CERT_REVOKED": "The certificate is revoked.",
