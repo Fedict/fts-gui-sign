@@ -58,8 +58,8 @@ export class StartPageContainer extends React.Component {
                                     <br/><br/>
                                     <FormattedMessage id="index.footer2a" defaultMessage="If you experience problems with the signing or the installation of software, you can find more information here: "/>
                                     <FormattedMessage id="index.faqurl" defaultMessage="https://bosa.belgium.be/en/federal-trust-services-frequently-asked-questions">{ link =>
-                                        <a href={link} rel="noreferrer" target="_blank"><FormattedMessage id="index.footer2b" defaultMessage="Frequently asked questions signing service"/></a>
-                                    } </FormattedMessage>
+                                        <a href={link} rel="noreferrer" target="_blank"><FormattedMessage id="index.footer2b" defaultMessage="Frequently asked questions signing service"/></a> }
+                                    </FormattedMessage>
                                 </div>
                             </main>
                         </div>
