@@ -176,7 +176,7 @@
   "validate.result.messages.hashFailure" : "Ten minste één hash van het ondertekende document (algoritme)  komt niet overeen met de overeenkomstige hashwaarde (algoritme) in de handtekening.",
   "validate.result.messages.indeterminate": "Er is onvoldoende informatie aanwezig om de digitale handtekening te valideren.",
   "validate.result.messages.noChainFound" : "Het ondertekeningscertificaat (certificaat op eID) dat is gebruikt om dit document te ondertekenen, kan niet worden gevonden.",
-  "validate.result.messages.noPOE" : "Het noodzakelijke bewijs van bestaan van de handtekening, nodig voor validatie, ontbreekt. Herlaad de pagina en probeer het opnieuw. Neem contact op met servicedesk.DTO@bosa.fgov.be als deze fout blijft verschijnen. Voeg de foutmelding 'proof of existence' toe aan uw melding.",
+  "validate.result.messages.noPOE" : "Het noodzakelijke bewijs van bestaan van de handtekening, nodig voor validatie, ontbreekt. Herlaad de pagina en probeer het opnieuw. Neem contact op met servicedesk.DTO@bosa.fgov.be als deze fout blijft verschijnen. Voeg de foutmelding 'proof of existence' toe aan de melding.",
   "validate.result.messages.noSigningCertificateFound" : "Het ondertekeningscertificaat (certificaat op eID) dat is gebruikt om dit document te ondertekenen, kan niet worden geïdentificeerd.",
   "validate.result.messages.notYetValid" : "Het tijdstip van ondertekening van het document ligt vóór de datum van afgifte van het gebruikte ondertekeningscertificaat (certificaat op eID).",
   "validate.result.messages.outOfBoundsNoPOE" : "Het ondertekeningscertificaat (certificaat op eID) dat werd gebruikt om dit document te ondertekenen, is verlopen of nog niet geldig.",
