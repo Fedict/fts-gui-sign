@@ -56,7 +56,20 @@ function getSignatures(validation) {
                                 break;
                         }
                     }
-                    break
+                    let basicSig = xmlSignature.getElementsByTagNameNS(NS, "ValidationProcessBasicSignature")
+                    if (basicSig && basicSig.length === 1) {
+                        let basicConclusion = basicSig.item(0).getElementsByTagNameNS(NS, "Conclusion")
+                        if (basicConclusion && basicConclusion.length === 1) {
+                            for (let error of basicConclusion.item(0).children) {
+                                if (error.localName === 'Errors') {
+                                    let keyAttr =  error.getAttribute("Key")
+                                    if (keyAttr === "BBB_ICS_ISASCP_ANS" && error.textContent === "The signed attribute: 'signing-certificate' is absent!") {
+                                        sig.missingSigningCert = true
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -106,10 +119,16 @@ export class ResultContainer extends React.Component {
                             <div className="col px-0">{sig.signer}</div>
                             <div className="col-4 px-0">{moment(sig.date).format('DD/MM/YYYY - h:mm:ss')}</div>
                             <div className="col-2 px-0">{sig.isValid ? yes : no}
-                                { sig.subIndication && <img title={intl.formatMessage({ id: sig.subIndication.id, defaultMessage: sig.subIndication.message })} style={{ width:16, height:16, marginBottom: 3, marginLeft: 4 }} src="/img/questionMark.svg"/> }
+                                { sig.missingSigningCert ? <strong> *</strong> : (sig.subIndication && <img title={intl.formatMessage({ id: sig.subIndication.id, defaultMessage: sig.subIndication.message })} style={{ width:16, height:16, marginBottom: 3, marginLeft: 4 }} src="/img/questionMark.svg"/>) }
                              </div>
                             <div className="col-2 px-0">{sig.isQualified ? yes : no }</div>
                         </div> )}
+                        { signatures.find(sig => sig.missingSigningCert) && <>
+                        <p class="text-justify"><strong>* </strong><FormattedMessage id='validate.result.note.adobeSigned.1' defaultMessage="This signature is set with the setting PKCS7. This signature type contains insufficient info to pass reliable validation." /></p>
+                        <p class="text-justify"><FormattedMessage id='validate.result.note.adobeSigned.2' defaultMessage="Good to know, PKCS7 is Adobe's default setting. You can change this setting yourself and thus create signatures (or have them created) that pass full validation." /></p>
+                        <p class="text-justify"><a href="/pkcs7"><FormattedMessage id='validate.result.note.adobeSigned.link' defaultMessage="Adjust signature settings in Adobe manually" /></a></p>
+                        </>
+                        }
                     </div> : <div className="text-center">
                         <div className="alert alert-warning" role="alert">
                             <FormattedMessage id='validate.result.messages.noSignature' defaultMessage="No signature could be found in the document." />

@@ -1,6 +1,6 @@
 module.exports = {
     fr: `<h2>Manuel pour changer les paramètres de signature dans Adobe</h2>
-    <h4>Manuel pour modifier les paramètres de signature par défaut dans Adobe (pkcs7) en CAdES
+    <h4>Manuel pour modifier les paramètres de signature par défaut dans Adobe (pkcs7) en CAdES.
     <ol>
     <li>Démarrez l'Application 'Adobe Acrobat'</li>
     <li><p>Ouvrez le menu ‘Edit’ et sélectionnez l'option ‘Preferences’</p>
