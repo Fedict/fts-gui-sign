@@ -22,7 +22,8 @@ const errorMessages = defineMessages({
     },
     "This application doesn't support this eID reader type" : {
         id : "eid.link.error.reader.not_supported.text",
-        defaultMessage : "This application doesn't support this eID reader type."
+        defaultMessage : "This application doesn't support this eID reader type.",
+        link: "#4"
     },
     "The eId card was removed" : {
         id : "eid.link.error.card.removed",
@@ -34,7 +35,8 @@ const errorMessages = defineMessages({
     },
     "Please insert your eID card" : {
         id : "eid.link.error.card.not_found.text",
-        defaultMessage : "Please insert your eID card"
+        defaultMessage : "Please insert your eID card",
+        link: "#3"
     },
     "Something went wrong" : {
         id : "eid.link.error.general.title",

@@ -57,9 +57,9 @@ export class StartPageContainer extends React.Component {
                                     <FormattedMessage id="index.footer" defaultMessage="If you want more information about eID cards and card readers, you can find it here: " /><a href="https://eid.belgium.be/">eid.belgium.be</a>
                                     <br/><br/>
                                     <FormattedMessage id="index.footer2a" defaultMessage="If you experience problems with the signing or the installation of software, you can find more information here: "/>
-                                    <FormattedMessage id="index.faqurl" defaultMessage="https://dtservices.bosa.be/en/faq/frequently-asked-questions-about-signature-service">{ link =>
-                                        <a href={link} rel="noreferrer" target="_blank"><FormattedMessage id="index.footer2b" defaultMessage="Frequently asked questions signing service"/></a>
-                                    } </FormattedMessage>
+                                    <FormattedMessage id="index.faqurl" defaultMessage="https://bosa.belgium.be/en/federal-trust-services-frequently-asked-questions">{ link =>
+                                        <a href={link} rel="noreferrer" target="_blank"><FormattedMessage id="index.footer2b" defaultMessage="Frequently asked questions signing service"/></a> }
+                                    </FormattedMessage>
                                 </div>
                             </main>
                         </div>

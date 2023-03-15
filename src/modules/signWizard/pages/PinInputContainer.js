@@ -47,6 +47,7 @@ if(!window.PinInputContainerData){
 const PinInputContainer = (props) => {
     const { resetWizard, pinError, certificate, intl } = props;
     const nextBtnRef = useRef(null);
+    const pinInputRef = useRef(null);
     let [pin, setPin] = useState('');
     let [indexCursor, setIndexCursor] = useState(0);
     const pinstring = "*".repeat(pin.length);
@@ -111,6 +112,7 @@ const PinInputContainer = (props) => {
 
             pinInputContainerData.setPin(pincode);
             pinInputContainerData.setIndex(newIndexCursor);
+            if (pincode.length < 4 && pinInputRef.current) pinInputRef.current.focus();
             if(doLog){
                 console.log('TEST --- ','pincode', pincode, 'newIndexCursor', newIndexCursor);
             }
@@ -131,6 +133,7 @@ const PinInputContainer = (props) => {
     }, [])
 
     useEffect(() => {
+        if (pinInputRef.current) pinInputRef.current.focus();
         return () => {
             console.log('removing event listener')
             //wil be called on Destroy
@@ -173,7 +176,7 @@ const PinInputContainer = (props) => {
                 </p>
                 <ChangeAutoDownloadOption />
                 <form className="form-inline" onSubmit={() => { handleSubmit(pin) }} >
-                    <div className="form-control" id="input_code" data-testid="input_code" translate="no" style={{width:150, marginRight:30}}>
+                    <div className="form-control" id="input_code" data-testid="input_code" tabIndex="0" translate="no" style={{width:150, marginRight:30}} ref={ pinInputRef }>
                         {pinstring.substr(0, indexCursor)}<span className="blinking-cursor">|</span>{pinstring.substr(indexCursor)}
                     </div>
                     <button type="submit" className={"btn btn-primary"} id="button_next" disabled={pin.length < 4} ref={ nextBtnRef }>
