@@ -12,7 +12,7 @@ import { browserIsAccepted } from './modules/browserDetection/BrowserDetection';
 import MessageContainer from './modules/message/MessageContainer';
 import { ErrorNotSupported, ErrorIE11NotSupported } from './modules/message/MessageConstants';
 import Footer from './modules/footer/Footer';
-import { GeneralTerms, PrivacyStatement, CookiePolicy } from './modules/info/InformationPages';
+import { GeneralTerms, PrivacyStatement, CookiePolicy, InternalFAQ } from './modules/info/InformationPages';
 import StartPageContainer from './modules/startPage/StartPageContainer';
 import MainI18nWrapper from "./modules/i18n/MainI18nWrapper";
 import TokenWizardContainer from "./modules/signByTokenWizard/TokenWizardContainer";
@@ -31,6 +31,7 @@ export const BaseApp = () => {
                         <Route path="/sign/:token"><TokenWizardContainer /></Route>
                         <Route path="/sign" exact strict><WizardContainer /></Route>
                         <Route path="/validate"><ValidateWizardContainer /></Route>
+                        <Route path="/pkcs7"><InternalFAQ /></Route>
                         <Route path="/gtou"><GeneralTerms /></Route>
                         <Route path="/ps"><PrivacyStatement /></Route>
                         <Route path="/cookies"><CookiePolicy /></Route>
