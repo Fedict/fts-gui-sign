@@ -120,7 +120,33 @@ describe("ResultContainer", () => {
         expect(screen.getAllByText('Jeff Musk').length).toBe(2);
         expect(screen.getAllByText('Invalid date').length).toBe(2);
         expect(screen.getAllByText('Yes').length).toBe(2);
-        expect(screen.getAllByText('Yes').length).toBe(2);
         expect(screen.getAllByText('No').length).toBe(2);
+    })
+
+    test("Signature with 'PKCS7' ", () => {
+        render(<ResultContainerWithIntl validation=
+            {{ diagnosticData: { 
+                Signature: [ { Id: "S_1", ClaimedSigningTime: "Now", ChainItem: [ { Certificate: "C_1" } ]} ],
+                Certificate: [ { Id: "C_1", CommonName: "Jeff Musk", KeyUsage: ['nonRepudiation'] } ]
+             },
+             report: '<report xmlns:ns1="http://dss.esig.europa.eu/validation/detailed-report">' +
+                        '<ns1:Signature Id="S_1">' +
+                            '<ns1:Conclusion>' +
+                                '<ns1:Indication>TOTAL_PASSED</ns1:Indication>' +
+                            '</ns1:Conclusion>' +
+                            '<ns1:ValidationProcessBasicSignature>' +
+                                '<ns1:Conclusion>' +
+                                    '<ns1:Errors Key="BBB_ICS_ISASCP_ANS">The signed attribute: \'signing-certificate\' is absent!</ns1:Errors>' +
+                                '</ns1:Conclusion>' +
+                            '</ns1:ValidationProcessBasicSignature>' +
+                        '</ns1:Signature>' +
+                    '</report>' 
+           }} />);
+        expect(screen.getByText('Result of the validation')).toBeInTheDocument();
+        expect(screen.getAllByText('Jeff Musk').length).toBe(1);
+        expect(screen.getAllByText('Invalid date').length).toBe(1);
+        expect(screen.getAllByText('No').length).toBe(1);
+        expect(screen.getAllByText('? *').length).toBe(1);
+        expect(screen.getAllByText('Sign.belgium can\'t validate the signature based on the available information.').length).toBe(1);
     })
 })
