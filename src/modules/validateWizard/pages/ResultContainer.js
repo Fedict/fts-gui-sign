@@ -56,7 +56,20 @@ function getSignatures(validation) {
                                 break;
                         }
                     }
-                    break
+                    let basicSig = xmlSignature.getElementsByTagNameNS(NS, "ValidationProcessBasicSignature")
+                    if (basicSig && basicSig.length === 1) {
+                        let basicConclusion = basicSig.item(0).getElementsByTagNameNS(NS, "Conclusion")
+                        if (basicConclusion && basicConclusion.length === 1) {
+                            for (let error of basicConclusion.item(0).children) {
+                                if (error.localName === 'Errors') {
+                                    let keyAttr =  error.getAttribute("Key")
+                                    if (keyAttr === "BBB_ICS_ISASCP_ANS" && error.textContent === "The signed attribute: 'signing-certificate' is absent!") {
+                                        sig.missingSigningCert = true
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -72,7 +85,7 @@ function getSignatures(validation) {
         }
         
         sig.isQualified = cert && cert.KeyUsage && qualification === 'QESig' && cert.KeyUsage.includes('nonRepudiation')
-        sig.class = "light-" + (sig.isValid ? (sig.isQualified ? "success" : "warning") : "danger")
+        sig.class = "light-" + (sig.missingSigningCert ? "pkcs7" : (sig.isValid ? (sig.isQualified ? "success" : "warning") : "danger"))
     });
     return signatures;
 }
@@ -105,11 +118,20 @@ export class ResultContainer extends React.Component {
                         { signatures.map((sig,index) => <div key={index} className={ "row validateResult " + sig.class }>
                             <div className="col px-0">{sig.signer}</div>
                             <div className="col-4 px-0">{moment(sig.date).format('DD/MM/YYYY - h:mm:ss')}</div>
-                            <div className="col-2 px-0">{sig.isValid ? yes : no}
-                                { sig.subIndication && <img title={intl.formatMessage({ id: sig.subIndication.id, defaultMessage: sig.subIndication.message })} style={{ width:16, height:16, marginBottom: 3, marginLeft: 4 }} src="/img/questionMark.svg"/> }
-                             </div>
+                            <div className="col-2 px-0"> {
+                                sig.missingSigningCert ? <strong>? *</strong> : <>
+                                    {sig.isValid ? yes : no}
+                                    {sig.subIndication && <img title={intl.formatMessage({ id: sig.subIndication.id, defaultMessage: sig.subIndication.message })} style={{ width:16, height:16, marginBottom: 3, marginLeft: 4 }} src="/img/questionMark.svg"/> }
+                                </>
+                            } </div>
                             <div className="col-2 px-0">{sig.isQualified ? yes : no }</div>
                         </div> )}
+                        { signatures.find(sig => sig.missingSigningCert) && <>
+                        <p class="text-justify"><strong>* </strong><FormattedMessage id='validate.result.note.adobeSigned.1' defaultMessage="Sign.belgium can't validate the signature based on the available information." /></p>
+                        <p class="text-justify"><FormattedMessage id='validate.result.note.adobeSigned.2' defaultMessage="Sign.belgium signature validation is based on the applicable European standards. If Adobe Reader was used to sign this document, it is possible to change the signature format to this European standard." /></p>
+                        <p class="text-justify"><a href="/pkcs7"><FormattedMessage id='validate.result.note.adobeSigned.link' defaultMessage="Manual: how to adjust the signature setting in Adobe Reader." /></a></p>
+                        </>
+                        }
                     </div> : <div className="text-center">
                         <div className="alert alert-warning" role="alert">
                             <FormattedMessage id='validate.result.messages.noSignature' defaultMessage="No signature could be found in the document." />
