@@ -85,7 +85,7 @@ function getSignatures(validation) {
         }
         
         sig.isQualified = cert && cert.KeyUsage && qualification === 'QESig' && cert.KeyUsage.includes('nonRepudiation')
-        sig.class = "light-" + (sig.isValid ? (sig.isQualified ? "success" : "warning") : "danger")
+        sig.class = "light-" + (sig.missingSigningCert ? "pkcs7" : (sig.isValid ? (sig.isQualified ? "success" : "warning") : "danger"))
     });
     return signatures;
 }
