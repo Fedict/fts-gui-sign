@@ -192,7 +192,7 @@
   "validate.result.messages.tryLater" : "Les informations sur la signature ne sont pas suffisantes pour vérifier toutes les restrictions.",
   "validate.result.messages.noSignature" : "Aucune signature n'a pu être trouvée dans le document.",
   "validate.result.note.adobeSigned.1": "Sign.belgium ne peut pas valider la signature sur base des informations disponibles.",
-  "validate.result.note.adobeSigned.2": "La validation de la signature par sign.belgium est basée sur les normes européennes applicables. Si Adobe Reader a été utilisé pour signer ce document, il est possible de modifier le format de la signature pour qu'il corresponde à cette norme européenne.",
+  "validate.result.note.adobeSigned.2": "La validation de la signature par sign.belgium est basée sur les normes européennes applicables. Si Adobe Reader a été utilisé pour signer ce document, il est possible de modifier le format de la signature conformément au standard européen.",
   "validate.result.note.adobeSigned.link": "Manuel : comment ajuster les paramètres de signature dans Adobe Reader.",
   "validate.result.title": "Résultat de la validation",
   "validate.result.validateNextButton": "Vérifier un autre document",
