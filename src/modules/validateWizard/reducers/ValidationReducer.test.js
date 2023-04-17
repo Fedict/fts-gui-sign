@@ -1,33 +1,25 @@
-const { VALIDATION_SET_REPORT, VALIDATION_SET_DIAGNOSTICDATA } = require("../actions/ValidationActions")
+const { VALIDATION_SET } = require("../actions/ValidationActions")
 const { default: ValidationReducer } = require("./ValidationReducer")
 
 describe("ValidationReducer", () => {
 
-    describe("VALIDATION_SET_DIAGNOSTICDATA", () => {
-
-        test("action with type VALIDATION_SET_DIAGNOSTICDATA changes diagnosticData object", () => {
-            const payload = 'diagnosticData'
-            const startStore = {
-
-            }
-            const action =  {type: VALIDATION_SET_DIAGNOSTICDATA , payload :payload }
-            
-            const result = ValidationReducer(startStore, action)
-            expect(result.diagnosticData).toBe(payload)
-         })
-     })
-
-    describe("VALIDATION_SET_REPORT", () => { 
+    describe("VALIDATION_SET", () => { 
         
-        test("action with type VALIDATION_SET_REPORT changes report object", () => {
-            const payload = 'report'
+        test("action with type VALIDATION_SET changes report objects", () => {
+            const payload = {
+                report: "report",
+                diagnosticData: "diagnosticData",
+                normalizedReport: "normalizedReport"
+            }
             const startStore = {
                 
             }
-            const action =  {type: VALIDATION_SET_REPORT, payload: payload}
+            const action =  {type: VALIDATION_SET, payload: payload}
 
             const result = ValidationReducer(startStore, action)
-            expect(result.report).toBe(payload)
-         })
+            expect(result.report).toBe(payload.report)
+            expect(result.diagnosticData).toBe(payload.diagnosticData)
+            expect(result.normalizedReport).toBe(payload.normalizedReport)
+        })
     })
 })

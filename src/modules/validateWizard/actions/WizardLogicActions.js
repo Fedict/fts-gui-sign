@@ -2,7 +2,7 @@ import { WIZARD_STATE_START, WIZARD_STATE_RESULT } from "../../wizard/WizardCons
 import { resetStore } from "../../../store/storeActions"
 import { navigateToStep} from "../../wizard/WizardActions"
 import { validateSignatureAPI } from "../../communication/communication"
-import { validationSetReport, validationSetDiagnosticData } from "./ValidationActions"
+import { validationSet } from "./ValidationActions"
 import { showErrorMessage } from "../../message/actions/MessageActions"
 import { ErrorGeneral } from "../../message/MessageConstants"
 import { setNewFlowId } from "../../controlIds/flowId/FlowIdActions"
@@ -22,11 +22,10 @@ export const validateDocument = () => (dispatch, getStore) => {
     validateSignatureAPI(uploadFile.file)
         .then(handleFlowIdError(flowId, getStore))
         .then((val) => {
-            if (val.error || !val.diagnosticData || !val.report) {
+            if (val.error || !val.diagnosticData || !val.report || !val.normalizedReport) {
                     dispatch(showErrorMessage(ErrorGeneral))
             } else {
-                dispatch(validationSetReport(val.report))
-                dispatch(validationSetDiagnosticData(val.diagnosticData))
+                dispatch(validationSet(val))
                 dispatch(navigateToStep(WIZARD_STATE_RESULT))
             }
         })
