@@ -22,7 +22,7 @@ export const validateDocument = () => (dispatch, getStore) => {
     validateSignatureAPI(uploadFile.file)
         .then(handleFlowIdError(flowId, getStore))
         .then((val) => {
-            if (val.error || !val.diagnosticData || !val.report || !val.normalizedReport) {
+            if (val.error || !val.report || !val.normalizedReport) {
                     dispatch(showErrorMessage(ErrorGeneral))
             } else {
                 dispatch(validationSet(val))

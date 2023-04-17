@@ -8,7 +8,6 @@ describe("ValidationReducer", () => {
         test("action with type VALIDATION_SET changes report objects", () => {
             const payload = {
                 report: "report",
-                diagnosticData: "diagnosticData",
                 normalizedReport: "normalizedReport"
             }
             const startStore = {
@@ -18,7 +17,6 @@ describe("ValidationReducer", () => {
 
             const result = ValidationReducer(startStore, action)
             expect(result.report).toBe(payload.report)
-            expect(result.diagnosticData).toBe(payload.diagnosticData)
             expect(result.normalizedReport).toBe(payload.normalizedReport)
         })
     })
