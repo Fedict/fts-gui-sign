@@ -750,8 +750,6 @@ export const signDocument = () => (dispatch, getStore) => {
                 .catch((err) => {
                     hookInfo.ok = false
                     sendHookInfoAPI(hookInfo, tokenFile);
-                    //console.log('signDocumentForTokenAPI error', err)
-                    sendHookInfoAPI(hookInfo, tokenFile);
                     if (err !== INCORECT_FLOW_ID) {
                         dispatch(showErrorMessage({...ErrorGeneral, message : errorMessages.FAILED_TO_SIGN}))
                     }

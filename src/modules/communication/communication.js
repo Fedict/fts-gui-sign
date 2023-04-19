@@ -81,6 +81,12 @@ export const createBodyForToken = (certificateBody, token, fileIdToSign, signing
 
 const noContentHandler = (response) => {
     if (!response.ok) {
+        if(response.headers){
+            const contentType = response.headers.get("content-type");
+            if (contentType && contentType.indexOf("application/json") > -1) {
+                return response.json();
+            }
+        }
         throw new Error(REQUEST_FAILED)
     }
     return true;
