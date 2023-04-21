@@ -6,7 +6,7 @@ import {ErrorGeneral} from "../../message/MessageConstants";
 import {navigateToSign} from "../../signWizard/actions/WizardLogicActions";
 import {errorMessages} from "../../i18n/translations";
 import {navigateToStep} from "../../wizard/WizardActions";
-import {WIZARD_STATE_UPLOAD} from "../../wizard/WizardConstants";
+import {WIZARD_STATE_UPLOAD, WIZARD_STATE_DIGEST_LOADING, WIZARD_STATE_SUCCES} from "../../wizard/WizardConstants";
 import moment from "moment";
 import {setDateSigning} from "../../signWizard/actions/SignatureActions";
 import {parseErrorMessage} from "../../utils/helper";
@@ -24,6 +24,7 @@ export const SET_DOCUMENT_TOKEN_METADATA = "SET_DOCUMENT_TOKEN_METADATA"
  */
 export const getDigestForToken = () => (dispatch, getStore) => {
     const store = getStore()
+
     const { certificate } = store
     const { tokenFile } = store
     const signingDate = moment().format();
@@ -51,21 +52,30 @@ export const getDigestForToken = () => (dispatch, getStore) => {
                     dispatch(navigateToSign())
                     dispatch(setDateSigning(resp.signingDate))
                 }else{
+                    var errorMessage;
                     const parsedError = parseErrorMessage(resp.message);
                     if(parsedError && errorMessages[parsedError.type]){
-                        dispatch(showErrorMessage({
+                        errorMessage = {
                             ...ErrorGeneral,
                             title : errorMessages.failedToFetchDataToSign,
                             message : errorMessages[parsedError.type],
                             ref : parsedError.ref,
-                            errorDetails : parsedError.details
-                        }));
-                    }else{
-                        dispatch(showErrorMessage({
+                            errorDetails : parsedError.details,
+                        }
+                    } else {
+                        errorMessage = {
                             ...ErrorGeneral,
                             message: errorMessages.failedToFetchDataToSign,
-                            body: resp.message
-                        }))
+                            body: resp.message,
+                        }
+
+                        if (tokenFile.signingType !== signingType.XadesMultiFile) {
+                            dispatch(setInputsSignState(fileIdToSign, signState.ERROR_DIGEST));
+                            var moreToSign = getStore().tokenFile.inputs.find(input => input.signState === signState.TO_BE_SIGNED);
+                            errorMessage.nextButton = { isVisible: true, text: { id: "signing.error.skipButton", defaultMessage: "Skip" }, nextPage: moreToSign ? WIZARD_STATE_DIGEST_LOADING : WIZARD_STATE_SUCCES }
+                        }
+
+                        dispatch(showErrorMessage(errorMessage));
                     }
                 }
             })

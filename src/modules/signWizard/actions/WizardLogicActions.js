@@ -729,22 +729,31 @@ export const signDocument = () => (dispatch, getStore) => {
                         var moreToSign = getStore().tokenFile.inputs.find(input => input.signState === signState.TO_BE_SIGNED);
                         dispatch(navigateToStep(moreToSign ? WIZARD_STATE_DIGEST_LOADING: WIZARD_STATE_SUCCES))
                     } else {
+                        var errorMessage;
                         const parsedError = parseErrorMessage(resp.message);
                         if(parsedError && errorMessages[parsedError.type]){
-                            dispatch(showErrorMessage({
+                            errorMessage = {
                                 ...ErrorGeneral,
                                 title : errorMessages.failedToSignWrongResultFromAPI,
                                 message : errorMessages[parsedError.type],
                                 ref : parsedError.ref,
-                                errorDetails : parsedError.details
-                            }));
-                        }else{
-                            dispatch(showErrorMessage({
+                                errorDetails : parsedError.details,
+                            }
+                        } else {
+                            errorMessage = {
                                 ...ErrorGeneral,
                                 message: errorMessages.failedToSignWrongResultFromAPI,
-                                body: resp.message
-                            }))
+                                body: resp.message,
+                            }
                         }
+
+                        if (tokenFile.signingType !== signingType.XadesMultiFile) {
+                            dispatch(setInputsSignState(fileIdToSign, signState.ERROR_SIGN));
+                            var moreToSign = getStore().tokenFile.inputs.find(input => input.signState === signState.TO_BE_SIGNED);
+                            errorMessage.nextButton = { isVisible: true, text: { id: "signing.error.skipButton", defaultMessage: "Skip" }, nextPage: moreToSign ? WIZARD_STATE_DIGEST_LOADING : WIZARD_STATE_SUCCES }
+                        }
+
+                        dispatch(showErrorMessage(errorMessage));
                     }
                 })
                 .catch((err) => {

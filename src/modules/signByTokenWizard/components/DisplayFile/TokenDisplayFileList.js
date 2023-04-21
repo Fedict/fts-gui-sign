@@ -65,8 +65,15 @@ export const TokenDisplayFileList = ({ tokenFile, selectedInputId, setPreviewFil
                     </div>
                     { input.signState === signState.SIGNED && (<div className="col-md-auto py-1">
                         <div className="px-3" style={{ width: "auto", maxWidth: "100%", borderRadius: "20px", backgroundColor: "#01c301" }}>
-                            <img className="mb-1 mr-1" style={{ width: "12px", height:"12px" }} src="/img/check.png" alt="PDF"/>
+                            <img className="mb-1 mr-1" style={{ width: "12px", height:"12px" }} src="/img/check.png"/>
                             <FormattedMessage id = "succes.title.short" defaultMessage="Signed" />
+                        </div>
+                    </div>
+                    )}
+                    { (input.signState === signState.ERROR_DIGEST || input.signState === signState.ERROR_SIGN) && (<div className="col-md-auto py-1">
+                        <div className="px-3" style={{ width: "auto", maxWidth: "100%", borderRadius: "20px", backgroundColor: "#01c301" }}>
+                            <img className="mb-1 mr-1" style={{ width: "12px", height:"12px" }} src="/img/cross.png"/>
+                            <FormattedMessage id = "error.title.short" defaultMessage="Error" />
                         </div>
                     </div>
                     )}

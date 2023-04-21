@@ -16,31 +16,24 @@ describe("SuccesForTokenContainer", () => {
         expect(screen.getByText('Your documents have been successfully signed!')).toBeInTheDocument();
         expect(screen.getByText(/The signed version of your documents will be automatically/)).toBeInTheDocument();
     })
-})
 
-
-describe("SuccesForTokenContainer", () => {
     test("Single document", () => {
-        render(<SuccesContainerForTokenWithIntl multipleDocuments={false} autoDownloadDocument={false} tokenFile={{ noSignedDownloads: true, clientNames: { }, inputs: [ { signState: signState.SIGNED } ] }} />);
+        render(<SuccesContainerForTokenWithIntl autoDownloadDocument={false} tokenFile={{ noSignedDownloads: true, clientNames: { }, inputs: [ { signState: signState.SIGNED } ] }} />);
 
         expect(screen.queryByRole('button', {name : /Download document/i})).not.toBeInTheDocument();
 
         expect(screen.getByText('Your document has been successfully signed!')).toBeInTheDocument();
     })
-})
 
-describe("SuccesForTokenContainer", () => {
     test("Default client name", () => {
-        const { getByText } = render(<SuccesContainerForTokenWithIntl tokenFile={{ noSignedDownload: true, clientNames: { name: "Howdy" }  }} />);
+        const { getByText } = render(<SuccesContainerForTokenWithIntl tokenFile={{ noSignedDownload: true, inputs: [{ signState: signState.SIGNED }], clientNames: { name: "Howdy" }  }} />);
 
         expect(getByText(/You'll be redirected to Howdy in 3 seconds/)).toBeInTheDocument();
     })
-})
 
-describe("SuccesForTokenContainer", () => {
-    test("en client name", () => {
-        const { getByText } = render(<SuccesContainerForTokenWithIntl tokenFile={{ noSignedDownload: true, clientNames: { name_en: "Yo!" }  }} />);
+    test("no Download left", () => {
+        const { getByText } = render(<SuccesContainerForTokenWithIntl tokenFile={{ noSignedDownload: true, inputs: [], clientNames: { name_en: "Yo!" }  }} />);
 
-        expect(getByText(/You'll be redirected to Yo! in 3 second/)).toBeInTheDocument();
+        expect(getByText(/Because of an error no file was signed and can be downloaded/)).toBeInTheDocument();
     })
 })
