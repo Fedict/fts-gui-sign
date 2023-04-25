@@ -68,16 +68,17 @@ export const getDigestForToken = () => (dispatch, getStore) => {
                             message: errorMessages.failedToFetchDataToSign,
                             body: resp.message,
                         }
+                    }
 
-                        if (tokenFile.signingType !== signingType.XadesMultiFile) {
-                            dispatch(setInputsSignState(fileIdToSign, signState.ERROR_DIGEST));
-                            var moreToSign = getStore().tokenFile.inputs.find(input => input.signState === signState.TO_BE_SIGNED);
+                    if (tokenFile.signingType !== signingType.XadesMultiFile) {
+                        if (getStore().tokenFile.skipErrors) {
+                            dispatch(setInputsSignState(fileIdToSign, signState.ERROR_SIGN));
+                            var moreToSign =  getStore().tokenFile.inputs.find(input => input.signState === signState.TO_BE_SIGNED);
                             errorMessage.nextButton = { isVisible: true, text: { id: "signing.error.skipButton", defaultMessage: "Skip" }, nextPage: moreToSign ? WIZARD_STATE_DIGEST_LOADING : WIZARD_STATE_SUCCES }
                         }
-
-                        dispatch(showErrorMessage(errorMessage));
                     }
-                }
+                    dispatch(showErrorMessage(errorMessage));
+            }
             })
             .catch((err) => {
                 if (err !== INCORECT_FLOW_ID) {
