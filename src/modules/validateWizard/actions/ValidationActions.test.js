@@ -1,20 +1,12 @@
-import { validationSetReport, VALIDATION_SET_REPORT, validationSetDiagnosticData, VALIDATION_SET_DIAGNOSTICDATA } from "./ValidationActions"
+import { validationSet, VALIDATION_SET } from "./ValidationActions"
 
 describe("ValidationActions", () => {
 
-    test("validationSetReport returns a action with type VALIDATION_SET_REPORT and payload report", () => {
+    test("validationSet returns a action with type VALIDATION_SET and payload report", () => {
         const payload = "first report"
-        const result = validationSetReport(payload)
+        const result = validationSet(payload)
 
-        expect(result.type).toBe(VALIDATION_SET_REPORT)
-        expect(result.payload).toEqual(payload)
-    })
-    
-    test("validationSetDiagnosticData returns a action with type VALIDATION_SET_DIAGNOSTICDATA and payload Diagnostic data", () => {
-        const payload = "Diagnostic data"
-        const result = validationSetDiagnosticData(payload)
-
-        expect(result.type).toBe(VALIDATION_SET_DIAGNOSTICDATA)
+        expect(result.type).toBe(VALIDATION_SET)
         expect(result.payload).toEqual(payload)
     })
 })
