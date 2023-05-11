@@ -26,9 +26,15 @@ import {definedMessages} from "../i18n/translations";
 const MessageContainer = ({ message, messageInStore, navigateToStep, onCancel,  doSendLogInfo }) => {
     const intl = useIntl();
     const handleButtonClick = (buttonInfo, buttonType) => {
-        if (buttonInfo && buttonInfo.nextPage) {
-            doSendLogInfo('UI - ' + buttonType + "_BUTTON CLICKED");
-            navigateToStep(buttonInfo.nextPage)
+        if (buttonInfo) {
+            if (buttonInfo.action) {
+                buttonInfo.action(buttonInfo);
+            }
+
+            if (buttonInfo.nextPage) {
+                doSendLogInfo('UI - ' + buttonType + "_BUTTON CLICKED");
+                navigateToStep(buttonInfo.nextPage)
+            }
         }
     }
 
@@ -68,7 +74,7 @@ const MessageContainer = ({ message, messageInStore, navigateToStep, onCancel,  
 
 
             text={shownMessage.message}
-            predButtonText = { shownMessage.predButton.text }
+            predButtonText = { shownMessage.predButton ? shownMessage.predButton.text : null }
             onClickPred = { () => { handleButtonClick(shownMessage.predButton, 'ACTUAL_RETRY') } }
         >
             {shownMessage.body? (

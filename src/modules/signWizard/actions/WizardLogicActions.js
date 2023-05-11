@@ -751,8 +751,8 @@ export const signDocument = () => (dispatch, getStore) => {
                             if (!getStore().tokenFile.noSkipErrors) {
                                 dispatch(setInputsSignState(fileIdToSign, signState.ERROR_SIGN));
                                 var moreToSign =  getStore().tokenFile.inputs.find(input => input.signState === signState.TO_BE_SIGNED);
-                                errorMessage.predButton = { text: { id: "signing.error.skipButton", defaultMessage: "Skip" }, nextPage: WIZARD_STATE_DIGEST_LOADING }
-                                errorMessage.nextButton = { isVisible: true, text: { id: "signing.error.skipButton", defaultMessage: "Skip" }, nextPage: moreToSign ? WIZARD_STATE_DIGEST_LOADING : WIZARD_STATE_SUCCES }
+                                errorMessage.predButton = { text: { id: "signing.error.retryButton", defaultMessage: "Try again" }, action: () => { dispatch(setInputsSignState(fileIdToSign, signState.TO_BE_SIGNED)) }, nextPage: WIZARD_STATE_DIGEST_LOADING }
+                                errorMessage.nextButton = { isVisible: true, text: { id: "signing.error.skipButton", defaultMessage: "Skip file" }, nextPage: moreToSign ? WIZARD_STATE_DIGEST_LOADING : WIZARD_STATE_SUCCES }
                             }
                         }
 
