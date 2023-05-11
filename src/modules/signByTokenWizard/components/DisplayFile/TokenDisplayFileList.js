@@ -71,7 +71,7 @@ export const TokenDisplayFileList = ({ tokenFile, selectedInputId, setPreviewFil
                     </div>
                     )}
                     { (input.signState === signState.ERROR_DIGEST || input.signState === signState.ERROR_SIGN) && (<div className="col-md-auto py-1">
-                        <div className="px-3" style={{ width: "auto", maxWidth: "100%", borderRadius: "20px", backgroundColor: "#01c301" }}>
+                        <div className="px-3" style={{ width: "auto", maxWidth: "100%", borderRadius: "20px", backgroundColor: "#FF0000" }}>
                             <img className="mb-1 mr-1" style={{ width: "12px", height:"12px" }} src="/img/cross.png"/>
                             <FormattedMessage id = "error.title.short" defaultMessage="Error" />
                         </div>
