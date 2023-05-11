@@ -23,7 +23,8 @@ describe("ResultContainer", () => {
             qualified: false,
             missingSigningCert: false,
             signerCommonName: "Jeff Musk",
-            claimedSigningTime: null
+            claimedSigningTime: null,
+            signatureFormat: "PKCS7_LT"
         } ] }}
     />);
 
@@ -34,6 +35,8 @@ describe("ResultContainer", () => {
         expect(NO.length).toBe(2);
         expect(NO[0]).toBeInTheDocument();
         expect(NO[1]).toBeInTheDocument();
+        expect(screen.queryAllByText('EU').length).toBe(0);
+        expect(screen.queryAllByText('Non-EU').length).toBe(0);
     })
 
     test("Has one OK signature", () => {
@@ -42,7 +45,8 @@ describe("ResultContainer", () => {
             qualified: true,
             missingSigningCert: false,
             signerCommonName: "Jeff Musk",
-            claimedSigningTime: null
+            claimedSigningTime: null,
+            signatureFormat: "PKCS7"
         } ] }}
     />);
 
@@ -53,6 +57,7 @@ describe("ResultContainer", () => {
         expect(YES.length).toBe(2);
         expect(YES[0]).toBeInTheDocument();
         expect(YES[1]).toBeInTheDocument();
+        expect(screen.getAllByText('Non-EU').length).toBe(1);
     })
 
     test("Has two OK signature from the different certs", () => {
@@ -61,14 +66,16 @@ describe("ResultContainer", () => {
                 qualified: true,
                 missingSigningCert: false,
                 signerCommonName: "Jeff Musk",
-                claimedSigningTime: null
+                claimedSigningTime: null,
+                signatureFormat: "PDAES_"
             },
             {
                 valid: true,
                 qualified: false,
                 missingSigningCert: false,
                 signerCommonName: "Elon Bezos",
-                claimedSigningTime: null
+                claimedSigningTime: null,
+                signatureFormat: "ANYTHING_REALLY"
             } ] }}
         />);
         expect(screen.getByText('Result of the validation')).toBeInTheDocument();
@@ -77,6 +84,7 @@ describe("ResultContainer", () => {
         expect(screen.getAllByText('Invalid date').length).toBe(2);
         expect(screen.getAllByText('Yes').length).toBe(3);
         expect(screen.getAllByText('No').length).toBe(1);
+        expect(screen.getAllByText('EU').length).toBe(2);
     })
 
     test("Has one OK signature & one NOK signature from the same cert", () => {
@@ -85,14 +93,16 @@ describe("ResultContainer", () => {
                 qualified: true,
                 missingSigningCert: false,
                 signerCommonName: "Jeff Musk",
-                claimedSigningTime: null
+                claimedSigningTime: null,
+                signatureFormat: "CADES_"
             },
             {
                 valid: false,
                 qualified: false,
                 missingSigningCert: false,
                 signerCommonName: "Jeff Musk",
-                claimedSigningTime: null
+                claimedSigningTime: null,
+                signatureFormat: "XADES"
             } ] }}
         />);
         expect(screen.getByText('Result of the validation')).toBeInTheDocument();
@@ -100,6 +110,7 @@ describe("ResultContainer", () => {
         expect(screen.getAllByText('Invalid date').length).toBe(2);
         expect(screen.getAllByText('Yes').length).toBe(2);
         expect(screen.getAllByText('No').length).toBe(2);
+        expect(screen.getAllByText('EU').length).toBe(1);
     })
 
     test("Signature with 'PKCS7' ", () => {
@@ -108,7 +119,8 @@ describe("ResultContainer", () => {
                         qualified: false,
                         missingSigningCert: true,
                         signerCommonName: "Jeff Musk",
-                        claimedSigningTime: null
+                        claimedSigningTime: null,
+                        signatureFormat: "PKCS7_LT"
                     } ] }}
                 />);
         expect(screen.getByText('Result of the validation')).toBeInTheDocument();
