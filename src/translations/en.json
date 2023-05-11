@@ -211,6 +211,7 @@
   "validation.sign.moment": "Date",
   "validation.sign.valid": "Valid",
   "validation.sign.qualif": "Qualified",
+  "validation.sign.format": "EU Format",
   "footer.genTerms":  "General terms of use",
   "footer.genPrivacy": "Privacy Statement",
   "footer.accStatement": "Accessibility statement",

@@ -212,6 +212,7 @@
   "validation.sign.moment": "Datum",
   "validation.sign.valid": "Geldig",
   "validation.sign.qualif": "Gekwalificeerd",
+  "validation.sign.format": "EU Formaat",
   "footer.genTerms":  "Gebruikersvoorwaarden",
   "footer.genPrivacy": "Privacyclausule",
   "footer.accStatement": "Toegankelijkheidsverklaring",

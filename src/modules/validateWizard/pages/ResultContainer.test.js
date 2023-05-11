@@ -23,7 +23,8 @@ describe("ResultContainer", () => {
             qualified: false,
             missingSigningCert: false,
             signerCommonName: "Jeff Musk",
-            claimedSigningTime: null
+            claimedSigningTime: null,
+            signatureFormat: "PKCS7_LT"
         } ] }}
     />);
 
@@ -42,7 +43,8 @@ describe("ResultContainer", () => {
             qualified: true,
             missingSigningCert: false,
             signerCommonName: "Jeff Musk",
-            claimedSigningTime: null
+            claimedSigningTime: null,
+            signatureFormat: "PKCS7"
         } ] }}
     />);
 
@@ -61,21 +63,23 @@ describe("ResultContainer", () => {
                 qualified: true,
                 missingSigningCert: false,
                 signerCommonName: "Jeff Musk",
-                claimedSigningTime: null
+                claimedSigningTime: null,
+                signatureFormat: "PDAES_"
             },
             {
                 valid: true,
                 qualified: false,
                 missingSigningCert: false,
                 signerCommonName: "Elon Bezos",
-                claimedSigningTime: null
+                claimedSigningTime: null,
+                signatureFormat: "ANYTHING_REALLY"
             } ] }}
         />);
         expect(screen.getByText('Result of the validation')).toBeInTheDocument();
         expect(screen.getAllByText('Jeff Musk').length).toBe(1);
         expect(screen.getAllByText('Elon Bezos').length).toBe(1);
         expect(screen.getAllByText('Invalid date').length).toBe(2);
-        expect(screen.getAllByText('Yes').length).toBe(3);
+        expect(screen.getAllByText('Yes').length).toBe(5);
         expect(screen.getAllByText('No').length).toBe(1);
     })
 
@@ -85,20 +89,22 @@ describe("ResultContainer", () => {
                 qualified: true,
                 missingSigningCert: false,
                 signerCommonName: "Jeff Musk",
-                claimedSigningTime: null
+                claimedSigningTime: null,
+                signatureFormat: "CADES_"
             },
             {
                 valid: false,
                 qualified: false,
                 missingSigningCert: false,
                 signerCommonName: "Jeff Musk",
-                claimedSigningTime: null
+                claimedSigningTime: null,
+                signatureFormat: "XADES"
             } ] }}
         />);
         expect(screen.getByText('Result of the validation')).toBeInTheDocument();
         expect(screen.getAllByText('Jeff Musk').length).toBe(2);
         expect(screen.getAllByText('Invalid date').length).toBe(2);
-        expect(screen.getAllByText('Yes').length).toBe(2);
+        expect(screen.getAllByText('Yes').length).toBe(3);
         expect(screen.getAllByText('No').length).toBe(2);
     })
 
@@ -108,13 +114,14 @@ describe("ResultContainer", () => {
                         qualified: false,
                         missingSigningCert: true,
                         signerCommonName: "Jeff Musk",
-                        claimedSigningTime: null
+                        claimedSigningTime: null,
+                        signatureFormat: "PKCS7_LT"
                     } ] }}
                 />);
         expect(screen.getByText('Result of the validation')).toBeInTheDocument();
         expect(screen.getAllByText('Jeff Musk').length).toBe(1);
         expect(screen.getAllByText('Invalid date').length).toBe(1);
-        expect(screen.getAllByText('No').length).toBe(1);
+        expect(screen.getAllByText('No').length).toBe(2);
         expect(screen.getAllByText('? *').length).toBe(1);
         expect(screen.getAllByText('Sign.belgium can\'t validate the signature based on the available information.').length).toBe(1);
     })
