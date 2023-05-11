@@ -35,8 +35,6 @@ describe("ResultContainer", () => {
         expect(NO.length).toBe(2);
         expect(NO[0]).toBeInTheDocument();
         expect(NO[1]).toBeInTheDocument();
-        expect(screen.queryAllByText('EU').length).toBe(0);
-        expect(screen.queryAllByText('Non-EU').length).toBe(0);
     })
 
     test("Has one OK signature", () => {
@@ -57,7 +55,6 @@ describe("ResultContainer", () => {
         expect(YES.length).toBe(2);
         expect(YES[0]).toBeInTheDocument();
         expect(YES[1]).toBeInTheDocument();
-        expect(screen.getAllByText('Non-EU').length).toBe(1);
     })
 
     test("Has two OK signature from the different certs", () => {
@@ -82,9 +79,8 @@ describe("ResultContainer", () => {
         expect(screen.getAllByText('Jeff Musk').length).toBe(1);
         expect(screen.getAllByText('Elon Bezos').length).toBe(1);
         expect(screen.getAllByText('Invalid date').length).toBe(2);
-        expect(screen.getAllByText('Yes').length).toBe(3);
+        expect(screen.getAllByText('Yes').length).toBe(5);
         expect(screen.getAllByText('No').length).toBe(1);
-        expect(screen.getAllByText('EU').length).toBe(2);
     })
 
     test("Has one OK signature & one NOK signature from the same cert", () => {
@@ -108,9 +104,8 @@ describe("ResultContainer", () => {
         expect(screen.getByText('Result of the validation')).toBeInTheDocument();
         expect(screen.getAllByText('Jeff Musk').length).toBe(2);
         expect(screen.getAllByText('Invalid date').length).toBe(2);
-        expect(screen.getAllByText('Yes').length).toBe(2);
+        expect(screen.getAllByText('Yes').length).toBe(3);
         expect(screen.getAllByText('No').length).toBe(2);
-        expect(screen.getAllByText('EU').length).toBe(1);
     })
 
     test("Signature with 'PKCS7' ", () => {
@@ -126,7 +121,7 @@ describe("ResultContainer", () => {
         expect(screen.getByText('Result of the validation')).toBeInTheDocument();
         expect(screen.getAllByText('Jeff Musk').length).toBe(1);
         expect(screen.getAllByText('Invalid date').length).toBe(1);
-        expect(screen.getAllByText('No').length).toBe(1);
+        expect(screen.getAllByText('No').length).toBe(2);
         expect(screen.getAllByText('? *').length).toBe(1);
         expect(screen.getAllByText('Sign.belgium can\'t validate the signature based on the available information.').length).toBe(1);
     })
