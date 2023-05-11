@@ -28,6 +28,8 @@ export const CardError = injectIntl((
         onClickNext,
         nextButtonIsDisabled,
         text,
+        predButtonText,
+        onClickPred,
         intl
     }
 ) => {
@@ -39,6 +41,9 @@ export const CardError = injectIntl((
     }
     if(nextButtonText && nextButtonText.id){
         nextButtonText = intl.formatMessage(nextButtonText);
+    }
+    if(predButtonText && predButtonText.id){
+        predButtonText = intl.formatMessage(predButtonText);
     }
     if(title && title.id){
         title = intl.formatMessage(title);
@@ -68,6 +73,8 @@ export const CardError = injectIntl((
             nextButtonText={nextButtonText}
             onClickNext={onClickNext}
             nextButtonIsDisabled={nextButtonIsDisabled}
+            predButtonText = {predButtonText}
+            onClickPred = {onClickPred}
         >
             <div className="text-center">
                 <div className="alert alert-danger" role="alert" >

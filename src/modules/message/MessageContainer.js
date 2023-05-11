@@ -25,10 +25,10 @@ import {definedMessages} from "../i18n/translations";
  */
 const MessageContainer = ({ message, messageInStore, navigateToStep, onCancel,  doSendLogInfo }) => {
     const intl = useIntl();
-    const handleButtonNextClick = () => {
-        if (shownMessage && shownMessage.nextButton && shownMessage.nextButton.nextPage) {
-            doSendLogInfo('UI - RETRY_BUTTON CLICKED');
-            navigateToStep(shownMessage.nextButton.nextPage)
+    const handleButtonClick = (buttonInfo, buttonType) => {
+        if (buttonInfo && buttonInfo.nextPage) {
+            doSendLogInfo('UI - ' + buttonType + "_BUTTON CLICKED");
+            navigateToStep(buttonInfo.nextPage)
         }
     }
 
@@ -50,10 +50,7 @@ const MessageContainer = ({ message, messageInStore, navigateToStep, onCancel,  
         shownMessage = ErrorGeneral
     }
 
-    let Container = CardError
-    if (shownMessage.type === messageTypes.INFO) {
-        Container = CardInfo
-    }
+    let Container = shownMessage.type === messageTypes.INFO ? CardInfo : CardError;
 
     return (
         <Container
@@ -67,9 +64,12 @@ const MessageContainer = ({ message, messageInStore, navigateToStep, onCancel,  
             }}
             hasNextButton={shownMessage.nextButton.isVisible}
             nextButtonText={shownMessage.nextButton.text}
-            onClickNext={() => { handleButtonNextClick() }}
+            onClickNext={() => { handleButtonClick(shownMessage.nextButton, 'RETRY') }}
+
 
             text={shownMessage.message}
+            predButtonText = { shownMessage.predButton.text }
+            onClickPred = { () => { handleButtonClick(shownMessage.predButton, 'ACTUAL_RETRY') } }
         >
             {shownMessage.body? (
                 shownMessage.body.id && intl.formatMessage(shownMessage.body)

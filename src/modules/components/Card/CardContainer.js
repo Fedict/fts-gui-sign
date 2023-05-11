@@ -28,8 +28,8 @@ export const CardContainer = (
             onClickNext,
             nextButtonIsDisabled,
             autoClickNextTimeout,
-            leftButtonText,
-            onClickLeft
+            predButtonText,
+            onClickPred
         }
     ) => {
     const [autoClickTime, setAutoClickTime] = useState(autoClickNextTimeout);
@@ -90,7 +90,7 @@ export const CardContainer = (
                     ? (
                         <div className="card-footer text-muted">
                             {
-                             leftButtonText && <button className="float-left btn btn-primary" onClick={(e) => onClickLeft(e)} >{leftButtonText}</button>
+                             predButtonText && <button className="float-left btn btn-primary" onClick={(e) => onClickPred(e)} >{predButtonText}</button>
                             }
                             {
                                 (hasNextButton)

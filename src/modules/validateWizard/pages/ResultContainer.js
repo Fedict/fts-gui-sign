@@ -31,8 +31,8 @@ export class ResultContainer extends React.Component {
                     hasNextButton
                     nextButtonText={intl.formatMessage(messages.next)}
                     onClickNext={() => { resetWizard() }}
-                    leftButtonText={ <FormattedMessage id="report.download.link" defaultMessage="Download full report"/> }
-                    onClickLeft={() => saveAs(new Blob([report], {type: "application/xml;charset=utf-8"}), "report.xml")}
+                    predButtonText={ <FormattedMessage id="report.download.link" defaultMessage="Download full report"/> }
+                    onClickPred={() => saveAs(new Blob([report], {type: "application/xml;charset=utf-8"}), "report.xml")}
                 >
                 { normalizedReport.signatures.length !== 0 ? <div className="container text-center">
                     <div className="row validateResult py-0 mt-0">
