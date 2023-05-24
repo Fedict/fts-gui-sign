@@ -7,7 +7,8 @@ const ResultContainerWithIntl = injectIntl(ResultContainer)
 
 describe("ResultContainer", () => {
     test("Has No signature message", () => {
-        render(<ResultContainerWithIntl validation={{ diagnosticData: null  }} />);
+        render(<ResultContainerWithIntl report= { '<report />' } normalizedReport = {{ signatures: [] }}
+    />);
 
         expect(screen.getByText('Result of the validation')).toBeInTheDocument();
         const noSign = screen.getByText('No signature could be found in the document.');
@@ -17,18 +18,14 @@ describe("ResultContainer", () => {
     })
 
     test("Has one bad signature", () => {
-        render(<ResultContainerWithIntl validation=
-            {{ diagnosticData: { 
-                Signature: [ { Id: "S_1", ClaimedSigningTime: "Now", ChainItem: [ { Certificate: "C_1" } ]} ],
-                Certificate: [ { Id: "C_1", CommonName: "Jeff Musk" } ]
-             },
-             report: '<report xmlns:ns1="http://dss.esig.europa.eu/validation/detailed-report">' +
-                        '<ns1:Signature Id="S_2">' +
-                            '<ns1:ValidationProcessBasicSignature/>' +
-                            '<ns1:ValidationSignatureQualification/>' +
-                        '</ns1:Signature>' +
-                    '</report>'
-        }} />);
+        render(<ResultContainerWithIntl report= { '<report />' } normalizedReport = {{ signatures: [ {
+            valid: false,
+            qualified: false,
+            missingSigningCert: false,
+            signerCommonName: "Jeff Musk",
+            claimedSigningTime: null
+        } ] }}
+    />);
 
         expect(screen.getByText('Result of the validation')).toBeInTheDocument();
         expect(screen.getByText('Jeff Musk')).toBeInTheDocument();
@@ -40,20 +37,14 @@ describe("ResultContainer", () => {
     })
 
     test("Has one OK signature", () => {
-        render(<ResultContainerWithIntl validation=
-            {{ diagnosticData: { 
-                Signature: [ { Id: "S_1", ClaimedSigningTime: "Now", ChainItem: [ { Certificate: "C_1" } ]} ],
-                Certificate: [ { Id: "C_1", CommonName: "Jeff Musk", KeyUsage: ['nonRepudiation'] } ]
-             },
-             report: '<report xmlns:ns1="http://dss.esig.europa.eu/validation/detailed-report">' +
-                        '<ns1:Signature Id="S_1">' +
-                            '<ns1:ValidationSignatureQualification SignatureQualification="QESig"/>' +
-                            '<ns1:Conclusion>' +
-                                '<ns1:Indication>TOTAL_PASSED</ns1:Indication>' +
-                            '</ns1:Conclusion>' +
-                        '</ns1:Signature>' +
-                    '</report>' 
-           }} />);
+        render(<ResultContainerWithIntl report= { '<report />' } normalizedReport = {{ signatures: [ {
+            valid: true,
+            qualified: true,
+            missingSigningCert: false,
+            signerCommonName: "Jeff Musk",
+            claimedSigningTime: null
+        } ] }}
+    />);
 
         expect(screen.getByText('Result of the validation')).toBeInTheDocument();
         expect(screen.getByText('Jeff Musk')).toBeInTheDocument();
@@ -65,27 +56,21 @@ describe("ResultContainer", () => {
     })
 
     test("Has two OK signature from the different certs", () => {
-        render(<ResultContainerWithIntl validation=
-            {{ diagnosticData: { 
-                Signature: [ { Id: "S_1", ClaimedSigningTime: "Now", ChainItem: [ { Certificate: "C_2" } ]}, { Id: "S_2", ClaimedSigningTime: "NotNow", ChainItem: [ { Certificate: "C_1" } ]} ],
-                Certificate: [ { Id: "C_1", CommonName: "Jeff Musk", KeyUsage: ['nonRepudiation'] }, { Id: "C_2", CommonName: "Elon Bezos", KeyUsage: ['nonRepudiation'] } ]
-             },
-
-             report: '<report xmlns:ns1="http://dss.esig.europa.eu/validation/detailed-report">' +
-                        '<ns1:Signature Id="S_1">' +
-                            '<ns1:ValidationSignatureQualification SignatureQualification="QESig"/>' +
-                            '<ns1:Conclusion>' +
-                                '<ns1:Indication>TOTAL_PASSED</ns1:Indication>' +
-                            '</ns1:Conclusion>' +
-                        '</ns1:Signature>' +
-                        '<ns1:Signature Id="S_2">' +
-                            '<ns1:ValidationSignatureQualification SignatureQualification="Invalid QESig"/>' +
-                            '<ns1:Conclusion>' +
-                                '<ns1:Indication>TOTAL_PASSED</ns1:Indication>' +
-                            '</ns1:Conclusion>' +
-                        '</ns1:Signature>' +
-                    '</report>' 
-            }} />);
+        render(<ResultContainerWithIntl report= { '<report />' } normalizedReport = {{ signatures: [ {
+                valid: true,
+                qualified: true,
+                missingSigningCert: false,
+                signerCommonName: "Jeff Musk",
+                claimedSigningTime: null
+            },
+            {
+                valid: true,
+                qualified: false,
+                missingSigningCert: false,
+                signerCommonName: "Elon Bezos",
+                claimedSigningTime: null
+            } ] }}
+        />);
         expect(screen.getByText('Result of the validation')).toBeInTheDocument();
         expect(screen.getAllByText('Jeff Musk').length).toBe(1);
         expect(screen.getAllByText('Elon Bezos').length).toBe(1);
@@ -95,27 +80,21 @@ describe("ResultContainer", () => {
     })
 
     test("Has one OK signature & one NOK signature from the same cert", () => {
-        render(<ResultContainerWithIntl validation=
-            {{ diagnosticData: { 
-                Signature: [ { Id: "S_1", ClaimedSigningTime: "Now", ChainItem: [ { Certificate: "C_1" } ]}, { Id: "S_2", ClaimedSigningTime: "NotNow", ChainItem: [ { Certificate: "C_1" } ]} ],
-                Certificate: [ { Id: "C_1", CommonName: "Jeff Musk", KeyUsage: ['nonRepudiation'] } ]
-             },
-             report: '<report xmlns:ns1="http://dss.esig.europa.eu/validation/detailed-report">' +
-                        '<ns1:Signature Id="S_1">' +
-                            '<ns1:ValidationSignatureQualification SignatureQualification="QESig"/>' +
-                            '<ns1:Conclusion>' +
-                                '<ns1:Indication>TOTAL_PASSED</ns1:Indication>' +
-                            '</ns1:Conclusion>' +
-                        '</ns1:Signature>' +
-                        '<ns1:Signature Id="S_2">' +
-                            '<ns1:ValidationSignatureQualification SignatureQualification="Invalid QESig"/>' +
-                            '<ns1:Conclusion>' +
-                                '<ns1:Indication>TOTAL_FAILED</ns1:Indication>' +
-                                '<ns1:SubIndication>NO_CERTIFICATE_CHAIN_FOUND</ns1:SubIndication>' +
-                            '</ns1:Conclusion>' +
-                        '</ns1:Signature>' +
-                    '</report>' 
-            }} />);
+        render(<ResultContainerWithIntl report= { '<report />' } normalizedReport = {{ signatures: [ {
+                valid: true,
+                qualified: true,
+                missingSigningCert: false,
+                signerCommonName: "Jeff Musk",
+                claimedSigningTime: null
+            },
+            {
+                valid: false,
+                qualified: false,
+                missingSigningCert: false,
+                signerCommonName: "Jeff Musk",
+                claimedSigningTime: null
+            } ] }}
+        />);
         expect(screen.getByText('Result of the validation')).toBeInTheDocument();
         expect(screen.getAllByText('Jeff Musk').length).toBe(2);
         expect(screen.getAllByText('Invalid date').length).toBe(2);
@@ -124,24 +103,14 @@ describe("ResultContainer", () => {
     })
 
     test("Signature with 'PKCS7' ", () => {
-        render(<ResultContainerWithIntl validation=
-            {{ diagnosticData: { 
-                Signature: [ { Id: "S_1", ClaimedSigningTime: "Now", ChainItem: [ { Certificate: "C_1" } ]} ],
-                Certificate: [ { Id: "C_1", CommonName: "Jeff Musk", KeyUsage: ['nonRepudiation'] } ]
-             },
-             report: '<report xmlns:ns1="http://dss.esig.europa.eu/validation/detailed-report">' +
-                        '<ns1:Signature Id="S_1">' +
-                            '<ns1:Conclusion>' +
-                                '<ns1:Indication>TOTAL_PASSED</ns1:Indication>' +
-                            '</ns1:Conclusion>' +
-                            '<ns1:ValidationProcessBasicSignature>' +
-                                '<ns1:Conclusion>' +
-                                    '<ns1:Errors Key="BBB_ICS_ISASCP_ANS">The signed attribute: \'signing-certificate\' is absent!</ns1:Errors>' +
-                                '</ns1:Conclusion>' +
-                            '</ns1:ValidationProcessBasicSignature>' +
-                        '</ns1:Signature>' +
-                    '</report>' 
-           }} />);
+        render(<ResultContainerWithIntl report= { '<report />' } normalizedReport = {{ signatures: [ {
+                        valid: true,
+                        qualified: false,
+                        missingSigningCert: true,
+                        signerCommonName: "Jeff Musk",
+                        claimedSigningTime: null
+                    } ] }}
+                />);
         expect(screen.getByText('Result of the validation')).toBeInTheDocument();
         expect(screen.getAllByText('Jeff Musk').length).toBe(1);
         expect(screen.getAllByText('Invalid date').length).toBe(1);
