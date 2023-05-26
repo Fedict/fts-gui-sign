@@ -4,7 +4,8 @@ export const signState = {
     TO_BE_SIGNED: 'tobe',
     SIGNED: 'signed',
     ERROR_DIGEST: 'edigest',
-    ERROR_SIGN: 'esign'
+    ERROR_SIGN: 'esign',
+    SKIPPED: 'skipped'
 }
 
 export const signingType = {

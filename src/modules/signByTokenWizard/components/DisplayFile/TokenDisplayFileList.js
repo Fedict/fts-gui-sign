@@ -77,6 +77,12 @@ export const TokenDisplayFileList = ({ tokenFile, selectedInputId, setPreviewFil
                         </div>
                     </div>
                     )}
+                    { (input.signState === signState.SKIPPED) && (<div className="col-md-auto py-1">
+                        <div className="px-3" style={{ width: "auto", maxWidth: "100%", borderRadius: "20px", backgroundColor: "#0e8297", color: "white" }}>
+                            <FormattedMessage id = "error.title.skipped" defaultMessage="Skipped" />
+                        </div>
+                    </div>
+                    )}
                 </div>
             </div>
         )))}

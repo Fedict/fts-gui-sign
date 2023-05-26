@@ -152,6 +152,7 @@
   "succes.multiFile.title": "Vos documents ont été signés avec succès !",
   "succes.title.short": "Signé",
   "error.title.short": "Erreur",
+  "error.title.skipped": "Passé",
   "title": "BOSA - Signer le document",
   "token.intro.check.read": "J'ai lu ce document.",
   "token.intro.check.multiFile.read": "J'ai lu ces documents.",
