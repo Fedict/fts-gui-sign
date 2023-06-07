@@ -44,7 +44,7 @@ export class ResultContainer extends React.Component {
                         </div>
                         { normalizedReport.signatures.map((sig,index) => <div key={index} className={ "row validateResult " + ("light-" + (sig.missingSigningCert ? "pkcs7" : (sig.valid ? (sig.qualified ? "success" : "warning") : "danger"))) }>
                             <div className="col px-0">{sig.signerCommonName}</div>
-                            <div className="col-4 px-0">{moment(sig.claimedSigningTime).format('DD/MM/YYYY - h:mm:ss')}</div>
+                            <div className="col-4 px-0">{moment(sig.claimedSigningTime).format('DD/MM/YYYY - HH:mm:ss')}</div>
                             <div className="col-2 px-0"> {
                                 sig.missingSigningCert ? <strong>? *</strong> : <>
                                     {sig.valid ? yes : no}

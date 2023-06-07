@@ -23,14 +23,14 @@ describe("ResultContainer", () => {
             qualified: false,
             missingSigningCert: false,
             signerCommonName: "Jeff Musk",
-            claimedSigningTime: null,
+            claimedSigningTime: new Date('August 1, 2020 23:23:23'),
             signatureFormat: "PKCS7_LT"
         } ] }}
     />);
 
         expect(screen.getByText('Result of the validation')).toBeInTheDocument();
         expect(screen.getByText('Jeff Musk')).toBeInTheDocument();
-        expect(screen.getByText('Invalid date')).toBeInTheDocument();
+        expect(screen.getByText('01/08/2020 - 23:23:23')).toBeInTheDocument();
         const NO = screen.getAllByText('No');
         expect(NO.length).toBe(2);
         expect(NO[0]).toBeInTheDocument();
