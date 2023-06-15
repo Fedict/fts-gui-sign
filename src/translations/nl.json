@@ -153,7 +153,7 @@
   "succes.multiFile.title": "Je documenten zijn succesvol ondertekend!",
   "succes.title.short": "Ondertekend",
   "error.title.short": "Fout",
-  "error.title.skipped": "Overslaagd",
+  "error.title.skipped": "Overgeslagen",
   "title": "BOSA - document ondertekenen",
   "token.intro.check.read": "Ik heb het document gelezen.",
   "token.intro.check.multiFile.read": "Ik heb deze documenten gelezen.",
