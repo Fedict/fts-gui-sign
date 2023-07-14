@@ -67,6 +67,10 @@ export const errorMessages = defineMessages({
         defaultMessage: "Failed to fetch data to sign.",
         link: "#6"
     },
+    SIGNATURE_OUT_OF_BOUNDS: {
+        id: "error.SIGNATURE_OUT_OF_BOUNDS",
+        defaultMessage: "The new signature field position is outside the page dimensions!"
+    },
     SIGN_CERT_EXPIRED: {
         id: "error.SIGN_CERT_EXPIRED",
         defaultMessage: "The certificate is expired."

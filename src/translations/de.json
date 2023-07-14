@@ -66,6 +66,7 @@
   "error.NOT_ALLOWED_TO_SIGN": "Sie haben nicht die Erlaubnis, dieses Dokument zu unterzeichnen. Für weitere Informationen wenden Sie sich bitte an den Eigentümer des Dokuments.",
   "error.PARSE_ERROR": "Konnte die Anfrage nicht anhandeln.",
   "error.SIGN_PERIOD_EXPIRED": "Die Eingabe der PIN hat zu lange gedauert.",
+  "error.SIGNATURE_OUT_OF_BOUNDS": "Die Position des neuen Unterschriftenfeldes liegt außerhalb der Seitenabmessungen!",
   "error.SIGN_CERT_EXPIRED": "Das Zertifikat ist abgelaufen.",
   "error.UNKNOWN_PROFILE": "Unbekanntes Signaturprofil.",
   "error.WRONG_RESULT_SIGN_TOKEN": "Unterschreiben des Dokuments fehlgeschlagen.",
