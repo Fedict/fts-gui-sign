@@ -55,10 +55,8 @@ export const TokenDisplayFileList = ({ tokenFile, selectedInputId, setPreviewFil
                     <div className="col">
                     { tokenFile.selectDocuments &&
                         <input type="checkbox" className="form-check-input" style={{ width: 15, height: 15, margin: 9, position: "absolute" }}
-                            disabled={!(input.signState === signState.DONT_SIGN || input.signState === signState.SIGN_REQUESTED)} checked={input.signState !== signState.DONT_SIGN}
-                            onChange={ () => { setInputsSignState(index, input.signState === signState.SIGN_REQUESTED ? signState.DONT_SIGN : signState.SIGN_REQUESTED)
-                                doSendLogInfo('UI - CHECK FILE : ' + input.fileName + " : " + (input.signState === signState.DONT_SIGN))
-                             }}/>
+                            disabled={ true } checked={input.signState !== signState.DONT_SIGN}
+                            />
                     }
                         <img  className="p-2" src={"/img/Icon" + input.iconType + ".png"} alt={input.iconType} style={{ marginTop: "-3px", marginLeft: "27px" }} ></img>
                         <a href={ input.url + "?forceDownload" } download>{input.cleanFileName}</a>
