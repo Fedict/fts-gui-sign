@@ -18,6 +18,7 @@ import MainI18nWrapper from "./modules/i18n/MainI18nWrapper";
 import TokenWizardContainer from "./modules/signByTokenWizard/TokenWizardContainer";
 import { isInIframe } from "./modules/utils/helper";
 import { getBrowser, browser } from './modules/browserDetection/BrowserDetection';
+import { Helmet } from "react-helmet-async";
 
 export const BaseApp = () => {
     const browserIsSupported = browserIsAccepted();
@@ -61,6 +62,9 @@ export const BaseApp = () => {
 function App() {
     return (
         <Router>
+            <Helmet>
+                <meta httpEquiv="Content-Security-Policy" content={ window.configData.CSP }></meta>
+            </Helmet>
             <MainI18nWrapper>
                 <BaseApp />
             </MainI18nWrapper>
