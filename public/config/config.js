@@ -64,8 +64,8 @@ window.configData = {
     BEurl: "https://validate.ta.fts.bosa.belgium.be/signandvalidation",
     //BEurl: "http://localhost:8751",
     
-    //CSP: "default-src 'self'; connect-src 'self' https://validate.ta.fts.bosa.belgium.be  http://localhost:8081; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; object-src https://validate.ta.fts.bosa.belgium.be; frame-src https://validate.ta.fts.bosa.belgium.be;",
-    CSP: "default-src 'self'; connect-src 'self' http://localhost:8751  http://localhost:8081; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; object-src http://localhost:8751; frame-src http://localhost:8751;",
+    CSP: "default-src 'self'; connect-src 'self' https://validate.ta.fts.bosa.belgium.be  https://mintest.ta.fts.bosa.belgium.be; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; object-src https://validate.ta.fts.bosa.belgium.be; frame-src https://validate.ta.fts.bosa.belgium.be;",
+    //CSP: "default-src 'self'; connect-src 'self' http://localhost:8751  http://localhost:8081; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; object-src http://localhost:8751; frame-src http://localhost:8751;",
 
     skipCertificateChainValidate : false
     
