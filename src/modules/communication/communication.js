@@ -115,6 +115,15 @@ const jsonHandler = (response) => {
 //-----------------------------------------
 
 /**
+ * API request the back-end version
+ * @returns {Promise} Promise that resolves the result of the API request
+ */
+export const getBackendVersionAPI = () => {
+
+    return fetch(url + "/signing/version").then((response) => response.text())
+}
+
+/**
  * API request to validate a array of certificates
  * @param {Object} certificateBody - the api body for the request
  * 
