@@ -1,5 +1,3 @@
-import 'react-app-polyfill/ie9';
-import 'react-app-polyfill/ie11';
 import 'react-app-polyfill/stable'
 import 'abortcontroller-polyfill/dist/polyfill-patch-fetch'
 import React from 'react';

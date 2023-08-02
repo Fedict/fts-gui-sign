@@ -46,13 +46,13 @@ export const BaseApp = () => {
                                 <MessageContainer message={ErrorIE11NotSupported} />
                             </div>
                         </div>)
-                    : (
-                        <div className="container">
-                            <div className="col col-12 col-md-8 mx-auto align-middle">
-                                <MessageContainer message={ErrorNotSupported} />
-                            </div>
+                : (
+                    <div className="container">
+                        <div className="col col-12 col-md-8 mx-auto align-middle">
+                            <MessageContainer message={ErrorNotSupported} />
                         </div>
-                    )
+                    </div>
+                )
                 )
             }
             <Footer />
