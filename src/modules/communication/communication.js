@@ -1,6 +1,8 @@
 import { getBase64Data } from "../fileUpload/helpers/FileHelper"
 import packageJson from '../../../package.json';
 import {defaults, defaultsExcludeEmpty, getBEUrl} from "../utils/helper";
+import { globalToken } from "../../App"
+
 //-----------------------------------------
 //--- constants                         ---
 //-----------------------------------------
@@ -60,7 +62,8 @@ export const createBody = (certificateBody, documentName, documentBase64, docume
         "toSignDocument": {
             "bytes": documentBase64,
             "name": documentName
-        }
+        },
+        token: globalToken
     }
 }
 
@@ -202,7 +205,8 @@ export const validateSignatureAPI = async (document) => {
         "signedDocument": {
             "bytes": documentB64,
             "name": document.name
-        }
+        },
+        token : globalToken
     }
 
     return fetch(url + "/validation/validateSignature", {
@@ -355,6 +359,8 @@ export const sendLogInfo = (message, callback, token) => {
     lastLogInfo.message = message;
     lastLogInfo.token = token;
     lastLogInfo.amount = 0;
+
+    if (!token) token = globalToken;
     const body = {
         "level" : "INFO",
         "message": message,

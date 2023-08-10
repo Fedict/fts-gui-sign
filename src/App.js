@@ -61,10 +61,11 @@ const BaseApp = (props) => {
     )
 }
 const App = () => {
-    const [backendVersion, setBackendVersion] = useState('none');
+    const [backendVersion, setBackendVersion] = useState('0.0.0');
 
     useEffect(() => {
         getBackendVersionAPI().then(version => { setBackendVersion(version) })
+
        }, []);
 
     return (
@@ -79,5 +80,6 @@ const App = () => {
     );
 }
 
+export var globalToken = Date.now();
 
 export default App;

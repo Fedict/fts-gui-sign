@@ -53,6 +53,7 @@ import {defaults, parseErrorMessage} from "../../utils/helper";
 import {ID_FLAGS} from "../../eIdLink/strategies/createEIDLinkExtensionStrategy";
 import { SET_ALL_INPUTS, setInputsSignState } from "../../signByTokenWizard/actions/TokenActions"
 import { signingType, signState } from "../../signByTokenWizard/constants"
+import { globalToken } from "../../../App"
 
 //----------------------------------
 // helpers                    
@@ -361,7 +362,8 @@ export const validateCertificates = () => (dispatch, getStore) => {
         const APIBody = certificate.certificateList.map((val) => {
             return {
                 ...val.APIBody,
-                "expectedKeyUsage": "NON_REPUDIATION"
+                "expectedKeyUsage": "NON_REPUDIATION",
+                token: globalToken
             }
         })
 
@@ -497,7 +499,8 @@ export const validateCertificate = (certificateObject) => (dispatch, getStore) =
         //console.log('validateCertificate', certificateObject)
         const APIBody = [{
             ...certificateObject.APIBody,
-            "expectedKeyUsage": "NON_REPUDIATION"
+            "expectedKeyUsage": "NON_REPUDIATION",
+            token: globalToken
         }]
 
         const flowId = getStore().controlId.flowId
@@ -750,7 +753,7 @@ export const signDocument = () => (dispatch, getStore) => {
                         if (tokenFile.signingType !== signingType.XadesMultiFile) {
                             if (!getStore().tokenFile.noSkipErrors) {
                                 dispatch(setInputsSignState(fileIdToSign, signState.ERROR_SIGN));
-                                var moreToSign =  getStore().tokenFile.inputs.find(input => input.signState === signState.TO_BE_SIGNED);
+                                moreToSign =  getStore().tokenFile.inputs.find(input => input.signState === signState.TO_BE_SIGNED);
                                 errorMessage.predButton = { text: { id: "signing.error.retryButton", defaultMessage: "Try again" }, action: () => {
                                     dispatch(setInputsSignState(fileIdToSign, signState.TO_BE_SIGNED)) },
                                     nextPage: WIZARD_STATE_DIGEST_LOADING }
