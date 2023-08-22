@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react'
+import React, {Fragment, useState, useRef} from "react"
 import {FormattedMessage} from "react-intl";
 import XmlDataViewer from "../XmlDataViewer/XmlDataViewer";
 
@@ -16,13 +16,38 @@ export const DisplayFile = ({ uploadFile }) => {
 
     if (uploadFile && uploadFile.displayFile) {
         const data = uploadFile.displayFile
-        if (data && data.url) {
+                if (data && data.url) {
             if (data.isPdf) {
                 return (
-
-                    <object style={{height: "85vh", width: "100%"}} type="application/pdf" data={data.url} name={data.fileName}>
-                        <p><FormattedMessage id="file.download.failed.pdf" defaultMessage="Failed to load pdf."/></p>
-                    </object>
+/*
+                    <div>
+                        {!pdfDocument && <span>Loading...</span>}
+                        <canvas ref={canvasRef} />
+                        {Boolean(pdfDocument && pdfDocument.numPages) && (
+                            <nav>
+                                <ul className="pager">
+                                    <li className="previous">
+                                    <button disabled={page === 1} onClick={() => setPage(page - 1)}>
+                                        Previous
+                                    </button>
+                                    </li>
+                                    <li className="next">
+                                    <button
+                                        disabled={page === pdfDocument.numPages}
+                                        onClick={() => setPage(page + 1)}
+                                    >
+                                        Next
+                                    </button>
+                                    </li>
+                                </ul>
+                            </nav>
+                        )}
+                    </div>
+*/
+    
+                        <object style={{height: "85vh", width: "100%"}} type="application/pdf" data={data.url} name={data.fileName}>
+                            <p><FormattedMessage id="file.download.failed.pdf" defaultMessage="Failed to load pdf."/></p>
+                        </object>
 
                 )
             }else{
