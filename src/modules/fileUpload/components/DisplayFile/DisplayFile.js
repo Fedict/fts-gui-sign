@@ -1,9 +1,10 @@
-import React, {Fragment, useState, useRef} from "react"
+import React, {Fragment } from "react"
 import {FormattedMessage} from "react-intl";
 import XmlDataViewer from "../XmlDataViewer/XmlDataViewer";
+import { DisplayPDF } from "./DisplayPDF";
 
 /**
- * Component to display a file
+ * Component to display a file (XML or PDF)
  * if no file is present a picture is shown
  * @param {object} props  
  * @param {object} props.uploadFile - upload file object from the redux store 
@@ -14,67 +15,35 @@ import XmlDataViewer from "../XmlDataViewer/XmlDataViewer";
  */
 export const DisplayFile = ({ uploadFile }) => {
 
-    if (uploadFile && uploadFile.displayFile) {
-        const data = uploadFile.displayFile
-                if (data && data.url) {
-            if (data.isPdf) {
-                return (
-/*
-                    <div>
-                        {!pdfDocument && <span>Loading...</span>}
-                        <canvas ref={canvasRef} />
-                        {Boolean(pdfDocument && pdfDocument.numPages) && (
-                            <nav>
-                                <ul className="pager">
-                                    <li className="previous">
-                                    <button disabled={page === 1} onClick={() => setPage(page - 1)}>
-                                        Previous
-                                    </button>
-                                    </li>
-                                    <li className="next">
-                                    <button
-                                        disabled={page === pdfDocument.numPages}
-                                        onClick={() => setPage(page + 1)}
-                                    >
-                                        Next
-                                    </button>
-                                    </li>
-                                </ul>
-                            </nav>
-                        )}
-                    </div>
-*/
-    
-                        <object style={{height: "85vh", width: "100%"}} type="application/pdf" data={data.url} name={data.fileName}>
-                            <p><FormattedMessage id="file.download.failed.pdf" defaultMessage="Failed to load pdf."/></p>
-                        </object>
-
-                )
-            }else{
-                const dataNotVisualizable = <Fragment>
-                    <p><FormattedMessage id="file.download.text.1" defaultMessage="The document to sign can't be previewed but you can download it by right-clicking on the link below and selecting the option 'save-link-as'."/></p>
-                </Fragment>
-
-                return <div>
-                    {data.isXml && <XmlDataViewer key={data.url} data={data.url} xslt={data.xsltUrl} previewErrorRenderer={() => (
-                        dataNotVisualizable
-                    )}></XmlDataViewer>}
-                    <p><a href={data.url} download={data.fileName} title={data.fileName}><FormattedMessage id="file.download.link" defaultMessage="Download the file to sign."/></a></p>
-                </div>
-            }
-        }
+    if (!(uploadFile && uploadFile.displayFile && uploadFile.displayFile.url)) {
+        return (
+            <div style={{
+                height: "85vh",
+                width: "100%",
+                backgroundColor: "white",
+                backgroundImage: "url('/img/img.jpg')",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "cover"
+            }}>
+            </div>
+        )
     }
-    return (
-        <div style={{
-            height: "85vh",
-            width: "100%",
-            backgroundColor: "white",
-            backgroundImage: "url('/img/img.jpg')",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "cover"
-        }}>
+    
+    const data = uploadFile.displayFile
+    if (!data.isPdf) {
+        const dataNotVisualizable = <Fragment>
+            <p><FormattedMessage id="file.download.text.1" defaultMessage="The document to sign can't be previewed but you can download it by right-clicking on the link below and selecting the option 'save-link-as'."/></p>
+        </Fragment>
+
+        return <div>
+            {data.isXml && <XmlDataViewer key={data.url} data={data.url} xslt={data.xsltUrl} previewErrorRenderer={() => (
+                dataNotVisualizable
+            )}></XmlDataViewer>}
+            <p><a href={data.url} download={data.fileName} title={data.fileName}><FormattedMessage id="file.download.link" defaultMessage="Download the file to sign."/></a></p>
         </div>
-    )
+    }
+
+    return <DisplayPDF file={data} />;
 }
 

@@ -41,14 +41,18 @@ export class ResultContainer extends React.Component {
                             <div className="col-2 px-0"><b><FormattedMessage id="validation.sign.valid" defaultMessage="Valid"/></b></div>
                             <div className="col-2 px-0 text-nowrap"><b><FormattedMessage id="validation.sign.qualif" defaultMessage="Qualified"/></b></div>
                             <div className="col-2 px-0 text-nowrap"><b><FormattedMessage id="validation.sign.format" defaultMessage="EU Format"/></b></div>
-                        </div>
-                        { normalizedReport.signatures.map((sig,index) => <div key={index} className={ "row validateResult " + ("light-" + (sig.missingSigningCert ? "pkcs7" : (sig.valid ? (sig.qualified ? "success" : "warning") : "danger"))) }>
+                    </div>
+                        { normalizedReport.signatures.map((sig,index) => <div key={index} className={ "row validateResult light-" + (sig.missingSigningCert ? "pkcs7" : (sig.valid ? (sig.qualified ? "success" : "warning") : "danger")) }>
                             <div className="col px-0">{sig.signerCommonName}</div>
                             <div className="col-4 px-0">{moment(sig.claimedSigningTime).format('DD/MM/YYYY - HH:mm:ss')}</div>
                             <div className="col-2 px-0"> {
                                 sig.missingSigningCert ? <strong>? *</strong> : <>
                                     {sig.valid ? yes : no}
-                                    {sig.subIndication && <img title={intl.formatMessage({ id: subIndication[sig.subIndication].id, defaultMessage: subIndication[sig.subIndication].message })} style={{ width:16, height:16, marginBottom: 3, marginLeft: 4 }} src="/img/questionMark.svg"/> }
+                                    {sig.subIndication &&
+                                            <img title={intl.formatMessage({ id: subIndication[sig.subIndication].id, defaultMessage: subIndication[sig.subIndication].message })}
+                                            alt={intl.formatMessage({ id: subIndication[sig.subIndication].id, defaultMessage: subIndication[sig.subIndication].message })}
+                                            style={{ width:16, height:16, marginBottom: 3, marginLeft: 4 }} src="/img/questionMark.svg"
+                                            /> }
                                 </>
                             } </div>
                             <div className="col-2 px-0">{sig.qualified ? yes : no }</div>
