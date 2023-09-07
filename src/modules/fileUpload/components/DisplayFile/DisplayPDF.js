@@ -86,13 +86,15 @@ export const DisplayPDF = ({ file }) => {
     let dragY;
     let dragRect;
     
-    const isDragRectValid = (e) => {
+    const recordNewRectIfValid = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
         var rect = normalizeRect({ top: dragY, right: e.offsetX, left: dragX, bottom: e.offsetY });
 
         if (pageSignatures) {
             for(let i = 0; i < pageSignatures.length; i++) {
                 const sigRect = pageSignatures[i].rect;
-                if (intersectRect(sigRect, rect)) return false;
+                if (intersectRect(sigRect, rect)) return;
             };
         }
 
@@ -103,39 +105,33 @@ export const DisplayPDF = ({ file }) => {
         context.strokeStyle = '#ff000080';
         context.strokeRect(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
         dragRect = rect;
-        return true;
     }
     
     const onMouseDown = (e) => {
         dragX = e.offsetX;
         dragY = e.offsetY;
-        if (isDragRectValid(e)) {
-            e.preventDefault();
-            e.stopPropagation();
-        }
-
+        recordNewRectIfValid(e);
         console.log("DOWN");
         console.log(dragRect);
     };
 
     const onMouseMove = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        if (dragRect) isDragRectValid(e);
+        if (dragRect) recordNewRectIfValid(e);
     };
 
-    const onMouseUp = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        console.log("UP");
+    const onDocumentMouseUp = (e) => {
+        onMouseUp(e, true);
+    }
+
+    const onMouseUp = (e, isOutOfCanvas) => {
+        console.log("UP " + isOutOfCanvas);
         if (dragRect) {
-            if (isDragRectValid(e)) {
-                if ((dragRect.right - dragRect.left) !== 0 && (dragRect.bottom - dragRect.top) !== 0) {
-                    setSignatureRect({
-                        page: pageNumber,
-                        rect : scaleRect(dragRect, ZOOM_CORRECTION / zoomLevel)
-                    });
-                }
+            if (!isOutOfCanvas) recordNewRectIfValid(e);
+            if ((dragRect.right - dragRect.left) !== 0 && (dragRect.bottom - dragRect.top) !== 0) {
+                setSignatureRect({
+                    page: pageNumber,
+                    rect : scaleRect(dragRect, ZOOM_CORRECTION / zoomLevel)
+                });
             }
             const canvas = selectionCanvasRef.current;
             canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
@@ -149,10 +145,12 @@ export const DisplayPDF = ({ file }) => {
             dragRect = null;
             canvas.addEventListener("mousedown", onMouseDown);
             canvas.addEventListener("mouseup", onMouseUp);
+            document.documentElement.addEventListener('mouseup', onDocumentMouseUp); 
             canvas.addEventListener("mousemove", onMouseMove);
             return () => {
                 canvas.removeEventListener('mousedown', onMouseDown);
                 canvas.removeEventListener('mouseup', onMouseUp);
+                document.documentElement.removeEventListener('mouseup', onDocumentMouseUp); 
                 canvas.removeEventListener('mousemove', onMouseMove);
             }
         }
@@ -262,7 +260,7 @@ export const DisplayPDF = ({ file }) => {
             {showIndex && <div className="col-1 border">
                     {thumbNails}
                 </div>}
-                <div className="col" style={{ width: "100%", height: "1000px", overflow: "scroll", position: "relative" }} >
+                <div className="col bg-light" style={{ width: "100%", height: "1000px", overflow: "scroll", position: "relative" }} >
                     <canvas id="pdf-canvas" ref={pdfCanvasRef} width={canvasWidth} height ={canvasHeight} style= { { position: "absolute", left: "0", top: "0", zIndex: "0" } } />
                     <canvas id="pdf-canvasSelection" ref={selectionCanvasRef} width={canvasWidth} height ={canvasHeight} style= { { position: "absolute", left: "0", top: "0", zIndex: "1" } } />
                 </div>
