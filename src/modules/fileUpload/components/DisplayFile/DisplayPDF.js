@@ -49,7 +49,7 @@ const getSignatures = async (page, scale)  => {
 
 
 /**
- * Component to display a PDF
+ * Component to display a PDF, select a rectangle where a visible signature (acroform) will be added 
  * @param {object} props  
  * @param {object} props.uploadFile - upload file object from the redux store 
  * @param {object} props.uploadFile.displayFile - file that is shown 
@@ -57,6 +57,14 @@ const getSignatures = async (page, scale)  => {
  * @param {object} props.uploadFile.displayFile.url - dataURL for the file
  */
 export const DisplayPDF = ({ file }) => {
+    const [currentPDF, setCurrentPDF] = useState(null);
+    const pdfCanvasRef = useRef(null);
+    const [canvasWidth, setCanvasWidth] = useState(0);
+    const [canvasHeight, setCanvasHeight] = useState(0);
+    const thumbCanvasRefs = useRef([]);
+    const [thumbSizes, setThumbSizes] = useState(null);
+    const [renderThumbnails, setRenderThumbnails] = useState(false);
+
     const [showIndex, setShowIndex] = useState(false);
     const [pageNumber, setPageNumber] = useState(1);
 
@@ -71,15 +79,11 @@ export const DisplayPDF = ({ file }) => {
         return predZoomLevel ? predZoomLevel : zoomLevels[0];
     };
 
-    const [currentPDF, setCurrentPDF] = useState(null);
-    const [canvasWidth, setCanvasWidth] = useState(0);
-    const [canvasHeight, setCanvasHeight] = useState(0);
-    const pdfCanvasRef = useRef(null);
+    //****************************************************************************************
+    // Handle mouse events to allow drawing the signature rectangle.
+    // A signature can't be drawn over another so we're forbidding intersection with existing signing acroforms 
+    //****************************************************************************************
     const selectionCanvasRef = useRef(null);
-    const thumbCanvasRefs = useRef([]);
-    const [thumbWidth, setThumbWidth] = useState([]);
-    const [thumbHeight, setThumbHeight] = useState([]);
-
     const [pageSignatures, setPageSignatures] = useState(null);
     const [signatureArea, setSignatureRect] = useState(null);
     let dragX;
@@ -157,34 +161,54 @@ export const DisplayPDF = ({ file }) => {
     }, [selectionCanvasRef, pageSignatures]);
 
 
-    useEffect(() => {
-        setPageNumber(1);
-        setZoomLevel(100);
-    }, [])
+    //****************************************************************************************
+    // Draw current PDF page and thumbnails 
+    //****************************************************************************************
 
     useEffect(() => {
+        setShowIndex(false);
+        setPageNumber(1);
+        setZoomLevel(100);
         getDocument(file.url).promise.then(pdf => {
             setCurrentPDF(pdf);
-        });
+            let getPagePromises = [];
+            let thumbIndex = pdf.numPages;
+            while(thumbIndex >= 1) getPagePromises.push(pdf.getPage(thumbIndex--));
+
+            Promise.all(getPagePromises).then(function (thumbPages) {
+                let newThumbSizes = [];
+                thumbPages.forEach((page) => {{ newThumbSizes.push({ width: page.view[2] / 10, height: page.view[3] / 10 }) }});
+                console.log("newThumbSizes");
+                console.log(newThumbSizes);
+                setThumbSizes(newThumbSizes);
+                setRenderThumbnails(true);
+                });
+            });
     }, [file.url]);
     
     useEffect(() => {
-        if (!currentPDF || !showIndex) return;
+        if (!renderThumbnails || !currentPDF) return;
 
-        for(let thumbIndex = 0; thumbIndex < currentPDF.numPages; thumbIndex++) {
+        for(let thumbIndex = 0; thumbIndex < thumbSizes.length; thumbIndex++) {
             currentPDF.getPage(thumbIndex + 1).then(function (thumbPage) {
-                const context = thumbCanvasRefs.current[thumbIndex].getContext('2d');
-                thumbWidth[thumbIndex] = thumbPage.view[2] / 10;
-                thumbHeight[thumbIndex] = thumbPage.view[3] / 10;
-                const renderContext = {
-                    canvasContext: context,
+                thumbPage.render({
+                    canvasContext: thumbCanvasRefs.current[thumbIndex].getContext('2d'),
                     viewport: thumbPage.getViewport({ scale: 0.1 }),
                     textContent: currentPDF,
-                };
-                thumbPage.render(renderContext);
+                });
             })
         }
-    }, [currentPDF, showIndex])
+        setRenderThumbnails(false);
+    }, [renderThumbnails])
+    
+
+    const changePageNumber = (page) => {
+        setPageNumber(page);
+        if (thumbCanvasRefs.current) {
+            let element = thumbCanvasRefs.current[page - 1];
+            if (element) element.scrollIntoView();
+        }
+    }
 
     useLayoutEffect(() => {
         renderPage();
@@ -230,26 +254,23 @@ export const DisplayPDF = ({ file }) => {
         }).catch((e) => { console.log("?" + e) });
     }
 
-    let thumbNails = [];
-    if (currentPDF && showIndex) {
-        for(let thumbIndex = 0; thumbIndex < currentPDF.numPages; thumbIndex++) {
-            thumbNails.push(<canvas key={ thumbIndex } ref={(element) => thumbCanvasRefs.current[thumbIndex] = element} width={thumbWidth[thumbIndex]} height ={thumbHeight[thumbIndex]} />);
-        }
-    }
+    //****************************************************************************************
+    // HTML rendering
+    //****************************************************************************************
 
     return (
-        <div className="container border">
-            <div className="row bg-light">
-                <div className="col-md-auto">
+        <div className="container flex-column border" style={ { width:"100%", backgroundColor: "rgba(0, 0, 0, 0.03)" }}>
+            <div className="row">
+                <div className="col">
                     <button onClick={() => { setShowIndex(!showIndex) }}>I</button>
                 </div>
-                <div className="col-md-auto">
+                <div className="col">
                     <span className="px-2">Page : </span>
-                    <button className="px-2" onClick={() => { setPageNumber(pageNumber - 1) }} disabled={ pageNumber <= 1}>Pred</button>
+                    <button className="px-2" onClick={() => { changePageNumber(pageNumber - 1) }} disabled={ pageNumber <= 1}>Pred</button>
                     <span  className="px-2">{ pageNumber }</span>
-                    <button  className="px-2" onClick={() => { setPageNumber(pageNumber + 1) }} disabled={ currentPDF && pageNumber >= currentPDF.numPages}>Next</button>
+                    <button  className="px-2" onClick={() => { changePageNumber(pageNumber + 1) }} disabled={ currentPDF && pageNumber >= currentPDF.numPages}>Next</button>
                 </div>
-                <div className="col-md-auto">
+                <div className="col">
                     <span className="px-2">Zoom : </span>
                     <button  className="px-2" onClick={() => { setZoomLevel(predZoom()) }} disabled={ predZoom() === zoomLevel}>Pred</button>
                     <span  className="px-2">{ zoomLevel }</span>
@@ -257,10 +278,15 @@ export const DisplayPDF = ({ file }) => {
                 </div>
             </div>
             <div className="row">
-            {showIndex && <div className="col-1 border">
-                    {thumbNails}
-                </div>}
-                <div className="col bg-light" style={{ width: "100%", height: "1000px", overflow: "scroll", position: "relative" }} >
+                <div style={{ overflow: "auto", width: "110px", textAlign: "center", height: "80vh"}}
+                 hidden={ showIndex ? null : "hidden" }>{thumbSizes && thumbSizes.map((input, thumbIndex) => (
+                        <canvas key={ "tumbnail-"+thumbIndex } 
+                            ref={(element) => thumbCanvasRefs.current[thumbIndex] = element } 
+                            width={thumbSizes[thumbIndex].width} height ={thumbSizes[thumbIndex].height}
+                            onClick={ () => { setPageNumber(thumbIndex + 1) }}
+                            style={ pageNumber === (thumbIndex + 1) ?  { border: "double" } : {} } />                    
+                 ))}</div>
+                <div className="col" style={{ overflow: "auto", height: "80vh" }}>
                     <canvas id="pdf-canvas" ref={pdfCanvasRef} width={canvasWidth} height ={canvasHeight} style= { { position: "absolute", left: "0", top: "0", zIndex: "0" } } />
                     <canvas id="pdf-canvasSelection" ref={selectionCanvasRef} width={canvasWidth} height ={canvasHeight} style= { { position: "absolute", left: "0", top: "0", zIndex: "1" } } />
                 </div>
