@@ -44,6 +44,6 @@ export const DisplayFile = ({ uploadFile }) => {
         </div>
     }
 
-    return <DisplayPDF file={data} />;
+    return <DisplayPDF file={data} drawSignature={true} />;
 }
 
