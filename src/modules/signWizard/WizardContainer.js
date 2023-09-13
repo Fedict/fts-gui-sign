@@ -1,4 +1,5 @@
 import React from 'react'
+import {useDispatch} from "react-redux";
 import {
     WIZARD_STATE_UPLOAD,
     WIZARD_STATE_VERSION_CHECK_LOADING,
@@ -38,8 +39,11 @@ import { ErrorGeneral } from '../message/MessageConstants'
 import { resetWizard } from './actions/WizardLogicActions'
 import DisplayFile from '../fileUpload/components/UploadDisplayFile/UploadDisplayFile'
 import CertificateValidateChainContainer from './pages/CertificateValidateChainContainer'
+import {selectSignature} from "../fileUpload/reducers/DisplayPDFReducer";
 
-export const WizardContainer = ({ wizard, reader, resetWizard }) => {
+export const WizardContainer = ({ wizard, reader, resetWizard, signatureFields, signatureArea, signatureSelected }) => {
+    const dispatch = useDispatch();
+
     let content = null;
     switch (wizard.state) {
         case WIZARD_STATE_START:
@@ -111,6 +115,14 @@ export const WizardContainer = ({ wizard, reader, resetWizard }) => {
                 </div>
                 <div className={"col col-sm-6"}>
                     {content}
+                    <h1><br/>Signatures</h1>
+                    <input type="radio" key="noSignature" checked={signatureSelected === null} onChange={ () => {dispatch(selectSignature(null))} } name="sigSel"/>No visible Signature<br/>
+                    <input type="radio" key="manualSignature" checked={signatureSelected === undefined} disabled={signatureArea === null} onChange={ () => {dispatch(selectSignature(undefined))} } name="sigSel"/>Manual Signature<br/>
+                    { signatureFields.map((sigField, index) => (
+                        <div key={index} >
+                            <input type="radio" checked={signatureSelected === sigField} onChange={ () => {dispatch(selectSignature(sigField))} } name="sigSel"/>{ sigField }<br/>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div >)
@@ -119,7 +131,10 @@ export const WizardContainer = ({ wizard, reader, resetWizard }) => {
 const mapStateToProps = (state) => {
     return (state) => ({
         wizard: state.wizard,
-        reader: state.reader
+        reader: state.reader,
+        signatureFields: state.pdfSignatures.signatureFields,
+        signatureArea: state.pdfSignatures.signatureArea,
+        signatureSelected: state.pdfSignatures.signatureSelected
     })
 }
 

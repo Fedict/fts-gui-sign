@@ -39,17 +39,19 @@ const getPagesInfo = async (pdf) => {
         let pageInfo =  {
             width: page.view[2],
             height: page.view[3],
-            sigAcroform: []
+            sigAcroforms: []
         };
         let annotations = await page.getAnnotations();
         annotations.forEach((annotation) => {
             if (annotation.subtype === "Widget" && annotation.fieldType === "Sig") {
                 const r = annotation.rect;
-                pageInfo.sigAcroform.push({
-                    fieldName: annotation.fieldName,
-                    // Coordinate system of pdf "zero" is bottom left hence the "page.view[3] - r[1]"
-                    rect: normalizeRect({ left: r[0], top: page.view[3] - r[1], right: r[2], bottom: page.view[3] - r[3] })
-                })
+                if (r[0] != 0 || r[1] != 0 || r[2] != 0 || r[3] != 0) {
+                    pageInfo.sigAcroforms.push({
+                        fieldName: annotation.fieldName,
+                        // Coordinate system of pdf "zero" is bottom left hence the "page.view[3] - r[1]"
+                        rect: normalizeRect({ left: r[0], top: page.view[3] - r[1], right: r[2], bottom: page.view[3] - r[3] })
+                    })
+                }
             }
         })
         newPagesInfo.push(pageInfo)
@@ -104,7 +106,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
                 setPagesInfo(pagesInfo);
                 let signatureFields = [];
                 pagesInfo.forEach((page) => {
-                    page.sigAcroform.forEach((sigAcroform) => { signatureFields.push(sigAcroform.fieldName)});
+                    page.sigAcroforms.forEach((sigAcroform) => { signatureFields.push(sigAcroform.fieldName)});
                 } )
                 dispatch(setSignatureFields(signatureFields));
             });
@@ -135,16 +137,17 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     }
 
     useEffect(() => {
-        if (pagesInfo.length === 0 || !currentPDF) return;
+        if (pagesInfo.length === 0) return;
 
         let pi = pagesInfo[pageNumber - 1];
         const scale = zoomLevel / ZOOM_CORRECTION; // Scale (to percentage compensated for DPI pseudo mapping)
         setCanvasWidth(pi.width * scale);
         setCanvasHeight(pi.height * scale);
+        setRenderPdf(true);
     }, [pagesInfo, pageNumber, zoomLevel]);
 
     useLayoutEffect(() => {
-        if (!currentPDF || canvasHeight === 0 || canvasWidth === 0) return;
+        if (!renderPdf) return;
 
         currentPDF.getPage(pageNumber).then(function (page) {
             console.log("page", page);
@@ -155,9 +158,15 @@ export const DisplayPDF = ({ file, drawSignature }) => {
                 viewport: page.getViewport({ scale: scale }),
                 textContent: currentPDF,
             };
-            page.render(renderContext);
-        }).catch((e) => { console.log("?" + e) });
-    }, [pagesInfo, pageNumber, zoomLevel, canvasHeight, canvasWidth]);
+            
+            page.render(renderContext).promise.then(() => {
+                setRenderPdf(false);
+            });
+        }).catch((e) => {
+            console.log("?" + e)
+            setRenderPdf(false);
+        });
+    }, [renderPdf]);
 
     //****************************************************************************************
     // Handle mouse events to allow drawing the signature rectangle.
@@ -171,16 +180,29 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     let dragY;
     let dragRect;
     
+    useEffect(() => {
+        if (signatureSelected === undefined) {
+            if (pageNumber != signatureArea.page) setPageNumber(signatureArea.page);
+        } else {
+            pagesInfo.forEach((pi, index) => {
+                pi.sigAcroforms.forEach((sigAcroForm) => {
+                    if (signatureSelected === sigAcroForm.fieldName) {
+                        if (pageNumber != (index + 1)) setPageNumber(index + 1);
+                        return;
+                    }
+                })
+            })
+        }
+    }, [signatureSelected])
+
     useLayoutEffect(() => {
-        if (canvasHeight === 0 || canvasWidth === 0) return;
-
         drawSignatureBoxes();
-    }, [pagesInfo, pageNumber, zoomLevel, signatureSelected, signatureArea, canvasHeight, canvasWidth]);
+    }, [renderPdf, signatureSelected, signatureArea, canvasHeight, canvasWidth]);
 
-    const drawSignatureRect = (ctx, rect, color) => {
+    const drawSignatureRect = (ctx, r, color) => {
         ctx.fillStyle = color;
-        ctx.fillRect(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
-        ctx.drawImage(document.getElementById("signatureImage"), rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
+        ctx.fillRect(r.left, r.top, r.right - r.left, r.bottom - r.top);
+        ctx.drawImage(document.getElementById("signatureImage"), r.left, r.top, r.right - r.left, r.bottom - r.top);
     }
 
     const drawSignatureBoxes = (rect = null) => {
@@ -196,19 +218,19 @@ export const DisplayPDF = ({ file, drawSignature }) => {
 
         if (rect) {
             // Draw current selection ...
-            drawSignatureRect(ctx, rect, '#00EE00')
+            drawSignatureRect(ctx, rect, '#00EE0099')
             }
         else {
             // ... or Draw signature area
             if (signatureArea && signatureArea.page === pageNumber) {
-                drawSignatureRect(ctx, scaleRect(signatureArea.rect, scale), signatureSelected === undefined ? '#00EE00' : '#EEEEEE');
+                drawSignatureRect(ctx, scaleRect(signatureArea.rect, scale), signatureSelected === undefined ? '#00EE0099' : '#EEEEEE99');
             }
         }
 
         // Draw Existing signature fields
         if (pagesInfo.length != 0) {
-            pagesInfo[pageNumber - 1].sigAcroform.forEach((sigAcroform) => {
-                drawSignatureRect(ctx, scaleRect(sigAcroform.rect, scale), signatureSelected === sigAcroform.fieldName ? '#00EE00' : '#EEEEEE');
+            pagesInfo[pageNumber - 1].sigAcroforms.forEach((sigAcroform) => {
+                drawSignatureRect(ctx, scaleRect(sigAcroform.rect, scale), signatureSelected === sigAcroform.fieldName ? '#00EE0099' : '#EEEEEE99');
             });
         }
     };
@@ -218,10 +240,10 @@ export const DisplayPDF = ({ file, drawSignature }) => {
         e.stopPropagation();
         var rect = normalizeRect({ top: dragY, right: e.offsetX, left: dragX, bottom: e.offsetY });
 
-        let pi = pagesInfo[pageNumber - 1];
-        for(let i = 0; i < pi.sigAcroform.length; i++) {
-            if (intersectRect(scaleRect(pi.sigAcroform[i].rect, zoomLevel / ZOOM_CORRECTION), rect)) {
-                return pi.sigAcroform[i].fieldName;
+        let sigAcroforms = pagesInfo[pageNumber - 1].sigAcroforms;
+        for(let i = 0; i < sigAcroforms.length; i++) {
+            if (intersectRect(scaleRect(sigAcroforms[i].rect, zoomLevel / ZOOM_CORRECTION), rect)) {
+                return sigAcroforms[i].fieldName;
             }
         };
 
@@ -247,7 +269,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     const onDocumentMouseUp = (e) => {
         onMouseUp(e, true);
     }
-
+ 
     const onMouseUp = (e, isOutOfCanvas) => {
         console.log("UP " + isOutOfCanvas);
         if (!dragRect) return;
@@ -280,7 +302,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
                 document.documentElement.removeEventListener('mouseup', onDocumentMouseUp); 
             }
         }
-    }, [selectionCanvasRef, pagesInfo, pageNumber, zoomLevel]);
+    }, [pagesInfo, pageNumber, zoomLevel, signatureSelected, signatureArea]);
 
 
     //****************************************************************************************
