@@ -1,6 +1,8 @@
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react"
+import {useDispatch, useSelector} from "react-redux";
 import {FormattedMessage} from "react-intl";
 import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist'
-import React, { useState, useEffect, useLayoutEffect, useRef } from "react"
+import { selectSignature, setSignatureArea, setSignatureFields } from '../../reducers/DisplayPDFReducer'
 
 GlobalWorkerOptions.workerSrc = require("pdfjs-dist/build/pdf.worker.entry.js");
 const ZOOM_CORRECTION = 60
@@ -63,15 +65,17 @@ const getPagesInfo = async (pdf) => {
  * @param {object} props.file.url - dataURL for the file
  */
 export const DisplayPDF = ({ file, drawSignature }) => {
+    const dispatch = useDispatch();
     const [currentPDF, setCurrentPDF] = useState(null);
+    const [renderPdf, setRenderPdf] = useState(false);
     const [pagesInfo, setPagesInfo] = useState([]);
     const pdfCanvasRef = useRef(null);
     const [canvasWidth, setCanvasWidth] = useState(0);
     const [canvasHeight, setCanvasHeight] = useState(0);
     const thumbCanvasRefs = useRef([]);
-    const [renderThumbnails, setRenderThumbnails] = useState(false);
+    const [thumbnailsRendered, setThumbnailsRendered] = useState(false);
     
-    const [showIndex, setShowIndex] = useState(false);
+    const [showThumbnails, setShowThumbnails] = useState(false);
     const [pageNumber, setPageNumber] = useState(1);
 
     const [zoomLevel, setZoomLevel] = useState(100);
@@ -86,15 +90,129 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     };
 
     //****************************************************************************************
+    // Draw current PDF page and thumbnails 
+    //****************************************************************************************
+
+    useEffect(() => {
+        setPageNumber(1);
+        setZoomLevel(100);
+        setShowThumbnails(false);
+        getDocument(file.url).promise.then(pdf => {
+            setCurrentPDF(pdf);
+            setThumbnailsRendered(false);
+            getPagesInfo(pdf).then((pagesInfo) => {
+                setPagesInfo(pagesInfo);
+                let signatureFields = [];
+                pagesInfo.forEach((page) => {
+                    page.sigAcroform.forEach((sigAcroform) => { signatureFields.push(sigAcroform.fieldName)});
+                } )
+                dispatch(setSignatureFields(signatureFields));
+            });
+        });
+    }, [file.url]);
+
+    useEffect(() => {
+        if (thumbnailsRendered || !currentPDF) return;
+
+        for(let thumbIndex = 0; thumbIndex < currentPDF.numPages; thumbIndex++) {
+            currentPDF.getPage(thumbIndex + 1).then(function (thumbPage) {
+                thumbPage.render({
+                    canvasContext: thumbCanvasRefs.current[thumbIndex].getContext('2d'),
+                    viewport: thumbPage.getViewport({ scale: 0.1 }),
+                    textContent: currentPDF,
+                });
+            })
+        }
+        setThumbnailsRendered(true);
+    }, [showThumbnails])
+
+    const changePageNumber = (page) => {
+        setPageNumber(page);
+        if (thumbCanvasRefs.current) {
+            let element = thumbCanvasRefs.current[page - 1];
+            if (element) element.scrollIntoView();
+        }
+    }
+
+    useEffect(() => {
+        if (pagesInfo.length === 0 || !currentPDF) return;
+
+        let pi = pagesInfo[pageNumber - 1];
+        const scale = zoomLevel / ZOOM_CORRECTION; // Scale (to percentage compensated for DPI pseudo mapping)
+        setCanvasWidth(pi.width * scale);
+        setCanvasHeight(pi.height * scale);
+        setRenderPdf(true);
+    }, [pagesInfo, pageNumber, zoomLevel, canvasHeight]);
+
+    useLayoutEffect(() => {
+        if (!renderPdf) return;
+
+        currentPDF.getPage(pageNumber).then(function (page) {
+            console.log("page", page);
+            const context = pdfCanvasRef.current.getContext('2d');
+            const scale = zoomLevel / ZOOM_CORRECTION; // Scale (to percentage compensated for DPI pseudo mapping)
+            const renderContext = {
+                canvasContext: context,
+                viewport: page.getViewport({ scale: scale }),
+                textContent: currentPDF,
+            };
+            page.render(renderContext);
+            setRenderPdf(false);
+        }).catch((e) => { console.log("?" + e) });
+    }, [renderPdf]);
+
+    //****************************************************************************************
     // Handle mouse events to allow drawing the signature rectangle.
     // A signature can't be drawn over another so we're forbidding intersection with existing signing acroforms 
     //****************************************************************************************
+
     const selectionCanvasRef = useRef(null);
-    const [signatureArea, setSignatureArea] = useState(null);
+    const signatureArea = useSelector((state) => state.pdfSignatures.signatureArea);
+    const signatureSelected = useSelector((state) => state.pdfSignatures.signatureSelected);
     let dragX;
     let dragY;
     let dragRect;
     
+    useEffect(() => {
+        drawSignatureBoxes();
+    }, [renderPdf, signatureSelected, signatureArea]);
+
+    const drawSignatureRect = (ctx, rect, color) => {
+        ctx.fillStyle = color;
+        ctx.fillRect(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
+        ctx.drawImage(document.getElementById("signatureImage"), rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
+    }
+
+    const drawSignatureBoxes = (rect = null) => {
+        const canvas = selectionCanvasRef.current;
+        if (!canvas || canvas.height === 0) return;
+
+        const scale = zoomLevel / ZOOM_CORRECTION; // Scale (to percentage compensated for DPI pseudo mapping)
+
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        ctx.lineWidth = 2;
+
+        if (rect) {
+            // Draw current selection ...
+            drawSignatureRect(ctx, rect, '#00EE00')
+            }
+        else {
+            // ... or Draw signature area
+            if (signatureArea && signatureArea.page === pageNumber) {
+                drawSignatureRect(ctx, scaleRect(signatureArea.rect, scale), signatureSelected === undefined ? '#00EE00' : '#EEEEEE');
+            }
+        }
+
+        // Draw Existing signature fields
+        if (pagesInfo.length != 0) {
+            pagesInfo[pageNumber - 1].sigAcroform.forEach((sigAcroform) => {
+                drawSignatureRect(ctx, scaleRect(sigAcroform.rect, scale), signatureSelected === sigAcroform.fieldName ? '#00EE00' : '#EEEEEE');
+            });
+        }
+    };
+
     const recordNewRectIfValid = (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -102,22 +220,22 @@ export const DisplayPDF = ({ file, drawSignature }) => {
 
         let pi = pagesInfo[pageNumber - 1];
         for(let i = 0; i < pi.sigAcroform.length; i++) {
-            if (intersectRect(scaleRect(pi.sigAcroform[i].rect, zoomLevel / ZOOM_CORRECTION), rect)) return;
+            if (intersectRect(scaleRect(pi.sigAcroform[i].rect, zoomLevel / ZOOM_CORRECTION), rect)) {
+                return pi.sigAcroform[i].fieldName;
+            }
         };
 
-        const canvas = selectionCanvasRef.current;
-        const context = canvas.getContext('2d');
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        context.lineWidth = 2;
-        context.strokeStyle = '#ff000080';
-        context.strokeRect(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top);
+        drawSignatureBoxes(rect);
         dragRect = rect;
+        return null;
     }
     
     const onMouseDown = (e) => {
         dragX = e.offsetX;
         dragY = e.offsetY;
-        recordNewRectIfValid(e);
+        let fieldName = recordNewRectIfValid(e);
+        if (fieldName) dispatch(selectSignature(fieldName));
+
         console.log("DOWN");
         console.log(dragRect);
     };
@@ -136,13 +254,12 @@ export const DisplayPDF = ({ file, drawSignature }) => {
 
         if (!isOutOfCanvas) recordNewRectIfValid(e);
         if ((dragRect.right - dragRect.left) !== 0 && (dragRect.bottom - dragRect.top) !== 0) {
-            setSignatureArea({
+            dispatch(setSignatureArea({
                 page: pageNumber,
                 rect : scaleRect(dragRect, ZOOM_CORRECTION / zoomLevel)
-            });
+            }));
+            dispatch(selectSignature(undefined))
         }
-        const canvas = selectionCanvasRef.current;
-        canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
         dragRect = null;
     };
 
@@ -163,90 +280,8 @@ export const DisplayPDF = ({ file, drawSignature }) => {
                 document.documentElement.removeEventListener('mouseup', onDocumentMouseUp); 
             }
         }
-    }, [selectionCanvasRef, pagesInfo, pageNumber]);
+    }, [selectionCanvasRef, pagesInfo, pageNumber, zoomLevel]);
 
-
-    //****************************************************************************************
-    // Draw current PDF page and thumbnails 
-    //****************************************************************************************
-
-    useEffect(() => {
-        setPageNumber(1);
-        setZoomLevel(100);
-        setShowIndex(false);
-        getDocument(file.url).promise.then(pdf => {
-            setCurrentPDF(pdf);
-            setRenderThumbnails(true);
-            getPagesInfo(pdf).then((pagesInfo) => {
-                 setPagesInfo(pagesInfo)
-                 });
-        });
-    }, [file.url]);
-
-    useEffect(() => {
-        if (!renderThumbnails || !currentPDF) return;
-
-        for(let thumbIndex = 0; thumbIndex < pagesInfo.length; thumbIndex++) {
-            currentPDF.getPage(thumbIndex + 1).then(function (thumbPage) {
-                thumbPage.render({
-                    canvasContext: thumbCanvasRefs.current[thumbIndex].getContext('2d'),
-                    viewport: thumbPage.getViewport({ scale: 0.1 }),
-                    textContent: currentPDF,
-                });
-            })
-        }
-        setRenderThumbnails(false);
-    }, [showIndex])
-    
-
-    const changePageNumber = (page) => {
-        setPageNumber(page);
-        if (thumbCanvasRefs.current) {
-            let element = thumbCanvasRefs.current[page - 1];
-            if (element) element.scrollIntoView();
-        }
-    }
-
-    useLayoutEffect(() => {
-        renderPage();
-    }, [pagesInfo, pageNumber, zoomLevel, signatureArea]);
-
-    const renderPage = () => {
-        if (!currentPDF || !pdfCanvasRef.current) return;
-
-        console.log("getPage ", pageNumber)
-        currentPDF.getPage(pageNumber).then(function (page) {
-            console.log("page", page);
-            const scale = zoomLevel / ZOOM_CORRECTION; // Scale (to percentage compensated for DPI pseudo mapping)
-            setCanvasWidth(page.view[2] * scale);
-            setCanvasHeight(page.view[3] * scale);
-            const context = pdfCanvasRef.current.getContext('2d');
-            const renderContext = {
-                canvasContext: context,
-                viewport: page.getViewport({ scale: scale }),
-                textContent: currentPDF,
-            };
-
-            page.render(renderContext).promise.then(() => {
-                // Draw new signature area
-                const context = pdfCanvasRef.current.getContext('2d');
-                if (signatureArea && signatureArea.page === pageNumber) {
-                    context.strokeStyle = '#0000ff80';
-                    context.lineWidth = 2;
-                    const r = scaleRect(signatureArea.rect, scale);
-                    context.strokeRect(r.left, r.top, r.right - r.left, r.bottom - r.top);
-                }
-
-                // Draw Existing signature fields
-                pagesInfo[pageNumber - 1].sigAcroform.forEach((sigAcroform) => {
-                    context.strokeStyle = '#ff000080';
-                    context.lineWidth = 2;
-                    const r = scaleRect(sigAcroform.rect, scale);
-                    context.strokeRect(r.left, r.top, r.right - r.left, r.bottom - r.top);
-                });
-            })
-        }).catch((e) => { console.log("?" + e) });
-    }
 
     //****************************************************************************************
     // HTML rendering
@@ -254,9 +289,10 @@ export const DisplayPDF = ({ file, drawSignature }) => {
 
     return (
         <div className="container flex-column border" style={ { width:"100%", backgroundColor: "rgba(0, 0, 0, 0.03)" }}>
+            <img class="d-none" id="signatureImage" src="/img/signature.png"/>
             <div className="row">
                 <div className="col">
-                    <button onClick={() => { setShowIndex(!showIndex) }}>I</button>
+                    <button onClick={() => { setShowThumbnails(!showThumbnails) }}>I</button>
                 </div>
                 <div className="col">
                     <span className="px-2">Page : </span>
@@ -273,7 +309,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
             </div>
             <div className="row">
                 <div style={{ overflow: "auto", width: "110px", textAlign: "center", height: "80vh"}}
-                 hidden={ showIndex ? null : "hidden" }>{pagesInfo && pagesInfo.map((input, pageIndex) => (
+                 hidden={ showThumbnails ? null : "hidden" }>{pagesInfo.map((input, pageIndex) => (
                         <canvas key={ "tumbnail-"+pageIndex } 
                             ref={(element) => thumbCanvasRefs.current[pageIndex] = element } 
                             width={pagesInfo[pageIndex].width / 10} height ={pagesInfo[pageIndex].height / 10}
