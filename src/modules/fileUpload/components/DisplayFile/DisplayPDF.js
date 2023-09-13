@@ -141,11 +141,10 @@ export const DisplayPDF = ({ file, drawSignature }) => {
         const scale = zoomLevel / ZOOM_CORRECTION; // Scale (to percentage compensated for DPI pseudo mapping)
         setCanvasWidth(pi.width * scale);
         setCanvasHeight(pi.height * scale);
-        setRenderPdf(true);
-    }, [pagesInfo, pageNumber, zoomLevel, canvasHeight]);
+    }, [pagesInfo, pageNumber, zoomLevel]);
 
     useLayoutEffect(() => {
-        if (!renderPdf) return;
+        if (!currentPDF || canvasHeight === 0 || canvasWidth === 0) return;
 
         currentPDF.getPage(pageNumber).then(function (page) {
             console.log("page", page);
@@ -157,9 +156,8 @@ export const DisplayPDF = ({ file, drawSignature }) => {
                 textContent: currentPDF,
             };
             page.render(renderContext);
-            setRenderPdf(false);
         }).catch((e) => { console.log("?" + e) });
-    }, [renderPdf]);
+    }, [pagesInfo, pageNumber, zoomLevel, canvasHeight, canvasWidth]);
 
     //****************************************************************************************
     // Handle mouse events to allow drawing the signature rectangle.
@@ -173,9 +171,11 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     let dragY;
     let dragRect;
     
-    useEffect(() => {
+    useLayoutEffect(() => {
+        if (canvasHeight === 0 || canvasWidth === 0) return;
+
         drawSignatureBoxes();
-    }, [renderPdf, signatureSelected, signatureArea]);
+    }, [pagesInfo, pageNumber, zoomLevel, signatureSelected, signatureArea, canvasHeight, canvasWidth]);
 
     const drawSignatureRect = (ctx, rect, color) => {
         ctx.fillStyle = color;
@@ -289,7 +289,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
 
     return (
         <div className="container flex-column border" style={ { width:"100%", backgroundColor: "rgba(0, 0, 0, 0.03)" }}>
-            <img class="d-none" id="signatureImage" src="/img/signature.png"/>
+            <img className="d-none" id="signatureImage" src="/img/signature.png"/>
             <div className="row">
                 <div className="col">
                     <button onClick={() => { setShowThumbnails(!showThumbnails) }}>I</button>
