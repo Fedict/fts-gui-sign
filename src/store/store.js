@@ -14,7 +14,7 @@ import ControlIdReducer from "../modules/controlIds/common/ControlIdReducer";
 import i18nReducer from "../modules/i18n/reducers/i18nReducer";
 import TokenReducer from "../modules/signByTokenWizard/reducers/tokenReducers";
 import FilePreviewReducer from "../modules/signByTokenWizard/reducers/FilePreviewReducers";
-import DisplayPDFReducer from "../modules/fileUpload/reducers/DisplayPDFReducer";
+import CustomSignatureReducer from "../modules/fileUpload/reducers/customSignatureReducer";
 
 /*
 Middleware to accept an array as action, quite useful sometimes
@@ -52,7 +52,7 @@ export default function configureStore(initialState = {}) {
         reader: ReaderReducer,
         validation: ValidationReducer,
         controlId: ControlIdReducer,
-        pdfSignatures: DisplayPDFReducer
+        customSignatures: CustomSignatureReducer
     })
 
     return createStore(rootReducer, initialState, enhancer)

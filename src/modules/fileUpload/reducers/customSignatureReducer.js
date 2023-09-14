@@ -6,6 +6,9 @@ const SET_SIGNATURE_AREA = "SET_SIGNATURE_AREA"
 
 export const setSignatureArea = (signatureArea) => ({ type: SET_SIGNATURE_AREA, payload: signatureArea })
 
+export const INVISIBLE_SIGNATURE = null
+export const MANUAL_SIGNATURE = undefined
+
 const SELECT_SIGNATURE = "SELECT_SIGNATURE"
 
 export const selectSignature = (signatureSelected) => ({ type: SELECT_SIGNATURE, payload: signatureSelected })
@@ -18,10 +21,10 @@ export const reset = () => ({ type: STORE_RESET, payload: null })
 export const initialState = {
     signatureFields: [],
     signatureArea: null,
-    signatureSelected: null
+    signatureSelected: INVISIBLE_SIGNATURE
 }
 
-const DisplayPDFReducer = (state = initialState, action) => {
+const CustomSignatureReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_SIGNATURES_FIELDS:
             return {
@@ -45,4 +48,4 @@ const DisplayPDFReducer = (state = initialState, action) => {
     }
 }
 
-export default DisplayPDFReducer
+export default CustomSignatureReducer

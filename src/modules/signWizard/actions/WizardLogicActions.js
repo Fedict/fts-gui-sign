@@ -539,13 +539,14 @@ export const getDigest = () => (dispatch, getStore) => {
     const store = getStore()
     const { certificate } = store
     const { uploadFile } = store
+    const { customSignatures } = store
     const signingDate = moment().format();
     dispatch(setDateSigning(signingDate))
     if (certificate
         && certificate.certificateSelected
         && certificate.certificateSelected.APIBody) {
         const flowId = getStore().controlId.flowId
-        getDataToSignAPI(certificate.certificateSelected.APIBody, uploadFile.file, signingDate)
+        getDataToSignAPI(certificate.certificateSelected.APIBody, uploadFile.file, signingDate, customSignatures, certificate.certificateSelected.photo)
             .then(handleFlowIdError(flowId, getStore))
             .then((resp) => {
                 if(resp.digest && resp.digestAlgorithm && resp.signingDate) {
@@ -695,7 +696,7 @@ export const sign = (pin) => (dispatch, getStore) => {
  */
 export const signDocument = () => (dispatch, getStore) => {
 
-    const { certificate, signature, uploadFile, tokenFile } = getStore()
+    const { certificate, signature, uploadFile, tokenFile, customSignatures } = getStore()
 
     if (certificate
         && certificate.certificateSelected
@@ -778,7 +779,9 @@ export const signDocument = () => (dispatch, getStore) => {
                 certificate.certificateSelected.APIBody,
                 uploadFile.file,
                 signature.signature,
-                signature.signingDate)
+                signature.signingDate,
+                customSignatures,
+                certificate.certificateSelected.photo)
                 .then(handleFlowIdError(flowId, getStore))
                 .then((resp) => {
 

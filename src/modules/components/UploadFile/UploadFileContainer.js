@@ -8,6 +8,7 @@ import { WIZARD_STATE_CERTIFICATES_LOADING, WIZARD_STATE_VALIDATE_LOADING } from
 import { defineMessages, FormattedMessage, injectIntl } from "react-intl";
 import { boldedText } from "../../utils/reactIntlUtils";
 import { sendLogInfo } from "../../communication/communication"
+import {INVISIBLE_SIGNATURE, MANUAL_SIGNATURE, selectSignature} from "../../fileUpload/reducers/customSignatureReducer";
 
 const messagesSigning = defineMessages({
     title: {
@@ -236,15 +237,41 @@ export const UploadFileContainer = (props) => {
                     </div>
                 </div>
             </div>
+            { props.file.url && props.file.isPdf &&
+                <>
+                    <h1><br/>Signatures</h1>
+                    <input type="radio" id="sig_no" key="noSignature" checked={props.signatureSelected === INVISIBLE_SIGNATURE}
+                            onChange={ () => {props.selectSignature(INVISIBLE_SIGNATURE)} }
+                            name="sigSel"/>&nbsp;<label htmlFor="sig_no">No visible Signature</label><br/>
+                    <input type="radio" id="sig_man" key="manualSignature" checked={props.signatureSelected === MANUAL_SIGNATURE}
+                            disabled={props.signatureArea === null} onChange={ () => {props.selectSignature(MANUAL_SIGNATURE)} }
+                            name="sigSel"/>&nbsp;<label htmlFor="sig_man">Manual Signature</label><br/>
+                    { props.signatureFields.map((sigField, index) => (
+                        <div key={index} >
+                            <input type="radio" id={ "sig_"+index } checked={props.signatureSelected === sigField}
+                            onChange={ () => {props.selectSignature(sigField)} }
+                            name="sigSel"/>&nbsp;<label htmlFor={ "sig_"+index }>{ sigField }</label><br/>
+                        </div>
+                    ))}
+                </>}
         </CardContainer>
     )
 }
 
+const mapStateToProps = (state) => {
+    return (state) => ({
+        signatureFields: state.customSignatures.signatureFields,
+        signatureArea: state.customSignatures.signatureArea,
+        signatureSelected: state.customSignatures.signatureSelected,
+        file: state.uploadFile.displayFile
+    })
+}
 
 const mapDispatchToProps = ({
     uploadFile,
     navigateToStep,
-    displayFile
+    displayFile,
+    selectSignature
 })
 
-export default connect(null, mapDispatchToProps)(injectIntl(UploadFileContainer))
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(UploadFileContainer))

@@ -2,6 +2,7 @@ import { getBase64Data } from "../fileUpload/helpers/FileHelper"
 import packageJson from '../../../package.json';
 import {defaults, defaultsExcludeEmpty, getBEUrl} from "../utils/helper";
 import { globalToken } from "../../App"
+import { INVISIBLE_SIGNATURE, MANUAL_SIGNATURE } from '../fileUpload/reducers/customSignatureReducer'
 
 //-----------------------------------------
 //--- constants                         ---
@@ -48,7 +49,23 @@ export const getsigningProfileId = (documentType) => {
  * 
  * @returns {object} body to use in the API request
  */
-export const createBody = (certificateBody, documentName, documentBase64, documentType, signingDate) => {
+export const createBody = (certificateBody, documentName, documentBase64, documentType, signingDate, customSignatures, photo) => {
+
+    let psfN = null;
+    let psfC = null;
+    switch(customSignatures.signatureSelected) {
+        case INVISIBLE_SIGNATURE:
+            break;
+        case MANUAL_SIGNATURE:
+            const area = customSignatures.signatureArea;
+            psfC = area.page + "," + Math.round(area.rect.left) + "," +
+                                    Math.round(area.rect.top) + "," +
+                                    Math.round(area.rect.right - area.rect.left) + "," +
+                                    Math.round(area.rect.bottom - area.rect.top)  
+            break;
+        default:
+            psfN = customSignatures.signatureSelected;
+    }
 
     return {
         "clientSignatureParameters": {
@@ -56,7 +73,12 @@ export const createBody = (certificateBody, documentName, documentBase64, docume
             "detachedContents": [
             ],
             "signingCertificate": certificateBody.certificate,
-            "signingDate": signingDate
+            "signingDate": signingDate,
+            "psfN": psfN,
+            "psfC": psfC,
+            "photo": photo
+
+
         },
         "signingProfileId": getsigningProfileId(documentType),
         "toSignDocument": {
@@ -153,11 +175,11 @@ export const validateCertificatesAPI = (certificateBody) => {
  * 
  * @returns {Promise} Promise that resolves the result of the API request
  */
-export const getDataToSignAPI = async (certificateBody, document, signingDate) => {
+export const getDataToSignAPI = async (certificateBody, document, signingDate, customSignatures, photo) => {
 
     const documentB64 = await getBase64Data(document)
 
-    const body = createBody(certificateBody, document.name, documentB64, document.type, signingDate);
+    const body = createBody(certificateBody, document.name, documentB64, document.type, signingDate, customSignatures, photo);
 
     return fetch(url + "/signing/getDataToSign",
         {
@@ -177,11 +199,11 @@ export const getDataToSignAPI = async (certificateBody, document, signingDate) =
  * @param {Object} document - document to be signed
  * @param {string} signature - signature value used to sign th document
  */
-export const signDocumentAPI = async (certificateBody, document, signature, signingDate) => {
+export const signDocumentAPI = async (certificateBody, document, signature, signingDate, customSignatures, photo) => {
     const documentB64 = await getBase64Data(document)
 
     const body = {
-        ...createBody(certificateBody, document.name, documentB64, document.type, signingDate),
+        ...createBody(certificateBody, document.name, documentB64, document.type, signingDate, customSignatures, photo),
         "signatureValue": signature
     }
 

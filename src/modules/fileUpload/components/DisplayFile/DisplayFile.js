@@ -13,7 +13,7 @@ import { DisplayPDF } from "./DisplayPDF";
  * @param {string} props.uploadFile.displayFile.name - name of the file
  * @param {object} props.uploadFile.displayFile.url - dataURL for the file
  */
-export const DisplayFile = ({ uploadFile }) => {
+export const DisplayFile = ({ uploadFile, drawSignature }) => {
 
     if (!(uploadFile && uploadFile.displayFile && uploadFile.displayFile.url)) {
         return (
@@ -44,6 +44,6 @@ export const DisplayFile = ({ uploadFile }) => {
         </div>
     }
 
-    return <DisplayPDF file={data} drawSignature={true} />;
+    return <DisplayPDF file={data} drawSignature={drawSignature} />;
 }
 

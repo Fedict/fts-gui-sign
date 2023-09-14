@@ -2,7 +2,8 @@ import React, { useState, useEffect, useLayoutEffect, useRef } from "react"
 import {useDispatch, useSelector} from "react-redux";
 import {FormattedMessage} from "react-intl";
 import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist'
-import { selectSignature, setSignatureArea, setSignatureFields } from '../../reducers/DisplayPDFReducer'
+import { MANUAL_SIGNATURE, selectSignature, setSignatureArea, setSignatureFields } from '../../reducers/customSignatureReducer'
+
 
 GlobalWorkerOptions.workerSrc = require("pdfjs-dist/build/pdf.worker.entry.js");
 const ZOOM_CORRECTION = 60
@@ -45,6 +46,7 @@ const getPagesInfo = async (pdf) => {
         annotations.forEach((annotation) => {
             if (annotation.subtype === "Widget" && annotation.fieldType === "Sig") {
                 const r = annotation.rect;
+                // Timestamp (and invisible signatures) get an annotation with an "empty" rectangle
                 if (r[0] != 0 || r[1] != 0 || r[2] != 0 || r[3] != 0) {
                     pageInfo.sigAcroforms.push({
                         fieldName: annotation.fieldName,
@@ -108,6 +110,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
                 pagesInfo.forEach((page) => {
                     page.sigAcroforms.forEach((sigAcroform) => { signatureFields.push(sigAcroform.fieldName)});
                 } )
+                dispatch(setSignatureArea(null));
                 dispatch(setSignatureFields(signatureFields));
             });
         });
@@ -174,14 +177,14 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     //****************************************************************************************
 
     const selectionCanvasRef = useRef(null);
-    const signatureArea = useSelector((state) => state.pdfSignatures.signatureArea);
-    const signatureSelected = useSelector((state) => state.pdfSignatures.signatureSelected);
+    const signatureArea = useSelector((state) => state.customSignatures.signatureArea);
+    const signatureSelected = useSelector((state) => state.customSignatures.signatureSelected);
     let dragX;
     let dragY;
     let dragRect;
     
     useEffect(() => {
-        if (signatureSelected === undefined) {
+        if (signatureSelected === MANUAL_SIGNATURE) {
             if (pageNumber != signatureArea.page) setPageNumber(signatureArea.page);
         } else {
             pagesInfo.forEach((pi, index) => {
@@ -196,7 +199,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     }, [signatureSelected])
 
     useLayoutEffect(() => {
-        drawSignatureBoxes();
+        if (drawSignature) drawSignatureBoxes();
     }, [renderPdf, signatureSelected, signatureArea, canvasHeight, canvasWidth]);
 
     const drawSignatureRect = (ctx, r, color) => {
@@ -223,7 +226,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
         else {
             // ... or Draw signature area
             if (signatureArea && signatureArea.page === pageNumber) {
-                drawSignatureRect(ctx, scaleRect(signatureArea.rect, scale), signatureSelected === undefined ? '#00EE0099' : '#EEEEEE99');
+                drawSignatureRect(ctx, scaleRect(signatureArea.rect, scale), signatureSelected === MANUAL_SIGNATURE ? '#00EE0099' : '#EEEEEE99');
             }
         }
 
@@ -280,7 +283,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
                 page: pageNumber,
                 rect : scaleRect(dragRect, ZOOM_CORRECTION / zoomLevel)
             }));
-            dispatch(selectSignature(undefined))
+            dispatch(selectSignature(MANUAL_SIGNATURE))
         }
         dragRect = null;
     };
@@ -314,7 +317,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
             <img className="d-none" id="signatureImage" src="/img/signature.png"/>
             <div className="row">
                 <div className="col">
-                    <button onClick={() => { setShowThumbnails(!showThumbnails) }}>I</button>
+                    <button onClick={() => { setShowThumbnails(!showThumbnails) }}>Thumbnails</button>
                 </div>
                 <div className="col">
                     <span className="px-2">Page : </span>
@@ -324,9 +327,9 @@ export const DisplayPDF = ({ file, drawSignature }) => {
                 </div>
                 <div className="col">
                     <span className="px-2">Zoom : </span>
-                    <button  className="px-2" onClick={() => { setZoomLevel(predZoom()) }} disabled={ predZoom() === zoomLevel}>Pred</button>
+                    <button  className="px-2" onClick={() => { setZoomLevel(predZoom()) }} disabled={ predZoom() === zoomLevel}>Out</button>
                     <span  className="px-2">{ zoomLevel }</span>
-                    <button  className="px-2" onClick={() => { setZoomLevel(nextZoom()) }} disabled={ nextZoom() === zoomLevel}>Next</button>
+                    <button  className="px-2" onClick={() => { setZoomLevel(nextZoom()) }} disabled={ nextZoom() === zoomLevel}>In</button>
                 </div>
             </div>
             <div className="row">
