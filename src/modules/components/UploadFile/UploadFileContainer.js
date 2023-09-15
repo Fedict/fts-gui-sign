@@ -8,7 +8,7 @@ import { WIZARD_STATE_CERTIFICATES_LOADING, WIZARD_STATE_VALIDATE_LOADING } from
 import { defineMessages, FormattedMessage, injectIntl } from "react-intl";
 import { boldedText } from "../../utils/reactIntlUtils";
 import { sendLogInfo } from "../../communication/communication"
-import {INVISIBLE_SIGNATURE, MANUAL_SIGNATURE, selectSignature} from "../../fileUpload/reducers/customSignatureReducer";
+import { INVISIBLE_SIGNATURE, MANUAL_SIGNATURE, selectSignature, includePhoto, reset as resetCustomSignature, lock } from "../../fileUpload/reducers/CustomSignatureReducer";
 
 const messagesSigning = defineMessages({
     title: {
@@ -74,6 +74,7 @@ export const UploadFileContainer = (props) => {
                 case 'pdf':
                     setFile(e.dataTransfer.files[0]);
                     if (UploadFileContext === "sign") {
+                        props.resetCustomSignature()
                         props.displayFile(e.dataTransfer.files[0])
                     }
                     return;
@@ -107,12 +108,15 @@ export const UploadFileContainer = (props) => {
     const onchange = (e) => {
         const fileSelected = e.target.files[0]
         setFile(fileSelected);
+        
         if (UploadFileContext === "sign") {
+            props.resetCustomSignature()
             props.displayFile(fileSelected)
         }
     }
 
     const handleSubmit = () => {
+        props.lock(true, intl.locale)
         props.uploadFile(file)
         if (UploadFileContext === "sign") {
             props.navigateToStep(WIZARD_STATE_CERTIFICATES_LOADING)
@@ -253,6 +257,8 @@ export const UploadFileContainer = (props) => {
                             name="sigSel"/>&nbsp;<label htmlFor={ "sig_"+index }>{ sigField }</label><br/>
                         </div>
                     ))}
+                    <input type="checkbox" id="photo" checked={props.photoIncluded} disabled={props.signatureSelected === INVISIBLE_SIGNATURE}
+                            onChange={ () => { props.includePhoto(!props.photoIncluded) } } style={{ display: "inline-block"}}/>&nbsp;<label htmlFor="photo">Include photo</label><br/>
                 </>}
         </CardContainer>
     )
@@ -263,6 +269,7 @@ const mapStateToProps = (state) => {
         signatureFields: state.customSignatures.signatureFields,
         signatureArea: state.customSignatures.signatureArea,
         signatureSelected: state.customSignatures.signatureSelected,
+        photoIncluded: state.customSignatures.photoIncluded,
         file: state.uploadFile.displayFile
     })
 }
@@ -271,7 +278,10 @@ const mapDispatchToProps = ({
     uploadFile,
     navigateToStep,
     displayFile,
-    selectSignature
+    selectSignature,
+    includePhoto,
+    resetCustomSignature,
+    lock
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(UploadFileContainer))

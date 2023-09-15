@@ -2,7 +2,7 @@ import React, { useState, useEffect, useLayoutEffect, useRef } from "react"
 import {useDispatch, useSelector} from "react-redux";
 import {FormattedMessage} from "react-intl";
 import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist'
-import { MANUAL_SIGNATURE, selectSignature, setSignatureArea, setSignatureFields } from '../../reducers/customSignatureReducer'
+import { MANUAL_SIGNATURE, selectSignature, setSignatureArea, setSignatureFields } from '../../reducers/CustomSignatureReducer'
 
 
 GlobalWorkerOptions.workerSrc = require("pdfjs-dist/build/pdf.worker.entry.js");
@@ -179,6 +179,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     const selectionCanvasRef = useRef(null);
     const signatureArea = useSelector((state) => state.customSignatures.signatureArea);
     const signatureSelected = useSelector((state) => state.customSignatures.signatureSelected);
+    const locked = useSelector((state) => state.customSignatures.locked);
     let dragX;
     let dragY;
     let dragRect;
@@ -289,7 +290,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     };
 
     useEffect(() => {
-        if (!drawSignature) return;
+        if (!drawSignature || locked) return;
 
         const canvas = selectionCanvasRef.current;
         if (canvas !== null) {
@@ -305,7 +306,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
                 document.documentElement.removeEventListener('mouseup', onDocumentMouseUp); 
             }
         }
-    }, [pagesInfo, pageNumber, zoomLevel, signatureSelected, signatureArea]);
+    }, [pagesInfo, pageNumber, zoomLevel, signatureSelected, signatureArea, locked]);
 
 
     //****************************************************************************************

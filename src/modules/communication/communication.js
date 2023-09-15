@@ -2,7 +2,7 @@ import { getBase64Data } from "../fileUpload/helpers/FileHelper"
 import packageJson from '../../../package.json';
 import {defaults, defaultsExcludeEmpty, getBEUrl} from "../utils/helper";
 import { globalToken } from "../../App"
-import { INVISIBLE_SIGNATURE, MANUAL_SIGNATURE } from '../fileUpload/reducers/customSignatureReducer'
+import { INVISIBLE_SIGNATURE, MANUAL_SIGNATURE } from '../fileUpload/reducers/CustomSignatureReducer'
 
 //-----------------------------------------
 //--- constants                         ---
@@ -53,9 +53,20 @@ export const createBody = (certificateBody, documentName, documentBase64, docume
 
     let psfN = null;
     let psfC = null;
+    let psp = {
+        "texts": {
+            "fr": "Signé par %gn% %sn%\nLe %d(HH:mm MMM d YYYY z)%",
+            "en": "Signed by %gn% %sn%\nOn %d(HH:mm MMM d YYYY z)%",
+            "de": "Unterzeichnet von %gn% %sn%\nAm %d(HH:mm MMM d YYYY z)%",
+            "nl": "Getekend door %gn% %sn%\nOp %d(HH:mm MMM d YYYY z)%",
+        }
+    };
+
     switch(customSignatures.signatureSelected) {
         case INVISIBLE_SIGNATURE:
+            psp = null;
             break;
+
         case MANUAL_SIGNATURE:
             const area = customSignatures.signatureArea;
             psfC = area.page + "," + Math.round(area.rect.left) + "," +
@@ -63,6 +74,7 @@ export const createBody = (certificateBody, documentName, documentBase64, docume
                                     Math.round(area.rect.right - area.rect.left) + "," +
                                     Math.round(area.rect.bottom - area.rect.top)  
             break;
+
         default:
             psfN = customSignatures.signatureSelected;
     }
@@ -76,9 +88,9 @@ export const createBody = (certificateBody, documentName, documentBase64, docume
             "signingDate": signingDate,
             "psfN": psfN,
             "psfC": psfC,
-            "photo": photo
-
-
+            "photo": customSignatures.photoIncluded ? photo : null,
+            "signLanguage": customSignatures.signLanguage,
+            "psp": psp
         },
         "signingProfileId": getsigningProfileId(documentType),
         "toSignDocument": {
