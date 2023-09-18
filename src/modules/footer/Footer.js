@@ -3,6 +3,7 @@ import { useIntl } from 'react-intl';
 import {connect} from "react-redux";
 import { FormattedMessage } from 'react-intl';
 import { Link } from "react-router-dom";
+import { globalToken } from "../../App";
 
 export const Footer = (props) => {
     const locale = useIntl().locale
@@ -22,9 +23,9 @@ export const Footer = (props) => {
     )
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, props) => {
     return {
-        token : (state.tokenFile && state.tokenFile.token?state.tokenFile.token.substr(state.tokenFile.token.length - 16):undefined),
+        token : (state.tokenFile && state.tokenFile.token?state.tokenFile.token.substr(state.tokenFile.token.length - 16):globalToken),
     }
 }
 
