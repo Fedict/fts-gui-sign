@@ -6,6 +6,7 @@ import {
     signDocumentAPI,
     validateSignatureAPI, getDataToSignForTokenAPI, sendLogInfo, signDocumentForTokenAPI
 } from "./communication";
+import { MANUAL_SIGNATURE } from "../fileUpload/reducers/CustomSignatureReducer"
 import { getBase64Data } from "../fileUpload/helpers/FileHelper"
 import * as filehelper from "../fileUpload/helpers/FileHelper"
 
@@ -68,21 +69,35 @@ describe("createBody", () => {
         const startDocumentName = "name of the file"
         const startDocumentBase64 = "base64 string odf document"
         const startDocumentType = "application/xml"
+        const startCustomSignatures = {
+            signatureSelected: MANUAL_SIGNATURE,
+            signatureArea: {
+                page: 1,
+                rect: { top: 100.2, left: 150.3, bottom: 200.5, right: 250}
+            },
+            photoIncluded: true,
+            signLanguage: "fr"
+        }
         const expected = {
             "clientSignatureParameters": {
                 "certificateChain": startCertificateObject.certificateChain,
                 "detachedContents": [],
                 "signingCertificate": startCertificateObject.certificate,
                 "signingDate": null,
-            },
+                "photo": null,
+                "psfC": "1,150,100,100,100",
+                "psfN": null,
+                "signLanguage": "fr"
+                },
             "signingProfileId": "XADES_LTA",
-            "toSignDocument": {
+                        "toSignDocument": {
                 "bytes": startDocumentBase64,
                 "name": startDocumentName
             }
         }
 
-        const result = createBody(startCertificateObject, startDocumentName, startDocumentBase64, startDocumentType, null)
+        const result = createBody(startCertificateObject, startDocumentName, startDocumentBase64, startDocumentType, null, startCustomSignatures, null)
+        delete result.clientSignatureParameters.psp;
 
         expect(result).toEqual(expected)
     })
@@ -212,9 +227,14 @@ describe('getDataToSignAPI', () => {
             ],
             signingCertificate: { encodedCertificate: "certificatestring" }
         }
+        const custSignature = {
+            signatureSelected: "ABC",
+            photoIncluded: true,
+            signLanguage: "nl"
+        }
 
         //expected
-        const expectedBody = createBody(startCertificateObject, startDocument.name, BASE64STRING, startDocument.type)
+        const expectedBody = createBody(startCertificateObject, startDocument.name, BASE64STRING, startDocument.type, null, custSignature, null)
 
         //mocking
         const resultJson = { result: "result" }
@@ -227,7 +247,7 @@ describe('getDataToSignAPI', () => {
         global.fetch = jest.fn().mockImplementation(() => Promise.resolve(mockResponse));
 
         //result
-        const result = await getDataToSignAPI(startCertificateObject, startDocument)
+        const result = await getDataToSignAPI(startCertificateObject, startDocument, null, custSignature, null)
 
         //assertions
         expect(global.fetch).toHaveBeenCalledTimes(1)
@@ -251,9 +271,14 @@ describe('getDataToSignAPI', () => {
             ],
             signingCertificate: { encodedCertificate: "certificatestring" }
         }
+        const custSignature = {
+            signatureSelected: "ABC",
+            photoIncluded: true,
+            signLanguage: "nl"
+        }
 
         //expected
-        const expectedBody = createBody(startCertificateObject, startDocument.name, BASE64STRING, startDocument.type)
+        const expectedBody = createBody(startCertificateObject, startDocument.name, BASE64STRING, startDocument.type, null, custSignature, null)
 
         //mocking
         const resultString = "text"
@@ -268,7 +293,7 @@ describe('getDataToSignAPI', () => {
         global.fetch = jest.fn().mockImplementation(mockPromiseFunction);
 
         //result
-        const result = await getDataToSignAPI(startCertificateObject, startDocument)
+        const result = await getDataToSignAPI(startCertificateObject, startDocument, null, custSignature, null)
 
         //assertions
         expect(global.fetch).toHaveBeenCalledTimes(1)
@@ -292,9 +317,14 @@ describe('getDataToSignAPI', () => {
             ],
             signingCertificate: { encodedCertificate: "certificatestring" }
         }
+        const custSignature = {
+            signatureSelected: "ABC",
+            photoIncluded: true,
+            signLanguage: "nl"
+        }
 
         //expected
-        const expectedBody = createBody(startCertificateObject, startDocument.name, BASE64STRING, startDocument.type)
+        const expectedBody = createBody(startCertificateObject, startDocument.name, BASE64STRING, startDocument.type, null, custSignature, null)
 
         //mocking
         const mockResponse = {
@@ -305,7 +335,7 @@ describe('getDataToSignAPI', () => {
         global.fetch = jest.fn().mockImplementation(() => Promise.resolve(mockResponse));
 
         try {
-            await getDataToSignAPI(startCertificateObject, startDocument)
+            await getDataToSignAPI(startCertificateObject, startDocument, null, custSignature, null)
         }
         catch (e) {
             expect(e.message).toBe(REQUEST_FAILED)
@@ -353,10 +383,16 @@ describe('signDocumentAPI', () => {
         }
         const startSignature = "signature"
 
+        const custSignature = {
+            signatureSelected: "ABC",
+            photoIncluded: true,
+            signLanguage: "nl"
+        }
+
         //expected
-        const bodyObject = createBody(startCertificateObject, startDocument.name, BASE64STRING, startDocument.type)
+        const bodyObject = createBody(startCertificateObject, startDocument.name, BASE64STRING, startDocument.type, null, custSignature, null)
         const expectedBody = { ...bodyObject, "signatureValue": startSignature }
-        //mocking
+                //mocking
         const resultJson = { result: "result" }
         const mockResponse = {
             ok: true,
@@ -367,7 +403,7 @@ describe('signDocumentAPI', () => {
         global.fetch = jest.fn().mockImplementation(() => Promise.resolve(mockResponse));
 
         //result
-        const result = await signDocumentAPI(startCertificateObject, startDocument, startSignature)
+        const result = await signDocumentAPI(startCertificateObject, startDocument, startSignature, null, custSignature, null)
 
         //assertions
         expect(global.fetch).toHaveBeenCalledTimes(1)
@@ -393,8 +429,14 @@ describe('signDocumentAPI', () => {
         }
         const startSignature = "signature"
 
+        const custSignature = {
+            signatureSelected: "ABC",
+            photoIncluded: true,
+            signLanguage: "nl"
+        }
+
         //expected
-        const bodyObject = createBody(startCertificateObject, startDocument.name, BASE64STRING, startDocument.type)
+        const bodyObject = createBody(startCertificateObject, startDocument.name, BASE64STRING, startDocument.type, null, custSignature, null)
         const expectedBody = { ...bodyObject, "signatureValue": startSignature }
 
         //mocking
@@ -410,7 +452,7 @@ describe('signDocumentAPI', () => {
         global.fetch = jest.fn().mockImplementation(mockPromiseFunction);
 
         //result
-        const result = await signDocumentAPI(startCertificateObject, startDocument, startSignature)
+        const result = await signDocumentAPI(startCertificateObject, startDocument, startSignature, null, custSignature, null)
 
         //assertions
         expect(global.fetch).toHaveBeenCalledTimes(1)
@@ -436,8 +478,14 @@ describe('signDocumentAPI', () => {
         }
         const startSignature = "signature"
 
+        const custSignature = {
+            signatureSelected: "ABC",
+            photoIncluded: false,
+            signLanguage: "de"
+        }
+
         //expected
-        const bodyObject = createBody(startCertificateObject, startDocument.name, BASE64STRING, startDocument.type)
+        const bodyObject = createBody(startCertificateObject, startDocument.name, BASE64STRING, startDocument.type, null, custSignature, null)
         const expectedBody = { ...bodyObject, "signatureValue": startSignature }
 
         //mocking
@@ -449,7 +497,7 @@ describe('signDocumentAPI', () => {
         global.fetch = jest.fn().mockImplementation(() => Promise.resolve(mockResponse));
 
         try {
-            await signDocumentAPI(startCertificateObject, startDocument, startSignature)
+            await signDocumentAPI(startCertificateObject, startDocument, startSignature, null, custSignature, null)
         }
         catch (e) {
             expect(e.message).toBe(REQUEST_FAILED)
@@ -562,7 +610,7 @@ describe('validateSignatureAPI', () => {
              "signedDocument": {
                  "bytes": BASE64STRING,
                  "name": startDocument.name
-             }
+            }
          }
 
         //mocking

@@ -1034,7 +1034,7 @@ describe("WizardLogicActions", () => {
             const expectedCertificateList = certificateList.map(val => {
                 return {
                     ...val.APIBody,
-                    "expectedKeyUsage": "NON_REPUDIATION"
+                    "expectedKeyUsage": "NON_REPUDIATION" 
                 }
             })
             const mockDispatch = jest.fn()
@@ -1850,7 +1850,7 @@ describe("WizardLogicActions", () => {
             })
             getDigest()(mockDispatch, mockGetStore)
             expect(communication.getDataToSignAPI).toBeCalledTimes(1)
-            expect(communication.getDataToSignAPI).toBeCalledWith(mockapiBody, mockFile, expect.anything())
+            expect(communication.getDataToSignAPI).toBeCalledWith(mockapiBody, mockFile, expect.anything(), undefined, undefined)
 
         })
 
@@ -2528,7 +2528,7 @@ describe("WizardLogicActions", () => {
             })
             signDocument()(mockDispatch, mockGetStore)
             expect(signDocumentAPI).toBeCalledTimes(1)
-            expect(signDocumentAPI).toBeCalledWith(mockApiBody, mockFile, mockSignatureString, mockSigningDate)
+            expect(signDocumentAPI).toBeCalledWith(mockApiBody, mockFile, mockSignatureString, mockSigningDate, undefined, undefined)
         })
 
         test("signDocument success handleFlowIdError", () => {
