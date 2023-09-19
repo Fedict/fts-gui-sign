@@ -214,6 +214,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
         const canvas = selectionCanvasRef.current;
         console.log("canvas, canvas.height " + canvas + " - " + (canvas ? canvas.height : -1));
         if (!canvas || canvas.height === 0) return;
+        console.log(canvas);
 
         const scale = zoomLevel / ZOOM_CORRECTION; // Scale (to percentage compensated for DPI pseudo mapping)
 
@@ -242,11 +243,14 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     };
 
     const drawSignatureRect = (ctx, r, color) => {
-        console.log("drawSignatureRect " + r.top + " - " + r.left + " - " + r.bottom + " - " + r.right);
+        console.log(ctx);
         ctx.fillStyle = color;
         ctx.fillRect(r.left, r.top, r.right - r.left, r.bottom - r.top);
         const image = document.getElementById("signatureImage");
-        if (image) ctx.drawImage(image, r.left, r.top, r.right - r.left, r.bottom - r.top);
+        if (image) {
+            console.log("drawSignatureRect " + r.top + " - " + r.left + " - " + r.bottom + " - " + r.right);
+            ctx.drawImage(image, r.left, r.top, r.right - r.left, r.bottom - r.top);
+        }
     }
     
     const recordNewRectIfValid = (e) => {
