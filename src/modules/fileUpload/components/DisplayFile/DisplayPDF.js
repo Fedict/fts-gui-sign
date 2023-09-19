@@ -98,6 +98,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     //****************************************************************************************
 
     useEffect(() => {
+        console.log("file.url " + file.url)
         setPageNumber(1);
         setZoomLevel(100);
         setShowThumbnails(false);
@@ -117,6 +118,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     }, [file.url]);
 
     useEffect(() => {
+        console.log("showThumbnails " + showThumbnails + " - " + thumbnailsRendered  +  " - " + currentPDF)
         if (thumbnailsRendered || !currentPDF) return;
 
         for(let thumbIndex = 0; thumbIndex < currentPDF.numPages; thumbIndex++) {
@@ -140,6 +142,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     }
 
     useEffect(() => {
+        console.log("pagesInfo, pageNumber, zoomLevel " + pagesInfo.length)
         if (pagesInfo.length === 0) return;
 
         let pi = pagesInfo[pageNumber - 1];
@@ -150,6 +153,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     }, [pagesInfo, pageNumber, zoomLevel]);
 
     useLayoutEffect(() => {
+        console.log("renderPdf " + renderPdf)
         if (!renderPdf) return;
 
         currentPDF.getPage(pageNumber).then(function (page) {
@@ -185,6 +189,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     let dragRect;
     
     useEffect(() => {
+        console.log("signatureSelected " + signatureSelected)
         if (signatureSelected === MANUAL_SIGNATURE) {
             if (pageNumber != signatureArea.page) setPageNumber(signatureArea.page);
         } else {
@@ -200,6 +205,8 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     }, [signatureSelected])
 
     useLayoutEffect(() => {
+        console.log("renderPdf, signatureSelected, signatureArea, canvasHeight, canvasWidth " + drawSignature);
+        
         if (drawSignature) drawSignatureBoxes();
     }, [renderPdf, signatureSelected, signatureArea, canvasHeight, canvasWidth]);
 
