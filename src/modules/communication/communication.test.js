@@ -90,14 +90,15 @@ describe("createBody", () => {
                 "signLanguage": "fr"
                 },
             "signingProfileId": "XADES_LTA",
-                        "toSignDocument": {
+            "token": 0,
+            "toSignDocument": {
                 "bytes": startDocumentBase64,
                 "name": startDocumentName
             }
         }
 
         const result = createBody(startCertificateObject, startDocumentName, startDocumentBase64, startDocumentType, null, startCustomSignatures, null)
-        delete result.clientSignatureParameters.psp;
+        delete result.clientSignatureParameters.psp;        result.token = 0;
 
         expect(result).toEqual(expected)
     })
@@ -123,7 +124,7 @@ describe('validateCertificatesAPI', () => {
 
         expect(global.fetch).toHaveBeenCalledTimes(1)
         expect(global.fetch.mock.calls[0][0]).toEqual("/validation/validateCertificates")
-        expect(global.fetch.mock.calls[0][1].body).toEqual(JSON.stringify(startBody))
+        expect(global.fetch.mock.calls[0][1].body.replace(/"token":[0-9]*/, "\"token\":0")).toEqual(JSON.stringify(startBody))
         expect(global.fetch.mock.calls[0][1].method).toEqual('POST')
 
         expect(mockResponse.json).toBeCalledTimes(1)
@@ -148,7 +149,7 @@ describe('validateCertificatesAPI', () => {
 
         expect(global.fetch).toHaveBeenCalledTimes(1)
         expect(global.fetch.mock.calls[0][0]).toEqual("/validation/validateCertificates")
-        expect(global.fetch.mock.calls[0][1].body).toEqual(JSON.stringify(startBody))
+        expect(global.fetch.mock.calls[0][1].body.replace(/"token":[0-9]*/, "\"token\":0")).toEqual(JSON.stringify(startBody))
         expect(global.fetch.mock.calls[0][1].method).toEqual('POST')
         expect(mockResponse.json).toBeCalledTimes(1)
         expect(mockResponse.text).toBeCalledTimes(1)
@@ -187,7 +188,7 @@ describe('validateCertificatesAPI', () => {
             expect(e.message).toBe(REQUEST_FAILED)
             expect(global.fetch).toHaveBeenCalledTimes(1)
             expect(global.fetch.mock.calls[0][0]).toEqual("/validation/validateCertificates")
-            expect(global.fetch.mock.calls[0][1].body).toEqual(JSON.stringify(startBody))
+            expect(global.fetch.mock.calls[0][1].body.replace(/"token":[0-9]*\/, "\"token\":0")).toEqual(JSON.stringify(startBody))
             expect(global.fetch.mock.calls[0][1].method).toEqual('POST')
 
             expect(mockResponse.json).toBeCalledTimes(0)
@@ -235,6 +236,7 @@ describe('getDataToSignAPI', () => {
 
         //expected
         const expectedBody = createBody(startCertificateObject, startDocument.name, BASE64STRING, startDocument.type, null, custSignature, null)
+        expectedBody.token = 0;
 
         //mocking
         const resultJson = { result: "result" }
@@ -252,7 +254,7 @@ describe('getDataToSignAPI', () => {
         //assertions
         expect(global.fetch).toHaveBeenCalledTimes(1)
         expect(global.fetch.mock.calls[0][0]).toEqual("/signing/getDataToSign")
-        expect(global.fetch.mock.calls[0][1].body).toEqual(JSON.stringify(expectedBody))
+        expect(global.fetch.mock.calls[0][1].body.replace(/"token":[0-9]*/, "\"token\":0")).toEqual(JSON.stringify(expectedBody))
         expect(global.fetch.mock.calls[0][1].method).toEqual('POST')
 
         expect(mockResponse.json).toBeCalledTimes(1)
@@ -279,6 +281,7 @@ describe('getDataToSignAPI', () => {
 
         //expected
         const expectedBody = createBody(startCertificateObject, startDocument.name, BASE64STRING, startDocument.type, null, custSignature, null)
+        expectedBody.token = 0;
 
         //mocking
         const resultString = "text"
@@ -298,7 +301,7 @@ describe('getDataToSignAPI', () => {
         //assertions
         expect(global.fetch).toHaveBeenCalledTimes(1)
         expect(global.fetch.mock.calls[0][0]).toEqual("/signing/getDataToSign")
-        expect(global.fetch.mock.calls[0][1].body).toEqual(JSON.stringify(expectedBody))
+        expect(global.fetch.mock.calls[0][1].body.replace(/"token":[0-9]*/, "\"token\":0")).toEqual(JSON.stringify(expectedBody))
         expect(global.fetch.mock.calls[0][1].method).toEqual('POST')
 
         expect(mockResponse.json).toBeCalledTimes(1)
@@ -325,6 +328,7 @@ describe('getDataToSignAPI', () => {
 
         //expected
         const expectedBody = createBody(startCertificateObject, startDocument.name, BASE64STRING, startDocument.type, null, custSignature, null)
+        expectedBody.token = 0;
 
         //mocking
         const mockResponse = {
@@ -341,7 +345,7 @@ describe('getDataToSignAPI', () => {
             expect(e.message).toBe(REQUEST_FAILED)
             expect(global.fetch).toHaveBeenCalledTimes(1)
             expect(global.fetch.mock.calls[0][0]).toEqual("/signing/getDataToSign")
-            expect(global.fetch.mock.calls[0][1].body).toEqual(JSON.stringify(expectedBody))
+            expect(global.fetch.mock.calls[0][1].body.replace(/"token":[0-9]*/, "\"token\":0")).toEqual(JSON.stringify(expectedBody))
             expect(global.fetch.mock.calls[0][1].method).toEqual('POST')
 
             expect(mockResponse.json).toBeCalledTimes(0)
@@ -392,7 +396,8 @@ describe('signDocumentAPI', () => {
         //expected
         const bodyObject = createBody(startCertificateObject, startDocument.name, BASE64STRING, startDocument.type, null, custSignature, null)
         const expectedBody = { ...bodyObject, "signatureValue": startSignature }
-                //mocking
+        expectedBody.token = 0;
+        //mocking
         const resultJson = { result: "result" }
         const mockResponse = {
             ok: true,
@@ -408,7 +413,7 @@ describe('signDocumentAPI', () => {
         //assertions
         expect(global.fetch).toHaveBeenCalledTimes(1)
         expect(global.fetch.mock.calls[0][0]).toEqual("/signing/signDocument")
-        expect(global.fetch.mock.calls[0][1].body).toEqual(JSON.stringify(expectedBody))
+        expect(global.fetch.mock.calls[0][1].body.replace(/"token":[0-9]*/, "\"token\":0")).toEqual(JSON.stringify(expectedBody))
         expect(global.fetch.mock.calls[0][1].method).toEqual('POST')
 
         expect(mockResponse.json).toBeCalledTimes(1)
@@ -438,6 +443,7 @@ describe('signDocumentAPI', () => {
         //expected
         const bodyObject = createBody(startCertificateObject, startDocument.name, BASE64STRING, startDocument.type, null, custSignature, null)
         const expectedBody = { ...bodyObject, "signatureValue": startSignature }
+        expectedBody.token = 0;
 
         //mocking
         const resultString = "text"
@@ -457,7 +463,7 @@ describe('signDocumentAPI', () => {
         //assertions
         expect(global.fetch).toHaveBeenCalledTimes(1)
         expect(global.fetch.mock.calls[0][0]).toEqual("/signing/signDocument")
-        expect(global.fetch.mock.calls[0][1].body).toEqual(JSON.stringify(expectedBody))
+        expect(global.fetch.mock.calls[0][1].body.replace(/"token":[0-9]*/, "\"token\":0")).toEqual(JSON.stringify(expectedBody))
         expect(global.fetch.mock.calls[0][1].method).toEqual('POST')
 
         expect(mockResponse.json).toBeCalledTimes(1)
@@ -487,6 +493,7 @@ describe('signDocumentAPI', () => {
         //expected
         const bodyObject = createBody(startCertificateObject, startDocument.name, BASE64STRING, startDocument.type, null, custSignature, null)
         const expectedBody = { ...bodyObject, "signatureValue": startSignature }
+        expectedBody.token = 0;
 
         //mocking
         const mockResponse = {
@@ -503,7 +510,7 @@ describe('signDocumentAPI', () => {
             expect(e.message).toBe(REQUEST_FAILED)
             expect(global.fetch).toHaveBeenCalledTimes(1)
             expect(global.fetch.mock.calls[0][0]).toEqual("/signing/signDocument")
-            expect(global.fetch.mock.calls[0][1].body).toEqual(JSON.stringify(expectedBody))
+            expect(global.fetch.mock.calls[0][1].body.replace(/"token":[0-9]*/, "\"token\":0")).toEqual(JSON.stringify(expectedBody))
             expect(global.fetch.mock.calls[0][1].method).toEqual('POST')
 
             expect(mockResponse.json).toBeCalledTimes(0)
@@ -534,7 +541,8 @@ describe('validateSignatureAPI', () => {
             "signedDocument": {
                 "bytes": BASE64STRING,
                 "name": startDocument.name
-            }
+            },
+            "token": 0
         }
 
         //mocking
@@ -553,7 +561,7 @@ describe('validateSignatureAPI', () => {
         //assertions
         expect(global.fetch).toHaveBeenCalledTimes(1)
         expect(global.fetch.mock.calls[0][0]).toEqual("/validation/validateSignature")
-        expect(global.fetch.mock.calls[0][1].body).toEqual(JSON.stringify(expectedBody))
+        expect(global.fetch.mock.calls[0][1].body.replace(/"token":[0-9]*/, "\"token\":0")).toEqual(JSON.stringify(expectedBody))
         expect(global.fetch.mock.calls[0][1].method).toEqual('POST')
 
         expect(mockResponse.json).toBeCalledTimes(1)
@@ -571,7 +579,8 @@ describe('validateSignatureAPI', () => {
             "signedDocument": {
                 "bytes": BASE64STRING,
                 "name": startDocument.name
-            }
+            },
+            "token": 0
         }
 
         //mocking
@@ -592,7 +601,7 @@ describe('validateSignatureAPI', () => {
         //assertions
         expect(global.fetch).toHaveBeenCalledTimes(1)
         expect(global.fetch.mock.calls[0][0]).toEqual("/validation/validateSignature")
-        expect(global.fetch.mock.calls[0][1].body).toEqual(JSON.stringify(expectedBody))
+        expect(global.fetch.mock.calls[0][1].body.replace(/"token":[0-9]*/, "\"token\":0")).toEqual(JSON.stringify(expectedBody))
         expect(global.fetch.mock.calls[0][1].method).toEqual('POST')
 
         expect(mockResponse.json).toBeCalledTimes(1)
@@ -610,8 +619,9 @@ describe('validateSignatureAPI', () => {
              "signedDocument": {
                  "bytes": BASE64STRING,
                  "name": startDocument.name
-            }
-         }
+                },
+            "token": 0
+             }
 
         //mocking
         const mockResponse = {
@@ -628,7 +638,7 @@ describe('validateSignatureAPI', () => {
             expect(e.message).toBe(REQUEST_FAILED)
             expect(global.fetch).toHaveBeenCalledTimes(1)
             expect(global.fetch.mock.calls[0][0]).toEqual("/validation/validateSignature")
-            expect(global.fetch.mock.calls[0][1].body).toEqual(JSON.stringify(expectedBody))
+            expect(global.fetch.mock.calls[0][1].body.replace(/"token":[0-9]*/, "\"token\":0")).toEqual(JSON.stringify(expectedBody))
             expect(global.fetch.mock.calls[0][1].method).toEqual('POST')
 
             expect(mockResponse.json).toBeCalledTimes(0)

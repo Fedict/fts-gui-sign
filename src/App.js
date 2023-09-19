@@ -80,6 +80,4 @@ const App = () => {
     );
 }
 
-export var globalToken = Date.now();
-
 export default App;
