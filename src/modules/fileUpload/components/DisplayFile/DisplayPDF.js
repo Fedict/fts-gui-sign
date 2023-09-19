@@ -244,11 +244,12 @@ export const DisplayPDF = ({ file, drawSignature }) => {
 
     const drawSignatureRect = (ctx, r, color) => {
         console.log(ctx);
-        ctx.fillStyle = color;
+        ctx.fillStyle = "red";
         ctx.fillRect(r.left, r.top, r.right - r.left, r.bottom - r.top);
         const image = document.getElementById("signatureImage");
         if (image) {
             console.log("drawSignatureRect " + r.top + " - " + r.left + " - " + r.bottom + " - " + r.right);
+            console.log(image);
             ctx.drawImage(image, r.left, r.top, r.right - r.left, r.bottom - r.top);
         }
     }
