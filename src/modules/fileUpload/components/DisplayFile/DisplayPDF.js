@@ -184,12 +184,13 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     const signatureArea = useSelector((state) => state.customSignatures.signatureArea);
     const signatureSelected = useSelector((state) => state.customSignatures.signatureSelected);
     const locked = useSelector((state) => state.customSignatures.locked);
+    const [imgLoaded, setImgLoaded] = useState(false);
+    
     let dragX;
     let dragY;
     let dragRect;
     
     useEffect(() => {
-        console.log("signatureSelected " + signatureSelected)
         if (signatureSelected === MANUAL_SIGNATURE) {
             if (pageNumber != signatureArea.page) setPageNumber(signatureArea.page);
         } else {
@@ -205,14 +206,11 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     }, [signatureSelected])
 
     useLayoutEffect(() => {
-        console.log("renderPdf, signatureSelected, signatureArea, canvasHeight, canvasWidth " + drawSignature);
-
-        if (drawSignature) drawSignatureBoxes();
-    }, [renderPdf, signatureSelected, signatureArea, canvasHeight, canvasWidth, selectionCanvasRef.current, pagesInfo]);
+        if (drawSignature && imgLoaded) drawSignatureBoxes();
+    }, [renderPdf, signatureSelected, signatureArea, canvasHeight, canvasWidth, imgLoaded]);
 
     const drawSignatureBoxes = (rect = null) => {
         const canvas = selectionCanvasRef.current;
-        console.log("canvas, canvas.height " + canvas + " - " + (canvas ? canvas.height : -1));
         if (!canvas || canvas.height === 0) return;
         console.log(canvas);
 
@@ -233,23 +231,18 @@ export const DisplayPDF = ({ file, drawSignature }) => {
         }
 
         // Draw Existing signature (acroform) fields
-        console.log("pagesInfo.length " + pagesInfo.length + " - " + pageNumber);
         if (pagesInfo.length != 0) {
             pagesInfo[pageNumber - 1].sigAcroforms.forEach((sigAcroform) => {
-                console.log(sigAcroform);
                 drawSignatureRect(ctx, scaleRect(sigAcroform.rect, scale), signatureSelected === sigAcroform.fieldName ? '#00EE0099' : '#EEEEEE99');
             });
         }
     };
 
     const drawSignatureRect = (ctx, r, color) => {
-        console.log(ctx);
-        ctx.fillStyle = "red";
+        ctx.fillStyle = color;
         ctx.fillRect(r.left, r.top, r.right - r.left, r.bottom - r.top);
         const image = document.getElementById("signatureImage");
         if (image) {
-            console.log("drawSignatureRect " + r.top + " - " + r.left + " - " + r.bottom + " - " + r.right);
-            console.log(image);
             ctx.drawImage(image, r.left, r.top, r.right - r.left, r.bottom - r.top);
         }
     }
@@ -330,7 +323,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
 
     return (
         <div className="container flex-column border" style={ { width:"100%", backgroundColor: "rgba(0, 0, 0, 0.03)" }}>
-            <img className="d-none" id="signatureImage" src="/img/signature.png"/>
+            <img className="d-none" id="signatureImage" src="/img/signature.png" onLoad={() => setImgLoaded(true)} />
             <div className="row">
                 { pagesInfo.length > 1 && <div className="col">
                     <button onClick={() => { setShowThumbnails(!showThumbnails) }}>Thumbnails</button>
