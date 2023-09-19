@@ -1,7 +1,7 @@
 import { getBase64Data } from "../fileUpload/helpers/FileHelper"
 import packageJson from '../../../package.json';
 import {defaults, defaultsExcludeEmpty, getBEUrl} from "../utils/helper";
-import { globalToken } from "../../App"
+import { globalToken } from "../../store/globals"
 
 //-----------------------------------------
 //--- constants                         ---

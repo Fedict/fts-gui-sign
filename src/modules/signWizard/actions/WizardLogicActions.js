@@ -53,7 +53,7 @@ import {defaults, parseErrorMessage} from "../../utils/helper";
 import {ID_FLAGS} from "../../eIdLink/strategies/createEIDLinkExtensionStrategy";
 import { SET_ALL_INPUTS, setInputsSignState } from "../../signByTokenWizard/actions/TokenActions"
 import { signingType, signState } from "../../signByTokenWizard/constants"
-import { globalToken } from "../../../App"
+import { globalToken } from "../../../store/globals"
 
 //----------------------------------
 // helpers                    

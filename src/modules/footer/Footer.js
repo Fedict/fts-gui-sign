@@ -3,7 +3,7 @@ import { useIntl } from 'react-intl';
 import {connect} from "react-redux";
 import { FormattedMessage } from 'react-intl';
 import { Link } from "react-router-dom";
-import { globalToken } from "../../App";
+import { globalToken } from "../../store/globals"
 
 export const Footer = (props) => {
     const locale = useIntl().locale
