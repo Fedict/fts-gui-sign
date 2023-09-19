@@ -206,17 +206,19 @@ export const DisplayPDF = ({ file, drawSignature }) => {
 
     useLayoutEffect(() => {
         console.log("renderPdf, signatureSelected, signatureArea, canvasHeight, canvasWidth " + drawSignature);
-        
+
         if (drawSignature) drawSignatureBoxes();
     }, [renderPdf, signatureSelected, signatureArea, canvasHeight, canvasWidth]);
 
     const drawSignatureRect = (ctx, r, color) => {
+        console.log("drawSignatureRect " + r.top + " - " + r.left + " - " + r.bottom + " - " + r.right);
         ctx.fillStyle = color;
         ctx.fillRect(r.left, r.top, r.right - r.left, r.bottom - r.top);
         ctx.drawImage(document.getElementById("signatureImage"), r.left, r.top, r.right - r.left, r.bottom - r.top);
     }
 
     const drawSignatureBoxes = (rect = null) => {
+        console.log("canvas, canvas.length " + canvas + " - " + canvas ? canvas.length : -1);
         const canvas = selectionCanvasRef.current;
         if (!canvas || canvas.height === 0) return;
 
@@ -239,8 +241,10 @@ export const DisplayPDF = ({ file, drawSignature }) => {
         }
 
         // Draw Existing signature fields
+        console.log("pagesInfo.length " + pagesInfo.length + " - " + pageNumber);
         if (pagesInfo.length != 0) {
             pagesInfo[pageNumber - 1].sigAcroforms.forEach((sigAcroform) => {
+                console.log(sigAcroform);
                 drawSignatureRect(ctx, scaleRect(sigAcroform.rect, scale), signatureSelected === sigAcroform.fieldName ? '#00EE0099' : '#EEEEEE99');
             });
         }
