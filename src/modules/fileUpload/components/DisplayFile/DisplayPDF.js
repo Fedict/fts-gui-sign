@@ -214,7 +214,9 @@ export const DisplayPDF = ({ file, drawSignature }) => {
         console.log("drawSignatureRect " + r.top + " - " + r.left + " - " + r.bottom + " - " + r.right);
         ctx.fillStyle = color;
         ctx.fillRect(r.left, r.top, r.right - r.left, r.bottom - r.top);
-        ctx.drawImage(document.getElementById("signatureImage"), r.left, r.top, r.right - r.left, r.bottom - r.top);
+        const image = document.getElementById("signatureImage");
+        console.log("Image : " + image);
+        ctx.drawImage(image, r.left, r.top, r.right - r.left, r.bottom - r.top);
     }
 
     const drawSignatureBoxes = (rect = null) => {
