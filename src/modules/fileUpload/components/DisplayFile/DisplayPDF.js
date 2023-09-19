@@ -208,7 +208,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
         console.log("renderPdf, signatureSelected, signatureArea, canvasHeight, canvasWidth " + drawSignature);
 
         if (drawSignature) drawSignatureBoxes();
-    }, [renderPdf, signatureSelected, signatureArea, canvasHeight, canvasWidth, selectionCanvasRef, pagesInfo]);
+    }, [renderPdf, signatureSelected, signatureArea, canvasHeight, canvasWidth, selectionCanvasRef.current, pagesInfo]);
 
     const drawSignatureBoxes = (rect = null) => {
         const canvas = selectionCanvasRef.current;
@@ -246,8 +246,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
         ctx.fillStyle = color;
         ctx.fillRect(r.left, r.top, r.right - r.left, r.bottom - r.top);
         const image = document.getElementById("signatureImage");
-        console.log("Image : " + image);
-        ctx.drawImage(image, r.left, r.top, r.right - r.left, r.bottom - r.top);
+        if (image) ctx.drawImage(image, r.left, r.top, r.right - r.left, r.bottom - r.top);
     }
     
     const recordNewRectIfValid = (e) => {
@@ -328,9 +327,9 @@ export const DisplayPDF = ({ file, drawSignature }) => {
         <div className="container flex-column border" style={ { width:"100%", backgroundColor: "rgba(0, 0, 0, 0.03)" }}>
             <img className="d-none" id="signatureImage" src="/img/signature.png"/>
             <div className="row">
-                <div className="col">
+                { pagesInfo.length > 1 && <div className="col">
                     <button onClick={() => { setShowThumbnails(!showThumbnails) }}>Thumbnails</button>
-                </div>
+                </div>}
                 <div className="col">
                     <span className="px-2">Page : </span>
                     <button className="px-2" onClick={() => { changePageNumber(pageNumber - 1) }} disabled={ pageNumber <= 1}>Pred</button>
@@ -345,14 +344,16 @@ export const DisplayPDF = ({ file, drawSignature }) => {
                 </div>
             </div>
             <div className="row">
-                <div style={{ overflow: "auto", width: "110px", textAlign: "center", height: "80vh"}}
-                 hidden={ showThumbnails ? null : "hidden" }>{pagesInfo.map((input, pageIndex) => (
+                { pagesInfo.length > 1 && 
+                    <div style={{ overflow: "auto", width: "110px", textAlign: "center", height: "80vh"}}
+                        hidden={ showThumbnails ? null : "hidden" }>{pagesInfo.map((input, pageIndex) => (
                         <canvas key={ "tumbnail-"+pageIndex } 
                             ref={(element) => thumbCanvasRefs.current[pageIndex] = element } 
                             width={pagesInfo[pageIndex].width / 10} height ={pagesInfo[pageIndex].height / 10}
                             onClick={ () => { setPageNumber(pageIndex + 1) }}
                             style={ pageNumber === (pageIndex + 1) ?  { border: "double" } : {} } />                    
-                 ))}</div>
+                    ))}</div>
+                }
                 <div className="col" style={{ overflow: "auto", height: "80vh" }}>
                     <canvas id="pdf-canvas" ref={pdfCanvasRef} width={canvasWidth} height ={canvasHeight} style= { { position: "absolute", left: "0", top: "0", zIndex: "0" } } />
                     <canvas id="pdf-canvasSelection" ref={selectionCanvasRef} width={canvasWidth} height ={canvasHeight} style= { { position: "absolute", left: "0", top: "0", zIndex: "1" } } />
