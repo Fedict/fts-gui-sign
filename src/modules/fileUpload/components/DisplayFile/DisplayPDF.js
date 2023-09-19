@@ -208,7 +208,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
         console.log("renderPdf, signatureSelected, signatureArea, canvasHeight, canvasWidth " + drawSignature);
 
         if (drawSignature) drawSignatureBoxes();
-    }, [renderPdf, signatureSelected, signatureArea, canvasHeight, canvasWidth, selectionCanvasRef]);
+    }, [renderPdf, signatureSelected, signatureArea, canvasHeight, canvasWidth, selectionCanvasRef, pagesInfo]);
 
     const drawSignatureRect = (ctx, r, color) => {
         console.log("drawSignatureRect " + r.top + " - " + r.left + " - " + r.bottom + " - " + r.right);
@@ -220,8 +220,8 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     }
 
     const drawSignatureBoxes = (rect = null) => {
-        console.log("canvas, canvas.height " + canvas + " - " + (canvas ? canvas.height : -1));
         const canvas = selectionCanvasRef.current;
+        console.log("canvas, canvas.height " + canvas + " - " + (canvas ? canvas.height : -1));
         if (!canvas || canvas.height === 0) return;
 
         const scale = zoomLevel / ZOOM_CORRECTION; // Scale (to percentage compensated for DPI pseudo mapping)
