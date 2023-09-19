@@ -208,7 +208,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
         console.log("renderPdf, signatureSelected, signatureArea, canvasHeight, canvasWidth " + drawSignature);
 
         if (drawSignature) drawSignatureBoxes();
-    }, [renderPdf, signatureSelected, signatureArea, canvasHeight, canvasWidth]);
+    }, [renderPdf, signatureSelected, signatureArea, canvasHeight, canvasWidth, selectionCanvasRef]);
 
     const drawSignatureRect = (ctx, r, color) => {
         console.log("drawSignatureRect " + r.top + " - " + r.left + " - " + r.bottom + " - " + r.right);
