@@ -98,7 +98,6 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     //****************************************************************************************
 
     useEffect(() => {
-        console.log("file.url " + file.url)
         setPageNumber(1);
         setZoomLevel(100);
         setShowThumbnails(false);
@@ -118,7 +117,6 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     }, [file.url]);
 
     useEffect(() => {
-        console.log("showThumbnails " + showThumbnails + " - " + thumbnailsRendered  +  " - " + currentPDF)
         if (thumbnailsRendered || !currentPDF) return;
 
         for(let thumbIndex = 0; thumbIndex < currentPDF.numPages; thumbIndex++) {
@@ -142,7 +140,6 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     }
 
     useEffect(() => {
-        console.log("pagesInfo, pageNumber, zoomLevel " + pagesInfo.length)
         if (pagesInfo.length === 0) return;
 
         let pi = pagesInfo[pageNumber - 1];
@@ -153,11 +150,9 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     }, [pagesInfo, pageNumber, zoomLevel]);
 
     useLayoutEffect(() => {
-        console.log("renderPdf " + renderPdf)
         if (!renderPdf) return;
 
         currentPDF.getPage(pageNumber).then(function (page) {
-            console.log("page", page);
             const context = pdfCanvasRef.current.getContext('2d');
             const scale = zoomLevel / ZOOM_CORRECTION; // Scale (to percentage compensated for DPI pseudo mapping)
             const renderContext = {
@@ -212,7 +207,6 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     const drawSignatureBoxes = (rect = null) => {
         const canvas = selectionCanvasRef.current;
         if (!canvas || canvas.height === 0) return;
-        console.log(canvas);
 
         const scale = zoomLevel / ZOOM_CORRECTION; // Scale (to percentage compensated for DPI pseudo mapping)
 
@@ -269,9 +263,6 @@ export const DisplayPDF = ({ file, drawSignature }) => {
         dragY = e.offsetY;
         let fieldName = recordNewRectIfValid(e);
         if (fieldName) dispatch(selectSignature(fieldName));
-
-        console.log("DOWN");
-        console.log(dragRect);
     };
 
     const onMouseMove = (e) => {
@@ -283,7 +274,6 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     }
  
     const onMouseUp = (e, isOutOfCanvas) => {
-        console.log("UP " + isOutOfCanvas);
         if (!dragRect) return;
 
         if (!isOutOfCanvas) recordNewRectIfValid(e);
