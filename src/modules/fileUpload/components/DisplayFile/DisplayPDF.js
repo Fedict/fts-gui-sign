@@ -210,15 +210,6 @@ export const DisplayPDF = ({ file, drawSignature }) => {
         if (drawSignature) drawSignatureBoxes();
     }, [renderPdf, signatureSelected, signatureArea, canvasHeight, canvasWidth, selectionCanvasRef, pagesInfo]);
 
-    const drawSignatureRect = (ctx, r, color) => {
-        console.log("drawSignatureRect " + r.top + " - " + r.left + " - " + r.bottom + " - " + r.right);
-        ctx.fillStyle = color;
-        ctx.fillRect(r.left, r.top, r.right - r.left, r.bottom - r.top);
-        const image = document.getElementById("signatureImage");
-        console.log("Image : " + image);
-        ctx.drawImage(image, r.left, r.top, r.right - r.left, r.bottom - r.top);
-    }
-
     const drawSignatureBoxes = (rect = null) => {
         const canvas = selectionCanvasRef.current;
         console.log("canvas, canvas.height " + canvas + " - " + (canvas ? canvas.height : -1));
@@ -229,20 +220,18 @@ export const DisplayPDF = ({ file, drawSignature }) => {
         const ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        ctx.lineWidth = 2;
-
         if (rect) {
-            // Draw current selection ...
+            // Draw current drag rectangle ...
             drawSignatureRect(ctx, rect, '#00EE0099')
             }
         else {
-            // ... or Draw signature area
+            // ... or Draw existing manual (drag) signature
             if (signatureArea && signatureArea.page === pageNumber) {
                 drawSignatureRect(ctx, scaleRect(signatureArea.rect, scale), signatureSelected === MANUAL_SIGNATURE ? '#00EE0099' : '#EEEEEE99');
             }
         }
 
-        // Draw Existing signature fields
+        // Draw Existing signature (acroform) fields
         console.log("pagesInfo.length " + pagesInfo.length + " - " + pageNumber);
         if (pagesInfo.length != 0) {
             pagesInfo[pageNumber - 1].sigAcroforms.forEach((sigAcroform) => {
@@ -252,6 +241,15 @@ export const DisplayPDF = ({ file, drawSignature }) => {
         }
     };
 
+    const drawSignatureRect = (ctx, r, color) => {
+        console.log("drawSignatureRect " + r.top + " - " + r.left + " - " + r.bottom + " - " + r.right);
+        ctx.fillStyle = color;
+        ctx.fillRect(r.left, r.top, r.right - r.left, r.bottom - r.top);
+        const image = document.getElementById("signatureImage");
+        console.log("Image : " + image);
+        ctx.drawImage(image, r.left, r.top, r.right - r.left, r.bottom - r.top);
+    }
+    
     const recordNewRectIfValid = (e) => {
         e.preventDefault();
         e.stopPropagation();
