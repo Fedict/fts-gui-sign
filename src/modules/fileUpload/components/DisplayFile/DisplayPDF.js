@@ -218,7 +218,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     }
 
     const drawSignatureBoxes = (rect = null) => {
-        console.log("canvas, canvas.length " + canvas + " - " + canvas ? canvas.height : -1);
+        console.log("canvas, canvas.height " + canvas + " - " + (canvas ? canvas.height : -1));
         const canvas = selectionCanvasRef.current;
         if (!canvas || canvas.height === 0) return;
 
