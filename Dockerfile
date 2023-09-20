@@ -11,11 +11,6 @@ RUN npm config set registry https://registry.npmjs.org/
 
 RUN npm install --loglevel http
 
-RUN sha1sum node_modules/pdfjs-dist/build/pdf.worker.js
-COPY customPdflib/SHA1.txt /app/
-RUN sha1sum -c SHA1.txt
-COPY customPdflib/pdf.worker.js node_modules/pdfjs-dist/build/pdf.worker.js
-
 RUN npm install serve -g
 COPY . /app
 
