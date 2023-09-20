@@ -10,6 +10,12 @@ COPY package-lock.json /app/
 RUN npm config set registry https://registry.npmjs.org/
 
 RUN npm install --loglevel http
+
+RUN sha1sum node_modules/pdfjs-dist/build/pdf.worker.js
+RUN sha1sum -c customPdflib/SHA1.txt
+
+RUN COPY customPdflib/pdf.worker.js node_modules/pdfjs-dist/build/pdf.worker.js
+
 RUN npm install serve -g
 COPY . /app
 
