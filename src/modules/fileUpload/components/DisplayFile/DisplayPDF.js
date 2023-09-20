@@ -283,6 +283,8 @@ export const DisplayPDF = ({ file, drawSignature }) => {
                 rect : scaleRect(dragRect, ZOOM_CORRECTION / zoomLevel)
             }));
             dispatch(selectSignature(MANUAL_SIGNATURE))
+        } else {
+            drawSignatureBoxes(scaleRect(signatureArea.rect, zoomLevel / ZOOM_CORRECTION));
         }
         dragRect = null;
     };
