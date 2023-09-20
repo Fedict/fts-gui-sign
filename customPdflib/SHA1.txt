@@ -1,1 +1,1 @@
-0.326 0f1167a0371ea74948738de741aefbcaf3a0c40d  node_modules/pdfjs-dist/build/pdf.worker.js
+0f1167a0371ea74948738de741aefbcaf3a0c40d  node_modules/pdfjs-dist/build/pdf.worker.js
