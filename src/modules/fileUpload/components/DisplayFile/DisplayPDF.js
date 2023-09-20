@@ -51,7 +51,8 @@ const getPagesInfo = async (pdf) => {
                     pageInfo.sigAcroforms.push({
                         fieldName: annotation.fieldName,
                         // Coordinate system of pdf "zero" is bottom left hence the "page.view[3] - r[1]"
-                        rect: normalizeRect({ left: r[0], top: page.view[3] - r[1], right: r[2], bottom: page.view[3] - r[3] })
+                        rect: normalizeRect({ left: r[0], top: page.view[3] - r[1], right: r[2], bottom: page.view[3] - r[3] }),
+                        isSigned: annotation.BoSa_hasValue
                     })
                 }
             }
@@ -108,7 +109,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
                 setPagesInfo(pagesInfo);
                 let signatureFields = [];
                 pagesInfo.forEach((page) => {
-                    page.sigAcroforms.forEach((sigAcroform) => { signatureFields.push(sigAcroform.fieldName)});
+                    page.sigAcroforms.forEach((sigAcroform) => { if (!sigAcroform.isSigned) signatureFields.push(sigAcroform.fieldName)});
                 } )
                 dispatch(setSignatureArea(null));
                 dispatch(setSignatureFields(signatureFields));
@@ -227,7 +228,9 @@ export const DisplayPDF = ({ file, drawSignature }) => {
         // Draw Existing signature (acroform) fields
         if (pagesInfo.length != 0) {
             pagesInfo[pageNumber - 1].sigAcroforms.forEach((sigAcroform) => {
-                drawSignatureRect(ctx, scaleRect(sigAcroform.rect, scale), signatureSelected === sigAcroform.fieldName ? '#00EE0099' : '#EEEEEE99');
+                if (!sigAcroform.isSigned) {
+                    drawSignatureRect(ctx, scaleRect(sigAcroform.rect, scale), signatureSelected === sigAcroform.fieldName ? '#00EE0099' : '#EEEEEE99');
+                }
             });
         }
     };
@@ -249,7 +252,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
         let sigAcroforms = pagesInfo[pageNumber - 1].sigAcroforms;
         for(let i = 0; i < sigAcroforms.length; i++) {
             if (intersectRect(scaleRect(sigAcroforms[i].rect, zoomLevel / ZOOM_CORRECTION), rect)) {
-                return sigAcroforms[i].fieldName;
+                return sigAcroforms[i].isSigned ? null : sigAcroforms[i].fieldName;
             }
         };
 

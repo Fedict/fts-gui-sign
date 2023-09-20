@@ -15,6 +15,7 @@
     "immutable": "^4.0.0-rc.12",
     "jquery": "3.5.1",
     "moment": "^2.29.1",
+    "patch-package": "^8.0.0",
     "pdfjs-dist": "^3.10.111",
     "popper.js": "1.16.1",
     "prop-types": "15.7.2",
@@ -46,7 +47,8 @@
     "test": "react-scripts test",
     "testOld": "react-scripts test --watchAll=false --coverage=true",
     "tests": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "postinstall": "patch-package"
   },
   "jest": {
     "coverageReporters": [
