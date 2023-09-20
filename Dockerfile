@@ -9,6 +9,7 @@ COPY package-lock.json /app/
 
 RUN npm config set registry https://registry.npmjs.org/
 
+COPY patches /app/patches/
 RUN npm install --loglevel http
 
 RUN npm install serve -g
