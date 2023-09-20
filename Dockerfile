@@ -13,7 +13,8 @@ RUN npm install --loglevel http
 
 RUN sha1sum node_modules/pdfjs-dist/build/pdf.worker.js
 COPY customPdflib /app/
-RUN sha1sum -c customPdflib/SHA1.txt
+RUN ls -l
+RUN sha1sum -c /app/customPdflib/SHA1.txt
 COPY customPdflib/pdf.worker.js node_modules/pdfjs-dist/build/pdf.worker.js
 
 RUN npm install serve -g
