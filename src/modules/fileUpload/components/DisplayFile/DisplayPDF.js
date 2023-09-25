@@ -335,7 +335,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
 
     return (
         <div className="container flex-column border" style={ { width:"100%", backgroundColor: "rgba(0, 0, 0, 0.03)" }}>
-            <img className="d-none" id="signatureImage" src="/img/Signature.png" onLoad={() => setImgSignatureLoaded(true)} />
+            <img className="d-none" id="signatureImage" src="/img/signature.png" onLoad={() => setImgSignatureLoaded(true)} />
             <img className="d-none" id="signPhotoImage" src="/img/photoSignature.png" onLoad={() => setImgSignPhotoLoaded(true)} />
             <div className="row">
                 { pagesInfo.length > 1 && <div className="col">
