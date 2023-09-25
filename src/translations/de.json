@@ -149,6 +149,7 @@
   "succes.redirect.to": "Sie werden in {timeLeft} Sekunden zu {clientName} weitergeleitet.",
   "succes.signed.downloadIsEmpty": "Nothing to download",
   "succes.signed.downloadIsEmptyTxt": "Because of an error no file was signed and can be downloaded",
+  "succes.signNext": "Nächstes Dokument unterschreiben",
   "succes.title": "Ihr Dokument wurde erfolgreich unterschrieben!",
   "succes.multiFile.title": "Ihre Dokumente wurden erfolgreich signiert!",
   "succes.title.short": "Unterschrieben",
