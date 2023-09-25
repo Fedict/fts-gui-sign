@@ -257,7 +257,7 @@ export const UploadFileContainer = (props) => {
                             name="sigSel"/>&nbsp;<label htmlFor={ "sig_"+index }>{ sigField }</label><br/>
                         </div>
                     ))}
-                    <input type="checkbox" id="photo" checked={props.photoIncluded} disabled={props.signatureSelected === INVISIBLE_SIGNATURE}
+                    <input type="checkbox" id="photo" checked={props.photoIncluded}
                             onChange={ () => { props.includePhoto(!props.photoIncluded) } } style={{ display: "inline-block"}}/>&nbsp;<label htmlFor="photo">Include photo</label><br/>
                 </>}
         </CardContainer>

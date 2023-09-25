@@ -298,9 +298,16 @@ export const DisplayPDF = ({ file, drawSignature }) => {
 
         if (!isOutOfCanvas) recordNewRectIfValid(e);
         if ((dragRect.right - dragRect.left) !== 0 && (dragRect.bottom - dragRect.top) !== 0) {
+            let rect = scaleRect(dragRect, ZOOM_CORRECTION / zoomLevel);
+            // mouse coordinates can be outside of the canvas => Fix this
+            if (rect.top < 0) rect.top = 0;
+            if (rect.left < 0) rect.left = 0;
+            const pi = pagesInfo[pageNumber - 1];
+            if (rect.right > pi.width) rect.right = pi.width;
+            if (rect.bottom > pi.height) rect.bottom = pi.height;
             dispatch(setSignatureArea({
                 page: pageNumber,
-                rect : scaleRect(dragRect, ZOOM_CORRECTION / zoomLevel)
+                rect : rect
             }));
             dispatch(selectSignature(MANUAL_SIGNATURE))
         } else {
