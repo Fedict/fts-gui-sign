@@ -4,7 +4,6 @@ import {FormattedMessage} from "react-intl";
 import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist'
 import { MANUAL_SIGNATURE, selectSignature, setSignatureArea, setSignatureFields } from '../../reducers/CustomSignatureReducer'
 
-
 GlobalWorkerOptions.workerSrc = require("pdfjs-dist/build/pdf.worker.entry.js");
 const ZOOM_CORRECTION = 60
 
@@ -179,8 +178,10 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     const selectionCanvasRef = useRef(null);
     const signatureArea = useSelector((state) => state.customSignatures.signatureArea);
     const signatureSelected = useSelector((state) => state.customSignatures.signatureSelected);
+    const photoIncluded = useSelector((state) => state.customSignatures.photoIncluded);
     const locked = useSelector((state) => state.customSignatures.locked);
-    const [imgLoaded, setImgLoaded] = useState(false);
+    const [imgSignatureLoaded, setImgSignatureLoaded] = useState(false);
+    const [imgSignPhotoLoaded, setImgSignPhotoLoaded] = useState(false);
     
     let dragX;
     let dragY;
@@ -202,8 +203,8 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     }, [signatureSelected])
 
     useLayoutEffect(() => {
-        if (drawSignature && imgLoaded) drawSignatureBoxes();
-    }, [renderPdf, signatureSelected, signatureArea, canvasHeight, canvasWidth, imgLoaded]);
+        if (drawSignature && imgSignatureLoaded && imgSignPhotoLoaded) drawSignatureBoxes();
+    }, [renderPdf, signatureSelected, signatureArea, canvasHeight, canvasWidth, photoIncluded, imgSignatureLoaded, imgSignPhotoLoaded]);
 
     const drawSignatureBoxes = (rect = null) => {
         const canvas = selectionCanvasRef.current;
@@ -236,25 +237,41 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     };
 
     const drawSignatureRect = (ctx, r, color) => {
+        const w = r.right - r.left;
+        const h = r.bottom - r.top;
         ctx.fillStyle = color;
-        ctx.fillRect(r.left, r.top, r.right - r.left, r.bottom - r.top);
-        const image = document.getElementById("signatureImage");
+        ctx.fillRect(r.left, r.top, w, h);
+        const image = document.getElementById(photoIncluded ? "signPhotoImage" : "signatureImage");
         if (image) {
-            ctx.drawImage(image, r.left, r.top, r.right - r.left, r.bottom - r.top);
+            // Scale image with fixed x/y ratio
+            let imgW = image.width;
+            let imgH = image.height;
+            let scale = w / imgW;
+            const scaleY = h / imgH;
+            if (scaleY < scale) scale = scaleY;
+            imgH *= scale;
+            imgW *= scale;
+            ctx.drawImage(image, r.left + (w - imgW) / 2, r.top + (h - imgH) / 2, imgW, imgH);
         }
     }
     
-    const recordNewRectIfValid = (e) => {
+    const recordNewRectIfValid = (e, checkSignatureArea = false) => {
         e.preventDefault();
         e.stopPropagation();
         var rect = normalizeRect({ top: dragY, right: e.offsetX, left: dragX, bottom: e.offsetY });
 
         let sigAcroforms = pagesInfo[pageNumber - 1].sigAcroforms;
+        // Use indexed for loop to be able to return method
         for(let i = 0; i < sigAcroforms.length; i++) {
-            if (intersectRect(scaleRect(sigAcroforms[i].rect, zoomLevel / ZOOM_CORRECTION), rect)) {
-                return sigAcroforms[i].isSigned ? null : sigAcroforms[i].fieldName;
+            const sigAcroform = sigAcroforms[i];
+            if (intersectRect(scaleRect(sigAcroform.rect, zoomLevel / ZOOM_CORRECTION), rect)) {
+                return sigAcroform.isSigned ? null : { target: sigAcroform.fieldName };
             }
         };
+        if (checkSignatureArea && signatureArea && pageNumber === signatureArea.page  &&
+            intersectRect(scaleRect(signatureArea.rect, zoomLevel / ZOOM_CORRECTION), rect)) {
+            return { target: MANUAL_SIGNATURE };
+        }
 
         drawSignatureBoxes(rect);
         dragRect = rect;
@@ -264,8 +281,8 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     const onMouseDown = (e) => {
         dragX = e.offsetX;
         dragY = e.offsetY;
-        let fieldName = recordNewRectIfValid(e);
-        if (fieldName) dispatch(selectSignature(fieldName));
+        const signatureHit = recordNewRectIfValid(e, true);
+        if (signatureHit) dispatch(selectSignature(signatureHit.target));
     };
 
     const onMouseMove = (e) => {
@@ -287,7 +304,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
             }));
             dispatch(selectSignature(MANUAL_SIGNATURE))
         } else {
-            drawSignatureBoxes(scaleRect(signatureArea.rect, zoomLevel / ZOOM_CORRECTION));
+            drawSignatureBoxes();
         }
         dragRect = null;
     };
@@ -309,7 +326,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
                 document.documentElement.removeEventListener('mouseup', onDocumentMouseUp); 
             }
         }
-    }, [pagesInfo, pageNumber, zoomLevel, signatureSelected, signatureArea, locked]);
+    }, [pagesInfo, pageNumber, zoomLevel, signatureSelected, signatureArea, locked, photoIncluded ]);
 
 
     //****************************************************************************************
@@ -318,7 +335,8 @@ export const DisplayPDF = ({ file, drawSignature }) => {
 
     return (
         <div className="container flex-column border" style={ { width:"100%", backgroundColor: "rgba(0, 0, 0, 0.03)" }}>
-            <img className="d-none" id="signatureImage" src="/img/signature.png" onLoad={() => setImgLoaded(true)} />
+            <img className="d-none" id="signatureImage" src="/img/Signature.png" onLoad={() => setImgSignatureLoaded(true)} />
+            <img className="d-none" id="signPhotoImage" src="/img/photoSignature.png" onLoad={() => setImgSignPhotoLoaded(true)} />
             <div className="row">
                 { pagesInfo.length > 1 && <div className="col">
                     <button onClick={() => { setShowThumbnails(!showThumbnails) }}>Thumbnails</button>
@@ -355,3 +373,4 @@ export const DisplayPDF = ({ file, drawSignature }) => {
         </div>
          )
 }
+
