@@ -217,12 +217,12 @@ export const DisplayPDF = ({ file, drawSignature }) => {
 
         if (rect) {
             // Draw current drag rectangle ...
-            drawSignatureRect(ctx, rect, '#00EE0099')
+            drawSignatureRect(ctx, rect, '#00EE00')
             }
         else {
             // ... or Draw existing manual (drag) signature
             if (signatureArea && signatureArea.page === pageNumber) {
-                drawSignatureRect(ctx, scaleRect(signatureArea.rect, scale), signatureSelected === MANUAL_SIGNATURE ? '#00EE0099' : '#EEEEEE99');
+                drawSignatureRect(ctx, scaleRect(signatureArea.rect, scale), signatureSelected === MANUAL_SIGNATURE ? '#00EE00' : '#EEEEEE');
             }
         }
 
@@ -230,7 +230,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
         if (pagesInfo.length != 0) {
             pagesInfo[pageNumber - 1].sigAcroforms.forEach((sigAcroform) => {
                 if (!sigAcroform.isSigned) {
-                    drawSignatureRect(ctx, scaleRect(sigAcroform.rect, scale), signatureSelected === sigAcroform.fieldName ? '#00EE0099' : '#EEEEEE99');
+                    drawSignatureRect(ctx, scaleRect(sigAcroform.rect, scale), signatureSelected === sigAcroform.fieldName ? '#00EE00' : '#EEEEEE');
                 }
             });
         }
