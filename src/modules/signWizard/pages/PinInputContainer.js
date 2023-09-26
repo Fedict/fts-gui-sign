@@ -174,7 +174,7 @@ const PinInputContainer = (props) => {
                         />
                     }
                 </p>
-                <ChangeAutoDownloadOption />
+                { props.downloadSelector && <ChangeAutoDownloadOption /> }
                 <form className="form-inline" onSubmit={() => { handleSubmit(pin) }} >
                     <div className="form-control" id="input_code" data-testid="input_code" tabIndex="0" translate="no" style={{width:150, marginRight:30}} ref={ pinInputRef }>
                         {pinstring.substr(0, indexCursor)}<span className="blinking-cursor">|</span>{pinstring.substr(indexCursor)}

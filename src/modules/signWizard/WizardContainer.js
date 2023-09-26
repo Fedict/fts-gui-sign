@@ -81,7 +81,7 @@ export const WizardContainer = ({ wizard, reader, resetWizard }) => {
             content = <DigestLoadingContainer />;
             break;
         case WIZARD_STATE_PIN_INPUT:
-            content = <PinInputContainer />;
+            content = <PinInputContainer downloadSelector={ false } />;
             break;
         case WIZARD_STATE_SIGNING_LOADING:
             content = <SigningLoadingContainer />;
