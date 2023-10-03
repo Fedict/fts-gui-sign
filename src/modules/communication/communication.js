@@ -63,7 +63,7 @@ export const createBody = (certificateBody, documentName, documentBase64, docume
         "textPos": "RIGHT",
         "textPadding": 10,
         "textAlignV": "MIDDLE",
-        "textSize": "40"
+        "textSize": "32"
     };
 
     switch(customSignatures.signatureSelected) {
