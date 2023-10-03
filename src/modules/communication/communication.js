@@ -59,7 +59,11 @@ export const createBody = (certificateBody, documentName, documentBase64, docume
             "en": "Signed by %gn% %sn%\nOn %d(HH:mm MMM d YYYY z)%",
             "de": "Unterzeichnet von %gn% %sn%\nAm %d(HH:mm MMM d YYYY z)%",
             "nl": "Getekend door %gn% %sn%\nOp %d(HH:mm MMM d YYYY z)%",
-        }
+        },
+        "textPos": "RIGHT",
+        "textPadding": 10,
+        "textAlignV": "MIDDLE",
+        "textSize": "40"
     };
 
     switch(customSignatures.signatureSelected) {
@@ -72,7 +76,7 @@ export const createBody = (certificateBody, documentName, documentBase64, docume
             psfC = area.page + "," + Math.round(area.rect.left) + "," +
                                     Math.round(area.rect.top) + "," +
                                     Math.round(area.rect.right - area.rect.left) + "," +
-                                    Math.round(area.rect.bottom - area.rect.top)  
+                                    Math.round(area.rect.bottom - area.rect.top);
             break;
 
         default:
