@@ -345,15 +345,18 @@ export const DisplayPDF = ({ file, drawSignature }) => {
             <img className="d-none" id="signatureImage" src="/img/signature.png" onLoad={() => setImgSignatureLoaded(true)} />
             <img className="d-none" id="signPhotoImage" src="/img/photoSignature.png" onLoad={() => setImgSignPhotoLoaded(true)} />
             <div className="row">
-                { pagesInfo.length > 1 && <div className="col">
-                    <button onClick={() => { setShowThumbnails(!showThumbnails) }}>Thumbnails</button>
-                </div>}
-                <div className="col">
-                    <span className="px-2">Page : </span>
-                    <button className="px-2" onClick={() => { changePageNumber(pageNumber - 1) }} disabled={ pageNumber <= 1}>Pred</button>
-                    <span  className="px-2">{ pageNumber }</span>
-                    <button  className="px-2" onClick={() => { changePageNumber(pageNumber + 1) }} disabled={ currentPDF && pageNumber >= currentPDF.numPages}>Next</button>
-                </div>
+                { pagesInfo.length > 1 && <>
+                    <div className="col">
+                        <button onClick={() => { setShowThumbnails(!showThumbnails) }}>Thumbnails</button>
+                    </div>
+                    <div className="col">
+                        <span className="px-2">Page : </span>
+                        <button className="px-2" onClick={() => { changePageNumber(pageNumber - 1) }} disabled={ pageNumber <= 1}>Pred</button>
+                        <span  className="px-2">{ pageNumber }</span>
+                        <button  className="px-2" onClick={() => { changePageNumber(pageNumber + 1) }} disabled={ currentPDF && pageNumber >= currentPDF.numPages}>Next</button>
+                    </div>
+                </>}
+
                 <div className="col">
                     <span className="px-2">Zoom : </span>
                     <button  className="px-2" onClick={() => { setZoomLevel(predZoom()) }} disabled={ predZoom() === zoomLevel}>Out</button>
