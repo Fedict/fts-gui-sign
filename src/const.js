@@ -9,3 +9,6 @@ exports.redirectErrorCodes = {
     GENERAL_ERROR : 6274,
 
 }
+
+exports.faqURLs = { id: "error.faq.URL", defaultMessage: "https://bosa.belgium.be/en/federal-trust-services-frequently-asked-questions"}
+
