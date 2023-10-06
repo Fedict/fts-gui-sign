@@ -1,6 +1,7 @@
 import React from "react"
 import { CardContainer } from "./CardContainer"
 import {injectIntl} from "react-intl";
+import {faqURLs} from "../../../const";
 
 /**
  * Card with buttons and a error message (based on bootstrap class "alert alert-danger")
@@ -33,7 +34,6 @@ export const CardError = injectIntl((
         intl
     }
 ) => {
-    const faqURLs = { id: "error.faq.URL", defaultMessage: "https://bosa.belgium.be/en/federal-trust-services-frequently-asked-questions"}
     const faqGeneric = { id: "error.faq.generic", defaultMessage: "I get the message ‘{error}’."}
 
     if(cancelButtonText && cancelButtonText.id){
