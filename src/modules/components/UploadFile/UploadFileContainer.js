@@ -122,14 +122,17 @@ export const UploadFileContainer = (props) => {
     }
 
     let fileSize = file ? Math.round(file.size*10/(1024*1024))/10 : 0;
-    let maxSize = Math.round(window.configData.maxUploadSize*10/(1024*1024))/10;
+    let maxUploadSize = window.configData.maxUploadSize;
+    if (!maxUploadSize) maxUploadSize = 10*1024*1024; // 10Mb default
+    let maxSize = Math.round(maxUploadSize*10/(1024*1024))/10;
+
     return (
         <CardContainer
             title={intl.formatMessage(messages.title)}
             hasNextButton
             nextButtonText={intl.formatMessage(messages.next)}
             onClickNext={() => { handleSubmit() }}
-            nextButtonIsDisabled={!(file && file.name && file.size <= window.configData.maxUploadSize)}>
+            nextButtonIsDisabled={!(file && file.name && file.size <= maxUploadSize)}>
 
             <div className="form-group">
                 <div className="container" >
@@ -232,7 +235,7 @@ export const UploadFileContainer = (props) => {
                                         </div>
                                     </div>
                                 }
-                                {file.size > window.configData.maxUploadSize &&
+                                {file.size > maxUploadSize &&
                                     <div className="row " style={{ justifyContent: "center" }}>
                                     <div className="col col-auto align-self-center ">
                                         <p className="btn m-0 text-center text-warning" >
