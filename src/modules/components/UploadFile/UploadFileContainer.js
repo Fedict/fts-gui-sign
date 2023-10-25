@@ -121,13 +121,15 @@ export const UploadFileContainer = (props) => {
         }
     }
 
+    let fileSize = file ? Math.round(file.size*10/(1024*1024))/10 : 0;
+    let maxSize = Math.round(window.configData.maxUploadSize*10/(1024*1024))/10;
     return (
         <CardContainer
             title={intl.formatMessage(messages.title)}
             hasNextButton
             nextButtonText={intl.formatMessage(messages.next)}
             onClickNext={() => { handleSubmit() }}
-            nextButtonIsDisabled={(file && file.name) ? false : true}>
+            nextButtonIsDisabled={!(file && file.name && file.size <= window.configData.maxUploadSize)}>
 
             <div className="form-group">
                 <div className="container" >
@@ -229,6 +231,15 @@ export const UploadFileContainer = (props) => {
                                             </p>
                                         </div>
                                     </div>
+                                }
+                                {file.size > window.configData.maxUploadSize &&
+                                    <div className="row " style={{ justifyContent: "center" }}>
+                                    <div className="col col-auto align-self-center ">
+                                        <p className="btn m-0 text-center text-warning" >
+                                            <FormattedMessage id="file.size.limit" defaultMessage="Document size ({fileSize} Mb.) larger than {maxSize} Mb., signing is disabled" values={{ fileSize: fileSize, maxSize: maxSize }} />
+                                        </p>
+                                    </div>
+                                </div>
                                 }
                                 {dragging && <div onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop} style={draggingError ? styleDragRed : styleDragGreen}></div>}
                             </div>

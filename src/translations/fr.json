@@ -118,6 +118,7 @@
   "or": "OU",
   "drag.drop.here": "faites glisser le document ici",
   "drag.drop.error": "Seulement un document au format pdf ou xml peut être sélectionné.",
+  "file.size.limit": "Taille du document ({fileSize} Mo.) supérieure à {maxSize} Mo., la signature est désactivée",
   "sign.token.1": "Lire et connecter l'eID",
   "sign.token.2": "Saisissez le code PIN et signez",
   "sign.token.4": "Prêt",
