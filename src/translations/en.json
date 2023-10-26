@@ -81,6 +81,7 @@
   "error.certificates.not_found.next": "Search again",
   "error.certificates.not_found.text": "There are no (valid) signing certificates found.",
   "error.certificates.not_found.title": "No valid certificates found",
+  "error.certificates.not_found.link": "Please check our FAQ",
   "error.general.text": "Something went wrong. Please reload the page and try again.",
   "error.general.title": "Something went wrong",
   "extension.install.button": "Install BeIDConnect extension",

@@ -7,6 +7,7 @@ import { CardInfo } from '../components/Card/CardInfo'
 import {doSendLogInfo, resetWizard} from '../signWizard/actions/WizardLogicActions'
 import {injectIntl, useIntl} from "react-intl";
 import {definedMessages} from "../i18n/translations";
+import {faqURLs} from "../../const";
 
 /**
  * a card that shows a message and has a cancel and next button
@@ -80,6 +81,7 @@ const MessageContainer = ({ message, messageInStore, navigateToStep, onCancel,  
             {shownMessage.body? (
                 shownMessage.body.id && intl.formatMessage(shownMessage.body)
             ):shownMessage.body}
+            {shownMessage.link && <a href={intl.formatMessage(faqURLs) + shownMessage.linkURL}>{intl.formatMessage(shownMessage.link)}</a>}
         </Container>
     )
 }

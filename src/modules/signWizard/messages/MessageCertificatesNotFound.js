@@ -8,7 +8,11 @@ const messages = defineMessages({
     },
     text : {
         id : 'error.certificates.not_found.text',
-        defaultMessage : "There are no (valid) signing certificates found."
+        defaultMessage : "There are no (valid) signing certificates found.",
+    },
+    link : {
+        id : 'error.certificates.not_found.link',
+        defaultMessage : "Please check our FAQ",
     },
     next : {
         id : 'error.certificates.not_found.next',
@@ -19,6 +23,8 @@ const messages = defineMessages({
 export const MessageCertificatesNotFound = {
     title: messages.title,
     message: messages.text,
+    link: messages.link,
+    linkURL: "TODO FILL ME!",
     body: null,
     nextButton: {
         text: messages.next,
