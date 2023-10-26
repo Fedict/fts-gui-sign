@@ -29,7 +29,7 @@ describe("CertificateReducer", () => {
                 const result = CertificateReducer(startState, action)
 
                 expect(result.certificateList).toEqual(action.payload)
-                expect(result).toEqual({ ...initialState, certificateList: action.payload })
+                expect(result).toEqual({ ...initialState, certificateList: action.payload, neverSaved: false })
             })
         })
 
