@@ -835,7 +835,7 @@ export const resetWizard = () => (dispatch, getStore) => {
     resetWizardClicked = true;
     let eIDLink = controller.getInstance()
     eIDLink.stop()
-    const {tokenFile, wizard, message} = getStore();
+    const {tokenFile, wizard, message, certificate} = getStore();
 
     let url;
     if(tokenFile && tokenFile.redirectUrl){
@@ -861,7 +861,8 @@ export const resetWizard = () => (dispatch, getStore) => {
             const errorType = Object.keys(errorMessages).find((k) => errorMessages[k].id === message.message.id);
             url.searchParams.set('err', defaults(redirectErrorCodes[errorType], errorType, message.err, 'SERVER_ERROR'));
         }else{
-            url.searchParams.set('err', redirectErrorCodes.USER_CANCELLED);
+            url.searchParams.set('err', certificate && !certificate.neverSaved && certificate.certificateList.length == 0 ?
+                                redirectErrorCodes.USER_CANCELLED_NO_CERT : redirectErrorCodes.USER_CANCELLED);
             url.searchParams.set('details', wizard.state);
         }
     }

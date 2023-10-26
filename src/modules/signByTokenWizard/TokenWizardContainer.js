@@ -154,7 +154,7 @@ export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, 
             content = <SigningPreSignLoading />;
             break;
         case WIZARD_STATE_PIN_INPUT:
-            content = <PinInputContainer />;
+            content = <PinInputContainer downloadSelector={ true } />;
             break;
         case WIZARD_STATE_SIGNING_LOADING:
             content = <SigningLoadingContainer />;
