@@ -24,7 +24,7 @@ import {
 import {
     getDataToSignAPI, sendLogInfo, sendLogInfoIgnoreResult,
     signDocumentAPI, signDocumentForTokenAPI,
-    validateCertificatesAPI, sendHookInfoAPI
+    validateCertificatesAPI, sendHookInfoAPI, logVersions
 } from "../../communication/communication"
 import { setDigest } from "./DigestActions"
 import {handleErrorEID, handlePinErrorEID, resetPinError} from "./SignErrorHandleActions"
@@ -193,9 +193,18 @@ export const checkVersion = (isErrorCheck) => (dispatch, getStore) => {
     eIDLink.getVersion(window.configData.eIDLinkMinimumVersion,
         (installedVersion) => {
             dispatch(removeRequestId(requestId))
-            dispatch(readerSetBeidConnectVersion(installedVersion))
             dispatch(readerSetCheck(true))
             dispatch(readerSetOk(true))
+            let token  = getStore().tokenFile;
+            logVersions(process.env.REACT_APP_VERSION,
+                installedVersion.version,
+                installedVersion.extensionVersion,
+                installedVersion.extensionBrowser,
+                token ? token.token : globalToken).then(version => {
+                    installedVersion.backend = version;
+                    dispatch(readerSetBeidConnectVersion(installedVersion));
+                });
+
             if (isErrorCheck) {
                 dispatch(showErrorMessage(ErrorGeneral))
             }
@@ -858,7 +867,7 @@ export const resetWizard = () => (dispatch, getStore) => {
             const errorType = Object.keys(errorMessages).find((k) => errorMessages[k].id === message.message.id);
             url.searchParams.set('err', defaults(redirectErrorCodes[errorType], errorType, message.err, 'SERVER_ERROR'));
         }else{
-            url.searchParams.set('err', certificate && !certificate.neverSaved && certificate.certificateList.length == 0 ?
+            url.searchParams.set('err', certificate && !certificate.neverSaved && certificate.certificateList.length === 0 ?
                                 redirectErrorCodes.USER_CANCELLED_NO_CERT : redirectErrorCodes.USER_CANCELLED);
             url.searchParams.set('details', wizard.state);
         }
