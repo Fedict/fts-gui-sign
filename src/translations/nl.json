@@ -151,7 +151,7 @@
   "succes.redirect.to": "Je wordt doorgestuurd naar {clientName} in {timeLeft} seconden.",
   "succes.signed.downloadIsEmpty": "Nothing to download",
   "succes.signed.downloadIsEmptyTxt": "Because of an error no file was signed and can be downloaded",
-  "succes.signNext": "Volgende document ondertekenen",
+  "succes.signNext": "Onderteken volgend document",
   "succes.title": "Het document werd succesvol ondertekend!",
   "succes.multiFile.title": "Je documenten zijn succesvol ondertekend!",
   "succes.title.short": "Ondertekend",
