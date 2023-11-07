@@ -25,7 +25,7 @@ export class ResultContainer extends React.Component {
 
         let no = <FormattedMessage id="no" defaultMessage="No"/>
         let yes = <FormattedMessage id="yes" defaultMessage="Yes"/>
-        
+
         return (<CardContainer
                     title={intl.formatMessage(messages.title)}
                     hasNextButton
@@ -52,7 +52,12 @@ export class ResultContainer extends React.Component {
                                 </>
                             } </div>
                             <div className="col-2 px-0">{sig.qualified ? yes : no }</div>
-                            <div className="col-2 px-0"> { sig.valid ? (sig.signatureFormat.startsWith("PKCS7") ? no : yes) : "" } </div>
+                            <div className="col-2 px-0"> { sig.valid ? (sig.signatureFormat.startsWith("PKCS7") ?
+                                    no : 
+                                    <>{yes} <img title={intl.formatMessage({ id: "more.info", defaultMessage: "More Info" })} style={{ width:16, height:16, marginBottom: 3, marginLeft: 4 }} src="/img/questionMark.svg"/>
+                                        <div style={{ width: "400px", backgroundColor: "#a6a6d1", position: "absolute" , zIndex: 2 }}>This signature validation is based on the applicable European standards. See LINK. Other signature formats and validations are available on the market (for example PCKS7 in Adobe Reader). Please check which validation standard matches your validation request.</div>
+                                    </>
+                                    ) : "" } </div>
                         </div> )}
                         { normalizedReport.signatures.find(sig => sig.missingSigningCert) && <>
                         <p class="text-justify"><strong>* </strong><FormattedMessage id='validate.result.note.adobeSigned.1' defaultMessage="Sign.belgium can't validate the signature based on the available information." /></p>
