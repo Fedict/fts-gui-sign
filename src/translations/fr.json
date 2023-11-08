@@ -81,7 +81,7 @@
   "error.certificates.not_found.next": "Effectuer une nouvelle recherche",
   "error.certificates.not_found.text": "Aucun certificat de signature (valide) n'a été trouvé.",
   "error.certificates.not_found.title": "Aucun certificat valide trouvé",
-  "error.certificates.not_found.link": "Please check our FAQ",
+  "error.certificates.not_found.link": "Plus d’info",
   "error.general.text": "Une erreur s'est produite. Veuillez actualiser la page et réessayer.",
   "error.general.title": "Une erreur s'est produite",
   "extension.install.button": "Installez l'extension BeIDConnect",
