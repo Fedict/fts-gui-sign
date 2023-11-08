@@ -22,6 +22,7 @@ import { WIZARD_STATE_PIN_INPUT, WIZARD_STATE_SIGNING_PRESIGN_LOADING, WIZARD_ST
 
 import { controller } from "../../eIdLink/controller"
 import * as eIDLinkController from "../../eIdLink/controller"
+import fetchMock from "fetch-mock";
 
 import { createRequestId, removeRequestId } from "../../controlIds/requestId/RequestIdActions"
 import * as RequestIdActions from '../../controlIds/requestId/RequestIdActions'
@@ -481,22 +482,23 @@ describe("WizardLogicActions", () => {
         })
 
         test("checkVersion navigates to FileUpload if version is correct and isErrorCheck is false", () => {
+
+            fetchMock.reset();
+            fetchMock.post('/logging/versions', {})
+
             const requestId = 55555
             RequestIdActions.createRequestId = jest.fn(() => { return requestId })
 
+            const mockGetStore = jest.fn(() => { return { controlId: { flowId: 20 } } })
             const mockDispatch = jest.fn((val) => { return val })
-            const mockCheckVersion = jest.fn()
+            const mockCheckVersion = jest.fn((minVer, mockVersionOK) => { mockVersionOK({ version: "1.1", extensionVersion: "1.2", extensionBrowser: "1.3" }) })
+
             eIDLinkController.controller.getNewInstance = jest.fn(() => { return { getVersion: mockCheckVersion } })
 
-            checkVersion(false)(mockDispatch)
+            checkVersion(false)(mockDispatch, mockGetStore)
 
             expect(mockCheckVersion).toBeCalledTimes(1)
-            expect(mockDispatch).toBeCalledTimes(1)
-
-            const versionCorrectCallback = mockCheckVersion.mock.calls[0][1]
-
-            versionCorrectCallback()
-            expect(mockDispatch).toBeCalledTimes(6)
+            expect(mockDispatch).toBeCalledTimes(5)
             expect(RequestIdActions.removeRequestId).toBeCalled()
             expect(RequestIdActions.removeRequestId).toBeCalledWith(requestId)
             expect(ReaderActions.readerSetCheck).toBeCalled()
@@ -508,22 +510,22 @@ describe("WizardLogicActions", () => {
         })
 
         test("checkVersion navigates to default error if version is correct and isErrorCheck is true", () => {
+
+            fetchMock.reset();
+            fetchMock.post('/logging/versions', {})
+            
             const requestId = 55555
             RequestIdActions.createRequestId = jest.fn(() => { return requestId })
 
+            const mockGetStore = jest.fn(() => { return { controlId: { flowId: 20 } } })
             const mockDispatch = jest.fn((val) => { return val })
-            const mockCheckVersion = jest.fn()
+            const mockCheckVersion = jest.fn((minVer, mockVersionOK) => { mockVersionOK({ version: "1.1", extensionVersion: "1.2", extensionBrowser: "1.3" }) })
             eIDLinkController.controller.getNewInstance = jest.fn(() => { return { getVersion: mockCheckVersion } })
 
-            checkVersion(true)(mockDispatch)
+            checkVersion(true)(mockDispatch, mockGetStore)
 
             expect(mockCheckVersion).toBeCalledTimes(1)
-            expect(mockDispatch).toBeCalledTimes(1)
-
-            const versionCorrectCallback = mockCheckVersion.mock.calls[0][1]
-
-            versionCorrectCallback()
-            expect(mockDispatch).toBeCalledTimes(6)
+            expect(mockDispatch).toBeCalledTimes(5)
             expect(RequestIdActions.removeRequestId).toBeCalled()
             expect(RequestIdActions.removeRequestId).toBeCalledWith(requestId)
             expect(ReaderActions.readerSetCheck).toBeCalled()

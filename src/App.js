@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react"
+import React from "react"
 import { useIntl } from 'react-intl';
 import Navbar from './modules/Navbar/Navbar';
 import WizardContainer from './modules/signWizard/WizardContainer';
@@ -18,10 +18,9 @@ import MainI18nWrapper from "./modules/i18n/MainI18nWrapper";
 import TokenWizardContainer from "./modules/signByTokenWizard/TokenWizardContainer";
 import { isInIframe } from "./modules/utils/helper";
 import { getBrowser, browser } from './modules/browserDetection/BrowserDetection';
-import { getBackendVersionAPI } from "./modules/communication/communication";
 import { Helmet } from "react-helmet-async";
 
-const BaseApp = (props) => {
+const BaseApp = () => {
     const browserIsSupported = browserIsAccepted();
     const usedBrowser = getBrowser();
     return (
@@ -56,25 +55,18 @@ const BaseApp = (props) => {
                 )
                 )
             }
-            <Footer backendVersion={props.backendVersion} />
+            <Footer/>
         </div>
     )
 }
 const App = () => {
-    const [backendVersion, setBackendVersion] = useState('0.0.0');
-
-    useEffect(() => {
-        getBackendVersionAPI().then(version => { setBackendVersion(version) })
-
-       }, []);
-
     return (
         <Router>
             <Helmet>
                 <meta httpEquiv="Content-Security-Policy" content={ window.configData.CSP }></meta>
             </Helmet>
             <MainI18nWrapper>
-                <BaseApp backendVersion={backendVersion}/>
+                <BaseApp/>
             </MainI18nWrapper>
         </Router>
     );

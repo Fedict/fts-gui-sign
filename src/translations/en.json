@@ -119,7 +119,7 @@
   "or": "OR",
   "drag.drop.here": "drag & drop it here",
   "drag.drop.error": "Only a document in format pdf or xml can be selected.",
-  "file.size.limit": "Document size ({fileSize} Mb.) larger than {maxSize} Mb., signing is disabled",
+  "file.size.limit": "Document size ({fileSize} Mb.) larger than maximum ({maxSize} Mb.), signing is disabled",
   "sign.token.1": "Read and connect eID",
   "sign.token.2": "Enter PIN  and sign",
   "sign.token.4": "Ready",

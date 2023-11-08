@@ -25,7 +25,8 @@ export const Footer = (props) => {
 
 const mapStateToProps = (state, props) => {
     return {
-        token : (state.tokenFile && state.tokenFile.token?state.tokenFile.token.substr(state.tokenFile.token.length - 16):globalToken),
+        token : state.tokenFile && state.tokenFile.token ? state.tokenFile.token : globalToken,
+        backendVersion: state.reader && state.reader.beidConnectVersion ? state.reader.beidConnectVersion.backend : null
     }
 }
 

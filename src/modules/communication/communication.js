@@ -156,12 +156,26 @@ const jsonHandler = (response) => {
 //-----------------------------------------
 
 /**
- * API request the back-end version
+ * API to log various front-end versions to the back-end
  * @returns {Promise} Promise that resolves the result of the API request
  */
-export const getBackendVersionAPI = () => {
+export const logVersions = (guiSign, beID, browserExt, browserStore, token) => {
 
-    return fetch(url + "/signing/version").then((response) => response.text())
+    return fetch(url + "/logging/versions", {
+            method: 'POST',
+            body: JSON.stringify({
+                frontEndType: "GUISIGN",
+                frontEnd: guiSign,
+                beID: beID,
+                browserExt: browserExt,
+                browserStore: browserStore,
+                token: token
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        }
+    ).then((response) => response.text())
 }
 
 /**
