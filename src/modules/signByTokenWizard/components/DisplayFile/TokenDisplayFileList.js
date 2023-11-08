@@ -32,7 +32,7 @@ export const TokenDisplayFileList = ({ tokenFile, selectedInputId, setPreviewFil
                          { width: 110, backgroundColor: "grey", borderRadius: "3px", border: "1px solid" }}>
                     <div style={{ paddingTop: -20, border: "solid 1px lightgrey", height:70, backgroundColor: "white", position: "relative" }}>
                     { tokenFile.selectDocuments &&
-                        <input type="checkbox" className="form-check-input" style={{ width: 15, height: 15, marignTop: "0.3rem", marginLeft: "-2.5rem" }} 
+                        <input type="checkbox" className="form-check-input" style={{ width: 15, height: 15, marginTop: "0.5rem", marginLeft: "0.5rem" }} 
                             disabled={!(input.signState === signState.DONT_SIGN || input.signState === signState.SIGN_REQUESTED)} checked={input.signState !== signState.DONT_SIGN}
                             onChange={ () => { setInputsSignState(index, input.signState === signState.SIGN_REQUESTED ? signState.DONT_SIGN : signState.SIGN_REQUESTED)
                                 doSendLogInfo('UI - CHECK FILE : ' + input.fileName + " : " + (input.signState === signState.DONT_SIGN))
@@ -54,19 +54,30 @@ export const TokenDisplayFileList = ({ tokenFile, selectedInputId, setPreviewFil
                 <div className="row">
                     <div className="col">
                     { tokenFile.selectDocuments &&
-                        <input type="checkbox" className="form-check-input" style={{ width: 15, height: 15, margin: 9, position: "relative" }}
-                            disabled={!(input.signState === signState.DONT_SIGN || input.signState === signState.SIGN_REQUESTED)} checked={input.signState !== signState.DONT_SIGN}
-                            onChange={ () => { setInputsSignState(index, input.signState === signState.SIGN_REQUESTED ? signState.DONT_SIGN : signState.SIGN_REQUESTED)
-                                doSendLogInfo('UI - CHECK FILE : ' + input.fileName + " : " + (input.signState === signState.DONT_SIGN))
-                             }}/>
+                        <input type="checkbox" className="form-check-input" style={{ width: 15, height: 15, margin: 9, position: "absolute" }}
+                            disabled={ true } checked={input.signState !== signState.DONT_SIGN}
+                            />
                     }
-                        <img  className="p-2" src={"/img/Icon" + input.iconType + ".png"} alt={input.iconType} style={{ marginTop: -7 }} ></img>
+                        <img  className="p-2" src={"/img/Icon" + input.iconType + ".png"} alt={input.iconType} style={{ marginTop: "-3px", marginLeft: "27px" }} ></img>
                         <a href={ input.url + "?forceDownload" } download>{input.cleanFileName}</a>
                     </div>
                     { input.signState === signState.SIGNED && (<div className="col-md-auto py-1">
                         <div className="px-3" style={{ width: "auto", maxWidth: "100%", borderRadius: "20px", backgroundColor: "#01c301" }}>
-                            <img className="mb-1 mr-1" style={{ width: "12px", height:"12px" }} src="/img/check.png" alt="PDF"/>
+                            <img className="mb-1 mr-1" style={{ width: "12px", height:"12px" }} src="/img/check.png"/>
                             <FormattedMessage id = "succes.title.short" defaultMessage="Signed" />
+                        </div>
+                    </div>
+                    )}
+                    { (input.signState === signState.ERROR_DIGEST || input.signState === signState.ERROR_SIGN) && (<div className="col-md-auto py-1">
+                        <div className="px-3" style={{ width: "auto", maxWidth: "100%", borderRadius: "20px", backgroundColor: "#FF0000" }}>
+                            <img className="mb-1 mr-1" style={{ width: "12px", height:"12px" }} src="/img/cross.png"/>
+                            <FormattedMessage id = "error.title.short" defaultMessage="Error" />
+                        </div>
+                    </div>
+                    )}
+                    { (input.signState === signState.SKIPPED) && (<div className="col-md-auto py-1">
+                        <div className="px-3" style={{ width: "auto", maxWidth: "100%", borderRadius: "20px", backgroundColor: "#0e8297", color: "white" }}>
+                            <FormattedMessage id = "error.title.skipped" defaultMessage="Skipped" />
                         </div>
                     </div>
                     )}

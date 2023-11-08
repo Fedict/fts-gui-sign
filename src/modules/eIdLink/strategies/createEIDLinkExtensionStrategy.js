@@ -49,7 +49,7 @@ export const createEIDLinkExtensionStrategy = (api) => {
     const getVersion = (minimumVersion, onCorrectVersion, onNotInstalled, onNeedsUpdate, onNoExtensionInstalled) => {
         api.getVersion().then(
             function (msg) {
-                var installedVersion = {version:msg.version};
+                var installedVersion = {version:msg.version, extensionVersion: msg.extensionVersion, extensionBrowser: msg.extensionBrowser};
                 //console.log("BeIDConnect version is " + installedVersion);
                 if (msg.windowsInstallType && msg.windowsInstallType==="admin")
                 {

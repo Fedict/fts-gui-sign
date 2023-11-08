@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react"
 import { useIntl } from 'react-intl';
 import Navbar from './modules/Navbar/Navbar';
 import WizardContainer from './modules/signWizard/WizardContainer';
@@ -18,8 +18,9 @@ import MainI18nWrapper from "./modules/i18n/MainI18nWrapper";
 import TokenWizardContainer from "./modules/signByTokenWizard/TokenWizardContainer";
 import { isInIframe } from "./modules/utils/helper";
 import { getBrowser, browser } from './modules/browserDetection/BrowserDetection';
+import { Helmet } from "react-helmet-async";
 
-export const BaseApp = () => {
+const BaseApp = () => {
     const browserIsSupported = browserIsAccepted();
     const usedBrowser = getBrowser();
     return (
@@ -45,24 +46,27 @@ export const BaseApp = () => {
                                 <MessageContainer message={ErrorIE11NotSupported} />
                             </div>
                         </div>)
-                    : (
-                        <div className="container">
-                            <div className="col col-12 col-md-8 mx-auto align-middle">
-                                <MessageContainer message={ErrorNotSupported} />
-                            </div>
+                : (
+                    <div className="container">
+                        <div className="col col-12 col-md-8 mx-auto align-middle">
+                            <MessageContainer message={ErrorNotSupported} />
                         </div>
-                    )
+                    </div>
+                )
                 )
             }
-            <Footer />
+            <Footer/>
         </div>
     )
 }
-function App() {
+const App = () => {
     return (
         <Router>
+            <Helmet>
+                <meta httpEquiv="Content-Security-Policy" content={ window.configData.CSP }></meta>
+            </Helmet>
             <MainI18nWrapper>
-                <BaseApp />
+                <BaseApp/>
             </MainI18nWrapper>
         </Router>
     );

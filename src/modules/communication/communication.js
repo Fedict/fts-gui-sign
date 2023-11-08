@@ -1,6 +1,8 @@
 import { getBase64Data } from "../fileUpload/helpers/FileHelper"
 import packageJson from '../../../package.json';
 import {defaults, defaultsExcludeEmpty, getBEUrl} from "../utils/helper";
+import { globalToken } from "../../store/globals"
+
 //-----------------------------------------
 //--- constants                         ---
 //-----------------------------------------
@@ -60,7 +62,8 @@ export const createBody = (certificateBody, documentName, documentBase64, docume
         "toSignDocument": {
             "bytes": documentBase64,
             "name": documentName
-        }
+        },
+        token: globalToken
     }
 }
 
@@ -81,6 +84,12 @@ export const createBodyForToken = (certificateBody, token, fileIdToSign, signing
 
 const noContentHandler = (response) => {
     if (!response.ok) {
+        if(response.headers){
+            const contentType = response.headers.get("content-type");
+            if (contentType && contentType.indexOf("application/json") > -1) {
+                return response.json();
+            }
+        }
         throw new Error(REQUEST_FAILED)
     }
     return true;
@@ -107,6 +116,29 @@ const jsonHandler = (response) => {
 //-----------------------------------------
 //--- API requests                      ---
 //-----------------------------------------
+
+/**
+ * API to log various front-end versions to the back-end
+ * @returns {Promise} Promise that resolves the result of the API request
+ */
+export const logVersions = (guiSign, beID, browserExt, browserStore, token) => {
+
+    return fetch(url + "/logging/versions", {
+            method: 'POST',
+            body: JSON.stringify({
+                frontEndType: "GUISIGN",
+                frontEnd: guiSign,
+                beID: beID,
+                browserExt: browserExt,
+                browserStore: browserStore,
+                token: token
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        }
+    ).then((response) => response.text())
+}
 
 /**
  * API request to validate a array of certificates
@@ -187,7 +219,8 @@ export const validateSignatureAPI = async (document) => {
         "signedDocument": {
             "bytes": documentB64,
             "name": document.name
-        }
+        },
+        token : globalToken
     }
 
     return fetch(url + "/validation/validateSignature", {
@@ -340,6 +373,8 @@ export const sendLogInfo = (message, callback, token) => {
     lastLogInfo.message = message;
     lastLogInfo.token = token;
     lastLogInfo.amount = 0;
+
+    if (!token) token = globalToken;
     const body = {
         "level" : "INFO",
         "message": message,

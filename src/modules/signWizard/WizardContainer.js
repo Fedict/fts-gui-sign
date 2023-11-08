@@ -81,7 +81,7 @@ export const WizardContainer = ({ wizard, reader, resetWizard }) => {
             content = <DigestLoadingContainer />;
             break;
         case WIZARD_STATE_PIN_INPUT:
-            content = <PinInputContainer />;
+            content = <PinInputContainer downloadSelector={ false } />;
             break;
         case WIZARD_STATE_SIGNING_LOADING:
             content = <SigningLoadingContainer />;
@@ -106,10 +106,10 @@ export const WizardContainer = ({ wizard, reader, resetWizard }) => {
     return (
         <div >
             <div className={"row mx-5 mt-3"}>
-                <div className={"col col-sm-7"} style={{ minWidth: '320px' }}>
+                <div className={"col col-sm-6"} style={{ minWidth: '320px' }}>
                     <DisplayFile />
                 </div>
-                <div className={"col col-sm-5"}>
+                <div className={"col col-sm-6"}>
                     {content}
                 </div>
             </div>

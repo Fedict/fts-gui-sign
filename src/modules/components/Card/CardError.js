@@ -1,6 +1,7 @@
 import React from "react"
 import { CardContainer } from "./CardContainer"
 import {injectIntl} from "react-intl";
+import {faqURLs} from "../../../const";
 
 /**
  * Card with buttons and a error message (based on bootstrap class "alert alert-danger")
@@ -28,10 +29,11 @@ export const CardError = injectIntl((
         onClickNext,
         nextButtonIsDisabled,
         text,
+        predButtonText,
+        onClickPred,
         intl
     }
 ) => {
-    const faqURLs = { id: "error.faq.URL", defaultMessage: "https://bosa.belgium.be/en/federal-trust-services-frequently-asked-questions"}
     const faqGeneric = { id: "error.faq.generic", defaultMessage: "I get the message ‘{error}’."}
 
     if(cancelButtonText && cancelButtonText.id){
@@ -39,6 +41,9 @@ export const CardError = injectIntl((
     }
     if(nextButtonText && nextButtonText.id){
         nextButtonText = intl.formatMessage(nextButtonText);
+    }
+    if(predButtonText && predButtonText.id){
+        predButtonText = intl.formatMessage(predButtonText);
     }
     if(title && title.id){
         title = intl.formatMessage(title);
@@ -68,6 +73,8 @@ export const CardError = injectIntl((
             nextButtonText={nextButtonText}
             onClickNext={onClickNext}
             nextButtonIsDisabled={nextButtonIsDisabled}
+            predButtonText = {predButtonText}
+            onClickPred = {onClickPred}
         >
             <div className="text-center">
                 <div className="alert alert-danger" role="alert" >

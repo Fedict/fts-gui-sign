@@ -95,6 +95,8 @@ describe('TokenWizardContainer', () => {
             }
         })
 
+        fetchMock.post('/logging/versions', {})
+
         act(() => {
             render(<Provider store={store}>
                 <MemoryRouter initialIndex={0} initialEntries={[`/sign/${token}?HookURL=/hook`]}>
@@ -257,6 +259,8 @@ describe('TokenWizardContainer', () => {
             }
         })
 
+        fetchMock.post('/logging/versions', {})
+
         render(<Provider store={store}>
             <MemoryRouter initialIndex={0} initialEntries={[`/sign/${token}?HookURL=/hook`]}>
                 <Switch>
@@ -374,6 +378,8 @@ describe('TokenWizardContainer', () => {
         fetchMock.post('/logging/log', (url, opts) => {
             lastLogMessage = JSON.parse(opts.body).message;
         })
+
+        fetchMock.post('/logging/versions', {})
 
         act(() => {render(<Provider store={store}>
             <MemoryRouter initialIndex={0} initialEntries={[`/sign/${token}?HookURL=/hook`]}>

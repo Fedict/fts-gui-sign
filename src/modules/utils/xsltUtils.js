@@ -1,5 +1,3 @@
-const isIE = typeof XSLTProcessor === 'undefined';
-
 const transformXMLProcessor = (xmlDoc, xslDoc) => {
     const xsltProcessor = new XSLTProcessor();
 
@@ -11,27 +9,10 @@ const transformXMLProcessor = (xmlDoc, xslDoc) => {
     return new XMLSerializer().serializeToString(fragment);
 }
 
-const transformXMLIE = (xmlDoc, xslDoc) =>{
-    var template = new window.ActiveXObject('Msxml2.XslTemplate.6.0');
-    template.stylesheet = xslDoc;
-    var proc = template.createProcessor();
-
-    proc.input = xmlDoc;
-
-    proc.transform();
-
-    return proc.output;
-}
-
 export const loadDoc = (url) => {
     return new Promise(function(resolve, reject) {
         var req = new XMLHttpRequest();
         req.open("GET", url);
-        if (isIE) {
-            try {
-                req.responseType = 'msxml-document';
-            }catch (e) {}
-        }
         req.onload = function() {
             if(this.responseXML){
                 resolve(this.responseXML)
@@ -49,12 +30,7 @@ export const transformXML = (xmlUrl, xsltUrl) => {
             try{
                 const xmlDoc = data[0];
                 const xslDoc = data[1];
-
-                if (isIE) {
-                    resolve(transformXMLIE(xmlDoc, xslDoc));
-                } else {
-                    resolve(transformXMLProcessor(xmlDoc, xslDoc));
-                }
+                resolve(transformXMLProcessor(xmlDoc, xslDoc));
             }catch (e){
                 //console.log(e);
             }

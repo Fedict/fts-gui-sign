@@ -154,7 +154,7 @@ export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, 
             content = <SigningPreSignLoading />;
             break;
         case WIZARD_STATE_PIN_INPUT:
-            content = <PinInputContainer />;
+            content = <PinInputContainer downloadSelector={ true } />;
             break;
         case WIZARD_STATE_SIGNING_LOADING:
             content = <SigningLoadingContainer />;
@@ -177,7 +177,7 @@ export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, 
     return (
         <div >
             <div className={"row mx-5 mt-3"}>
-                <div className={"col col-sm-7"}>
+                <div className={"col col-sm-6"}>
                     { inputs &&
                         <div className="row">
                             { inputs.length > 1 && (
@@ -194,7 +194,7 @@ export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, 
                         </div>
                     }
                 </div>
-                <div className={"col col-sm-5"}>
+                <div className={"col col-sm-6"}>
                     <ReactStepper style={{marginBottom : 20}}>
                         <ReactStepper.Header>
                             {Object.keys(messages).map((key, index) => (

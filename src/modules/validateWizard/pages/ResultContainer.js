@@ -31,8 +31,8 @@ export class ResultContainer extends React.Component {
                     hasNextButton
                     nextButtonText={intl.formatMessage(messages.next)}
                     onClickNext={() => { resetWizard() }}
-                    leftButtonText={ <FormattedMessage id="report.download.link" defaultMessage="Download full report"/> }
-                    onClickLeft={() => saveAs(new Blob([report], {type: "application/xml;charset=utf-8"}), "report.xml")}
+                    predButtonText={ <FormattedMessage id="report.download.link" defaultMessage="Download full report"/> }
+                    onClickPred={() => saveAs(new Blob([report], {type: "application/xml;charset=utf-8"}), "report.xml")}
                 >
                 { normalizedReport.signatures.length !== 0 ? <div className="container text-center">
                     <div className="row validateResult py-0 mt-0">
@@ -40,6 +40,7 @@ export class ResultContainer extends React.Component {
                             <div className="col-4 px-0"><b><FormattedMessage id="validation.sign.moment" defaultMessage="Date"/></b></div>
                             <div className="col-2 px-0"><b><FormattedMessage id="validation.sign.valid" defaultMessage="Valid"/></b></div>
                             <div className="col-2 px-0 text-nowrap"><b><FormattedMessage id="validation.sign.qualif" defaultMessage="Qualified"/></b></div>
+                            <div className="col-2 px-0 text-nowrap"><b><FormattedMessage id="validation.sign.format" defaultMessage="EU Format"/></b></div>
                         </div>
                         { normalizedReport.signatures.map((sig,index) => <div key={index} className={ "row validateResult " + ("light-" + (sig.missingSigningCert ? "pkcs7" : (sig.valid ? (sig.qualified ? "success" : "warning") : "danger"))) }>
                             <div className="col px-0">{sig.signerCommonName}</div>
@@ -51,6 +52,7 @@ export class ResultContainer extends React.Component {
                                 </>
                             } </div>
                             <div className="col-2 px-0">{sig.qualified ? yes : no }</div>
+                            <div className="col-2 px-0"> { sig.valid ? (sig.signatureFormat.startsWith("PKCS7") ? no : yes) : "" } </div>
                         </div> )}
                         { normalizedReport.signatures.find(sig => sig.missingSigningCert) && <>
                         <p class="text-justify"><strong>* </strong><FormattedMessage id='validate.result.note.adobeSigned.1' defaultMessage="Sign.belgium can't validate the signature based on the available information." /></p>

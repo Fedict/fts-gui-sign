@@ -22,6 +22,7 @@ import { WIZARD_STATE_PIN_INPUT, WIZARD_STATE_SIGNING_PRESIGN_LOADING, WIZARD_ST
 
 import { controller } from "../../eIdLink/controller"
 import * as eIDLinkController from "../../eIdLink/controller"
+import fetchMock from "fetch-mock";
 
 import { createRequestId, removeRequestId } from "../../controlIds/requestId/RequestIdActions"
 import * as RequestIdActions from '../../controlIds/requestId/RequestIdActions'
@@ -481,22 +482,23 @@ describe("WizardLogicActions", () => {
         })
 
         test("checkVersion navigates to FileUpload if version is correct and isErrorCheck is false", () => {
+
+            fetchMock.reset();
+            fetchMock.post('/logging/versions', {})
+
             const requestId = 55555
             RequestIdActions.createRequestId = jest.fn(() => { return requestId })
 
+            const mockGetStore = jest.fn(() => { return { controlId: { flowId: 20 } } })
             const mockDispatch = jest.fn((val) => { return val })
-            const mockCheckVersion = jest.fn()
+            const mockCheckVersion = jest.fn((minVer, mockVersionOK) => { mockVersionOK({ version: "1.1", extensionVersion: "1.2", extensionBrowser: "1.3" }) })
+
             eIDLinkController.controller.getNewInstance = jest.fn(() => { return { getVersion: mockCheckVersion } })
 
-            checkVersion(false)(mockDispatch)
+            checkVersion(false)(mockDispatch, mockGetStore)
 
             expect(mockCheckVersion).toBeCalledTimes(1)
-            expect(mockDispatch).toBeCalledTimes(1)
-
-            const versionCorrectCallback = mockCheckVersion.mock.calls[0][1]
-
-            versionCorrectCallback()
-            expect(mockDispatch).toBeCalledTimes(6)
+            expect(mockDispatch).toBeCalledTimes(5)
             expect(RequestIdActions.removeRequestId).toBeCalled()
             expect(RequestIdActions.removeRequestId).toBeCalledWith(requestId)
             expect(ReaderActions.readerSetCheck).toBeCalled()
@@ -508,22 +510,22 @@ describe("WizardLogicActions", () => {
         })
 
         test("checkVersion navigates to default error if version is correct and isErrorCheck is true", () => {
+
+            fetchMock.reset();
+            fetchMock.post('/logging/versions', {})
+            
             const requestId = 55555
             RequestIdActions.createRequestId = jest.fn(() => { return requestId })
 
+            const mockGetStore = jest.fn(() => { return { controlId: { flowId: 20 } } })
             const mockDispatch = jest.fn((val) => { return val })
-            const mockCheckVersion = jest.fn()
+            const mockCheckVersion = jest.fn((minVer, mockVersionOK) => { mockVersionOK({ version: "1.1", extensionVersion: "1.2", extensionBrowser: "1.3" }) })
             eIDLinkController.controller.getNewInstance = jest.fn(() => { return { getVersion: mockCheckVersion } })
 
-            checkVersion(true)(mockDispatch)
+            checkVersion(true)(mockDispatch, mockGetStore)
 
             expect(mockCheckVersion).toBeCalledTimes(1)
-            expect(mockDispatch).toBeCalledTimes(1)
-
-            const versionCorrectCallback = mockCheckVersion.mock.calls[0][1]
-
-            versionCorrectCallback()
-            expect(mockDispatch).toBeCalledTimes(6)
+            expect(mockDispatch).toBeCalledTimes(5)
             expect(RequestIdActions.removeRequestId).toBeCalled()
             expect(RequestIdActions.removeRequestId).toBeCalledWith(requestId)
             expect(ReaderActions.readerSetCheck).toBeCalled()
@@ -889,7 +891,8 @@ describe("WizardLogicActions", () => {
             const expectedCertificateList = certificateList.map(val => {
                 return {
                     ...val.APIBody,
-                    "expectedKeyUsage": "NON_REPUDIATION"
+                    "expectedKeyUsage": "NON_REPUDIATION",
+                    "token": expect.any(Number)
                 }
             })
             const mockDispatch = jest.fn()
@@ -904,7 +907,7 @@ describe("WizardLogicActions", () => {
             validateCertificates()(mockDispatch, mockGetStore)
 
             expect(communication.validateCertificatesAPI).toBeCalledTimes(1)
-            expect(communication.validateCertificatesAPI).toBeCalledWith(expectedCertificateList)
+            expect(communication.validateCertificatesAPI).toBeCalledWith(expect.objectContaining(expectedCertificateList))
         })
 
         test("validateCertificates doesn't call validateCertificatesAPI if there are no certificates and shows a error message", () => {
@@ -968,7 +971,8 @@ describe("WizardLogicActions", () => {
             const expectedCertificateList = certificateList.map(val => {
                 return {
                     ...val.APIBody,
-                    "expectedKeyUsage": "NON_REPUDIATION"
+                    "expectedKeyUsage": "NON_REPUDIATION",
+                    "token": expect.any(Number)
                 }
             })
             const mockDispatch = jest.fn()
@@ -986,7 +990,7 @@ describe("WizardLogicActions", () => {
             validateCertificates()(mockDispatch, mockGetStore)
             await flushPromises();
             expect(communication.validateCertificatesAPI).toBeCalledTimes(1)
-            expect(communication.validateCertificatesAPI).toBeCalledWith(expectedCertificateList)
+            expect(communication.validateCertificatesAPI).toBeCalledWith(expect.objectContaining(expectedCertificateList))
             expect(CertificateActions.saveCertificateList).toBeCalledTimes(1)
             const callParametersCertifictateList = CertificateActions.saveCertificateList.mock.calls[0][0]
             const callParametersCertifictateListPased = callParametersCertifictateList.filter((val) => { return val.keyUsageCheckOk })
@@ -1034,7 +1038,8 @@ describe("WizardLogicActions", () => {
             const expectedCertificateList = certificateList.map(val => {
                 return {
                     ...val.APIBody,
-                    "expectedKeyUsage": "NON_REPUDIATION"
+                    "expectedKeyUsage": "NON_REPUDIATION",
+                    "token": expect.any(Number) 
                 }
             })
             const mockDispatch = jest.fn()
@@ -1052,7 +1057,7 @@ describe("WizardLogicActions", () => {
             validateCertificates()(mockDispatch, mockGetStore)
             await flushPromises();
             expect(communication.validateCertificatesAPI).toBeCalledTimes(1)
-            expect(communication.validateCertificatesAPI).toBeCalledWith(expectedCertificateList)
+            expect(communication.validateCertificatesAPI).toBeCalledWith(expect.objectContaining(expectedCertificateList))
             expect(CertificateActions.saveCertificateList).toBeCalledTimes(1)
             const callParametersCertifictateList = CertificateActions.saveCertificateList.mock.calls[0][0]
             const callParametersCertifictateListPased = callParametersCertifictateList.filter((val) => { return val.keyUsageCheckOk })
@@ -1104,7 +1109,8 @@ describe("WizardLogicActions", () => {
             const expectedCertificateList = certificateList.map(val => {
                 return {
                     ...val.APIBody,
-                    "expectedKeyUsage": "NON_REPUDIATION"
+                    "expectedKeyUsage": "NON_REPUDIATION",
+                    token: expect.any(Number)
                 }
             })
             const mockDispatch = jest.fn()
@@ -1122,7 +1128,7 @@ describe("WizardLogicActions", () => {
             validateCertificates()(mockDispatch, mockGetStore)
             await flushPromises();
             expect(communication.validateCertificatesAPI).toBeCalledTimes(1)
-            expect(communication.validateCertificatesAPI).toBeCalledWith(expectedCertificateList)
+            expect(communication.validateCertificatesAPI).toBeCalledWith(expect.objectContaining(expectedCertificateList))
             expect(CertificateActions.saveCertificateList).toBeCalledTimes(1)
             const callParametersCertifictateList = CertificateActions.saveCertificateList.mock.calls[0][0]
             const callParametersCertifictateListPased = callParametersCertifictateList.filter((val) => { return val.keyUsageCheckOk })
@@ -1176,7 +1182,8 @@ describe("WizardLogicActions", () => {
             const expectedCertificateList = certificateList.map(val => {
                 return {
                     ...val.APIBody,
-                    "expectedKeyUsage": "NON_REPUDIATION"
+                    "expectedKeyUsage": "NON_REPUDIATION",
+                    token: expect.any(Number)
                 }
             })
             const mockDispatch = jest.fn()
@@ -1194,7 +1201,7 @@ describe("WizardLogicActions", () => {
             validateCertificates()(mockDispatch, mockGetStore)
             await flushPromises();
             expect(communication.validateCertificatesAPI).toBeCalledTimes(1)
-            expect(communication.validateCertificatesAPI).toBeCalledWith(expectedCertificateList)
+            expect(communication.validateCertificatesAPI).toBeCalledWith(expect.objectContaining(expectedCertificateList))
             expect(CertificateActions.saveCertificateList).toBeCalledTimes(1)
             const callParametersCertifictateList = CertificateActions.saveCertificateList.mock.calls[0][0]
             const callParametersCertifictateListPased = callParametersCertifictateList.filter((val) => { return val.keyUsageCheckOk })
@@ -1234,7 +1241,8 @@ describe("WizardLogicActions", () => {
             const expectedCertificateList = certificateList.map(val => {
                 return {
                     ...val.APIBody,
-                    "expectedKeyUsage": "NON_REPUDIATION"
+                    "expectedKeyUsage": "NON_REPUDIATION",
+                    "token": expect.any(Number)
                 }
             })
             const mockDispatch = jest.fn()
@@ -1252,7 +1260,7 @@ describe("WizardLogicActions", () => {
             validateCertificates()(mockDispatch, mockGetStore)
             await flushPromises();
             expect(communication.validateCertificatesAPI).toBeCalledTimes(1)
-            expect(communication.validateCertificatesAPI).toBeCalledWith(expectedCertificateList)
+            expect(communication.validateCertificatesAPI).toBeCalledWith(expect.objectContaining(expectedCertificateList))
 
             expect(MessageActions.showErrorMessage).toBeCalledWith(MessageCertificatesNotFound)
 
@@ -1491,7 +1499,8 @@ describe("WizardLogicActions", () => {
             })
             const expectedValue = [{
                 ...createCertificateObject(certificateString, mockvalidateCertificateChainResponse.certificateChain),
-                "expectedKeyUsage": "NON_REPUDIATION"
+                "expectedKeyUsage": "NON_REPUDIATION",
+                "token": expect.any(Number)
             }]
 
             FlowIdHelpers.handleFlowIdError = jest.fn(() => (val) => { return val })
@@ -1500,7 +1509,7 @@ describe("WizardLogicActions", () => {
             await flushPromises()
             mockDispatch.mock.calls[1][0](jest.fn(), jest.fn(() => ({ controlId: { flowId: 77777 } })))
             expect(communication.validateCertificatesAPI).toBeCalled()
-            expect(communication.validateCertificatesAPI).toBeCalledWith(expectedValue)
+            expect(communication.validateCertificatesAPI).toBeCalledWith(expect.objectContaining(expectedValue))
         })
 
         test("validateCertificateChain error shows message", async () => {
@@ -1618,7 +1627,8 @@ describe("WizardLogicActions", () => {
             }
             const expectedResult = [{
                 ...startValue.APIBody,
-                "expectedKeyUsage": "NON_REPUDIATION"
+                "expectedKeyUsage": "NON_REPUDIATION",
+                token: expect.any(Number)
             }]
 
             const mockDispatch = jest.fn()
@@ -1633,7 +1643,7 @@ describe("WizardLogicActions", () => {
             validateCertificate(startValue)(mockDispatch, mockGetStore)
             await flushPromises()
             expect(communication.validateCertificatesAPI).toBeCalledTimes(1)
-            expect(communication.validateCertificatesAPI).toBeCalledWith(expectedResult)
+            expect(communication.validateCertificatesAPI).toBeCalledWith(expect.objectContaining(expectedResult))
         })
 
         test("validateCertificates success certificate valid selects certificate and navigates to WIZARD_STATE_DIGEST_LOADING ", async () => {

@@ -29,32 +29,45 @@ const messages = defineMessages({
     redirectToMessage : {
         id : "succes.redirect.to",
         defaultMessage : "You'll be redirected to {clientName} in {timeLeft} seconds"
+    },
+    noFilesToDownload : {
+        id : "succes.signed.downloadIsEmpty",
+        defaultMessage : "Nothing to download"
     }
 })
 
 export class SuccesContainerForToken extends React.Component {
 
+    getFilesToDownload() {
+        const { tokenFile } = this.props
+
+        let filesToDownload;
+        tokenFile.inputs.forEach((input, index) => { if (input.signState === signState.SIGNED) filesToDownload = (filesToDownload ?  filesToDownload + ',' : '') + index });
+
+        return filesToDownload;
+    }
+
     downloadFile() {
         const { tokenFile } = this.props
 
-        const downloadLink = document.createElement("a");
-        var filesToDownload = ""
-        tokenFile.inputs.forEach((input, index) => { if (input.signState === signState.SIGNED) filesToDownload += ',' + index })
-        downloadLink.href = getBEUrl() + '/signing/getFileForToken/' + tokenFile.token + "/OUT/" + filesToDownload.substring(1) + "?forceDownload"
-        if(tokenFile.token){
-            downloadLink.addEventListener("click", () => {
-                sendLogInfoIgnoreResult('UI - DOWNLOAD_BUTTON CLICKED', tokenFile.token);
-            });
+        const filesToDownload = this.getFilesToDownload();
+        if (filesToDownload) {
+            const downloadLink = document.createElement("a");
+            downloadLink.href = getBEUrl() + '/signing/getFileForToken/' + tokenFile.token + "/OUT/" + filesToDownload + "?forceDownload"
+            if(tokenFile.token){
+                downloadLink.addEventListener("click", () => {
+                    sendLogInfoIgnoreResult('UI - DOWNLOAD_BUTTON CLICKED', tokenFile.token);
+                });
+            }
+    
+            downloadLink.click();
+    
         }
-
-        downloadLink.click();
     }
+
     componentDidMount() {
         if(this.props.autoDownloadDocument) {
             this.downloadFile()
-        }
-        if(false && this.props.tokenFile.noSignedDownloads){
-            this.props.nextButtonClicked(this.props.redirectUrl);
         }
     }
 
@@ -77,17 +90,19 @@ export class SuccesContainerForToken extends React.Component {
         let clientName = tokenFile.clientNames['name_' + intl.locale];
         if (!clientName) clientName = tokenFile.clientNames.name;
 
+        const noFilesToDownload = !this.getFilesToDownload();
+
         return (
             <CardContainer
-                title={intl.formatMessage(multipleDocuments ? messages.multiFileTitle : messages.title )}
-                hasCancelButton={false}
+                title={intl.formatMessage(noFilesToDownload ? messages.noFilesToDownload : (multipleDocuments ? messages.multiFileTitle : messages.title) )}
+                hasCancelButton={noFilesToDownload}
                 cancelButtonText={intl.formatMessage(messages.doneButton)}
                 onClickCancel={() => nextButtonClicked(redirectUrl)}
             >
                 <div className="form-group">
-                    {tokenFile.noSignedDownloads?
-                        false && <FormattedMessage id="succes.signed.downloadNotAllowed" defaultMessage="" values={{b : boldedText}} />
-                    :
+                    {noFilesToDownload ?
+                        <FormattedMessage id="succes.signed.downloadIsEmptyTxt" defaultMessage="Because of an error no file was signed and can be downloaded" values={{b : boldedText}} />
+                    :!tokenFile.noSignedDownloads &&
                         <Fragment>
                             <p><FormattedMessage id={bodyTextId} defaultMessage={bodyText}
                                             values={{b : boldedText, newLine : <br/>, succesButtonDownload : intl.formatMessage({id : "succes.button.download", defaultMessage : "Download document"})}}

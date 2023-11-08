@@ -7,6 +7,7 @@ import { CardInfo } from '../components/Card/CardInfo'
 import {doSendLogInfo, resetWizard} from '../signWizard/actions/WizardLogicActions'
 import {injectIntl, useIntl} from "react-intl";
 import {definedMessages} from "../i18n/translations";
+import {faqURLs} from "../../const";
 
 /**
  * a card that shows a message and has a cancel and next button
@@ -25,10 +26,16 @@ import {definedMessages} from "../i18n/translations";
  */
 const MessageContainer = ({ message, messageInStore, navigateToStep, onCancel,  doSendLogInfo }) => {
     const intl = useIntl();
-    const handleButtonNextClick = () => {
-        if (shownMessage && shownMessage.nextButton && shownMessage.nextButton.nextPage) {
-            doSendLogInfo('UI - RETRY_BUTTON CLICKED');
-            navigateToStep(shownMessage.nextButton.nextPage)
+    const handleButtonClick = (buttonInfo, buttonType) => {
+        if (buttonInfo) {
+            if (buttonInfo.action) {
+                buttonInfo.action(buttonInfo);
+            }
+
+            if (buttonInfo.nextPage) {
+                doSendLogInfo('UI - ' + buttonType + "_BUTTON CLICKED");
+                navigateToStep(buttonInfo.nextPage)
+            }
         }
     }
 
@@ -50,10 +57,7 @@ const MessageContainer = ({ message, messageInStore, navigateToStep, onCancel,  
         shownMessage = ErrorGeneral
     }
 
-    let Container = CardError
-    if (shownMessage.type === messageTypes.INFO) {
-        Container = CardInfo
-    }
+    let Container = shownMessage.type === messageTypes.INFO ? CardInfo : CardError;
 
     return (
         <Container
@@ -67,13 +71,17 @@ const MessageContainer = ({ message, messageInStore, navigateToStep, onCancel,  
             }}
             hasNextButton={shownMessage.nextButton.isVisible}
             nextButtonText={shownMessage.nextButton.text}
-            onClickNext={() => { handleButtonNextClick() }}
+            onClickNext={() => { handleButtonClick(shownMessage.nextButton, 'RETRY') }}
+
 
             text={shownMessage.message}
+            predButtonText = { shownMessage.predButton ? shownMessage.predButton.text : null }
+            onClickPred = { () => { handleButtonClick(shownMessage.predButton, 'ACTUAL_RETRY') } }
         >
             {shownMessage.body? (
                 shownMessage.body.id && intl.formatMessage(shownMessage.body)
             ):shownMessage.body}
+            {shownMessage.link && <a href={intl.formatMessage(faqURLs) + shownMessage.linkURL}>{intl.formatMessage(shownMessage.link)}</a>}
         </Container>
     )
 }

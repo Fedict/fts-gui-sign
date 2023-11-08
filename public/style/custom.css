@@ -7239,3 +7239,55 @@ a.text-dark:hover, a.text-dark:focus {
 .light-pkcs7 {
   background-color: #dddddd }
         
+/*
+    Same checkbox on all browsers
+*/
+input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: var(--form-background);
+
+  font: inherit;
+  color: currentColor;
+  width: 1.05em;
+  height: 1.05em;
+  border: 0.10em solid currentColor;
+  border-radius: 0.15em;
+
+  display: grid;
+  place-content: center;
+  background-color: white;
+}
+
+input[type="checkbox"]:checked::before {
+  content: "";
+  width: 0.65em;
+  height: 0.65em;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  background-color: white;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #0075FF;
+  color: #0075FF;
+}
+
+input[type="checkbox"]:focus {
+  outline: max(2px, 0.15em) solid black;
+  outline-offset: max(2px, 0.15em);
+}
+
+input[type="checkbox"]:disabled {
+  color: #CFCFCF;
+  background-color: #F0F0F0;
+}
+
+input[type="checkbox"]:disabled:checked {
+  background-color: #CFCFCF;
+  color: #CFCFCF;
+}
+
+input[type="checkbox"]:disabled:checked::before {
+  background-color: #F0F0F0;
+}
+

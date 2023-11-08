@@ -1,5 +1,3 @@
-import 'react-app-polyfill/ie9';
-import 'react-app-polyfill/ie11';
 import 'react-app-polyfill/stable'
 import 'abortcontroller-polyfill/dist/polyfill-patch-fetch'
 import React from 'react';
@@ -10,12 +8,16 @@ import configureStore from './store/store';
 import { Provider } from 'react-redux';
 import 'bs-stepper/dist/css/bs-stepper.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import { HelmetProvider } from "react-helmet-async";
 
 const store = configureStore();
 const app = (
-    <Provider store={store} >
-        <App />
-    </Provider>);
+    <HelmetProvider>
+        <Provider store={store} >
+            <App />
+        </Provider>
+    </HelmetProvider>
+    );
 
 ReactDOM.render(app, document.getElementById('root'));
 

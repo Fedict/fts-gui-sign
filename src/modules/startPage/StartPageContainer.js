@@ -26,10 +26,10 @@ export class StartPageContainer extends React.Component {
         return (
             <div >
                 <div className={"row mx-5 mt-3"}>
-                    <div className={"col col-sm-7"} style={{ minWidth: '320px' }}>
+                    <div className={"col col-sm-6"} style={{ minWidth: '320px' }}>
                         <   DisplayFile />
                     </div>
-                    <div className={"col col-sm-5"}>
+                    <div className={"col col-sm-6"}>
 
                         <div className={"container"}>
                             <main className="card">

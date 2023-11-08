@@ -24,7 +24,7 @@ import {
 import {
     getDataToSignAPI, sendLogInfo, sendLogInfoIgnoreResult,
     signDocumentAPI, signDocumentForTokenAPI,
-    validateCertificatesAPI, sendHookInfoAPI
+    validateCertificatesAPI, sendHookInfoAPI, logVersions
 } from "../../communication/communication"
 import { setDigest } from "./DigestActions"
 import {handleErrorEID, handlePinErrorEID, resetPinError} from "./SignErrorHandleActions"
@@ -53,6 +53,7 @@ import {defaults, parseErrorMessage} from "../../utils/helper";
 import {ID_FLAGS} from "../../eIdLink/strategies/createEIDLinkExtensionStrategy";
 import { SET_ALL_INPUTS, setInputsSignState } from "../../signByTokenWizard/actions/TokenActions"
 import { signingType, signState } from "../../signByTokenWizard/constants"
+import { globalToken } from "../../../store/globals"
 
 //----------------------------------
 // helpers                    
@@ -192,9 +193,18 @@ export const checkVersion = (isErrorCheck) => (dispatch, getStore) => {
     eIDLink.getVersion(window.configData.eIDLinkMinimumVersion,
         (installedVersion) => {
             dispatch(removeRequestId(requestId))
-            dispatch(readerSetBeidConnectVersion(installedVersion))
             dispatch(readerSetCheck(true))
             dispatch(readerSetOk(true))
+            let token  = getStore().tokenFile;
+            logVersions(process.env.REACT_APP_VERSION,
+                installedVersion.version,
+                installedVersion.extensionVersion,
+                installedVersion.extensionBrowser,
+                token ? token.token : globalToken).then(version => {
+                    installedVersion.backend = version;
+                    dispatch(readerSetBeidConnectVersion(installedVersion));
+                });
+
             if (isErrorCheck) {
                 dispatch(showErrorMessage(ErrorGeneral))
             }
@@ -361,7 +371,8 @@ export const validateCertificates = () => (dispatch, getStore) => {
         const APIBody = certificate.certificateList.map((val) => {
             return {
                 ...val.APIBody,
-                "expectedKeyUsage": "NON_REPUDIATION"
+                "expectedKeyUsage": "NON_REPUDIATION",
+                token: globalToken
             }
         })
 
@@ -497,7 +508,8 @@ export const validateCertificate = (certificateObject) => (dispatch, getStore) =
         //console.log('validateCertificate', certificateObject)
         const APIBody = [{
             ...certificateObject.APIBody,
-            "expectedKeyUsage": "NON_REPUDIATION"
+            "expectedKeyUsage": "NON_REPUDIATION",
+            token: globalToken
         }]
 
         const flowId = getStore().controlId.flowId
@@ -536,7 +548,7 @@ export const getDigest = () => (dispatch, getStore) => {
     const store = getStore()
     const { certificate } = store
     const { uploadFile } = store
-    const signingDate = moment().format();
+        const signingDate = moment().format();
     dispatch(setDateSigning(signingDate))
     if (certificate
         && certificate.certificateSelected
@@ -729,28 +741,42 @@ export const signDocument = () => (dispatch, getStore) => {
                         var moreToSign = getStore().tokenFile.inputs.find(input => input.signState === signState.TO_BE_SIGNED);
                         dispatch(navigateToStep(moreToSign ? WIZARD_STATE_DIGEST_LOADING: WIZARD_STATE_SUCCES))
                     } else {
+                        var errorMessage;
                         const parsedError = parseErrorMessage(resp.message);
                         if(parsedError && errorMessages[parsedError.type]){
-                            dispatch(showErrorMessage({
+                            errorMessage = {
                                 ...ErrorGeneral,
                                 title : errorMessages.failedToSignWrongResultFromAPI,
                                 message : errorMessages[parsedError.type],
                                 ref : parsedError.ref,
-                                errorDetails : parsedError.details
-                            }));
-                        }else{
-                            dispatch(showErrorMessage({
+                                errorDetails : parsedError.details,
+                            }
+                        } else {
+                            errorMessage = {
                                 ...ErrorGeneral,
                                 message: errorMessages.failedToSignWrongResultFromAPI,
-                                body: resp.message
-                            }))
+                                body: resp.message,
+                            }
                         }
+
+                        if (tokenFile.signingType !== signingType.XadesMultiFile) {
+                            if (!getStore().tokenFile.noSkipErrors) {
+                                dispatch(setInputsSignState(fileIdToSign, signState.ERROR_SIGN));
+                                moreToSign =  getStore().tokenFile.inputs.find(input => input.signState === signState.TO_BE_SIGNED);
+                                errorMessage.predButton = { text: { id: "signing.error.retryButton", defaultMessage: "Try again" }, action: () => {
+                                    dispatch(setInputsSignState(fileIdToSign, signState.TO_BE_SIGNED)) },
+                                    nextPage: WIZARD_STATE_DIGEST_LOADING }
+                                errorMessage.nextButton = { isVisible: true, text: { id: "signing.error.skipButton", defaultMessage: "Skip file" }, action: () => {
+                                    dispatch(setInputsSignState(fileIdToSign, signState.SKIPPED)) },
+                                    nextPage: moreToSign ? WIZARD_STATE_DIGEST_LOADING : WIZARD_STATE_SUCCES }
+                            }
+                        }
+
+                        dispatch(showErrorMessage(errorMessage));
                     }
                 })
                 .catch((err) => {
                     hookInfo.ok = false
-                    sendHookInfoAPI(hookInfo, tokenFile);
-                    //console.log('signDocumentForTokenAPI error', err)
                     sendHookInfoAPI(hookInfo, tokenFile);
                     if (err !== INCORECT_FLOW_ID) {
                         dispatch(showErrorMessage({...ErrorGeneral, message : errorMessages.FAILED_TO_SIGN}))
@@ -815,7 +841,7 @@ export const resetWizard = () => (dispatch, getStore) => {
     resetWizardClicked = true;
     let eIDLink = controller.getInstance()
     eIDLink.stop()
-    const {tokenFile, wizard, message} = getStore();
+    const {tokenFile, wizard, message, certificate} = getStore();
 
     let url;
     if(tokenFile && tokenFile.redirectUrl){
@@ -841,7 +867,8 @@ export const resetWizard = () => (dispatch, getStore) => {
             const errorType = Object.keys(errorMessages).find((k) => errorMessages[k].id === message.message.id);
             url.searchParams.set('err', defaults(redirectErrorCodes[errorType], errorType, message.err, 'SERVER_ERROR'));
         }else{
-            url.searchParams.set('err', redirectErrorCodes.USER_CANCELLED);
+            url.searchParams.set('err', certificate && !certificate.neverSaved && certificate.certificateList.length === 0 ?
+                                redirectErrorCodes.USER_CANCELLED_NO_CERT : redirectErrorCodes.USER_CANCELLED);
             url.searchParams.set('details', wizard.state);
         }
     }

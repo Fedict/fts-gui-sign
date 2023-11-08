@@ -29,6 +29,7 @@ const TokenReducer = (state = initialState, action) => {
                 selectDocuments: action.payload.selectDocuments,
                 noSignedDownloads : action.payload.noSignedDownloads,
                 requestDocumentReadConfirm : action.payload.requestDocumentReadConfirm,
+                noSkipErrors: action.payload.noSkipErrors,
                 signingType: action.payload.signingType
             }
         }

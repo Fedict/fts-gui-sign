@@ -3,7 +3,7 @@ import {defineMessages, FormattedMessage, IntlProvider} from "react-intl";
 import {connect} from "react-redux";
 import {languages} from "../../const";
 import {chooseLanguage, loadMessagesForLocale} from "./actions/i18nActions";
-import {defaults, setCookie} from "../utils/helper";
+import {defaults} from "../utils/helper";
 import {useRouter} from "../utils/useRouter";
 
 const dMessages = defineMessages({
@@ -33,7 +33,6 @@ const MainI18nWrapper = (props) => {
 					props.chooseLanguage(localeToFetch);
 				}
 			});
-			setCookie('language', localeToFetch);
 		}
 
 		return function cleanup() {
