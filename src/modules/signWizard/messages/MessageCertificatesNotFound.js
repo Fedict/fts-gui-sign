@@ -12,7 +12,7 @@ const messages = defineMessages({
     },
     link : {
         id : 'error.certificates.not_found.link',
-        defaultMessage : "Please check our FAQ",
+        defaultMessage : "More Info",
     },
     next : {
         id : 'error.certificates.not_found.next',
@@ -24,7 +24,7 @@ export const MessageCertificatesNotFound = {
     title: messages.title,
     message: messages.text,
     link: messages.link,
-    linkURL: "TODO FILL ME!",
+    linkURL: "#9",
     body: null,
     nextButton: {
         text: messages.next,

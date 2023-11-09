@@ -81,7 +81,7 @@
   "error.certificates.not_found.next": "Erneut suchen",
   "error.certificates.not_found.text": "Es wurden keine (gültigen) Signierzertifikate gefunden.",
   "error.certificates.not_found.title": "Keine gültigen Zertifikate gefunden",
-  "error.certificates.not_found.link": "Keine gültigen Zertifikate gefunden",
+  "error.certificates.not_found.link": "Mehr Infos",
   "error.general.text": "Ein Fehler ist aufgetreten. Bitte laden Sie die Seite neu und versuchen Sie es erneut.",
   "error.general.title": "Ein Fehler ist aufgetreten",
   "extension.install.button": "BeIDConnect-Erweiterung installieren",
