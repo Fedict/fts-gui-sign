@@ -3,7 +3,7 @@ import {injectIntl} from "react-intl";
 import { render, screen} from '../../testUtils/test-utils.js'
 import {ResultContainer} from "./ResultContainer.js";
 
-const ResultContainerWithIntl = injectIntl(ResultContainer)
+const ResultContainerWithIntl = ResultContainer
 
 describe("ResultContainer", () => {
     test("Has No signature message", () => {
