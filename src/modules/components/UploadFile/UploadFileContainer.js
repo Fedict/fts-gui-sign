@@ -239,7 +239,7 @@ export const UploadFileContainer = (props) => {
                                     <div className="row " style={{ justifyContent: "center" }}>
                                     <div className="col col-auto align-self-center ">
                                         <p className="btn m-0 text-center text-warning" >
-                                            <FormattedMessage id="file.size.limit" defaultMessage="Document size ({fileSize} Mb.) larger than maximum ({maxSize} Mb.), signing is disabled" values={{ fileSize: fileSize, maxSize: maxSize }} />
+                                            <FormattedMessage id="file.size.limit" defaultMessage="The maximum size of a document can be {maxSize}Mb. The uploaded document is too large with {fileSize}Mb." values={{ fileSize: fileSize, maxSize: maxSize }} />
                                         </p>
                                     </div>
                                 </div>
