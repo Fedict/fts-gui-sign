@@ -66,7 +66,7 @@
   "error.NOT_ALLOWED_TO_SIGN": "Vous n'avez pas la permission de signer ce document particulier. Contactez le propriétaire du document pour plus d'informations.",
   "error.PARSE_ERROR": "Impossible d'analyser la demande",
   "error.SIGN_PERIOD_EXPIRED": "La saisie du code PIN a pris trop de temps.",
-  "error.SIGNATURE_OUT_OF_BOUNDS": "La position du nouveau champ de signature est en dehors des dimensions de la page !",
+  "error.SIGNATURE_OUT_OF_BOUNDS": "Le nouveau champ de signature se situe en dehors des dimensions de la page.",
   "error.SIGN_CERT_EXPIRED": "Le certificat est expiré.",
   "error.UNKNOWN_PROFILE": "Profil de signature inconnu",
   "error.WRONG_RESULT_SIGN_TOKEN": "Impossible de signer le document",

@@ -69,7 +69,7 @@ export const errorMessages = defineMessages({
     },
     SIGNATURE_OUT_OF_BOUNDS: {
         id: "error.SIGNATURE_OUT_OF_BOUNDS",
-        defaultMessage: "The new signature field position is outside of the page dimensions!"
+        defaultMessage: "The position of the new signature field is outside of the page dimensions."
     },
     SIGN_CERT_EXPIRED: {
         id: "error.SIGN_CERT_EXPIRED",
