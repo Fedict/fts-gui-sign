@@ -119,7 +119,7 @@
   "or": "OF",
   "drag.drop.here": "sleep document naar hier",
   "drag.drop.error": "Alleen een document in formaat pdf of xml kan worden geselecteerd.",
-  "file.size.limit": "Documentgrootte ({fileSize} Mb.) groter dan {maxSize} Mb., ondertekening is uitgeschakeld",
+  "file.size.limit": "De maximale grootte van een document mag {maxSize}Mb zijn. Het opgeladen document is met {fileSize} Mb. te groot.",
   "sign.token.1": "Lees en verbind eID",
   "sign.token.2": "Voer pincode in en onderteken",
   "sign.token.4": "Klaar",
