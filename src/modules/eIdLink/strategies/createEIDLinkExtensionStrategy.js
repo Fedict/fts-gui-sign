@@ -18,7 +18,7 @@ function isUptodate(minimumVersion, installedVersion) {
     try{
         var expected = minimumVersion.split(".");
         var actual = installedVersion.split(".");
-        return (actual[0] > expected[0]) || (actual[0] === expected[0] && actual[1] >= expected[1]);
+        return (+actual[0] > +expected[0]) || (actual[0] === expected[0] && +actual[1] >= +expected[1]);
     }
     catch{
         return false;
