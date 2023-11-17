@@ -14,7 +14,7 @@ export const ID_FLAGS = {
     ID_FLAG_INCLUDE_ROOTCERT    : 256
 }
 
-function isUptodate(minimumVersion, installedVersion) {
+export function isUptodate(minimumVersion, installedVersion) {
     try{
         var expected = minimumVersion.split(".");
         var actual = installedVersion.split(".");
