@@ -196,11 +196,14 @@ export const checkVersion = (isErrorCheck) => (dispatch, getStore) => {
             dispatch(readerSetCheck(true))
             dispatch(readerSetOk(true))
             let token  = getStore().tokenFile;
+            if (token) token=token.token;
+            if (!token) token=globalToken;  // Use the GlobalToken for Signbox operations
+
             logVersions(process.env.REACT_APP_VERSION,
                 installedVersion.version,
                 installedVersion.extensionVersion,
                 installedVersion.extensionBrowser,
-                token ? token.token : globalToken).then(version => {
+                token).then(version => {
                     installedVersion.backend = version;
                     dispatch(readerSetBeidConnectVersion(installedVersion));
                 });
