@@ -31,6 +31,10 @@ const normalizeRect = (r) => {
     return rOut;
 }
 
+/**
+ * Get dimensions of all pages of a PDF. Also get all signature acroform dimensions
+ * @param pdf - The PDF
+ */
 const getPagesInfo = async (pdf) => {
     let newPagesInfo = [];
     let pageIndex = 0;

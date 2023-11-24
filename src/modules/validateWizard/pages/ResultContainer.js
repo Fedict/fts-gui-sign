@@ -59,9 +59,9 @@ export class ResultContainer extends React.Component {
                             <div className="col-2 px-0"> { sig.valid ? (sig.signatureFormat.startsWith("PKCS7") ? no : yes) : "" } </div>
                         </div> )}
                         { normalizedReport.signatures.find(sig => sig.missingSigningCert) && <>
-                        <p class="text-justify"><strong>* </strong><FormattedMessage id='validate.result.note.adobeSigned.1' defaultMessage="Sign.belgium can't validate the signature based on the available information." /></p>
-                        <p class="text-justify"><FormattedMessage id='validate.result.note.adobeSigned.2' defaultMessage="Sign.belgium signature validation is based on the applicable European standards. If Adobe Reader was used to sign this document, it is possible to change the signature format to this European standard." /></p>
-                        <p class="text-justify"><a href="/pkcs7"><FormattedMessage id='validate.result.note.adobeSigned.link' defaultMessage="Manual: how to adjust the signature setting in Adobe Reader." /></a></p>
+                        <p className="text-justify"><strong>* </strong><FormattedMessage id='validate.result.note.adobeSigned.1' defaultMessage="Sign.belgium can't validate the signature based on the available information." /></p>
+                        <p className="text-justify"><FormattedMessage id='validate.result.note.adobeSigned.2' defaultMessage="Sign.belgium signature validation is based on the applicable European standards. If Adobe Reader was used to sign this document, it is possible to change the signature format to this European standard." /></p>
+                        <p className="text-justify"><a href="/pkcs7"><FormattedMessage id='validate.result.note.adobeSigned.link' defaultMessage="Manual: how to adjust the signature setting in Adobe Reader." /></a></p>
                         </>
                         }
                     </div> : <div className="text-center">
