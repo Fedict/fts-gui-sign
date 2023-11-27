@@ -221,12 +221,12 @@ export const DisplayPDF = ({ file, drawSignature }) => {
 
         if (rect) {
             // Draw current drag rectangle ...
-            drawSignatureRect(ctx, rect, '#00EE00')
+            drawSignatureRect(ctx, rect, true)
             }
         else {
             // ... or Draw existing manual (drag) signature
             if (signatureArea && signatureArea.page === pageNumber) {
-                drawSignatureRect(ctx, scaleRect(signatureArea.rect, scale), signatureSelected === MANUAL_SIGNATURE ? '#00EE00' : '#EEEEEE');
+                drawSignatureRect(ctx, scaleRect(signatureArea.rect, scale), signatureSelected === MANUAL_SIGNATURE);
             }
         }
 
@@ -234,16 +234,16 @@ export const DisplayPDF = ({ file, drawSignature }) => {
         if (pagesInfo.length != 0) {
             pagesInfo[pageNumber - 1].sigAcroforms.forEach((sigAcroform) => {
                 if (!sigAcroform.isSigned) {
-                    drawSignatureRect(ctx, scaleRect(sigAcroform.rect, scale), signatureSelected === sigAcroform.fieldName ? '#00EE00' : '#EEEEEE');
+                    drawSignatureRect(ctx, scaleRect(sigAcroform.rect, scale), signatureSelected === sigAcroform.fieldName);
                 }
             });
         }
     };
 
-    const drawSignatureRect = (ctx, r, color) => {
+    const drawSignatureRect = (ctx, r, isSelected) => {
         const w = r.right - r.left;
         const h = r.bottom - r.top;
-        ctx.fillStyle = color;
+        ctx.fillStyle = isSelected ? '#11a0ba' : '#EEEEEE';
         ctx.fillRect(r.left, r.top, w, h);
         const image = document.getElementById(photoIncluded ? "signPhotoImage" : "signatureImage");
         if (image) {
@@ -255,7 +255,9 @@ export const DisplayPDF = ({ file, drawSignature }) => {
             if (scaleY < scale) scale = scaleY;
             imgH *= scale;
             imgW *= scale;
+            if (!isSelected) ctx.filter = "blur(4px)";
             ctx.drawImage(image, r.left + (w - imgW) / 2, r.top + (h - imgH) / 2, imgW, imgH);
+            ctx.filter = "none";
         }
     }
     

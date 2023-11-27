@@ -130,8 +130,12 @@ export const UploadFileContainer = (props) => {
     let maxUploadSize = window.configData.maxUploadSize;
     if (!maxUploadSize) maxUploadSize = 10*1024*1024; // 10Mb default
     let maxSize = Math.round(maxUploadSize*10/(1024*1024))/10;
+    let invisSig = props.signatureSelected === INVISIBLE_SIGNATURE;
+    let textColor = invisSig ? { color: "#CFCFCF"} : {};
+    let backgroundColor = invisSig ? { backgroundColor: "#CFCFCF"} : {};
 
     return (
+        <>
         <CardContainer
             title={intl.formatMessage(messages.title)}
             hasNextButton
@@ -255,26 +259,49 @@ export const UploadFileContainer = (props) => {
                     </div>
                 </div>
             </div>
-            { props.file.url && props.file.isPdf &&
-                <>
-                    <h1><br/>Signatures</h1>
-                    <input type="radio" id="sig_no" key="noSignature" checked={props.signatureSelected === INVISIBLE_SIGNATURE}
-                            onChange={ () => {props.selectSignature(INVISIBLE_SIGNATURE)} }
-                            name="sigSel"/>&nbsp;<label htmlFor="sig_no">No visible Signature</label><br/>
-                    <input type="radio" id="sig_man" key="manualSignature" checked={props.signatureSelected === MANUAL_SIGNATURE}
-                            disabled={props.signatureArea === null} onChange={ () => {props.selectSignature(MANUAL_SIGNATURE)} }
-                            name="sigSel"/>&nbsp;<label htmlFor="sig_man">Manual Signature</label><br/>
-                    { props.signatureFields.map((sigField, index) => (
-                        <div key={index} >
-                            <input type="radio" id={ "sig_"+index } checked={props.signatureSelected === sigField}
-                            onChange={ () => {props.selectSignature(sigField)} }
-                            name="sigSel"/>&nbsp;<label htmlFor={ "sig_"+index }>{ sigField }</label><br/>
-                        </div>
-                    ))}
-                    <input type="checkbox" id="photo" checked={props.photoIncluded}
-                            onChange={ () => { props.includePhoto(!props.photoIncluded) } } style={{ display: "inline-block"}}/>&nbsp;<label htmlFor="photo">Include photo</label><br/>
-                </>}
         </CardContainer>
+            { props.file.url && props.file.isPdf &&
+                <div className="col-12">
+                    <div className="card" style={{ marginTop: "15px", backgroundColor: "rgba(0, 0, 0, 0.03)"}}>
+                        <ol className="invisibleOL">
+                            <div className="card-body" style={{ paddingLeft: "60px" }}>
+                                <li><div className="row mb-4"><div className="col col-1"><span className="badge badge-primary p-1">1</span></div><div className="col col-11"><b>Do you want your signature to be visible in the document ?</b>
+                                    <br/><input className="mt-3" type="radio" id="sig_vis" key="visible" checked={props.signatureSelected !== INVISIBLE_SIGNATURE} disabled={props.signatureArea === null && props.signatureFields.length === 0 }
+                                    onChange={ () => { props.selectSignature((props.signatureArea === null) ? props.signatureFields[0] : MANUAL_SIGNATURE) } }
+                                    name="visible"/>&nbsp;<label htmlFor="sig_no">yes</label><br/>
+                                    <input type="radio" id="sig_inv" key="invisible" checked={invisSig}
+                                            onChange={ () => {props.selectSignature(INVISIBLE_SIGNATURE)} }
+                                            name="visible"/>&nbsp;<label htmlFor="sig_no">no</label><br/>
+                                </div></div></li>
+                                <li><div className="row mb-4" style={ textColor }><div className="col col-1"><span className="badge p-1 badge-primary" style={ backgroundColor }>2</span></div><div className="col col-11"><b>Do you want the signature to include your photo ?</b>
+                                    <br/><input className="mt-3" type="checkbox" id="photo" checked={props.photoIncluded && props.signatureSelected !== INVISIBLE_SIGNATURE}
+                                        onChange={ () => { props.includePhoto(!props.photoIncluded) } } disabled={invisSig}
+                                        style={{ display: "inline-block"}}/>&nbsp;<label htmlFor="photo">Include photo</label><br/>
+                                </div></div></li>
+                                <li><div className="row mb-4" style={ textColor }><div className="col col-1"><span className="badge p-1 badge-primary" style={ backgroundColor }>3</span></div><div className="col col-11">
+                                    { props.signatureFields.length === 0 && props.signatureArea === null ?
+                                        <b>Create a signature field by drawing its enclosing rectangle in the document preview</b> : 
+
+                                        <>
+                                            <b>Choose your signature field or draw one yourself  by pressing the button at the top right of your document:</b>
+                                            <br/><input className="mt-3" type="radio" id="sig_man" key="manualSignature" checked={props.signatureSelected === MANUAL_SIGNATURE}
+                                            disabled={props.signatureArea === null || invisSig} onChange={ () => {props.selectSignature(MANUAL_SIGNATURE)} }
+                                            name="sigSel"/>&nbsp;<label htmlFor="sig_man">Manual Signature</label><br/>
+                                            { props.signatureFields.map((sigField, index) => (
+                                                <div key={index} >
+                                                    <input type="radio" id={ "sig_"+index } checked={props.signatureSelected === sigField}
+                                                    onChange={ () => {props.selectSignature(sigField)} } disabled={invisSig} 
+                                                    name="sigSel"/>&nbsp;<label htmlFor={ "sig_"+index }>{ sigField }</label><br/>
+                                                </div>
+                                            ))}
+                                        </>
+                                    }
+                                </div></div></li>
+                            </div>
+                        </ol>
+                </div>
+            </div>}
+        </>
     )
 }
 
