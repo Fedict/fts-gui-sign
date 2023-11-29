@@ -259,50 +259,48 @@ export const UploadFileContainer = (props) => {
                     </div>
                 </div>
             </div>
-        </CardContainer>
             { props.file.url && props.file.isPdf &&
-                <div className="col-12">
-                    <div className="card" style={{ marginTop: "15px", backgroundColor: "rgba(0, 0, 0, 0.03)"}}>
-                        <ol className="invisibleOL">
-                            <div className="card-body" style={{ paddingLeft: "60px" }}>
-                                <li><div className="row mb-4"><div className="col col-1"><span className="badge badge-primary p-1">1</span></div><div className="col col-11">
-                                        <b><FormattedMessage id="signing.upload.visible.signature" defaultMessage="Do you wish to display your signature visibly in the document?"/></b>
-                                    <br/><input className="mt-3" type="radio" id="sig_vis" key="visible" checked={props.signatureSelected !== INVISIBLE_SIGNATURE} disabled={props.signatureArea === null && props.signatureFields.length === 0 }
-                                    onChange={ () => { props.selectSignature((props.signatureArea === null) ? props.signatureFields[0] : MANUAL_SIGNATURE) } }
-                                    name="visible"/>&nbsp;<label htmlFor="sig_no"><FormattedMessage id="yes" defaultMessage="Yes" /></label><br/>
-                                    <input type="radio" id="sig_inv" key="invisible" checked={invisSig}
-                                            onChange={ () => {props.selectSignature(INVISIBLE_SIGNATURE)} }
-                                            name="visible"/>&nbsp;<label htmlFor="sig_no"><FormattedMessage id="no" defaultMessage="No" /></label><br/>
-                                </div></div></li>
-                                <li><div className="row mb-4" style={ textColor }><div className="col col-1"><span className="badge p-1 badge-primary" style={ backgroundColor }>2</span></div><div className="col col-11">
-                                    <b><FormattedMessage id="signing.upload.photo.signature" defaultMessage="A profile picture can be added to your signature" /></b>
-                                    <br/><input className="mt-3" type="checkbox" id="photo" checked={props.photoIncluded && props.signatureSelected !== INVISIBLE_SIGNATURE}
-                                        onChange={ () => { props.includePhoto(!props.photoIncluded) } } disabled={invisSig}
-                                        style={{ display: "inline-block"}}/>&nbsp;<label htmlFor="photo"><FormattedMessage id="signing.upload.photo.choice" defaultMessage="Add photo" /></label><br/>
-                               </div></div></li>
-                                <li><div className="row mb-4" style={ textColor }><div className="col col-1"><span className="badge p-1 badge-primary" style={ backgroundColor }>3</span></div><div className="col col-11">
-                                    { props.signatureFields.length === 0 && props.signatureArea === null ?
-                                        <b><FormattedMessage id="signing.upload.no.signature" defaultMessage="Draw a signature by dragging a rectangle in the document preview" /></b> : 
+                <div className="card" style={{ marginTop: "15px", backgroundColor: "rgba(0, 0, 0, 0.03)"}}>
+                    <ol className="invisibleOL">
+                        <div className="card-body" style={{ paddingLeft: "60px" }}>
+                            <li><div className="row mb-4"><div className="col col-1"><span className="badge badge-primary p-1">1</span></div><div className="col col-11">
+                                    <b><FormattedMessage id="signing.upload.visible.signature" defaultMessage="Do you wish to display your signature visibly in the document?"/></b>
+                                <br/><input className="mt-3" type="radio" id="sig_vis" key="visible" checked={props.signatureSelected !== INVISIBLE_SIGNATURE} disabled={props.signatureArea === null && props.signatureFields.length === 0 }
+                                onChange={ () => { props.selectSignature((props.signatureArea === null) ? props.signatureFields[0] : MANUAL_SIGNATURE) } }
+                                name="visible"/>&nbsp;<label htmlFor="sig_no"><FormattedMessage id="yes" defaultMessage="Yes" /></label><br/>
+                                <input type="radio" id="sig_inv" key="invisible" checked={invisSig}
+                                        onChange={ () => {props.selectSignature(INVISIBLE_SIGNATURE)} }
+                                        name="visible"/>&nbsp;<label htmlFor="sig_no"><FormattedMessage id="no" defaultMessage="No" /></label><br/>
+                            </div></div></li>
+                            <li><div className="row mb-4" style={ textColor }><div className="col col-1"><span className="badge p-1 badge-primary" style={ backgroundColor }>2</span></div><div className="col col-11">
+                                <b><FormattedMessage id="signing.upload.photo.signature" defaultMessage="A profile picture can be added to your signature" /></b>
+                                <br/><input className="mt-3" type="checkbox" id="photo" checked={props.photoIncluded && props.signatureSelected !== INVISIBLE_SIGNATURE}
+                                    onChange={ () => { props.includePhoto(!props.photoIncluded) } } disabled={invisSig}
+                                    style={{ display: "inline-block"}}/>&nbsp;<label htmlFor="photo"><FormattedMessage id="signing.upload.photo.choice" defaultMessage="Add photo" /></label><br/>
+                            </div></div></li>
+                            <li><div className="row mb-4" style={ textColor }><div className="col col-1"><span className="badge p-1 badge-primary" style={ backgroundColor }>3</span></div><div className="col col-11">
+                                { props.signatureFields.length === 0 && props.signatureArea === null ?
+                                    <b><FormattedMessage id="signing.upload.no.signature" defaultMessage="Draw a signature by dragging a rectangle in the document preview" /></b> : 
 
-                                        <>
-                                            <b><FormattedMessage id="signing.upload.exisitng.signature" defaultMessage="A predefined signature field was found in the document. If you wish to use it, select it below. You can also create your own signature field by dragging a rectangle in the document preview." /></b>
-                                            <br/><input className="mt-3" type="radio" id="sig_man" key="manualSignature" checked={props.signatureSelected === MANUAL_SIGNATURE}
-                                            disabled={props.signatureArea === null || invisSig} onChange={ () => {props.selectSignature(MANUAL_SIGNATURE)} }
-                                            name="sigSel"/>&nbsp;<label htmlFor="sig_man"><FormattedMessage id="signing.upload.manual.signature" defaultMessage="Manual signature"/></label><br/>
-                                            { props.signatureFields.map((sigField, index) => (
-                                                <div key={index} >
-                                                    <input type="radio" id={ "sig_"+index } checked={props.signatureSelected === sigField}
-                                                    onChange={ () => {props.selectSignature(sigField)} } disabled={invisSig} 
-                                                    name="sigSel"/>&nbsp;<label htmlFor={ "sig_"+index }>{ sigField }</label><br/>
-                                                </div>
-                                            ))}
-                                        </>
-                                    }
-                                </div></div></li>
-                            </div>
-                        </ol>
-                </div>
-            </div>}
+                                    <>
+                                        <b><FormattedMessage id="signing.upload.exisitng.signature" defaultMessage="A predefined signature field was found in the document. If you wish to use it, select it below. You can also create your own signature field by dragging a rectangle in the document preview." /></b>
+                                        <br/><input className="mt-3" type="radio" id="sig_man" key="manualSignature" checked={props.signatureSelected === MANUAL_SIGNATURE}
+                                        disabled={props.signatureArea === null || invisSig} onChange={ () => {props.selectSignature(MANUAL_SIGNATURE)} }
+                                        name="sigSel"/>&nbsp;<label htmlFor="sig_man"><FormattedMessage id="signing.upload.manual.signature" defaultMessage="Manual signature"/></label><br/>
+                                        { props.signatureFields.map((sigField, index) => (
+                                            <div key={index} >
+                                                <input type="radio" id={ "sig_"+index } checked={props.signatureSelected === sigField}
+                                                onChange={ () => {props.selectSignature(sigField)} } disabled={invisSig} 
+                                                name="sigSel"/>&nbsp;<label htmlFor={ "sig_"+index }>{ sigField }</label><br/>
+                                            </div>
+                                        ))}
+                                    </>
+                                }
+                            </div></div></li>
+                        </div>
+                    </ol>
+                </div>}
+        </CardContainer>
         </>
     )
 }
