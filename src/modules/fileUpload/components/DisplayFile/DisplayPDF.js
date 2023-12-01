@@ -87,10 +87,26 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     const [pageNumber, setPageNumber] = useState(1);
 
     const [zoomLevel, setZoomLevel] = useState(100);
-    const zoomLevels = [10, 25, 50, 75, 100, 110, 130, 150, 200, 300, 400];
+    const zoomLevels = [25, 50, 75, 100, 125, 150, 175, 200, 225, 250, 275, 300];
+
+    const [pageNumberStr, setPageNumberStr] = useState("1");
+    const changePageNumberStr = (page) => {
+        setPageNumberStr(page);
+        page = +page.replace(/\D/g,'');
+        if (page >= 1 && page <= currentPDF.numPages) setPageNumber(page);
+    }
+
+    const setZoomLevelStr = (level) => {
+        level = +level.replace(/\D/g,'');
+        let maxLevel = zoomLevels[zoomLevels.length - 1];
+        if (level === 0) level = 1;
+        if (level > maxLevel) level = maxLevel;
+        setZoomLevel(level);
+    }
+
     const nextZoom = () => {
         let nextZoomLevel = zoomLevels.find((zoom) => zoom > zoomLevel );
-        return nextZoomLevel ? nextZoomLevel : zoomLevels.slice(-1);
+        return nextZoomLevel ? nextZoomLevel : zoomLevels.slice(-1)[0];
     };
     const predZoom = () => {
         let predZoomLevel = zoomLevels.toReversed().find((zoom) => zoom < zoomLevel );
@@ -137,6 +153,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
 
     const changePageNumber = (page) => {
         setPageNumber(page);
+        changePageNumberStr("" + page);
         if (thumbCanvasRefs.current) {
             let element = thumbCanvasRefs.current[page - 1];
             if (element) element.scrollIntoView();
@@ -234,7 +251,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
         if (pagesInfo.length != 0) {
             pagesInfo[pageNumber - 1].sigAcroforms.forEach((sigAcroform) => {
                 if (!sigAcroform.isSigned) {
-                    drawSignatureRect(ctx, scaleRect(sigAcroform.rect, scale), signatureSelected === sigAcroform.fieldName);
+                    drawSignatureRect(ctx, scaleRect(sigAcroform.rect, scale), signatureSelected === sigAcroform.fieldName && rect === null);
                 }
             });
         }
@@ -346,39 +363,41 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     // HTML rendering
     //****************************************************************************************
 
+    let btnStyle = { fontSize: "1.3rem", margin: "3px", borderStyle: "solid", borderColor: "rgba(0, 0, 0, 0)", backgroundColor: "rgba(0, 0, 0, 0)" };
+    let pageWidth = (currentPDF ? currentPDF.numPages.toString().length : 1) * 16 +"px";
+
     return (
         <div className="container flex-column border" style={ { width:"100%", backgroundColor: "rgba(0, 0, 0, 0.03)" }}>
             <img className="d-none" id="signatureImage" src="/img/signature.png" onLoad={() => setImgSignatureLoaded(true)} />
             <img className="d-none" id="signPhotoImage" src="/img/photoSignature.png" onLoad={() => setImgSignPhotoLoaded(true)} />
-            <div className="row">
+            <div className="row" style={{ marginBottom: "4px"}}>
                 { pagesInfo.length > 1 && <>
-                    <div className="col">
-                        <button onClick={() => { setShowThumbnails(!showThumbnails) }}>Thumbnails</button>
+                    <div className="col-1" style={{ marginTop: "13px"}}>
+                        <div onClick={() => { setShowThumbnails(!showThumbnails) }} style={{ fontSize: "1.4rem", cursor: "pointer" }}>☰</div>
                     </div>
+                    <div className="col" style={{ marginTop: "6px"}}>{ file.name }</div>
                     <div className="col">
-                        <span className="px-2">Page : </span>
-                        <button className="px-2" onClick={() => { changePageNumber(pageNumber - 1) }} disabled={ pageNumber <= 1}>Pred</button>
-                        <span  className="px-2">{ pageNumber }</span>
-                        <button  className="px-2" onClick={() => { changePageNumber(pageNumber + 1) }} disabled={ currentPDF && pageNumber >= currentPDF.numPages}>Next</button>
+                        <button className="px-2" style={btnStyle} onClick={() => { changePageNumber(pageNumber - 1) }} disabled={ pageNumber <= 1}><b>-</b></button>
+                        <input type="text" style={{borderStyle: "none", height: "30px", backgroundColor: "lightgrey", width: pageWidth }} size="1" value={ pageNumberStr } onChange={ (e) => changePageNumberStr(e.target.value)}></input> / { currentPDF.numPages }
+                        <button  className="px-2" style={btnStyle} onClick={() => { changePageNumber(pageNumber + 1) }} disabled={ currentPDF && pageNumber >= currentPDF.numPages}><b>+</b></button>
                     </div>
                 </>}
 
                 <div className="col">
-                    <span className="px-2">Zoom : </span>
-                    <button  className="px-2" onClick={() => { setZoomLevel(predZoom()) }} disabled={ predZoom() === zoomLevel}>Out</button>
-                    <span  className="px-2">{ zoomLevel }</span>
-                    <button  className="px-2" onClick={() => { setZoomLevel(nextZoom()) }} disabled={ nextZoom() === zoomLevel}>In</button>
+                    <button className="px-2" style={btnStyle} onClick={() => { setZoomLevel(predZoom()) }} disabled={ predZoom() === zoomLevel}><b>-</b></button>
+                    <input type="text" style={{borderStyle: "none", height: "30px", backgroundColor: "lightgrey" }} size="1" value={ zoomLevel + '%' } onChange={ (e) => setZoomLevelStr(e.target.value)}></input>
+                    <button  className="px-2" style={btnStyle} onClick={() => { setZoomLevel(nextZoom()) }} disabled={ nextZoom() === zoomLevel }><b>+</b></button>
                 </div>
             </div>
             <div className="row">
                 { pagesInfo.length > 1 && 
                     <div style={{ overflow: "auto", width: "110px", textAlign: "center", height: "80vh"}}
                         hidden={ showThumbnails ? null : "hidden" }>{pagesInfo.map((input, pageIndex) => (
-                        <canvas key={ "tumbnail-"+pageIndex } 
-                            ref={(element) => thumbCanvasRefs.current[pageIndex] = element } 
+                        <canvas key={ "tumbnail-"+pageIndex }
+                            ref={(element) => thumbCanvasRefs.current[pageIndex] = element }
                             width={pagesInfo[pageIndex].width / 10} height ={pagesInfo[pageIndex].height / 10}
                             onClick={ () => { setPageNumber(pageIndex + 1) }}
-                            style={ pageNumber === (pageIndex + 1) ?  { border: "double" } : {} } />                    
+                            style={ pageNumber === (pageIndex + 1) ?  { border: "double" } : {} } />
                     ))}</div>
                 }
                 <div className="col" style={{ overflow: "auto", height: "80vh" }}>
