@@ -371,18 +371,19 @@ export const DisplayPDF = ({ file, drawSignature }) => {
             <img className="d-none" id="signatureImage" src="/img/signature.png" onLoad={() => setImgSignatureLoaded(true)} />
             <img className="d-none" id="signPhotoImage" src="/img/photoSignature.png" onLoad={() => setImgSignPhotoLoaded(true)} />
             <div className="row" style={{ marginBottom: "4px"}}>
-                { pagesInfo.length > 1 && <>
+                { pagesInfo.length > 1 &&
                     <div className="col-1" style={{ marginTop: "5px"}}>
                         <div onClick={() => { setShowThumbnails(!showThumbnails) }} style={{ fontSize: "1.4rem", cursor: "pointer" }}>☰</div>
                     </div>
-                    <div className="col" style={{ marginTop: "10px"}}>{ file.name }</div>
+                }
+                <div className="col" style={{ marginTop: "10px"}}>{ file.name }</div>
+                { pagesInfo.length > 1 &&
                     <div className="col">
                         <button className="px-2" style={btnStyle} onClick={() => { changePageNumber(pageNumber - 1) }} disabled={ pageNumber <= 1}><b>-</b></button>
                         <input type="text" style={{borderStyle: "none", height: "30px", backgroundColor: "lightgrey", width: pageWidth }} size="1" value={ pageNumberStr } onChange={ (e) => changePageNumberStr(e.target.value)}></input> / { currentPDF.numPages }
                         <button  className="px-2" style={btnStyle} onClick={() => { changePageNumber(pageNumber + 1) }} disabled={ currentPDF && pageNumber >= currentPDF.numPages}><b>+</b></button>
                     </div>
-                </>}
-
+                }
                 <div className="col">
                     <button className="px-2" style={btnStyle} onClick={() => { setZoomLevel(predZoom()) }} disabled={ predZoom() === zoomLevel}><b>-</b></button>
                     <input type="text" style={{borderStyle: "none", height: "30px", backgroundColor: "lightgrey" }} size="1" value={ zoomLevel + '%' } onChange={ (e) => setZoomLevelStr(e.target.value)}></input>
