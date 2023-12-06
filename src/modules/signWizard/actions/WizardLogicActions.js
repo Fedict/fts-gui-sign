@@ -397,7 +397,7 @@ export const validateCertificates = () => (dispatch, getStore) => {
                 const newList = certificate.certificateList.map((val, index) => {
                     const res = resp.indications[index]
                     if (!res.keyUsageCheckOk || res.indication !== "PASSED") {
-                        if (res.subIndication === "REVOKED_NO_POE") hasRevokeCert = true
+                        if (res.subIndication === "REVOKED_NO_POE") hasRevokedCert = true
                         return undefined
                     }
                     val.indication = res.indication
