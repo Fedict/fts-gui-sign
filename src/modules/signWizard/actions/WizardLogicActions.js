@@ -744,24 +744,7 @@ export const signDocument = () => (dispatch, getStore) => {
                         var moreToSign = getStore().tokenFile.inputs.find(input => input.signState === signState.TO_BE_SIGNED);
                         dispatch(navigateToStep(moreToSign ? WIZARD_STATE_DIGEST_LOADING: WIZARD_STATE_SUCCES))
                     } else {
-                        var errorMessage;
-                        const parsedError = parseErrorMessage(resp.message);
-                        if(parsedError && errorMessages[parsedError.type]){
-                            errorMessage = {
-                                ...ErrorGeneral,
-                                title : errorMessages.failedToSignWrongResultFromAPI,
-                                message : errorMessages[parsedError.type],
-                                ref : parsedError.ref,
-                                errorDetails : parsedError.details,
-                            }
-                        } else {
-                            errorMessage = {
-                                ...ErrorGeneral,
-                                message: errorMessages.failedToSignWrongResultFromAPI,
-                                body: resp.message,
-                            }
-                        }
-
+                        var errorMessage = messageToError(resp.message);
                         if (tokenFile.signingType !== signingType.XadesMultiFile) {
                             if (!getStore().tokenFile.noSkipErrors) {
                                 dispatch(setInputsSignState(fileIdToSign, signState.ERROR_SIGN));
@@ -801,15 +784,7 @@ export const signDocument = () => (dispatch, getStore) => {
                         dispatch(navigateToStep(WIZARD_STATE_SUCCES))
                     }
                     else {
-                        if(errorMessages[resp.message]){
-                            dispatch(showErrorMessage({...ErrorGeneral, title : errorMessages.failedToSignWrongResultFromAPI, message : errorMessages[resp.message]}));
-                        }else{
-                            dispatch(showErrorMessage({
-                                ...ErrorGeneral,
-                                message: errorMessages.failedToSignWrongResultFromAPI,
-                                body: resp.message
-                            }))
-                        }
+                        dispatch(showErrorMessage(messageToError(resp.message)));
                     }
 
                 })
@@ -824,6 +799,27 @@ export const signDocument = () => (dispatch, getStore) => {
         dispatch(showErrorMessage(ErrorGeneral))
     }
 }
+
+const messageToError = (message) =>
+{
+    const parsedError = parseErrorMessage(message);
+    if (parsedError && errorMessages[parsedError.type]){
+        return {
+            ...ErrorGeneral,
+            title : errorMessages.failedToSignWrongResultFromAPI,
+            message : errorMessages[parsedError.type],
+            ref : parsedError.ref,
+            errorDetails : parsedError.details
+        }
+    }
+    return {
+        ...ErrorGeneral,
+        message: errorMessages.failedToSignWrongResultFromAPI,
+        body: message
+    }
+}
+
+
 
 let resetWizardClicked = false;
 export const clearResetWizardClicked = () =>
