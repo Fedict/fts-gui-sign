@@ -392,26 +392,34 @@ export const validateCertificates = () => (dispatch, getStore) => {
 
         validateCertificatesAPI(APIBody)
             .then(handleFlowIdError(flowId, getStore))
-            .then((val) => {
-                const indications = val.indications
+            .then((resp) => {
+                let hasRevokedCert = false
                 const newList = certificate.certificateList.map((val, index) => {
-                    const res = indications[index]
-                    if (res.keyUsageCheckOk) {
-                        val.indication = res.indication
-                        val.keyUsageCheckOk = res.keyUsageCheckOk
-                        val.commonName = res.commonName
-                        return val
-                    }
-                    else {
+                    const res = resp.indications[index]
+                    if (!res.keyUsageCheckOk || res.indication !== "PASSED") {
+                        if (res.subIndication === "REVOKED_NO_POE") hasRevokeCert = true
                         return undefined
                     }
+                    val.indication = res.indication
+                    val.keyUsageCheckOk = res.keyUsageCheckOk
+                    val.commonName = res.commonName
+                    return val
                 }).filter(val => val)
 
                 dispatch(saveCertificateList(newList))
 
                 if (newList.length <= 0) {
+                    let errorMessage = MessageCertificatesNotFound;
+                    if (hasRevokedCert) {
+                        errorMessage = {
+                            ...ErrorGeneral,
+                            title : errorMessages.CERT_REVOKED,
+                            message : errorMessages.CERT_REVOKED,
+                        }
+                    }
+
                     //console.log('MessageCertificatesNotFound', val)
-                    dispatch(showErrorMessage(MessageCertificatesNotFound))
+                    dispatch(showErrorMessage(errorMessage))
                 }
                 else {
                     if (newList.length === 1) {
