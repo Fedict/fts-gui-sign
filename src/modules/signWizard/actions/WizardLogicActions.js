@@ -392,26 +392,34 @@ export const validateCertificates = () => (dispatch, getStore) => {
 
         validateCertificatesAPI(APIBody)
             .then(handleFlowIdError(flowId, getStore))
-            .then((val) => {
-                const indications = val.indications
+            .then((resp) => {
+                let hasRevokedCert = false
                 const newList = certificate.certificateList.map((val, index) => {
-                    const res = indications[index]
-                    if (res.keyUsageCheckOk) {
-                        val.indication = res.indication
-                        val.keyUsageCheckOk = res.keyUsageCheckOk
-                        val.commonName = res.commonName
-                        return val
-                    }
-                    else {
+                    const res = resp.indications[index]
+                    if (!res.keyUsageCheckOk || res.indication !== "PASSED") {
+                        if (res.subIndication === "REVOKED_NO_POE") hasRevokedCert = true
                         return undefined
                     }
+                    val.indication = res.indication
+                    val.keyUsageCheckOk = res.keyUsageCheckOk
+                    val.commonName = res.commonName
+                    return val
                 }).filter(val => val)
 
                 dispatch(saveCertificateList(newList))
 
                 if (newList.length <= 0) {
+                    let errorMessage = MessageCertificatesNotFound;
+                    if (hasRevokedCert) {
+                        errorMessage = {
+                            ...ErrorGeneral,
+                            title : errorMessages.CERT_REVOKED,
+                            message : errorMessages.CERT_REVOKED,
+                        }
+                    }
+
                     //console.log('MessageCertificatesNotFound', val)
-                    dispatch(showErrorMessage(MessageCertificatesNotFound))
+                    dispatch(showErrorMessage(errorMessage))
                 }
                 else {
                     if (newList.length === 1) {
@@ -745,24 +753,7 @@ export const signDocument = () => (dispatch, getStore) => {
                         var moreToSign = getStore().tokenFile.inputs.find(input => input.signState === signState.TO_BE_SIGNED);
                         dispatch(navigateToStep(moreToSign ? WIZARD_STATE_DIGEST_LOADING: WIZARD_STATE_SUCCES))
                     } else {
-                        var errorMessage;
-                        const parsedError = parseErrorMessage(resp.message);
-                        if(parsedError && errorMessages[parsedError.type]){
-                            errorMessage = {
-                                ...ErrorGeneral,
-                                title : errorMessages.failedToSignWrongResultFromAPI,
-                                message : errorMessages[parsedError.type],
-                                ref : parsedError.ref,
-                                errorDetails : parsedError.details,
-                            }
-                        } else {
-                            errorMessage = {
-                                ...ErrorGeneral,
-                                message: errorMessages.failedToSignWrongResultFromAPI,
-                                body: resp.message,
-                            }
-                        }
-
+                        var errorMessage = messageToError(resp.message);
                         if (tokenFile.signingType !== signingType.XadesMultiFile) {
                             if (!getStore().tokenFile.noSkipErrors) {
                                 dispatch(setInputsSignState(fileIdToSign, signState.ERROR_SIGN));
@@ -804,15 +795,7 @@ export const signDocument = () => (dispatch, getStore) => {
                         dispatch(navigateToStep(WIZARD_STATE_SUCCES))
                     }
                     else {
-                        if(errorMessages[resp.message]){
-                            dispatch(showErrorMessage({...ErrorGeneral, title : errorMessages.failedToSignWrongResultFromAPI, message : errorMessages[resp.message]}));
-                        }else{
-                            dispatch(showErrorMessage({
-                                ...ErrorGeneral,
-                                message: errorMessages.failedToSignWrongResultFromAPI,
-                                body: resp.message
-                            }))
-                        }
+                        dispatch(showErrorMessage(messageToError(resp.message)));
                     }
 
                 })
@@ -827,6 +810,27 @@ export const signDocument = () => (dispatch, getStore) => {
         dispatch(showErrorMessage(ErrorGeneral))
     }
 }
+
+const messageToError = (message) =>
+{
+    const parsedError = parseErrorMessage(message);
+    if (parsedError && errorMessages[parsedError.type]){
+        return {
+            ...ErrorGeneral,
+            title : errorMessages.failedToSignWrongResultFromAPI,
+            message : errorMessages[parsedError.type],
+            ref : parsedError.ref,
+            errorDetails : parsedError.details
+        }
+    }
+    return {
+        ...ErrorGeneral,
+        message: errorMessages.failedToSignWrongResultFromAPI,
+        body: message
+    }
+}
+
+
 
 let resetWizardClicked = false;
 export const clearResetWizardClicked = () =>
