@@ -2,7 +2,7 @@ import React, { useState, useEffect, useLayoutEffect, useRef } from "react"
 import {useDispatch, useSelector} from "react-redux";
 import {FormattedMessage} from "react-intl";
 import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist'
-import { MANUAL_SIGNATURE, selectSignature, setSignatureArea, setSignatureFields } from '../../reducers/CustomSignatureReducer'
+import { INVISIBLE_SIGNATURE, MANUAL_SIGNATURE, selectSignature, setSignatureArea, setSignatureFields } from '../../reducers/CustomSignatureReducer'
 
 GlobalWorkerOptions.workerSrc = require("pdfjs-dist/build/pdf.worker.entry.js");
 const ZOOM_CORRECTION = 60
@@ -77,6 +77,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     const [currentPDF, setCurrentPDF] = useState(null);
     const [renderPdf, setRenderPdf] = useState(false);
     const [pagesInfo, setPagesInfo] = useState([]);
+    const canvasContainingDivRef = useRef(null);
     const pdfCanvasRef = useRef(null);
     const [canvasWidth, setCanvasWidth] = useState(0);
     const [canvasHeight, setCanvasHeight] = useState(0);
@@ -132,6 +133,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
                 } )
                 dispatch(setSignatureArea(null));
                 dispatch(setSignatureFields(signatureFields));
+                setShowThumbnails(true);
             });
         });
     }, [file.url]);
@@ -209,18 +211,26 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     let dragRect;
     
     useEffect(() => {
+        if (signatureSelected === INVISIBLE_SIGNATURE) return;
+
+        let newPage = undefined;
+        let newRect = undefined;
         if (signatureSelected === MANUAL_SIGNATURE) {
-            if (pageNumber != signatureArea.page) setPageNumber(signatureArea.page);
+                if (pageNumber != signatureArea.page) newPage = signatureArea.page;
+                newRect = signatureArea.rect;
         } else {
             pagesInfo.forEach((pi, index) => {
                 pi.sigAcroforms.forEach((sigAcroForm) => {
                     if (signatureSelected === sigAcroForm.fieldName) {
-                        if (pageNumber != (index + 1)) setPageNumber(index + 1);
-                        return;
+                        if (pageNumber != (index + 1)) newPage = index + 1;
+                        newRect = sigAcroForm.rect;
                     }
                 })
             })
         }
+        if (newPage) setPageNumber(newPage);
+        newRect = scaleRect(newRect, zoomLevel / ZOOM_CORRECTION);
+        canvasContainingDivRef.current.scrollTo( { top: newRect.top, left: newRect.left, behavior: "smooth" });
     }, [signatureSelected])
 
     useLayoutEffect(() => {
@@ -364,7 +374,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     //****************************************************************************************
 
     let btnStyle = { fontSize: "1.3rem", margin: "3px", borderStyle: "solid", borderColor: "rgba(0, 0, 0, 0)", backgroundColor: "rgba(0, 0, 0, 0)" };
-    let pageWidth = (currentPDF ? currentPDF.numPages.toString().length : 1) * 16 +"px";
+    let pageNumberWidth = (currentPDF ? currentPDF.numPages.toString().length : 1) * 1 +"em";
 
     return (
         <div className="container flex-column border" style={ { width:"100%", backgroundColor: "rgba(0, 0, 0, 0.03)" }}>
@@ -380,7 +390,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
                 { pagesInfo.length > 1 &&
                     <div className="col">
                         <button className="px-2" style={btnStyle} onClick={() => { changePageNumber(pageNumber - 1) }} disabled={ pageNumber <= 1}><b>-</b></button>
-                        <input type="text" style={{borderStyle: "none", height: "30px", backgroundColor: "lightgrey", width: pageWidth }} size="1" value={ pageNumberStr } onChange={ (e) => changePageNumberStr(e.target.value)}></input> / { currentPDF.numPages }
+                        <input type="text" style={{borderStyle: "none", height: "30px", backgroundColor: "lightgrey", width: pageNumberWidth }} size="1" value={ pageNumberStr } onChange={ (e) => changePageNumberStr(e.target.value)}></input> / { currentPDF.numPages }
                         <button  className="px-2" style={btnStyle} onClick={() => { changePageNumber(pageNumber + 1) }} disabled={ currentPDF && pageNumber >= currentPDF.numPages}><b>+</b></button>
                     </div>
                 }
@@ -401,7 +411,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
                             style={ pageNumber === (pageIndex + 1) ?  { border: "double" } : {} } />
                     ))}</div>
                 }
-                <div className="col" style={{ overflow: "auto", height: "80vh" }}>
+                <div className="col" ref={canvasContainingDivRef} style={{ overflow: "auto", height: "80vh" }}>
                     <canvas id="pdf-canvas" ref={pdfCanvasRef} width={canvasWidth} height ={canvasHeight} style= { { position: "absolute", left: "0", top: "0", zIndex: "0" } } />
                     <canvas id="pdf-canvasSelection" ref={selectionCanvasRef} width={canvasWidth} height ={canvasHeight} style= { { position: "absolute", left: "0", top: "0", zIndex: "1" } } />
                 </div>
