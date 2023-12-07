@@ -272,7 +272,7 @@ export const UploadFileContainer = (props) => {
                             <b style={ props.signatureArea === null && props.signatureFields.length === 0 ? disbledTextColor : {} }><FormattedMessage id="signing.upload.select.signature" defaultMessage="Select the signature field to sign"/></b><br/>
                             <input className="mt-3" type="radio" id="sig_inv" key="invisible" checked={ props.signatureSelected === INVISIBLE_SIGNATURE }
                                 onChange={ () => {props.selectSignature(INVISIBLE_SIGNATURE)} }
-                                name="sigSel"/>&nbsp;<label htmlFor="sig_no"><FormattedMessage id="signing.upload.visible.signature" defaultMessage="Invisible Signature" /></label><br/>
+                                name="sigSel"/>&nbsp;<label htmlFor="sig_inv"><FormattedMessage id="signing.upload.visible.signature" defaultMessage="Invisible Signature" /></label><br/>
                             <input type="radio" id="sig_man" key="manualSignature" checked={props.signatureSelected === MANUAL_SIGNATURE}
                                     disabled={props.signatureArea === null} onChange={ () => {props.selectSignature(MANUAL_SIGNATURE)} }
                                     name="sigSel"/>&nbsp;<label htmlFor="sig_man"><FormattedMessage id="signing.upload.manual.signature" defaultMessage="Manual signature"/></label><br/>
