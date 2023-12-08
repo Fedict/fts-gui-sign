@@ -390,13 +390,13 @@ export const DisplayPDF = ({ file, drawSignature }) => {
                 { pagesInfo.length > 1 &&
                     <div className="col">
                         <button className="px-2" style={btnStyle} onClick={() => { changePageNumber(pageNumber - 1) }} disabled={ pageNumber <= 1}><b>-</b></button>
-                        <input type="text" style={{borderStyle: "none", height: "30px", backgroundColor: "lightgrey", width: pageNumberWidth }} size="1" value={ pageNumberStr } onChange={ (e) => changePageNumberStr(e.target.value)}></input> / { currentPDF.numPages }
+                        <input type="text" style={{borderStyle: "none", height: "1.6em", backgroundColor: "lightgrey", width: pageNumberWidth }} size="1" value={ pageNumberStr } onChange={ (e) => changePageNumberStr(e.target.value)}></input> / { currentPDF.numPages }
                         <button  className="px-2" style={btnStyle} onClick={() => { changePageNumber(pageNumber + 1) }} disabled={ currentPDF && pageNumber >= currentPDF.numPages}><b>+</b></button>
                     </div>
                 }
                 <div className="col">
                     <button className="px-2" style={btnStyle} onClick={() => { setZoomLevel(predZoom()) }} disabled={ predZoom() === zoomLevel}><b>-</b></button>
-                    <input type="text" style={{borderStyle: "none", height: "30px", backgroundColor: "lightgrey" }} size="1" value={ zoomLevel + '%' } onChange={ (e) => setZoomLevelStr(e.target.value)}></input>
+                    <input type="text" style={{borderStyle: "none", height: "1.6em", width: "3em", backgroundColor: "lightgrey" }} size="1" value={ zoomLevel + '%' } onChange={ (e) => setZoomLevelStr(e.target.value)}></input>
                     <button  className="px-2" style={btnStyle} onClick={() => { setZoomLevel(nextZoom()) }} disabled={ nextZoom() === zoomLevel }><b>+</b></button>
                 </div>
             </div>
