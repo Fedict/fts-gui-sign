@@ -150,8 +150,8 @@ export const UploadFileContainer = (props) => {
                                 ?
                                 <>
                                     <li><NumberdText number="1"><FormattedMessage id="signing.upload.text.step.1"
-                                        defaultMessage="Select or 'drag & drop' the document (pdf or xml)."
-                                        values={{ b: boldedText, selectDocumentButton: intl.formatMessage({ id: "signing.upload.selectDocument", defaultMessage: "Select a document" }) }}
+                                        defaultMessage="Select or 'drag & drop' the document (pdf or xml, max. {maxSize}Mb)."
+                                        values={{ b: boldedText, maxSize: maxSize, selectDocumentButton: intl.formatMessage({ id: "signing.upload.selectDocument", defaultMessage: "Select a document" }) }}
                                     /></NumberdText></li>
                                     <li><NumberdText number="2"><FormattedMessage id="signing.upload.text.step.2" defaultMessage="Connect your eID reader." /></NumberdText></li>
                                     <li><NumberdText number="3"><FormattedMessage id="signing.upload.text.step.3" defaultMessage="Insert your eID card in the card reader." /></NumberdText></li>

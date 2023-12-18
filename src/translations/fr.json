@@ -136,7 +136,7 @@
   "signing.upload.selectDocument": "Sélectionnez un document",
   "signing.upload.selectedDocument": "Document sélectionné :",
   "signing.upload.noDocumentSelected": "aucun document sélectionné",
-  "signing.upload.text.step.1": "Sélectionnez ou faites glisser le document (pdf ou xml).",
+  "signing.upload.text.step.1": "Sélectionnez ou faites glisser le document (pdf ou xml, max. {maxSize}Mo).",
   "signing.upload.text.step.2": "Connectez votre lecteur eID.",
   "signing.upload.text.step.3": "Insérez votre carte d'identité électronique dans le lecteur de cartes.",
   "signing.upload.text.step.4": "Cliquez sur le bouton <b>{signButton}</b> et entrez votre code PIN lorsqu'il vous est demandé.",

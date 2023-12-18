@@ -136,7 +136,7 @@
   "signing.upload.selectDocument": "Wählen Sie ein Dokument aus",
   "signing.upload.selectedDocument": "Ausgewähltes Dokument:",
   "signing.upload.noDocumentSelected": "Es wurde noch kein Dokument ausgewählt.",
-  "signing.upload.text.step.1": "Dokument (.pdf oder .xml) über die Schaltfläche auswählen oder per Drag-and-drop hinzufügen.",
+  "signing.upload.text.step.1": "Dokument (pdf oder xml, maximale dokumentengröße {maxSize}MB) über die Schaltfläche auswählen oder per Drag-and-drop hinzufügen.",
   "signing.upload.text.step.2": "Schließen Sie Ihr eID-Lesegerät an.",
   "signing.upload.text.step.3": "Führen Sie Ihren elektronischen Personalausweis in das Kartenlesegerät ein.",
   "signing.upload.text.step.4": "Klicken Sie auf die Schaltfläche <b>{signButton}</b> und geben Sie Ihre PIN ein, wenn Sie dazu aufgefordert werden.",
