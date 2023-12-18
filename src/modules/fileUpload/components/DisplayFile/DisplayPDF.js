@@ -139,15 +139,19 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     }, [file.url]);
 
     useEffect(() => {
-        if (thumbnailsRendered || !currentPDF) return;
+        const curThumbCanvasRefs = thumbCanvasRefs.current;
+        if (thumbnailsRendered || !currentPDF || !curThumbCanvasRefs || curThumbCanvasRefs.length < currentPDF.numPages) return;
 
         for(let thumbIndex = 0; thumbIndex < currentPDF.numPages; thumbIndex++) {
             currentPDF.getPage(thumbIndex + 1).then(function (thumbPage) {
-                thumbPage.render({
-                    canvasContext: thumbCanvasRefs.current[thumbIndex].getContext('2d'),
-                    viewport: thumbPage.getViewport({ scale: 0.1 }),
-                    textContent: currentPDF,
-                });
+                const canvasContext = thumbCanvasRefs.current[thumbIndex];
+                if (canvasContext) {
+                    thumbPage.render({
+                        canvasContext: canvasContext.getContext('2d'),
+                        viewport: thumbPage.getViewport({ scale: 0.1 }),
+                        textContent: currentPDF,
+                    });
+                    }
             })
         }
         setThumbnailsRendered(true);
