@@ -29,7 +29,7 @@ export const ResultContainer = (props) => {
                 title={intl.formatMessage(messages.title)}
                 hasNextButton
                 nextButtonText={intl.formatMessage(messages.next)}
-                onClickNext={() => { resetWizard() }}
+                onClickNext={() => { props.resetWizard() }}
                 predButtonText={ <FormattedMessage id="report.download.link" defaultMessage="Download full report"/> }
                 onClickPred={() => saveAs(new Blob([report], {type: "application/xml;charset=utf-8"}), "report.xml")}
             >
