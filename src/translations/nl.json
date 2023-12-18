@@ -136,7 +136,7 @@
   "signing.upload.selectDocument": "Selecteer een document",
   "signing.upload.selectedDocument": "Geselecteerde document:",
   "signing.upload.noDocumentSelected": "nog geen document geselecteerd",
-  "signing.upload.text.step.1": "Selecteer of versleep het document (pdf of xml).",
+  "signing.upload.text.step.1": "Selecteer of versleep het document (pdf of xml, max. {maxSize}Mb).",
   "signing.upload.text.step.2": "Connecteer je eID-kaartlezer.",
   "signing.upload.text.step.3": "Steek je eID-kaart in de kaartlezer.",
   "signing.upload.text.step.4": "Klik op de knop <b>{signButton}</b> en geef je pincode in wanneer gevraagd.",
