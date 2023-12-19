@@ -69,7 +69,7 @@ const getPagesInfo = async (pdf) => {
  * Component to display a PDF, select a rectangle where a visible signature (acroform) will be added 
  * @param {object} props.drawSignature - the user is allowed to draw a signature in the PDF  
  * @param {object} props.file - file that is shown
- * @param {string} props.file.name - name of the file
+ * @param {string} props.file.fileName - name of the file
  * @param {object} props.file.url - dataURL for the file
  */
 export const DisplayPDF = ({ file, drawSignature }) => {
@@ -390,7 +390,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
                         <div onClick={() => { setShowThumbnails(!showThumbnails) }} style={{ fontSize: "1.4rem", cursor: "pointer" }}>☰</div>
                     </div>
                 }
-                <div className="col" style={{ marginTop: "10px"}}>{ file.name }</div>
+                <div className="col" style={{ marginTop: "10px"}}>{ file.fileName }</div>
                 { pagesInfo.length > 1 &&
                     <div className="col">
                         <button className="px-2" style={btnStyle} onClick={() => { changePageNumber(pageNumber - 1) }} disabled={ pageNumber <= 1}><b>-</b></button>

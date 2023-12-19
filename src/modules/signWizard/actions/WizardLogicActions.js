@@ -787,11 +787,10 @@ export const signDocument = () => (dispatch, getStore) => {
                 certificate.certificateSelected.photo)
                 .then(handleFlowIdError(flowId, getStore))
                 .then((resp) => {
-
                     if (resp
                         && resp.name
                         && resp.bytes) {
-                        dispatch(setDownloadFile(resp))
+                        dispatch(setDownloadFile( { bytes: resp.bytes, fileName: resp.name } ))
                         dispatch(navigateToStep(WIZARD_STATE_SUCCES))
                     }
                     else {

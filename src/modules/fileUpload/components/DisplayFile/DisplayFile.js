@@ -10,7 +10,7 @@ import { DisplayPDF } from "./DisplayPDF";
  * @param {object} props.uploadFile - upload file object from the redux store 
  * @param {object} props.uploadFile.displayFile - file that is shown 
  * @param {boolean} props.uploadFile.displayFile.isPdf - indicates if the file is a pdf
- * @param {string} props.uploadFile.displayFile.name - name of the file
+ * @param {string} props.uploadFile.displayFile.fileName - name of the file
  * @param {object} props.uploadFile.displayFile.url - dataURL for the file
  */
 export const DisplayFile = ({ uploadFile, drawSignature }) => {
@@ -30,20 +30,20 @@ export const DisplayFile = ({ uploadFile, drawSignature }) => {
         )
     }
     
-    const data = uploadFile.displayFile
-    if (!data.isPdf) {
+    const file = uploadFile.displayFile
+    if (!file.isPdf) {
         const dataNotVisualizable = <Fragment>
             <p><FormattedMessage id="file.download.text.1" defaultMessage="The document to sign can't be previewed but you can download it by right-clicking on the link below and selecting the option 'save-link-as'."/></p>
         </Fragment>
 
         return <div>
-            {data.isXml && <XmlDataViewer key={data.url} data={data.url} xslt={data.xsltUrl} previewErrorRenderer={() => (
+            {file.isXml && <XmlDataViewer key={file.url} data={file.url} xslt={file.xsltUrl} previewErrorRenderer={() => (
                 dataNotVisualizable
             )}></XmlDataViewer>}
-            <p><a href={data.url} download={data.fileName} title={data.fileName}><FormattedMessage id="file.download.link" defaultMessage="Download the file to sign."/></a></p>
+            <p><a href={file.url} download={file.fileName} title={file.fileName}><FormattedMessage id="file.download.link" defaultMessage="Download the file to sign."/></a></p>
         </div>
     }
 
-    return <DisplayPDF file={data} drawSignature={drawSignature} />;
+    return <DisplayPDF file={file} drawSignature={drawSignature} />;
 }
 
