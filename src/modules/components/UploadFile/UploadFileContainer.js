@@ -155,9 +155,8 @@ export const UploadFileContainer = (props) => {
                                     /></NumberdText></li>
                                     <li><NumberdText number="2"><FormattedMessage id="signing.upload.text.step.2" defaultMessage="Connect your eID reader." /></NumberdText></li>
                                     <li><NumberdText number="3"><FormattedMessage id="signing.upload.text.step.3" defaultMessage="Insert your eID card in the card reader." /></NumberdText></li>
-                                    <li><NumberdText number="4"><FormattedMessage id="signing.upload.text.step.4"
-                                        defaultMessage="Click on the button <b>{signButton}</b> and enter your pincode when asked."
-                                        values={{ b: boldedText, signButton: intl.formatMessage({ id: "signing.pininput.button.sign", defaultMessage: "Sign with eID" }) }}
+                                    <li><NumberdText number="4"><FormattedMessage id="signing.upload.text.step.4" defaultMessage="Click on the button <b>{signButton}</b> and enter your pincode when asked."
+                                        values={{ b: boldedText, signButton: intl.formatMessage( messages.next ) }}
                                     /></NumberdText></li>
                                 </>
                                 :
@@ -264,7 +263,7 @@ export const UploadFileContainer = (props) => {
                         <li><div className="row mb-4"><div className="col col-1"><span className="badge badge-primary p-1">1</span></div><div className="col col-11"><b>
                         { props.signatureFields.length === 0 ?
                                 <FormattedMessage id="signing.upload.no.signature" defaultMessage="Draw a signature by dragging a rectangle in the document preview" /> : 
-                                <FormattedMessage id="signing.upload.exisitng.signature" defaultMessage="A predefined signature field was found in the document. If you wish to use it, select it below. {br} You can also create your own signature field by dragging a rectangle in the document preview." values={ { br: <br/> }} />
+                                <FormattedMessage id="signing.upload.exisitng.signature" defaultMessage="A predefined signature field was found in the document. If you wish to use it, select it below.{br}You can also create your own signature field by dragging a rectangle in the document preview." values={ { br: <br/> }} />
                         }
                         </b></div></div></li>
                         <li><div className="row mb-4"><div className="col col-1">

@@ -45,8 +45,8 @@ export class CertificateChooseContainer extends React.Component {
                     onClickNext={() => { this.navigateToNextStep() }}
                     nextButtonIsDisabled={(certificate && !certificate.certificateSelected)}
                 >
-                    <p><FormattedMessage id="certificate.choose.text.1" defaultMessage='Multiple valid certificates were found. Please select the certificate you want to use."</a>'/></p>
-                    <p><FormattedMessage id="certificate.choose.text.link" defaultMessage='<a>I get the message that multiple valid certificats were found|https://bosa.belgium.be/en/federal-trust-services-frequently-asked-questions#1</a>'
+                    <p><FormattedMessage id="certificate.choose.text.1" defaultMessage="Multiple valid certificates were found. Please select the certificate you want to use."/></p>
+                    <p><FormattedMessage id="certificate.choose.text.link" defaultMessage="<a>I get the message that multiple valid certificats were found|https://bosa.belgium.be/en/federal-trust-services-frequently-asked-questions#1</a>"
                             values = {{ a: msg => ( <a href={msg.split('|')[1]}>{msg.split('|')[0]}</a>
                             )}}
                             /></p>
