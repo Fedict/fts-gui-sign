@@ -141,7 +141,7 @@
   "signing.upload.text.step.4": "Klik op de knop <b>{signButton}</b> en geef je pincode in wanneer gevraagd.",
   "signing.upload.visible.signature": "Onzichtbare handtekening",
   "signing.upload.select.signature": "Selecteer het handtekenveld om te ondertekenen",
-  "signing.upload.exisitng.signature": "In het document is een voorgedefinieerde handtekenveld gevonden. Als deze wenst te gebruiken, selecteer dat hieronder.{br}Je kan ook zelf een handtekenveld maken door een rechthoek te slepen in de preview van de document.",
+  "signing.upload.existing.signature": "Display in existing signature field ''{sigField}''",
   "signing.upload.no.signature": "Teken een handtekening door een rechthoek te slepen in de preview van de document", 
   "signing.upload.photo.signature": "Er kan en profielfoto toegevoegd worden aan je handtekening",
   "signing.upload.photo.choice": "Voeg foto toe",

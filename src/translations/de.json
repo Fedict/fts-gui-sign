@@ -141,7 +141,7 @@
   "signing.upload.text.step.4": "Klicken Sie auf die Schaltfläche <b>{signButton}</b> und geben Sie Ihre PIN ein, wenn Sie dazu aufgefordert werden.",
   "signing.upload.visible.signature": "Unsichtbare signatur",
   "signing.upload.select.signature": "Wählen Sie das zu unterzeichnende Feld aus",
-  "signing.upload.exisitng.signature": "In dem Dokument wurde ein vordefiniertes Unterschriftsfeld gefunden. Wenn Sie es verwenden möchten, wählen Sie es unten aus.{br}Sie können auch ein eigenes Signaturfeld erstellen, indem Sie ein Rechteck in der Dokumentenvorschau aufziehen.",
+  "signing.upload.existing.signature": "Display in existing signature field ''{sigField}''",
   "signing.upload.no.signature": "Zeichnen einer Unterschrift durch Ziehen eines Rechtecks in der Dokumentenvorschau", 
   "signing.upload.photo.signature": "Ein Profilbild kann zu Ihrer Signatur hinzugefügt werden",
   "signing.upload.photo.choice": "Foto hinzufügen",

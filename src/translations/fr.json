@@ -141,7 +141,7 @@
   "signing.upload.text.step.4": "Cliquez sur le bouton <b>{signButton}</b> et entrez votre code PIN lorsqu'il vous est demandé.",
   "signing.upload.visible.signature": "Signature invisible",
   "signing.upload.select.signature": "Sélectionnez le champ de signature",
-  "signing.upload.exisitng.signature": "Un champ de signature prédéfini a été trouvé dans le document. Si vous souhaitez l'utiliser, sélectionnez-le ci-dessous.{br}Vous pouvez également créer votre propre champ de signature en faisant glisser un rectangle dans l'aperçu du document.",
+  "signing.upload.existing.signature": "Display in existing signature field ''{sigField}''",
   "signing.upload.no.signature": "Dessinez une signature en faisant glisser un rectangle dans l'aperçu du document.", 
   "signing.upload.photo.signature": "Une photo de profil peut être ajoutée à votre signature",
   "signing.upload.photo.choice": "Ajouter une photo",
