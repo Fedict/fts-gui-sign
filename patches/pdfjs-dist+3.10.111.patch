@@ -1,0 +1,12 @@
+diff --git a/node_modules/pdfjs-dist/build/pdf.worker.js b/node_modules/pdfjs-dist/build/pdf.worker.js
+index 9fdb727..5911d11 100644
+--- a/node_modules/pdfjs-dist/build/pdf.worker.js
++++ b/node_modules/pdfjs-dist/build/pdf.worker.js
+@@ -5311,6 +5311,7 @@ class WidgetAnnotation extends Annotation {
+       key: "V",
+       getArray: true
+     });
++    data.BoSa_hasValue = fieldValue !== undefined;
+     data.fieldValue = this._decodeFormValue(fieldValue);
+     const defaultFieldValue = (0, _core_utils.getInheritableProperty)({
+       dict,

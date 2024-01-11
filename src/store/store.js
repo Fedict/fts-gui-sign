@@ -1,10 +1,6 @@
 import thunk from "redux-thunk";
-import {
-    compose,
-    applyMiddleware,
-    combineReducers,
-    createStore
-} from "redux";
+import { compose, applyMiddleware, combineReducers, createStore } from "redux";
+
 import wizardReducer from '../modules/wizard/WizardReducer'
 import UploadFileReducer from "../modules/fileUpload/reducers/UploadFileReducer";
 import MessageReducer from "../modules/message/reducers/MessageReducer";
@@ -18,6 +14,8 @@ import ControlIdReducer from "../modules/controlIds/common/ControlIdReducer";
 import i18nReducer from "../modules/i18n/reducers/i18nReducer";
 import TokenReducer from "../modules/signByTokenWizard/reducers/tokenReducers";
 import FilePreviewReducer from "../modules/signByTokenWizard/reducers/FilePreviewReducers";
+import CustomSignatureReducer from "../modules/fileUpload/reducers/CustomSignatureReducer";
+
 /*
 Middleware to accept an array as action, quite useful sometimes
  */
@@ -53,7 +51,8 @@ export default function configureStore(initialState = {}) {
         pinError: PinErrorReducer,
         reader: ReaderReducer,
         validation: ValidationReducer,
-        controlId: ControlIdReducer
+        controlId: ControlIdReducer,
+        customSignatures: CustomSignatureReducer
     })
 
     return createStore(rootReducer, initialState, enhancer)

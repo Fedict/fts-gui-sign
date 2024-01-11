@@ -34,7 +34,7 @@ export const CardError = injectIntl((
         intl
     }
 ) => {
-    const faqGeneric = { id: "error.faq.generic", defaultMessage: "I get the message ‘{error}’."}
+    const faqGeneric = { id: "error.faq.generic", defaultMessage: "Help, I get the message ‘{error}’."}
 
     if(cancelButtonText && cancelButtonText.id){
         cancelButtonText = intl.formatMessage(cancelButtonText)

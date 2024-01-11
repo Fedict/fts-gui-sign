@@ -1860,7 +1860,7 @@ describe("WizardLogicActions", () => {
             })
             getDigest()(mockDispatch, mockGetStore)
             expect(communication.getDataToSignAPI).toBeCalledTimes(1)
-            expect(communication.getDataToSignAPI).toBeCalledWith(mockapiBody, mockFile, expect.anything())
+            expect(communication.getDataToSignAPI).toBeCalledWith(mockapiBody, mockFile, expect.anything(), undefined, undefined)
 
         })
 
@@ -2538,7 +2538,7 @@ describe("WizardLogicActions", () => {
             })
             signDocument()(mockDispatch, mockGetStore)
             expect(signDocumentAPI).toBeCalledTimes(1)
-            expect(signDocumentAPI).toBeCalledWith(mockApiBody, mockFile, mockSignatureString, mockSigningDate)
+            expect(signDocumentAPI).toBeCalledWith(mockApiBody, mockFile, mockSignatureString, mockSigningDate, undefined, undefined)
         })
 
         test("signDocument success handleFlowIdError", () => {
@@ -2570,7 +2570,6 @@ describe("WizardLogicActions", () => {
         })
 
         test("signDocument success setDownloadFile", async () => {
-            const response = { name: "filename", bytes: "bytestring" }
             const mockApiBody = {
                 certificate: {
                     encodedCertificate: 'certificate string'
@@ -2593,12 +2592,12 @@ describe("WizardLogicActions", () => {
 
             })
 
-            communication.signDocumentAPI = jest.fn(() => { return Promise.resolve(response) })
+            communication.signDocumentAPI = jest.fn(() => { return Promise.resolve({ name: "filename", bytes: "bytestring" }) })
             signDocument()(mockDispatch, mockGetStore)
 
             await flushPromises()
             expect(setDownloadFile).toBeCalledTimes(1)
-            expect(setDownloadFile).toBeCalledWith(response)
+            expect(setDownloadFile).toBeCalledWith({ fileName: "filename", bytes: "bytestring" })
             expect(navigateToStep).toHaveBeenLastCalledWith(WIZARD_STATE_SUCCES)
         })
 

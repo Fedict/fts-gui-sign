@@ -132,7 +132,7 @@ export const errorMessages = defineMessages({
     },
     PARSE_ERROR : {
         id: "error.PARSE_ERROR",
-        defaultMessage: "Couldn\"t parse request."
+        defaultMessage: "Couldn't parse request."
     },
     NOT_ALLOWED_TO_SIGN : {
         id: "error.NOT_ALLOWED_TO_SIGN",

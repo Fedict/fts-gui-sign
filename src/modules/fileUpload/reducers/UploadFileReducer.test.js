@@ -20,7 +20,7 @@ describe(("UploadFileReducer"), () => {
             expect(result.isPdf).toBeFalsy()
             expect(result.isXml).toBeFalsy()
             expect(result.url).toEqual("")
-            expect(result.name).toBe(startFileName)
+            expect(result.fileName).toBe(startFileName)
         })
 
         test("getDisplayFileData creates correct object with filetype application/pdf", () => {
@@ -33,7 +33,7 @@ describe(("UploadFileReducer"), () => {
             expect(result.isPdf).toBeTruthy()
             expect(result.isXml).toBeFalsy()
             expect(result.url).toEqual(expectedUrl)
-            expect(result.name).toBe(startFileName)
+            expect(result.fileName).toBe(startFileName)
 
             expect(URL.createObjectURL).toHaveBeenCalledTimes(1)
             expect(URL.createObjectURL.mock.calls[0][0]).toEqual(startFile)
@@ -49,7 +49,7 @@ describe(("UploadFileReducer"), () => {
             expect(result.isPdf).toBeFalsy()
             expect(result.isXml).toBeTruthy()
             expect(result.url).toEqual(expectedUrl)
-            expect(result.name).toBe(startFileName)
+            expect(result.fileName).toBe(startFileName)
 
             expect(URL.createObjectURL).toHaveBeenCalledTimes(1)
             expect(URL.createObjectURL.mock.calls[0][0]).toEqual(startFile)
@@ -65,7 +65,7 @@ describe(("UploadFileReducer"), () => {
             expect(result.isPdf).toBeFalsy()
             expect(result.isXml).toBeTruthy()
             expect(result.url).toEqual(expectedUrl)
-            expect(result.name).toBe(startFileName)
+            expect(result.fileName).toBe(startFileName)
 
             expect(URL.createObjectURL).toHaveBeenCalledTimes(1)
             expect(URL.createObjectURL.mock.calls[0][0]).toEqual(startFile)
@@ -77,7 +77,7 @@ describe(("UploadFileReducer"), () => {
             expect(result.isPdf).toBeFalsy()
             expect(result.isXml).toBeFalsy()
             expect(result.url).toEqual("")
-            expect(result.name).toBe("")
+            expect(result.fileName).toBe("")
         })
 
         test("getDisplayFileData creates correct object with empty file object", () => {
@@ -86,7 +86,7 @@ describe(("UploadFileReducer"), () => {
             expect(result.isPdf).toBeFalsy()
             expect(result.isXml).toBeFalsy()
             expect(result.url).toEqual("")
-            expect(result.name).toBe("")
+            expect(result.fileName).toBe("")
         })
 
         afterEach(() => {

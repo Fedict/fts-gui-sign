@@ -559,13 +559,14 @@ export const getDigest = () => (dispatch, getStore) => {
     const store = getStore()
     const { certificate } = store
     const { uploadFile } = store
-        const signingDate = moment().format();
+    const { customSignatures } = store
+    const signingDate = moment().format();
     dispatch(setDateSigning(signingDate))
     if (certificate
         && certificate.certificateSelected
         && certificate.certificateSelected.APIBody) {
         const flowId = getStore().controlId.flowId
-        getDataToSignAPI(certificate.certificateSelected.APIBody, uploadFile.file, signingDate)
+        getDataToSignAPI(certificate.certificateSelected.APIBody, uploadFile.file, signingDate, customSignatures, certificate.certificateSelected.photo)
             .then(handleFlowIdError(flowId, getStore))
             .then((resp) => {
                 if(resp.digest && resp.digestAlgorithm && resp.signingDate) {
@@ -715,7 +716,7 @@ export const sign = (pin) => (dispatch, getStore) => {
  */
 export const signDocument = () => (dispatch, getStore) => {
 
-    const { certificate, signature, uploadFile, tokenFile } = getStore()
+    const { certificate, signature, uploadFile, tokenFile, customSignatures } = getStore()
 
     if (certificate
         && certificate.certificateSelected
@@ -757,7 +758,7 @@ export const signDocument = () => (dispatch, getStore) => {
                             if (!getStore().tokenFile.noSkipErrors) {
                                 dispatch(setInputsSignState(fileIdToSign, signState.ERROR_SIGN));
                                 moreToSign =  getStore().tokenFile.inputs.find(input => input.signState === signState.TO_BE_SIGNED);
-                                errorMessage.predButton = { text: { id: "signing.error.retryButton", defaultMessage: "Try again" }, action: () => {
+                                errorMessage.predButton = { text: { id: "button.retry", defaultMessage: "Try again" }, action: () => {
                                     dispatch(setInputsSignState(fileIdToSign, signState.TO_BE_SIGNED)) },
                                     nextPage: WIZARD_STATE_DIGEST_LOADING }
                                 errorMessage.nextButton = { isVisible: true, text: { id: "signing.error.skipButton", defaultMessage: "Skip file" }, action: () => {
@@ -781,14 +782,15 @@ export const signDocument = () => (dispatch, getStore) => {
                 certificate.certificateSelected.APIBody,
                 uploadFile.file,
                 signature.signature,
-                signature.signingDate)
+                signature.signingDate,
+                customSignatures,
+                certificate.certificateSelected.photo)
                 .then(handleFlowIdError(flowId, getStore))
                 .then((resp) => {
-
                     if (resp
                         && resp.name
                         && resp.bytes) {
-                        dispatch(setDownloadFile(resp))
+                        dispatch(setDownloadFile( { bytes: resp.bytes, fileName: resp.name } ))
                         dispatch(navigateToStep(WIZARD_STATE_SUCCES))
                     }
                     else {

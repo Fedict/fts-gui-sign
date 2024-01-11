@@ -107,7 +107,7 @@ export const WizardContainer = ({ wizard, reader, resetWizard }) => {
         <div >
             <div className={"row mx-5 mt-3"}>
                 <div className={"col col-sm-6"} style={{ minWidth: '320px' }}>
-                    <DisplayFile />
+                    <DisplayFile drawSignature={ true } />
                 </div>
                 <div className={"col col-sm-6"}>
                     {content}

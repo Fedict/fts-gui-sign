@@ -57,7 +57,7 @@ export const ErrorNotSupported = {
                     <li><FormattedMessage id="error.browser_not_supported.supported.5" defaultMessage="Opera (based on Chromium)"/></li>
                 </ul>
             </div>
-            <p><FormattedMessage id="error.browser_not_supported.link" defaultMessage='<a>In which browsers does the signature service work?|https://bosa.belgium.be/en/federal-trust-services-frequently-asked-questions#12</a>'
+            <p><FormattedMessage id="error.browser_not_supported.link" defaultMessage="<a>In which browsers does the signature service work?|https://bosa.belgium.be/en/federal-trust-services-frequently-asked-questions#12</a>"
                             values = {{ a: msg => ( <a href={msg.split('|')[1]}>{msg.split('|')[0]}</a>
                             )}}
                             /></p>

@@ -26,7 +26,7 @@ export const getDisplayFileData = (file) => {
         let data = {
             isPdf: false,
             isXml: false,
-            name: file.name || "",
+            fileName: file.name || "",
             url: ""
         }
         switch (type) {
@@ -49,7 +49,7 @@ export const getDisplayFileData = (file) => {
     return {
         isPdf: false,
         isXml: false,
-        name: "",
+        fileName: "",
         url: ""
     }
 }
