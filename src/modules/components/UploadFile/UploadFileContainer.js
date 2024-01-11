@@ -315,25 +315,3 @@ const mapDispatchToProps = ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(UploadFileContainer))
-
-
-
-
-
-/*
-1. Choose the place where you want to put your signature by drawing a rectangle at the desired location with your mouse.
-
-2. Confirm the display of your signature in this document:
-
-Display in manually drawn signature field
-
-Display in existing signature field X
-
-...
-
-No display (signature without illustration)
-
-3. A profile photo can be added to your signature.
-
-Add profile picture
-*/
