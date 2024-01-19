@@ -3,8 +3,9 @@ import { connect } from 'react-redux'
 import {FormattedMessage} from 'react-intl';
 
 import {getBEUrl} from "../../../utils/helper";
-import {setPreviewFileId, setInputsSignState, SET_ALL_INPUTS} from "../../actions/TokenActions";
+import {setPreviewFileId, setInputsSignState, setCustomSignature, SET_ALL_INPUTS} from "../../actions/TokenActions";
 import {signState} from "../../constants";
+import { setSignAttributes } from '../../../../modules/fileUpload/reducers/CustomSignatureReducer';
 import {doSendLogInfo} from "../../../signWizard/actions/WizardLogicActions";
 
 
@@ -17,17 +18,27 @@ import {doSendLogInfo} from "../../../signWizard/actions/WizardLogicActions";
  * @param {array} previewDocuments - display mode : if true display selectable icon list, else display list of downloadble urls
  * @param {array} selectedInputId - the curently selected icon
  */
-export const TokenDisplayFileList = ({ tokenFile, selectedInputId, setPreviewFileId, setInputsSignState, doSendLogInfo }) => {
+export const TokenDisplayFileList = ({ tokenFile, selectedInputId, customSignature, setPreviewFileId, setCustomSignature, setSignAttributes, setInputsSignState, doSendLogInfo }) => {
+
+    const inputs = tokenFile.inputs.map((input, index) => {
+        var iconType = "UNK"
+        if (input.mimeType === "application/pdf") iconType = "PDF"
+        else if (input.mimeType === "application/xml") iconType = "XML"
+        return { ...input, iconType, url: getBEUrl() + '/signing/getFileForToken/' + tokenFile.token + "/DOC/" + index, cleanFileName: input.fileName.replace(/\.[^.]*$/, '') };
+    });
+
     if (tokenFile.previewDocuments) {
-        let allNone = tokenFile.inputs.find((input) => (input.signState === signState.DONT_SIGN)) ?
+        const allNone = inputs.find((input) => (input.signState === signState.DONT_SIGN)) ?
                 { set: signState.SIGN_REQUESTED, id: "all", txt: "SELECT ALL" } :
                 { set: signState.DONT_SIGN, id: "none", txt: "UNSELECT ALL" }
         return (
         <div className="col-md-auto text-center">
             { tokenFile.selectDocuments && 
                 <a href="#" onClick={ () => setInputsSignState(SET_ALL_INPUTS, allNone.set) }><b><FormattedMessage id = { "token.documents.select." + allNone.id } defaultMessage={ allNone.txt }/></b></a> }
-            {( tokenFile.inputs.map((input, index) => ( 
-                <div className="m-2 p-2 text-break" key={index} onClick={() => setPreviewFileId(index)}
+            {( inputs.map((input, index) => ( 
+                <div className="m-2 p-2 text-break" key={index} onClick={() => { 
+                    setCustomSignature(selectedInputId, customSignature); setPreviewFileId(index);  setSignAttributes(inputs[index].customSignature);
+                 } }
                        style={ selectedInputId !== index ?  { width: 110 } : 
                          { width: 110, backgroundColor: "grey", borderRadius: "3px", border: "1px solid" }}>
                     <div style={{ paddingTop: -20, border: "solid 1px lightgrey", height:70, backgroundColor: "white", position: "relative" }}>
@@ -49,7 +60,7 @@ export const TokenDisplayFileList = ({ tokenFile, selectedInputId, setPreviewFil
     return (
     <div className="col">
         <p><b><FormattedMessage id = "token.documents.list" defaultMessage="DOCUMENTS TO SIGN"/></b></p>
-        {(tokenFile.inputs.map((input, index) => ( 
+        {(inputs.map((input, index) => ( 
             <div className="m-2 p-2" key={index} style={{ border:  selectedInputId === index ?  "3px solid blue" : "1px solid lightGrey", backgroundColor: "whiteSmoke", maxWidth: "100%" }}>
                 <div className="row">
                     <div className="col">
@@ -88,25 +99,19 @@ export const TokenDisplayFileList = ({ tokenFile, selectedInputId, setPreviewFil
 }
 
 export const mapStateToProps = (state) => {
-    state.tokenFile.inputs.forEach((input, index) => {
-        var iconType = "UNK"
-        if (input.mimeType === "application/pdf") iconType = "PDF"
-        else if (input.mimeType === "application/xml") iconType = "XML"
-        input.iconType = iconType
-        input.url = getBEUrl() + '/signing/getFileForToken/' + state.tokenFile.token + "/DOC/" + index
-        input.cleanFileName = input.fileName.replace(/\.[^.]*$/, '')
-     });
-    
     return {
         selectedInputId : state.filePreview.index,
         tokenFile: state.tokenFile,
+        customSignature: state.customSignature
     }
 }
 
 const mapDispatchToProps = ({
     setPreviewFileId,
     setInputsSignState,
-    doSendLogInfo
+    doSendLogInfo,
+    setCustomSignature,
+    setSignAttributes
 })
 
 export default connect(mapStateToProps,mapDispatchToProps)(TokenDisplayFileList)

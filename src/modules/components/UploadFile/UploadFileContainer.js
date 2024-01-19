@@ -117,7 +117,7 @@ export const UploadFileContainer = (props) => {
     }
 
     const handleSubmit = () => {
-        props.lock(true, intl.locale)
+        props.lock(true)
         props.uploadFile(file)
         if (UploadFileContext === "sign") {
             props.navigateToStep(WIZARD_STATE_CERTIFICATES_LOADING)

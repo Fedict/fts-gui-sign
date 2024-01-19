@@ -1860,7 +1860,7 @@ describe("WizardLogicActions", () => {
             })
             getDigest()(mockDispatch, mockGetStore)
             expect(communication.getDataToSignAPI).toBeCalledTimes(1)
-            expect(communication.getDataToSignAPI).toBeCalledWith(mockapiBody, mockFile, expect.anything(), undefined, undefined)
+            expect(communication.getDataToSignAPI).toBeCalledWith(mockapiBody, mockFile, expect.anything(), undefined, undefined, undefined)
 
         })
 
@@ -2538,7 +2538,7 @@ describe("WizardLogicActions", () => {
             })
             signDocument()(mockDispatch, mockGetStore)
             expect(signDocumentAPI).toBeCalledTimes(1)
-            expect(signDocumentAPI).toBeCalledWith(mockApiBody, mockFile, mockSignatureString, mockSigningDate, undefined, undefined)
+            expect(signDocumentAPI).toBeCalledWith(mockApiBody, mockFile, mockSignatureString, mockSigningDate, undefined, undefined, undefined)
         })
 
         test("signDocument success handleFlowIdError", () => {

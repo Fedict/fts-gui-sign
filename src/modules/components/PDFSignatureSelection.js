@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from "react-intl";
 import { INVISIBLE_SIGNATURE, MANUAL_SIGNATURE, selectSignature, includePhoto } from "../fileUpload/reducers/CustomSignatureReducer";
 
-const disbledTextColor = { color: "#CFCFCF"};
+const disabledTextColor = { color: "#CFCFCF"};
 const disabledBGColor = { backgroundColor: "#CFCFCF"};
 
 const PDFSignatureSelection = (props) => {
@@ -15,7 +15,7 @@ const PDFSignatureSelection = (props) => {
                 </b></div></div></li>
                 <li><div className="row mb-4"><div className="col col-1">
                     <span className="badge p-1 badge-primary" style={ props.signatureArea === null && props.signatureFields.length === 0 ? disabledBGColor : {} }>2</span></div><div className="col col-11">
-                    <b style={ props.signatureArea === null && props.signatureFields.length === 0 ? disbledTextColor : {} }><FormattedMessage id="signing.upload.select.signature" defaultMessage="Confirm the display of your signature in this document:"/></b><br/>
+                    <b style={ props.signatureArea === null && props.signatureFields.length === 0 ? disabledTextColor : {} }><FormattedMessage id="signing.upload.select.signature" defaultMessage="Confirm the display of your signature in this document:"/></b><br/>
                     <input className="mt-3" type="radio" id="sig_man" key="manualSignature" checked={props.signatureSelected === MANUAL_SIGNATURE}
                             disabled={props.signatureArea === null} onChange={ () => {props.selectSignature(MANUAL_SIGNATURE)} }
                             name="sigSel"/>&nbsp;<label htmlFor="sig_man"><FormattedMessage id="signing.upload.manual.signature" defaultMessage="Display in manually drawn signature field"/></label><br/>
@@ -28,7 +28,7 @@ const PDFSignatureSelection = (props) => {
                     <input type="radio" id="sig_inv" key="invisible" checked={ props.signatureSelected === INVISIBLE_SIGNATURE } onChange={ () => {props.selectSignature(INVISIBLE_SIGNATURE)} } name="sigSel"/>
                         &nbsp;<label htmlFor="sig_inv"><FormattedMessage id="signing.upload.visible.signature" defaultMessage="No display (signature without illustration)" /></label>
                 </div></div></li>
-                <li><div className="row mb-4" style={ props.signatureSelected === INVISIBLE_SIGNATURE ? disbledTextColor : {} }>
+                <li><div className="row mb-4" style={ props.signatureSelected === INVISIBLE_SIGNATURE ? disabledTextColor : {} }>
                     <div className="col col-1"><span className="badge p-1 badge-primary" style={ props.signatureSelected === INVISIBLE_SIGNATURE ? disabledBGColor : {} }>3</span></div>
                     <div className="col col-11">
                         <b><FormattedMessage id="signing.upload.photo.signature" defaultMessage="The photo from your eID card can be added to your signature." /></b><p style={{ height: "10px" }}>
@@ -44,10 +44,10 @@ const PDFSignatureSelection = (props) => {
 
 const mapStateToProps = (state) => {
     return (state) => ({
-        signatureFields: state.customSignatures.signatureFields,
-        signatureArea: state.customSignatures.signatureArea,
-        signatureSelected: state.customSignatures.signatureSelected,
-        photoIncluded: state.customSignatures.photoIncluded
+        signatureFields: state.customSignature.signatureFields,
+        signatureArea: state.customSignature.signatureArea,
+        signatureSelected: state.customSignature.signatureSelected,
+        photoIncluded: state.customSignature.photoIncluded
     })
 }
 
@@ -56,4 +56,4 @@ const mapDispatchToProps = ({
     includePhoto
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(PDFSignatureSelection))
+export default connect(mapStateToProps, mapDispatchToProps)(PDFSignatureSelection)

@@ -131,7 +131,6 @@ export const DisplayPDF = ({ file, drawSignature }) => {
                 pagesInfo.forEach((page) => {
                     page.sigAcroforms.forEach((sigAcroform) => { if (!sigAcroform.isSigned) signatureFields.push(sigAcroform.fieldName)});
                 } )
-                dispatch(setSignatureArea(null));
                 dispatch(setSignatureFields(signatureFields));
                 setShowThumbnails(true);
             });
@@ -203,10 +202,10 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     //****************************************************************************************
 
     const selectionCanvasRef = useRef(null);
-    const signatureArea = useSelector((state) => state.customSignatures.signatureArea);
-    const signatureSelected = useSelector((state) => state.customSignatures.signatureSelected);
-    const photoIncluded = useSelector((state) => state.customSignatures.photoIncluded);
-    const locked = useSelector((state) => state.customSignatures.locked);
+    const signatureArea = useSelector((state) => state.customSignature.signatureArea);
+    const signatureSelected = useSelector((state) => state.customSignature.signatureSelected);
+    const photoIncluded = useSelector((state) => state.customSignature.photoIncluded);
+    const locked = useSelector((state) => state.customSignature.locked);
     const [imgSignatureLoaded, setImgSignatureLoaded] = useState(false);
     const [imgSignPhotoLoaded, setImgSignPhotoLoaded] = useState(false);
     
@@ -214,6 +213,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     let dragY;
     let dragRect;
     
+    // Display the selected signature acroform 
     useEffect(() => {
         if (signatureSelected === INVISIBLE_SIGNATURE) return;
 
@@ -232,9 +232,11 @@ export const DisplayPDF = ({ file, drawSignature }) => {
                 })
             })
         }
-        if (newPage) setPageNumber(newPage);
-        newRect = scaleRect(newRect, zoomLevel / ZOOM_CORRECTION);
-        canvasContainingDivRef.current.scrollTo( { top: newRect.top, left: newRect.left, behavior: "smooth" });
+        if (newPage) changePageNumber(newPage);
+        if (newRect) {
+            newRect = scaleRect(newRect, zoomLevel / ZOOM_CORRECTION);
+            canvasContainingDivRef.current.scrollTo( { top: newRect.top, left: newRect.left, behavior: "smooth" });
+        }
     }, [signatureSelected])
 
     useLayoutEffect(() => {

@@ -1,3 +1,4 @@
+import { useIntl } from 'react-intl';
 import { navigateToStep } from "../../wizard/WizardActions"
 import {
     WIZARD_STATE_VERSION_CHECK_UPDATE,
@@ -555,18 +556,16 @@ export const validateCertificate = (certificateObject) => (dispatch, getStore) =
 /**
  * function (action) to get the digest
  */
-export const getDigest = () => (dispatch, getStore) => {
-    const store = getStore()
-    const { certificate } = store
-    const { uploadFile } = store
-    const { customSignatures } = store
+export const getDigest = (locale) => (dispatch, getStore) => {
+    const { certificate, uploadFile, customSignature } = getStore()
+    
     const signingDate = moment().format();
     dispatch(setDateSigning(signingDate))
     if (certificate
         && certificate.certificateSelected
         && certificate.certificateSelected.APIBody) {
         const flowId = getStore().controlId.flowId
-        getDataToSignAPI(certificate.certificateSelected.APIBody, uploadFile.file, signingDate, customSignatures, certificate.certificateSelected.photo)
+        getDataToSignAPI(certificate.certificateSelected.APIBody, uploadFile.file, signingDate, customSignature, locale, certificate.certificateSelected.photo)
             .then(handleFlowIdError(flowId, getStore))
             .then((resp) => {
                 if(resp.digest && resp.digestAlgorithm && resp.signingDate) {
@@ -607,7 +606,7 @@ export const getDigest = () => (dispatch, getStore) => {
  * - certificate reader type == 'pinpad' --> call authNonce (null) and navigates to pinpad loading page (WIZARD_STATE_SIGNING_PRESIGN_LOADING)
  * - certificate reader type != 'pinpad' --> navigate to pin input page (WIZARD_STATE_PIN_INPUT)
  */
-export const navigateToSign = () => (dispatch, getStore) => {
+export const navigateToSign = (locale) => (dispatch, getStore) => {
     const { certificate } = getStore()
     if (certificate
         && certificate.certificateSelected
@@ -616,7 +615,7 @@ export const navigateToSign = () => (dispatch, getStore) => {
         if (certificate.certificateSelected.readerType === "pinpad") {
             dispatch(resetPinError())
             dispatch(navigateToStep(WIZARD_STATE_SIGNING_PRESIGN_LOADING))
-            dispatch(sign(null))
+            dispatch(sign(null, locale))
         }
         else {
             dispatch(navigateToStep(WIZARD_STATE_PIN_INPUT))
@@ -657,7 +656,7 @@ export const navigateToPinError = () => (dispatch, getStore) => {
  * - calls signDocument if success
  * @param {string} pin - enterd pincode (should be null for pinpad reader)
  */
-export const sign = (pin) => (dispatch, getStore) => {
+export const sign = (pin, locale) => (dispatch, getStore) => {
     const { certificate, digest } = getStore()
 
     dispatch(resetPinError());
@@ -692,7 +691,7 @@ export const sign = (pin) => (dispatch, getStore) => {
             .then(
                 (response) => {
                     dispatch(setSignature(response))
-                    dispatch(signDocument())
+                    dispatch(signDocument(locale))
 
                 })
             .catch(
@@ -714,9 +713,9 @@ export const sign = (pin) => (dispatch, getStore) => {
  * function (action) that calls signDocumentAPI 
  * - if success navigates to WIZARD_STATE_SUCCES
  */
-export const signDocument = () => (dispatch, getStore) => {
+export const signDocument = (locale) => (dispatch, getStore) => {
 
-    const { certificate, signature, uploadFile, tokenFile, customSignatures } = getStore()
+    const { certificate, signature, uploadFile, tokenFile, customSignature } = getStore()
 
     if (certificate
         && certificate.certificateSelected
@@ -729,20 +728,13 @@ export const signDocument = () => (dispatch, getStore) => {
         dispatch(navigateToStep(WIZARD_STATE_SIGNING_LOADING))
         const flowId = getStore().controlId.flowId;
         if(tokenFile && tokenFile.token){
-            let photo;
-            if(tokenFile.readPhoto){
-                photo = certificate.certificateSelected.photo;
-            }
             var fileIdToSign = tokenFile.inputs.findIndex(input => input.signState === signState.TO_BE_SIGNED);
             var hookInfo = { id: 'FILE_SIGNED', fileId: fileIdToSign };
-            signDocumentForTokenAPI(
-                certificate.certificateSelected.APIBody,
-                tokenFile.token,
-                fileIdToSign,
-                signature.signature,
-                signature.signingDate,
-                photo,
-                true)
+            const curInput = tokenFile.inputs[fileIdToSign];
+            const customSignature = curInput.customSignature;
+            const photo = curInput.psfP || customSignature.photoIncluded ? certificate.certificateSelected.photo : null;
+            const signLanguage = curInput.signLanguage ? curInput.signLanguage : locale;
+            signDocumentForTokenAPI(certificate.certificateSelected.APIBody, tokenFile.token, fileIdToSign, customSignature, signLanguage, signature.signature, signature.signingDate, photo, true)
                 .then(handleFlowIdError(flowId, getStore))
                 .then((resp) => {
                     //console.log('signDocumentForTokenAPI response', resp)
@@ -778,13 +770,8 @@ export const signDocument = () => (dispatch, getStore) => {
                     }
                 })
         }else{
-            signDocumentAPI(
-                certificate.certificateSelected.APIBody,
-                uploadFile.file,
-                signature.signature,
-                signature.signingDate,
-                customSignatures,
-                certificate.certificateSelected.photo)
+            signDocumentAPI(certificate.certificateSelected.APIBody, uploadFile.file, signature.signature, signature.signingDate, customSignature, locale, certificate.certificateSelected.photo)
+
                 .then(handleFlowIdError(flowId, getStore))
                 .then((resp) => {
                     if (resp

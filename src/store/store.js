@@ -52,7 +52,7 @@ export default function configureStore(initialState = {}) {
         reader: ReaderReducer,
         validation: ValidationReducer,
         controlId: ControlIdReducer,
-        customSignatures: CustomSignatureReducer
+        customSignature: CustomSignatureReducer
     })
 
     return createStore(rootReducer, initialState, enhancer)

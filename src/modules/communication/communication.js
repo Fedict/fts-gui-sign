@@ -37,6 +37,17 @@ export const getsigningProfileId = (documentType) => {
     return (window && window.configData) ? window.configData.defaultSigningProfileId : ""
 }
 
+
+/**
+ * Function to format a manually drawn Signature definition to a psfC field
+ */
+const createPsfC = (signatureArea) => {
+    return signatureArea.page + "," + Math.round(signatureArea.rect.left) + "," +
+                            Math.round(signatureArea.rect.top) + "," +
+                            Math.round(signatureArea.rect.right - signatureArea.rect.left) + "," +
+                            Math.round(signatureArea.rect.bottom - signatureArea.rect.top);
+}
+
 /**
  * Function to build the request body for the Api request
  * @param {Object} certificateBody - object that represents the certificate
@@ -49,52 +60,32 @@ export const getsigningProfileId = (documentType) => {
  * 
  * @returns {object} body to use in the API request
  */
-export const createBody = (certificateBody, documentName, documentBase64, documentType, signingDate, customSignatures, photo) => {
+export const createBody = (certificateBody, documentName, documentBase64, documentType, signingDate, customSignature, signLanguage, photo) => {
 
-    let psfN = null;
-    let psfC = null;
-    let psp = {
-        "texts": {
-            "fr": "Signé par %gn% %sn%\nLe %d(HH:mm MMM d YYYY z)%",
-            "en": "Signed by %gn% %sn%\nOn %d(HH:mm MMM d YYYY z)%",
-            "de": "Unterzeichnet von %gn% %sn%\nAm %d(HH:mm MMM d YYYY z)%",
-            "nl": "Getekend door %gn% %sn%\nOp %d(HH:mm MMM d YYYY z)%",
-        },
-        "textPos": "RIGHT",
-        "textPadding": 10,
-        "textAlignV": "MIDDLE",
-        "textSize": "32"
-    };
-
-    switch(customSignatures.signatureSelected) {
-        case INVISIBLE_SIGNATURE:
-            psp = null;
-            break;
-
-        case MANUAL_SIGNATURE:
-            const area = customSignatures.signatureArea;
-            psfC = area.page + "," + Math.round(area.rect.left) + "," +
-                                    Math.round(area.rect.top) + "," +
-                                    Math.round(area.rect.right - area.rect.left) + "," +
-                                    Math.round(area.rect.bottom - area.rect.top);
-            break;
-
-        default:
-            psfN = customSignatures.signatureSelected;
-    }
-
+    const sigType = customSignature.signatureSelected;
     return {
         "clientSignatureParameters": {
             "certificateChain": certificateBody.certificateChain,
             "detachedContents": [
             ],
             "signingCertificate": certificateBody.certificate,
-            "signingDate": signingDate,
-            "psfN": psfN,
-            "psfC": psfC,
-            "photo": customSignatures.photoIncluded ? photo : null,
-            "signLanguage": customSignatures.signLanguage,
-            "psp": psp
+            signingDate,
+            "psfN": sigType !== INVISIBLE_SIGNATURE && sigType !== MANUAL_SIGNATURE ? sigType : null,
+            "psfC": sigType === MANUAL_SIGNATURE ? createPsfC(customSignature.signatureArea) : null,
+            photo,
+            signLanguage,
+            "psp": sigType === INVISIBLE_SIGNATURE ? null : {
+                "texts": {
+                    "fr": "Signé par %gn% %sn%\nLe %d(HH:mm MMM d YYYY z)%",
+                    "en": "Signed by %gn% %sn%\nOn %d(HH:mm MMM d YYYY z)%",
+                    "de": "Unterzeichnet von %gn% %sn%\nAm %d(HH:mm MMM d YYYY z)%",
+                    "nl": "Getekend door %gn% %sn%\nOp %d(HH:mm MMM d YYYY z)%",
+                },
+                "textPos": "RIGHT",
+                "textPadding": 10,
+                "textAlignV": "MIDDLE",
+                "textSize": "32"
+            }
         },
         "signingProfileId": getsigningProfileId(documentType),
         "toSignDocument": {
@@ -105,20 +96,24 @@ export const createBody = (certificateBody, documentName, documentBase64, docume
     }
 }
 
-export const createBodyForToken = (certificateBody, token, fileIdToSign, signingDate, photo) => (
-    {
+export const createBodyForToken = (certificateBody, token, fileIdToSign, customSignature, signLanguage, signingDate, photo) => {
+    const sigType = customSignature.signatureSelected;
+    return {
         "clientSignatureParameters": {
             "certificateChain": certificateBody.certificateChain,
             "detachedContents": [
             ],
             "signingCertificate": certificateBody.certificate,
-            "signingDate": signingDate,
-            photo
+            signingDate,
+            "psfC": sigType === MANUAL_SIGNATURE ? createPsfC(customSignature.signatureArea) : null,
+            "psfN": sigType !== INVISIBLE_SIGNATURE ? sigType : null,
+            photo,
+            signLanguage,
         },
-        fileIdToSign: fileIdToSign,
+        fileIdToSign,
         token
     }
-)
+}
 
 const noContentHandler = (response) => {
     if (!response.ok) {
@@ -205,11 +200,11 @@ export const validateCertificatesAPI = (certificateBody) => {
  * 
  * @returns {Promise} Promise that resolves the result of the API request
  */
-export const getDataToSignAPI = async (certificateBody, document, signingDate, customSignatures, photo) => {
+export const getDataToSignAPI = async (certificateBody, document, signingDate, customSignature, signLanguage, photo) => {
 
     const documentB64 = await getBase64Data(document)
 
-    const body = createBody(certificateBody, document.name, documentB64, document.type, signingDate, customSignatures, photo);
+    const body = createBody(certificateBody, document.name, documentB64, document.type, signingDate, customSignature, signLanguage, photo);
 
     return fetch(url + "/signing/getDataToSign",
         {
@@ -229,11 +224,11 @@ export const getDataToSignAPI = async (certificateBody, document, signingDate, c
  * @param {Object} document - document to be signed
  * @param {string} signature - signature value used to sign th document
  */
-export const signDocumentAPI = async (certificateBody, document, signature, signingDate, customSignatures, photo) => {
+export const signDocumentAPI = async (certificateBody, document, signature, signingDate, customSignature, signLanguage, photo) => {
     const documentB64 = await getBase64Data(document)
 
     const body = {
-        ...createBody(certificateBody, document.name, documentB64, document.type, signingDate, customSignatures, photo),
+        ...createBody(certificateBody, document.name, documentB64, document.type, signingDate, customSignature, signLanguage, photo),
         "signatureValue": signature
     }
 
@@ -279,9 +274,9 @@ export const validateSignatureAPI = async (document) => {
  *
  * @returns {Promise} Promise that resolves the result of the API request
  */
-export const getDataToSignForTokenAPI = async (certificateBody, token, fileIdToSign, signingDate, photo) => {
+export const getDataToSignForTokenAPI = async (certificateBody, token, fileIdToSign, customSignature, signLanguage, signingDate, photo) => {
 
-    const body = createBodyForToken(certificateBody, token, fileIdToSign, signingDate, photo);
+    const body = createBodyForToken(certificateBody, token, fileIdToSign, customSignature, signLanguage, signingDate, photo);
 
     return fetch(url + "/signing/getDataToSignForToken",
         {
@@ -302,9 +297,9 @@ export const getDataToSignForTokenAPI = async (certificateBody, token, fileIdToS
  * @param {Object} token - token of the document to be signed
  * @param {string} signature - signature value used to sign th document
  */
-export const signDocumentForTokenAPI = async (certificateBody, token, fileIdToSign, signature, signingDate, photo, expectNoContent = false) => {
+export const signDocumentForTokenAPI = async (certificateBody, token, fileIdToSign, customSignature, signLanguage, signature, signingDate, photo, expectNoContent = false) => {
     const body = {
-        ...createBodyForToken(certificateBody, token, fileIdToSign, signingDate, photo),
+        ...createBodyForToken(certificateBody, token, fileIdToSign, customSignature, signLanguage, signingDate, photo),
         "signatureValue": signature
     }
 

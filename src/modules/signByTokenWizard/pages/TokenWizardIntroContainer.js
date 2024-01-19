@@ -11,6 +11,7 @@ import { boldedText } from "../../utils/reactIntlUtils";
 import { ReadCertificates } from "../../components/ReadCertificates/ReadCertificates";
 import { setPreview, setInputsSignState, setPreviewFileId } from "../../signByTokenWizard/actions/TokenActions"
 import { signingType, signState } from '../constants';
+import PDFSignatureSelection from '../../components/PDFSignatureSelection'
 
 const messages = defineMessages({
     title: {
@@ -102,15 +103,27 @@ const TokenWizardIntroContainer = (props) => {
             >
                 <FormattedMessage id="buttons.reject" defaultMessage="Reject" />
             </button>
+            { props.showPDFSigSelection && <PDFSignatureSelection/> }
         </CardContainer>
     );
 }
 
 function mapStateToProps(state) {
+    const inputs = state.tokenFile.inputs;
+    if (!inputs) {
+        return {
+            isMultifile: false,
+            fileName: "",
+            tokenFile: state.tokenFile,
+            showPDFSigSelection: false
+        };
+    }
+    const curInput = inputs[state.filePreview.index];
     return {
-        isMultifile: state.tokenFile.inputs.length > 1,
-        fileName: state.tokenFile.inputs[0].fileName,
-        tokenFile: state.tokenFile
+        isMultifile: inputs.length > 1,
+        fileName: inputs[0].fileName,
+        tokenFile: state.tokenFile,
+        showPDFSigSelection: curInput.mimeType === "application/pdf" && curInput.drawSignature
     };
 }
 const mapDispatchToProps = ({

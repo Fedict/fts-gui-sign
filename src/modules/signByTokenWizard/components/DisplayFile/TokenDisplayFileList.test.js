@@ -6,12 +6,14 @@ import React from "react";
 describe("TokenDisplayFileList", () => {
     test("Displays a list of checkable files with preview",  done => {
         const setInputsSignState = jest.fn();
+        const setCustomSignature = jest.fn();
+        const setSignAttributes = jest.fn();
         const setPreviewFileId = jest.fn();
         const doSendLogInfo = jest.fn();
 
-        const { container } = render(<TokenDisplayFileList selectedInputId={ 0 } doSendLogInfo={doSendLogInfo} setPreviewFileId={setPreviewFileId}
+        const { container } = render(<TokenDisplayFileList selectedInputId={ 0 } doSendLogInfo={doSendLogInfo} setPreviewFileId={setPreviewFileId} setCustomSignature={setCustomSignature} setSignAttributes={setSignAttributes}
              setInputsSignState={setInputsSignState} tokenFile={ { previewDocuments: true, selectDocuments: true,
-                inputs: [ {signState: signState.SIGN_REQUESTED, iconType: 'XML', cleanFileName: 'file1' }, {signState: signState.SIGN_REQUESTED, iconType: 'PDF', cleanFileName: 'fileB' } ] }} />);
+                inputs: [ {signState: signState.SIGN_REQUESTED, mimeType: 'application/xml', fileName: 'file1.xml' }, {signState: signState.SIGN_REQUESTED, mimeType: 'application/pdf', fileName: 'fileB.pdf' } ] }} />);
 
         var elt = screen.getByText(/^UNSELECT ALL/);
         expect(elt).toBeInTheDocument();
@@ -19,6 +21,8 @@ describe("TokenDisplayFileList", () => {
         const fileDivs = container.getElementsByClassName('m-2 p-2 text-break');
         fileDivs[0].click();
         expect(setPreviewFileId).toBeCalled();
+        expect(setSignAttributes).toBeCalled();
+        expect(setCustomSignature).toBeCalled();
 
         var checkBoxes = screen.getAllByRole('checkbox');
         expect(checkBoxes.length).toBe(2)
@@ -38,7 +42,7 @@ describe("TokenDisplayFileList", () => {
 
         render(<TokenDisplayFileList selectedInputId={ 0 } doSendLogInfo={doSendLogInfo} setPreviewFileId={setPreviewFileId}
              setInputsSignState={done} tokenFile={ { previewDocuments: false, selectDocuments: false,
-                inputs: [ {signState: signState.SIGN_REQUESTED, iconType: 'XML', cleanFileName: 'file1' }, {signState: signState.SIGN_REQUESTED, iconType: 'PDF', cleanFileName: 'fileB' } ] }} />);
+                inputs: [ {signState: signState.SIGN_REQUESTED, mimeType: 'application/xml', fileName: 'file1.xml' }, {signState: signState.SIGN_REQUESTED, mimeType: 'application/pdf', fileName: 'fileB.pdf' } ] }} />);
 
         var elt = screen.getByText(/^file1/);
         expect(elt).toBeInTheDocument();
