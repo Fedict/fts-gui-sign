@@ -99,7 +99,7 @@ export const subIndication =
     TIMESTAMP_ORDER_FAILURE: {
         key: "TIMESTAMP_ORDER_FAILURE",
         className: "alert-warning",
-        message: "When signing a document one or more time stamps are added to register the official time and/or form of the signature. In this document the constraint on the order of the time stamps does not appear to be respected. ",
+        message: "When signing a document one or more time stamps are added to register the official time and/or form of the signature. In this document the constraint on the order of the time stamps does not appear to be respected.",
         id: "validate.result.messages.timestampOrderFailure"
     },
     NO_SIGNING_CERTIFICATE_FOUND: {

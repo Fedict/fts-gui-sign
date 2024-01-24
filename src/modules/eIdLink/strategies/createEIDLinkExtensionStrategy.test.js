@@ -1,5 +1,5 @@
 import { MESSAGE_SET_ERROR } from "../../message/actions/MessageActions"
-import { createEIDLinkExtensionStrategy } from "./createEIDLinkExtensionStrategy"
+import { createEIDLinkExtensionStrategy, isUptodate } from "./createEIDLinkExtensionStrategy"
 
 describe("unit tests for createEIDLinExtensionStrategy", () => {
 
@@ -112,6 +112,24 @@ describe("unit tests for createEIDLinExtensionStrategy", () => {
                 strategy.getVersion("3.0", null, null, onMock2)
                 strategy.getVersion("3.0", null, null, onMock3)
 
+            })
+        })
+
+        describe("isUpToDate", () => {
+
+            test("isUpToDate 2.1 vs 2.0", async () => {
+                expect(isUptodate("2.1", "2.0")).toBe(false);
+            })
+            test("isUpToDate 2.0 vs 2.5", async () => {
+                expect(isUptodate("2.0", "2.5")).toBe(true);
+            })
+
+            test("isUpToDate 2.0 vs 2.10", async () => {
+                expect(isUptodate("2.0", "2.10")).toBe(true);
+            })
+
+            test("isUpToDate 3.2 vs 10.1", async () => {
+                expect(isUptodate("3.2", "10.1")).toBe(true);
             })
         })
     })

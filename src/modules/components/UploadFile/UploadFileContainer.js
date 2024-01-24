@@ -8,6 +8,7 @@ import { WIZARD_STATE_CERTIFICATES_LOADING, WIZARD_STATE_VALIDATE_LOADING } from
 import { defineMessages, FormattedMessage, injectIntl } from "react-intl";
 import { boldedText } from "../../utils/reactIntlUtils";
 import { sendLogInfo } from "../../communication/communication"
+import { INVISIBLE_SIGNATURE, MANUAL_SIGNATURE, selectSignature, includePhoto, reset as resetCustomSignature, lock } from "../../fileUpload/reducers/CustomSignatureReducer";
 
 const messagesSigning = defineMessages({
     title: {
@@ -55,6 +56,9 @@ const styleDragRed = {
     left: "0px",
 };
 
+const disbledTextColor = { color: "#CFCFCF"};
+const disabledBGColor = { backgroundColor: "#CFCFCF"};
+
 export const UploadFileContainer = (props) => {
     const { intl, UploadFileContext } = props;
     const [file, setFile] = React.useState({});
@@ -73,6 +77,7 @@ export const UploadFileContainer = (props) => {
                 case 'pdf':
                     setFile(e.dataTransfer.files[0]);
                     if (UploadFileContext === "sign") {
+                        props.resetCustomSignature()
                         props.displayFile(e.dataTransfer.files[0])
                     }
                     return;
@@ -106,12 +111,15 @@ export const UploadFileContainer = (props) => {
     const onchange = (e) => {
         const fileSelected = e.target.files[0]
         setFile(fileSelected);
+        
         if (UploadFileContext === "sign") {
+            props.resetCustomSignature()
             props.displayFile(fileSelected)
         }
     }
 
     const handleSubmit = () => {
+        props.lock(true, intl.locale)
         props.uploadFile(file)
         if (UploadFileContext === "sign") {
             props.navigateToStep(WIZARD_STATE_CERTIFICATES_LOADING)
@@ -142,14 +150,13 @@ export const UploadFileContainer = (props) => {
                                 ?
                                 <>
                                     <li><NumberdText number="1"><FormattedMessage id="signing.upload.text.step.1"
-                                        defaultMessage="Select or 'drag & drop' the document (pdf or xml)."
-                                        values={{ b: boldedText, selectDocumentButton: intl.formatMessage({ id: "signing.upload.selectDocument", defaultMessage: "Select a document" }) }}
+                                        defaultMessage="Select or 'drag & drop' the document (pdf or xml, max. {maxSize}Mb)."
+                                        values={{ b: boldedText, maxSize: maxSize, selectDocumentButton: intl.formatMessage({ id: "signing.upload.selectDocument", defaultMessage: "Select a document" }) }}
                                     /></NumberdText></li>
                                     <li><NumberdText number="2"><FormattedMessage id="signing.upload.text.step.2" defaultMessage="Connect your eID reader." /></NumberdText></li>
                                     <li><NumberdText number="3"><FormattedMessage id="signing.upload.text.step.3" defaultMessage="Insert your eID card in the card reader." /></NumberdText></li>
-                                    <li><NumberdText number="4"><FormattedMessage id="signing.upload.text.step.4"
-                                        defaultMessage="Click on the button <b>{signButton}</b> and enter your pincode when asked."
-                                        values={{ b: boldedText, signButton: intl.formatMessage({ id: "signing.pininput.button.sign", defaultMessage: "Sign with eID" }) }}
+                                    <li><NumberdText number="4"><FormattedMessage id="signing.upload.text.step.4" defaultMessage="Click on the button <b>{signButton}</b> and enter your pincode when asked."
+                                        values={{ b: boldedText, signButton: intl.formatMessage( messages.next ) }}
                                     /></NumberdText></li>
                                 </>
                                 :
@@ -250,15 +257,61 @@ export const UploadFileContainer = (props) => {
                     </div>
                 </div>
             </div>
+            { props.file.url && props.file.isPdf &&
+                <ol className="invisibleOL" style={{ borderTopStyle: "solid", borderWidth: "thin", borderColor: "rgba(0, 0, 0, 0.125)", margin: "15px -20px -20px", backgroundColor: "rgba(0, 0, 0, 0.03)"}}>
+                    <div className="card-body" style={{ paddingLeft: "60px" }}>
+                        <li><div className="row mb-4"><div className="col col-1"><span className="badge badge-primary p-1">1</span></div><div className="col col-11"><b>
+                            <FormattedMessage id="signing.upload.no.signature" defaultMessage="Choose the place where you want to add your signature by drawing a rectangle at the desired location with your mouse." />
+                        </b></div></div></li>
+                        <li><div className="row mb-4"><div className="col col-1">
+                            <span className="badge p-1 badge-primary" style={ props.signatureArea === null && props.signatureFields.length === 0 ? disabledBGColor : {} }>2</span></div><div className="col col-11">
+                            <b style={ props.signatureArea === null && props.signatureFields.length === 0 ? disbledTextColor : {} }><FormattedMessage id="signing.upload.select.signature" defaultMessage="Confirm the display of your signature in this document:"/></b><br/>
+                            <input className="mt-3" type="radio" id="sig_man" key="manualSignature" checked={props.signatureSelected === MANUAL_SIGNATURE}
+                                    disabled={props.signatureArea === null} onChange={ () => {props.selectSignature(MANUAL_SIGNATURE)} }
+                                    name="sigSel"/>&nbsp;<label htmlFor="sig_man"><FormattedMessage id="signing.upload.manual.signature" defaultMessage="Display in manually drawn signature field"/></label><br/>
+                                    { props.signatureFields.map((sigField, index) => (
+                                        <div key={index} >
+                                            <input type="radio" id={ "sig_"+index } checked={props.signatureSelected === sigField} onChange={ () => {props.selectSignature(sigField)} } name="sigSel"/>
+                                            &nbsp;<label htmlFor={ "sig_"+index }><FormattedMessage id="signing.upload.existing.signature" defaultMessage="Display in existing signature field ''{sigField}''" values={{ sigField: sigField }} /></label><br/>
+                                        </div>
+                                    ))}
+                            <input type="radio" id="sig_inv" key="invisible" checked={ props.signatureSelected === INVISIBLE_SIGNATURE } onChange={ () => {props.selectSignature(INVISIBLE_SIGNATURE)} } name="sigSel"/>
+                                &nbsp;<label htmlFor="sig_inv"><FormattedMessage id="signing.upload.visible.signature" defaultMessage="No display (signature without illustration)" /></label>
+                        </div></div></li>
+                        <li><div className="row mb-4" style={ props.signatureSelected === INVISIBLE_SIGNATURE ? disbledTextColor : {} }>
+                            <div className="col col-1"><span className="badge p-1 badge-primary" style={ props.signatureSelected === INVISIBLE_SIGNATURE ? disabledBGColor : {} }>3</span></div>
+                            <div className="col col-11">
+                                <b><FormattedMessage id="signing.upload.photo.signature" defaultMessage="A profile photo can be added to your signature." /></b><p style={{ height: "10px" }}>
+                                <input className="mt-3" type="checkbox" id="photo" checked={props.photoIncluded && props.signatureSelected !== INVISIBLE_SIGNATURE}
+                                    onChange={ () => { props.includePhoto(!props.photoIncluded) } } disabled={ props.signatureSelected === INVISIBLE_SIGNATURE } style={{ display: "inline-grid "}}/>&nbsp;
+                                <label style={{ position: "absolute", marginTop: "11px" }} htmlFor="photo"><FormattedMessage id="signing.upload.photo.choice" defaultMessage="Add profile picture" /></label></p>
+                            </div>
+                        </div></li>
+                    </div>
+                </ol>
+                }
         </CardContainer>
     )
 }
 
+const mapStateToProps = (state) => {
+    return (state) => ({
+        signatureFields: state.customSignatures.signatureFields,
+        signatureArea: state.customSignatures.signatureArea,
+        signatureSelected: state.customSignatures.signatureSelected,
+        photoIncluded: state.customSignatures.photoIncluded,
+        file: state.uploadFile.displayFile
+    })
+}
 
 const mapDispatchToProps = ({
     uploadFile,
     navigateToStep,
-    displayFile
+    displayFile,
+    selectSignature,
+    includePhoto,
+    resetCustomSignature,
+    lock
 })
 
-export default connect(null, mapDispatchToProps)(injectIntl(UploadFileContainer))
+export default connect(mapStateToProps, mapDispatchToProps)(injectIntl(UploadFileContainer))

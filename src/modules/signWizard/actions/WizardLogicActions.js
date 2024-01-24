@@ -196,11 +196,14 @@ export const checkVersion = (isErrorCheck) => (dispatch, getStore) => {
             dispatch(readerSetCheck(true))
             dispatch(readerSetOk(true))
             let token  = getStore().tokenFile;
+            if (token) token=token.token;
+            if (!token) token=globalToken;  // Use the GlobalToken for Signbox operations
+
             logVersions(process.env.REACT_APP_VERSION,
                 installedVersion.version,
                 installedVersion.extensionVersion,
                 installedVersion.extensionBrowser,
-                token ? token.token : globalToken).then(version => {
+                token).then(version => {
                     installedVersion.backend = version;
                     dispatch(readerSetBeidConnectVersion(installedVersion));
                 });
@@ -389,26 +392,34 @@ export const validateCertificates = () => (dispatch, getStore) => {
 
         validateCertificatesAPI(APIBody)
             .then(handleFlowIdError(flowId, getStore))
-            .then((val) => {
-                const indications = val.indications
+            .then((resp) => {
+                let hasRevokedCert = false
                 const newList = certificate.certificateList.map((val, index) => {
-                    const res = indications[index]
-                    if (res.keyUsageCheckOk) {
-                        val.indication = res.indication
-                        val.keyUsageCheckOk = res.keyUsageCheckOk
-                        val.commonName = res.commonName
-                        return val
-                    }
-                    else {
+                    const res = resp.indications[index]
+                    if (!res.keyUsageCheckOk || res.indication !== "PASSED") {
+                        if (res.subIndication === "REVOKED_NO_POE") hasRevokedCert = true
                         return undefined
                     }
+                    val.indication = res.indication
+                    val.keyUsageCheckOk = res.keyUsageCheckOk
+                    val.commonName = res.commonName
+                    return val
                 }).filter(val => val)
 
                 dispatch(saveCertificateList(newList))
 
                 if (newList.length <= 0) {
+                    let errorMessage = MessageCertificatesNotFound;
+                    if (hasRevokedCert) {
+                        errorMessage = {
+                            ...ErrorGeneral,
+                            title : errorMessages.CERT_REVOKED,
+                            message : errorMessages.CERT_REVOKED,
+                        }
+                    }
+
                     //console.log('MessageCertificatesNotFound', val)
-                    dispatch(showErrorMessage(MessageCertificatesNotFound))
+                    dispatch(showErrorMessage(errorMessage))
                 }
                 else {
                     if (newList.length === 1) {
@@ -548,13 +559,14 @@ export const getDigest = () => (dispatch, getStore) => {
     const store = getStore()
     const { certificate } = store
     const { uploadFile } = store
-        const signingDate = moment().format();
+    const { customSignatures } = store
+    const signingDate = moment().format();
     dispatch(setDateSigning(signingDate))
     if (certificate
         && certificate.certificateSelected
         && certificate.certificateSelected.APIBody) {
         const flowId = getStore().controlId.flowId
-        getDataToSignAPI(certificate.certificateSelected.APIBody, uploadFile.file, signingDate)
+        getDataToSignAPI(certificate.certificateSelected.APIBody, uploadFile.file, signingDate, customSignatures, certificate.certificateSelected.photo)
             .then(handleFlowIdError(flowId, getStore))
             .then((resp) => {
                 if(resp.digest && resp.digestAlgorithm && resp.signingDate) {
@@ -704,7 +716,7 @@ export const sign = (pin) => (dispatch, getStore) => {
  */
 export const signDocument = () => (dispatch, getStore) => {
 
-    const { certificate, signature, uploadFile, tokenFile } = getStore()
+    const { certificate, signature, uploadFile, tokenFile, customSignatures } = getStore()
 
     if (certificate
         && certificate.certificateSelected
@@ -741,29 +753,12 @@ export const signDocument = () => (dispatch, getStore) => {
                         var moreToSign = getStore().tokenFile.inputs.find(input => input.signState === signState.TO_BE_SIGNED);
                         dispatch(navigateToStep(moreToSign ? WIZARD_STATE_DIGEST_LOADING: WIZARD_STATE_SUCCES))
                     } else {
-                        var errorMessage;
-                        const parsedError = parseErrorMessage(resp.message);
-                        if(parsedError && errorMessages[parsedError.type]){
-                            errorMessage = {
-                                ...ErrorGeneral,
-                                title : errorMessages.failedToSignWrongResultFromAPI,
-                                message : errorMessages[parsedError.type],
-                                ref : parsedError.ref,
-                                errorDetails : parsedError.details,
-                            }
-                        } else {
-                            errorMessage = {
-                                ...ErrorGeneral,
-                                message: errorMessages.failedToSignWrongResultFromAPI,
-                                body: resp.message,
-                            }
-                        }
-
+                        var errorMessage = messageToError(resp.message);
                         if (tokenFile.signingType !== signingType.XadesMultiFile) {
                             if (!getStore().tokenFile.noSkipErrors) {
                                 dispatch(setInputsSignState(fileIdToSign, signState.ERROR_SIGN));
                                 moreToSign =  getStore().tokenFile.inputs.find(input => input.signState === signState.TO_BE_SIGNED);
-                                errorMessage.predButton = { text: { id: "signing.error.retryButton", defaultMessage: "Try again" }, action: () => {
+                                errorMessage.predButton = { text: { id: "button.retry", defaultMessage: "Try again" }, action: () => {
                                     dispatch(setInputsSignState(fileIdToSign, signState.TO_BE_SIGNED)) },
                                     nextPage: WIZARD_STATE_DIGEST_LOADING }
                                 errorMessage.nextButton = { isVisible: true, text: { id: "signing.error.skipButton", defaultMessage: "Skip file" }, action: () => {
@@ -787,26 +782,19 @@ export const signDocument = () => (dispatch, getStore) => {
                 certificate.certificateSelected.APIBody,
                 uploadFile.file,
                 signature.signature,
-                signature.signingDate)
+                signature.signingDate,
+                customSignatures,
+                certificate.certificateSelected.photo)
                 .then(handleFlowIdError(flowId, getStore))
                 .then((resp) => {
-
                     if (resp
                         && resp.name
                         && resp.bytes) {
-                        dispatch(setDownloadFile(resp))
+                        dispatch(setDownloadFile( { bytes: resp.bytes, fileName: resp.name } ))
                         dispatch(navigateToStep(WIZARD_STATE_SUCCES))
                     }
                     else {
-                        if(errorMessages[resp.message]){
-                            dispatch(showErrorMessage({...ErrorGeneral, title : errorMessages.failedToSignWrongResultFromAPI, message : errorMessages[resp.message]}));
-                        }else{
-                            dispatch(showErrorMessage({
-                                ...ErrorGeneral,
-                                message: errorMessages.failedToSignWrongResultFromAPI,
-                                body: resp.message
-                            }))
-                        }
+                        dispatch(showErrorMessage(messageToError(resp.message)));
                     }
 
                 })
@@ -821,6 +809,27 @@ export const signDocument = () => (dispatch, getStore) => {
         dispatch(showErrorMessage(ErrorGeneral))
     }
 }
+
+const messageToError = (message) =>
+{
+    const parsedError = parseErrorMessage(message);
+    if (parsedError && errorMessages[parsedError.type]){
+        return {
+            ...ErrorGeneral,
+            title : errorMessages.failedToSignWrongResultFromAPI,
+            message : errorMessages[parsedError.type],
+            ref : parsedError.ref,
+            errorDetails : parsedError.details
+        }
+    }
+    return {
+        ...ErrorGeneral,
+        message: errorMessages.failedToSignWrongResultFromAPI,
+        body: message
+    }
+}
+
+
 
 let resetWizardClicked = false;
 export const clearResetWizardClicked = () =>

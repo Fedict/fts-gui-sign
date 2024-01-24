@@ -180,7 +180,7 @@ const PinInputContainer = (props) => {
                         {pinstring.substr(0, indexCursor)}<span className="blinking-cursor">|</span>{pinstring.substr(indexCursor)}
                     </div>
                     <button type="submit" className={"btn btn-primary"} id="button_next" disabled={pin.length < 4} ref={ nextBtnRef }>
-                        <FormattedMessage id={"signing.pininput.button.sign"} defaultMessage={"Sign with eID"}/>
+                        <FormattedMessage id={messages.next.id} defaultMessage={messages.next.defaultMessage}/>
                     </button>
                 </form>
 

@@ -1,7 +1,7 @@
 import React from "react";
-import {injectIntl} from "react-intl";
-import { render, screen} from '../../testUtils/test-utils.js'
-import {ResultContainer} from "./ResultContainer.js";
+import { injectIntl } from "react-intl";
+import { render, screen } from '../../testUtils/test-utils.js'
+import { ResultContainer } from "./ResultContainer.js";
 
 const ResultContainerWithIntl = injectIntl(ResultContainer)
 

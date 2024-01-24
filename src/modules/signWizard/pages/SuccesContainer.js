@@ -24,12 +24,12 @@ export class SuccesContainer extends React.Component {
 
         if (uploadFile
             && uploadFile.downloadFile
-            && uploadFile.downloadFile.name
+            && uploadFile.downloadFile.fileName
             && uploadFile.downloadFile.bytes) {
 
             if (window.navigator.msSaveBlob) {
                 const blobData = getBlobFromBase64(uploadFile.downloadFile.bytes);
-                window.navigator.msSaveOrOpenBlob(blobData,uploadFile.downloadFile.name);
+                window.navigator.msSaveOrOpenBlob(blobData,uploadFile.downloadFile.fileName);
             }
             else {
                 let linkSource = `data:application/octet-stream;base64,{base64}`;
@@ -37,7 +37,7 @@ export class SuccesContainer extends React.Component {
                 const downloadLink = document.createElement("a");
 
                 downloadLink.href = linkSource;
-                downloadLink.download = uploadFile.downloadFile.name;
+                downloadLink.download = uploadFile.downloadFile.fileName;
                 downloadLink.click();
             }
         }
@@ -48,14 +48,14 @@ export class SuccesContainer extends React.Component {
 
     render() {
         const { intl } = this.props
-        const { resetWizard } = this.props
+
         return (
 
             <CardContainer
                 title={intl.formatMessage(messages.title)}
                 hasNextButton
                 nextButtonText={intl.formatMessage(messages.doneButton)}
-                onClickNext={() => { resetWizard() }}
+                onClickNext={() => { this.props.resetWizard() }}
             >
                 <div className="form-group">
                     <Fragment>

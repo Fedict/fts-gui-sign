@@ -82,7 +82,7 @@ export class SuccesContainerForToken extends React.Component {
 
         let bodyText = this.props.autoDownloadDocument ? 
                         (multipleDocuments ? 
-                            "The signed version of your documents will be automatically downloaded. If the download doesn't start, click <b>download document</b>." :
+                            "The signed version of your documents will be automatically downloaded. If the download doesn't start, click <b>download document.</b>" :
                             "Your document will be automatically downloaded. If this is not the case, you can start the download manually."
                         ) : "You can download the document by clicking on <b>{succesButtonDownload}</b>."
 

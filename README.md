@@ -135,3 +135,36 @@ configuration of the devtools are found in /src/store/store.js
 ``` JS
  const composeEnhancers = (process.env.NODE_ENV !== "production") ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose : compose
 ```
+
+
+## pdf viewer
+To allow selecting the position of the signature inside the PDF (free position or inside an annotation),
+the library pdfjs (https://github.com/mozilla/pdfjs-dist) is used.
+This library allows you to display a PDF for preview, list the signing annotations, and allow custom rendering.
+Unfortunately, the library does not provide information if a signing annotation already contains a signature.
+
+The work around is to modify the library to add a field that defines if a value (signature) is present or not.
+
+for the version 3.10.111 of the library, the following line must be inserted at line 5314 of node_modules\pdfjs-dist\build\pdf.worker.js.
+
+``` JS
+    data.BoSa_hasValue = fieldValue !== undefined;
+```
+
+This allows us to check if the fieldValue has content associated. The following snapshot demonstrates the context.
+
+``` JS
+    let fieldValue = (0, _core_utils.getInheritableProperty)({
+      dict,
+      key: "V",
+      getArray: true
+    });
+    data.BoSa_hasValue = fieldValue !== undefined;
+```
+
+This allows the UI to gray the annotation that already contain a signature.
+
+To avoid having to maintain a fork of the project, the decision to patch the library was taken.
+
+Inside the development environment, the patch must be done manually each time the library is installed/updated.
+Inside the CI/CD pipeline, there is a verification of the current version of the file (SHA1 to check if the lib version didn’t change). If the version didn’t change, copy of the patch file is done after the NPM install and the generation of the project.
