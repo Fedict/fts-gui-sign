@@ -11,6 +11,7 @@ import { boldedText } from "../../utils/reactIntlUtils";
 import { ReadCertificates } from "../../components/ReadCertificates/ReadCertificates";
 import { setPreview, setInputsSignState, setPreviewFileId } from "../../signByTokenWizard/actions/TokenActions"
 import { signingType, signState } from '../constants';
+import {setCustomSignature} from "../actions/TokenActions";
 import PDFSignatureSelection from '../../components/PDFSignatureSelection'
 
 const messages = defineMessages({
@@ -73,6 +74,7 @@ const TokenWizardIntroContainer = (props) => {
                 <button
                     className={ readyToSign ? "btn btn-primary text-uppercase" : "btn btn-secondary text-uppercase"} disabled={!readyToSign}
                     onClick={() => {
+                        props.setCustomSignature(props.selectedInputId, props.customSignature); 
                         props.setInputsSignState(signState.SIGN_REQUESTED, signState.TO_BE_SIGNED)
                         if (props.tokenFile.signingType === signingType.XadesMultiFile || props.isMultifile) {
                             props.setPreview(false)
@@ -109,21 +111,26 @@ const TokenWizardIntroContainer = (props) => {
 }
 
 function mapStateToProps(state) {
+    const selectedInputId = state.filePreview.index;
     const inputs = state.tokenFile.inputs;
     if (!inputs) {
         return {
             isMultifile: false,
             fileName: "",
             tokenFile: state.tokenFile,
-            showPDFSigSelection: false
+            showPDFSigSelection: false,
+            selectedInputId: 0,
+            customSignature: null
         };
     }
-    const curInput = inputs[state.filePreview.index];
+    const curInput = inputs[selectedInputId];
     return {
         isMultifile: inputs.length > 1,
         fileName: inputs[0].fileName,
         tokenFile: state.tokenFile,
-        showPDFSigSelection: curInput.mimeType === "application/pdf" && curInput.drawSignature
+        showPDFSigSelection: curInput.mimeType === "application/pdf" && curInput.drawSignature,
+        selectedInputId,
+        customSignature: state.customSignature
     };
 }
 const mapDispatchToProps = ({
@@ -134,7 +141,8 @@ const mapDispatchToProps = ({
     doSendLogInfo,
     setPreview,
     setInputsSignState,
-    setPreviewFileId
+    setPreviewFileId,
+    setCustomSignature
 })
 
 export const TokenWizardIntroComponent = injectIntl(TokenWizardIntroContainer)

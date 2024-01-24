@@ -106,7 +106,7 @@ export const createBodyForToken = (certificateBody, token, fileIdToSign, customS
             "signingCertificate": certificateBody.certificate,
             signingDate,
             "psfC": sigType === MANUAL_SIGNATURE ? createPsfC(customSignature.signatureArea) : null,
-            "psfN": sigType !== INVISIBLE_SIGNATURE ? sigType : null,
+            "psfN": sigType !== INVISIBLE_SIGNATURE && sigType !== MANUAL_SIGNATURE ? sigType : null,
             photo,
             signLanguage,
         },
