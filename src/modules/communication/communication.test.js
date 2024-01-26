@@ -667,6 +667,7 @@ describe('getDataToSignForTokenAPI', () => {
             "signingCertificate": { encodedCertificate: "certificatestring" },
             "signingDate": "this value will be replaced later",
             "psfC": "1,150,100,100,100",
+            "psfN": null,
             "photo": "picture bytes",
             "signLanguage": "nl"
         },
@@ -727,6 +728,7 @@ describe('signDocumentForTokenAPI', () => {
                 },
                 "signingDate": "2021-06-23T11:53:33+02:00",
                 "psfC": "1,150,100,100,100",
+                "psfN": null,
                 "photo": "/9j/4AAQSk",
                 "signLanguage": "fr"
             },
