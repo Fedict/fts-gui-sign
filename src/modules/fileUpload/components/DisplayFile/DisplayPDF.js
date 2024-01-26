@@ -85,16 +85,26 @@ export const DisplayPDF = ({ file, drawSignature }) => {
     const [thumbnailsRendered, setThumbnailsRendered] = useState(false);
     
     const [showThumbnails, setShowThumbnails] = useState(false);
-    const [pageNumber, setPageNumber] = useState(1);
-
+    
     const [zoomLevel, setZoomLevel] = useState(100);
     const zoomLevels = [25, 50, 75, 100, 125, 150, 175, 200, 225, 250, 275, 300];
 
+    const [pageNumber, setPageNumber] = useState(1);
     const [pageNumberStr, setPageNumberStr] = useState("1");
+
     const changePageNumberStr = (page) => {
         setPageNumberStr(page);
         page = +page.replace(/\D/g,'');
         if (page >= 1 && page <= currentPDF.numPages) setPageNumber(page);
+    }
+
+    const changePageNumber = (page) => {
+        setPageNumber(page);
+        setPageNumberStr("" + page);
+        if (thumbCanvasRefs.current) {
+            let element = thumbCanvasRefs.current[page - 1];
+            if (element) element.scrollIntoView();
+        }
     }
 
     const setZoomLevelStr = (level) => {
@@ -155,15 +165,6 @@ export const DisplayPDF = ({ file, drawSignature }) => {
         }
         setThumbnailsRendered(true);
     }, [showThumbnails])
-
-    const changePageNumber = (page) => {
-        setPageNumber(page);
-        changePageNumberStr("" + page);
-        if (thumbCanvasRefs.current) {
-            let element = thumbCanvasRefs.current[page - 1];
-            if (element) element.scrollIntoView();
-        }
-    }
 
     useEffect(() => {
         if (pagesInfo.length === 0) return;
@@ -413,7 +414,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
                         <canvas key={ "tumbnail-"+pageIndex }
                             ref={(element) => thumbCanvasRefs.current[pageIndex] = element }
                             width={pagesInfo[pageIndex].width / 10} height ={pagesInfo[pageIndex].height / 10}
-                            onClick={ () => { setPageNumber(pageIndex + 1) }}
+                            onClick={ () => { changePageNumber(pageIndex + 1) }}
                             style={ pageNumber === (pageIndex + 1) ?  { border: "double" } : {} } />
                     ))}</div>
                 }

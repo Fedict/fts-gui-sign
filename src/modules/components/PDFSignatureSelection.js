@@ -11,7 +11,7 @@ const PDFSignatureSelection = (props) => {
         <ol className="invisibleOL" style={{ borderTopStyle: "solid", borderWidth: "thin", borderColor: "rgba(0, 0, 0, 0.125)", margin: "15px -20px -20px", backgroundColor: "rgba(0, 0, 0, 0.03)"}}>
             <div className="card-body" style={{ paddingLeft: "60px" }}>
                 <li><div className="row mb-4"><div className="col col-1"><span className="badge badge-primary p-1">1</span></div><div className="col col-11"><b>
-                    <FormattedMessage id="signing.upload.no.signature" defaultMessage="Choose the place where you want to put your signature by drawing a rectangle at the desired location with your mouse." />
+                    <FormattedMessage id="signing.upload.no.signature" defaultMessage="Choose the place where you want to add your signature by drawing a rectangle at the desired location with your mouse." />
                 </b></div></div></li>
                 <li><div className="row mb-4"><div className="col col-1">
                     <span className="badge p-1 badge-primary" style={ props.signatureArea === null && props.signatureFields.length === 0 ? disabledBGColor : {} }>2</span></div><div className="col col-11">
@@ -31,10 +31,10 @@ const PDFSignatureSelection = (props) => {
                 <li><div className="row mb-4" style={ props.signatureSelected === INVISIBLE_SIGNATURE ? disabledTextColor : {} }>
                     <div className="col col-1"><span className="badge p-1 badge-primary" style={ props.signatureSelected === INVISIBLE_SIGNATURE ? disabledBGColor : {} }>3</span></div>
                     <div className="col col-11">
-                        <b><FormattedMessage id="signing.upload.photo.signature" defaultMessage="The photo from your eID card can be added to your signature." /></b><p style={{ height: "10px" }}>
+                        <b><FormattedMessage id="signing.upload.photo.signature" defaultMessage="A profile photo can be added to your signature." /></b><p style={{ height: "10px" }}>
                         <input className="mt-3" type="checkbox" id="photo" checked={props.photoIncluded && props.signatureSelected !== INVISIBLE_SIGNATURE}
                             onChange={ () => { props.includePhoto(!props.photoIncluded) } } disabled={ props.signatureSelected === INVISIBLE_SIGNATURE } style={{ display: "inline-grid "}}/>&nbsp;
-                        <label style={{ position: "absolute", marginTop: "11px" }} htmlFor="photo"><FormattedMessage id="signing.upload.photo.choice" defaultMessage="Add photo from eID card" /></label></p>
+                        <label style={{ position: "absolute", marginTop: "11px" }} htmlFor="photo"><FormattedMessage id="signing.upload.photo.choice" defaultMessage="Add profile picture" /></label></p>
                     </div>
                 </div></li>
             </div>

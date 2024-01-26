@@ -40,13 +40,13 @@ export const ResultContainer = (props) => {
                         <div className="col-2 px-0"><b><FormattedMessage id="validation.sign.valid" defaultMessage="Valid"/></b></div>
                         <div className="col-2 px-0 text-nowrap"><b><FormattedMessage id="validation.sign.qualif" defaultMessage="Qualified"/></b></div>
                         <div className="col-2 px-0 text-nowrap"><b><FormattedMessage id="validation.sign.format" defaultMessage="EU Format"/></b>
-                            <img title={intl.formatMessage({ id: "more.info", defaultMessage: "More Info" })} style={{ width:16, height:16, marginBottom: 3, marginLeft: 4 }} src="/img/questionMark.svg" onClick={() => setShowPkcs7Info(!showPkcs7Info)}/>
+                            <img title={intl.formatMessage({ id: "more.info", defaultMessage: "More information" })} style={{ width:16, height:16, marginBottom: 3, marginLeft: 4 }} src="/img/questionMark.svg" onClick={() => setShowPkcs7Info(!showPkcs7Info)}/>
                                     { showPkcs7Info && <div className="text-wrap" style={{ textAlign: "left", marginLeft: "-170px", backgroundColor: "white", width: "400px", borderStyle: "dotted", padding: "10px", position: "absolute" , zIndex: 1 }}>
-                                        <FormattedMessage id="validation.sign.pkcs7.info" defaultMessage="This signature validation is based on the {LINK} and adheres to the applicable {LINK1}.{br} Other signature formats are available on the market (for example PCKS7 in Adobe Reader). Please check the validation standard requested for your validation."
+                                        <FormattedMessage id="validation.sign.pkcs7.info" defaultMessage="This signature validation is based on the {LINK} and adheres to the {LINK1}.{br}Other signature formats are available on the market (for example PCKS7 in Adobe Reader).{br}Please check the validation standard requested for your validation."
                                             values={{ br: <br/>, LINK: (<a href="https://ec.europa.eu/digital-building-blocks/DSS/webapp-demo">
                                                                     <FormattedMessage id="validation.sign.pkcs7.linkText" defaultMessage="Digital Signature Service component provided by the European Commission" /></a>),
                                                                 LINK1: (<a href="https://www.etsi.org/deliver/etsi_EN/319100_319199/31910201/01.03.01_60/en_31910201v010301p.pdf">
-                                                                <FormattedMessage id="validation.sign.pkcs7.linkText1" defaultMessage="European standards for signature validation" /></a>) }}
+                                                                <FormattedMessage id="validation.sign.pkcs7.linkText1" defaultMessage="applicable European standards for signature validation" /></a>) }}
                                         />
                                         <div onClick={() => setShowPkcs7Info(false)} style={{ position: "fixed", padding: 0, margin: 0, top: 0, left: 0, width: "100%", height: "100%" , zIndex: -1 }}/>
                                     </div>}
