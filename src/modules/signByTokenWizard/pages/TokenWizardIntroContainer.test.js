@@ -68,6 +68,16 @@ describe("TokenWizardIntroContainer", () => {
 
         expect(buttonElement).toBeEnabled();
         buttonElement.click();
+
+        // Save last "customSignature" values to token's input field
+        expect(setCustomSignature).toBeCalled();
+        
+        // Stop previewing documents
+        expect(setPreview).toBeCalledWith(false);
+        expect(setPreviewFileId).toBeCalledWith(-1);
+
+        // Make all "SIGN_REQUESTED" documents into "TO_BE_SIGNED" documents
+        expect(setInputsSignState).toBeCalledWith(signState.SIGN_REQUESTED, signState.TO_BE_SIGNED);
     })
 });
 
