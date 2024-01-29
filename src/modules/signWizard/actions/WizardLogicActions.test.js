@@ -997,6 +997,74 @@ describe("WizardLogicActions", () => {
             expect(callParametersCertifictateListPased.length).toEqual(1)
         })
 
+        test("validateCertificates ignores 'indication' results provided 'keyUsageCheckOk' is true. Really ??????", async () => {
+
+            const certificateList = [{
+                readerName: 'readerName',
+                readerType: 'standard',
+                cardType: 'BEID',
+                certificate: 'certificate string',
+                APIBody: {
+                    certificate: {
+                        encodedCertificate: 'certificate string'
+                    }
+                }
+            }, {
+                readerName: 'readerName',
+                readerType: 'standard',
+                cardType: 'BEID',
+                certificate: 'certificate string',
+                APIBody: {
+                    certificate: {
+                        encodedCertificate: 'certificate string'
+                    }
+                }
+            }]
+
+            const certificateResponse = {
+                "indications": [{
+                    "commonName": "name (Signature)",
+                    "indication": "PASSED",
+                    "subIndication": null,
+                    "keyUsageCheckOk": true
+                }, {
+                    "commonName": "name 1 (Signature)",
+                    "indication": "FAILED",
+                    "subIndication": null,
+                    "keyUsageCheckOk": true
+                }]
+            }
+
+            communication.validateCertificatesAPI = jest.fn(() => { return Promise.resolve(certificateResponse) })
+            const expectedCertificateList = certificateList.map(val => {
+                return {
+                    ...val.APIBody,
+                    "expectedKeyUsage": "NON_REPUDIATION",
+                    "token": expect.any(Number)
+                }
+            })
+            const mockDispatch = jest.fn()
+            const mockGetStore = jest.fn(() => {
+                return {
+                    controlId: 88888,
+                    certificate: {
+                        certificateList: certificateList
+                    }
+                }
+            })
+            FlowIdHelpers.handleFlowIdError = jest.fn(() => (value) => { return value })
+
+
+            validateCertificates()(mockDispatch, mockGetStore)
+            await flushPromises();
+            expect(communication.validateCertificatesAPI).toBeCalledTimes(1)
+            expect(communication.validateCertificatesAPI).toBeCalledWith(expect.objectContaining(expectedCertificateList))
+            expect(CertificateActions.saveCertificateList).toBeCalledTimes(1)
+            const callParametersCertifictateList = CertificateActions.saveCertificateList.mock.calls[0][0]
+            const callParametersCertifictateListPased = callParametersCertifictateList.filter((val) => { return val.keyUsageCheckOk })
+            expect(callParametersCertifictateListPased.length).toEqual(2)
+        })
+
         test("validateCertificates success valid certificates list.length == 0 shows error MessageCertificatesNotFound ", async () => {
             const certificateList = [{
                 readerName: 'readerName',
