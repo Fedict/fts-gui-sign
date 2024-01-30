@@ -154,7 +154,7 @@
   "succes.next": "Fermer",
   "succes.redirect": "Nous vous redirigerons dans {timeLeft} secondes.",
   "succes.redirect.to": "Nous vous redirigerons vers {clientName} dans {timeLeft} secondes.",
-  "succes.signed.downloadIsEmpty": "Nothing to download",
+  "succes.signed.downloadIsEmpty": "Aucun nouveau téléchargement",
   "succes.signed.downloadIsEmptyTxt": "Because of an error no file was signed and can be downloaded",
   "succes.signNext": "Signez un nouveau document",
   "succes.title": "Votre document a été signé avec succès!",
