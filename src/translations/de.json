@@ -143,7 +143,7 @@
   "signing.upload.select.signature": "Bestätigen Sie die Anzeige Ihrer Unterschrift in diesem Dokument:",
   "signing.upload.existing.signature": "Anzeige im bestehenden Unterschriftenfeld ''{sigField}''",
   "signing.upload.no.signature": "Wählen Sie die Stelle, an der Sie Ihre Unterschrift anbringen möchten, indem Sie mit der Maus ein Rechteck an der gewünschten Stelle zeichnen.", 
-  "signing.upload.photo.signature": "Es ist möglich, Ihr Profilbild zur Signatur hinzuzufügen.",
+  "signing.upload.photo.signature": "Es ist möglich, der Unterschrift Ihr Profilbild hinzuzufügen.",
   "signing.upload.photo.choice": "Profilbild hinzufügen",
   "signing.upload.manual.signature": "Anzeige im manuell gezeichneten Unterschriftenfeld",
   "signing.error.skipButton": "Datei überspringen",

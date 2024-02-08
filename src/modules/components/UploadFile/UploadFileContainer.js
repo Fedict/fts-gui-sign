@@ -281,7 +281,7 @@ export const UploadFileContainer = (props) => {
                         <li><div className="row mb-4" style={ props.signatureSelected === INVISIBLE_SIGNATURE ? disbledTextColor : {} }>
                             <div className="col col-1"><span className="badge p-1 badge-primary" style={ props.signatureSelected === INVISIBLE_SIGNATURE ? disabledBGColor : {} }>3</span></div>
                             <div className="col col-11">
-                                <b><FormattedMessage id="signing.upload.photo.signature" defaultMessage="A profile photo can be added to your signature." /></b><p style={{ height: "10px" }}>
+                                <b><FormattedMessage id="signing.upload.photo.signature" defaultMessage="Your profile picture can be added to the signature." /></b><p style={{ height: "10px" }}>
                                 <input className="mt-3" type="checkbox" id="photo" checked={props.photoIncluded && props.signatureSelected !== INVISIBLE_SIGNATURE}
                                     onChange={ () => { props.includePhoto(!props.photoIncluded) } } disabled={ props.signatureSelected === INVISIBLE_SIGNATURE } style={{ display: "inline-grid "}}/>&nbsp;
                                 <label style={{ position: "absolute", marginTop: "11px" }} htmlFor="photo"><FormattedMessage id="signing.upload.photo.choice" defaultMessage="Add profile picture" /></label></p>
