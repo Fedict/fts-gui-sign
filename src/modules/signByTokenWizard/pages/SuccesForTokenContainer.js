@@ -32,7 +32,7 @@ const messages = defineMessages({
     },
     noFilesToDownload : {
         id : "succes.signed.downloadIsEmpty",
-        defaultMessage : "Nothing to download"
+        defaultMessage : "No new downloads"
     }
 })
 
