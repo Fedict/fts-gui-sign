@@ -21,7 +21,7 @@ import { getBrowser, browser } from './modules/browserDetection/BrowserDetection
 import { Helmet } from "react-helmet-async";
 
 const BaseApp = () => {
-    const browserIsSupported = browserIsAccepted();
+    const browserIsSupported = false; //browserIsAccepted();
     const usedBrowser = getBrowser();
     return (
         <div lang={ useIntl().locale } >
@@ -51,6 +51,7 @@ const BaseApp = () => {
                         <div className="col col-12 col-md-8 mx-auto align-middle">
                             <MessageContainer message={ErrorNotSupported} />
                         </div>
+                        <h1>{ navigator.userAgent } </h1>
                     </div>
                 )
                 )
