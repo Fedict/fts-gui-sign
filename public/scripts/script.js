@@ -9,6 +9,7 @@ var no_support_message = '<div class="alert alert-danger" role="alert" >' +
     '<li>Edge (based on Chromium)</li>' +
     '<li>Firefox</li>' +
     '<li>Opera (based on Chromium)</li>' +
+    '<H1>' + navigator.userAgent + '</H1>' +
     '</ul>' +
     '</div>' +
     '</div>'
