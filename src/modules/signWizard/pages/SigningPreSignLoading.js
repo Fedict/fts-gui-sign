@@ -33,7 +33,7 @@ export const SigningPreSignLoading = ({ certificate, resetWizard, intl, pinError
             onClickCancel={() => { resetWizard() }}
             hasNextButton={pinError && pinError.message !== undefined}
             nextButtonText={intl.formatMessage(definedMessages.retry)}
-            onClickNext={() => navigateToSign()}
+            onClickNext={() => navigateToSign(intl.locale)}
         >
             {(isPinPadReader)
                 ? (

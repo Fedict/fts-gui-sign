@@ -15,7 +15,7 @@ const messages = defineMessages({
 
 export class DigestForTokenLoadingContainer extends React.Component {
     componentDidMount() {
-        this.props.getDigestForToken()
+        this.props.getDigestForToken(this.props.intl.locale)
     }
 
     render() {

@@ -17,12 +17,13 @@ export const SET_TOKEN_PREVIEW = "SET_TOKEN_PREVIEW"
 export const SET_INPUTS_SIGN_STATE = "SET_INPUTS_SIGN_STATE"
 export const SET_PREVIEW_FILE_ID = "SET_PREVIEW_FILE_ID"
 export const SET_INPUT_SELECTION = "SET_INPUT_SELECTION"
+export const SET_CUSTOM_SIGNATURE = "SET_CUSTOM_SIGNATURE"
 export const SET_DOCUMENT_TOKEN_METADATA = "SET_DOCUMENT_TOKEN_METADATA"
 
 /**
  * function (action) to get the digest by token
  */
-export const getDigestForToken = () => (dispatch, getStore) => {
+export const getDigestForToken = (locale) => (dispatch, getStore) => {
     const store = getStore()
 
     const { certificate } = store
@@ -36,15 +37,14 @@ export const getDigestForToken = () => (dispatch, getStore) => {
         && tokenFile
         && tokenFile.token) {
         const flowId = getStore().controlId.flowId;
-        let photo;
-        if(tokenFile.readPhoto){
-            photo = certificate.certificateSelected.photo;
-        }
-
         var fileIdToSign = tokenFile.inputs.findIndex(input => input.signState === signState.TO_BE_SIGNED);
         dispatch(setPreviewFileId(tokenFile.signingType === signingType.XadesMultiFile ? -1 : fileIdToSign));
+        const curInput = tokenFile.inputs[fileIdToSign];
+        const customSignature = curInput.customSignature;
+        const photo = curInput.psfP || customSignature.photoIncluded ? certificate.certificateSelected.photo : null;
+        const signLanguage = curInput.signLanguage ? curInput.signLanguage : locale;
         
-        getDataToSignForTokenAPI(certificate.certificateSelected.APIBody, tokenFile.token, fileIdToSign, signingDate, photo)
+        getDataToSignForTokenAPI(certificate.certificateSelected.APIBody, tokenFile.token, fileIdToSign, customSignature, signLanguage, signingDate, photo)
             .then(handleFlowIdError(flowId, getStore))
             .then((resp) => {
                 if(resp.digest && resp.digestAlgorithm && resp.signingDate){
@@ -174,5 +174,16 @@ export const setPreviewFileId = (index) => (dispatch) => {
     dispatch({
         type : SET_PREVIEW_FILE_ID,
         payload : {index}
+    })
+}
+
+export const setCustomSignature = (fileId, customSignature) => (dispatch) => {
+    dispatch({
+        type : SET_CUSTOM_SIGNATURE,
+        payload : {fileId, customSignature: {
+            signatureArea: customSignature.signatureArea,
+            signatureSelected: customSignature.signatureSelected,
+            photoIncluded: customSignature.photoIncluded,
+        }}
     })
 }

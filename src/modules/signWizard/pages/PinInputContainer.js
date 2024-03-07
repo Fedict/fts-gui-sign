@@ -59,7 +59,7 @@ const PinInputContainer = (props) => {
             console.log('signing', thePin)
         }
         if(thePin && thePin.length >= 4){
-            sign(thePin)
+            sign(thePin, intl.locale)
         }
     }
 

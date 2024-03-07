@@ -18,7 +18,7 @@ export class PinPadError extends React.Component {
     }
 
     onClickNext() {
-        this.props.navigateToSign()
+        this.props.navigateToSign(this.props.intl.locale)
     }
     
     render() {

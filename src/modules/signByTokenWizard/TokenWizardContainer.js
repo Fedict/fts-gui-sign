@@ -188,7 +188,7 @@ export const TokenWizardContainer = ({ wizard, reader, resetWizard, doSetToken, 
                                     { inputs.length > 1 && (
                                         <p><FormattedMessage id = "token.documents.title.name"defaultMessage="<b>DOCUMENT PREVIEW:</b> {docName}" values={{b : boldedText, docName: inputs[selectedInputId].fileName.toUpperCase() }}/></p>
                                     )}
-                                    <TokenDisplayFile index={selectedInputId} />
+                                    <TokenDisplayFile index={selectedInputId} drawSignature={ inputs[selectedInputId].drawSignature } />
                                 </div>
                             )}
                         </div>

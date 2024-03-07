@@ -1,5 +1,6 @@
 import {STORE_RESET} from "../../../store/storeActions";
-import {SET_DOCUMENT_TOKEN_METADATA, TOKEN_RECEIVED, SET_TOKEN_PREVIEW, SET_INPUTS_SIGN_STATE, SET_ALL_INPUTS} from "../actions/TokenActions";
+import { INVISIBLE_SIGNATURE } from "../../fileUpload/reducers/CustomSignatureReducer";
+import {SET_DOCUMENT_TOKEN_METADATA, TOKEN_RECEIVED, SET_TOKEN_PREVIEW, SET_INPUTS_SIGN_STATE, SET_ALL_INPUTS, SET_CUSTOM_SIGNATURE} from "../actions/TokenActions";
 import { signState } from "../constants";
 
 export const initialState = {
@@ -23,8 +24,11 @@ const TokenReducer = (state = initialState, action) => {
         case SET_DOCUMENT_TOKEN_METADATA : {
             return {
                 ...state,
-                inputs : action.payload.inputs.map(input => { return { ...input, signState: signState.SIGN_REQUESTED } }),
-                readPhoto : action.payload.readPhoto,
+                inputs : action.payload.inputs.map(input => { return { ...input, signState: signState.SIGN_REQUESTED, customSignature: {
+                        signatureArea: null,
+                        signatureSelected: INVISIBLE_SIGNATURE,
+                        photoIncluded: false,
+                    } }}),
                 previewDocuments : action.payload.previewDocuments,
                 selectDocuments: action.payload.selectDocuments,
                 noSignedDownloads : action.payload.noSignedDownloads,
@@ -43,8 +47,15 @@ const TokenReducer = (state = initialState, action) => {
             return {
                 ...state,
                 inputs: state.inputs.map(
-                    (input, i) => i === action.payload.selector || action.payload.selector === SET_ALL_INPUTS || action.payload.selector === input.signState ? {...input, signState: action.payload.newState } : input
+                    (input, i) => i === action.payload.selector || action.payload.selector === SET_ALL_INPUTS || action.payload.selector === input.signState ? {...input, signState: action.payload.newState } : { ...input }
                 )}
+            }
+        case SET_CUSTOM_SIGNATURE:
+            return {
+                ...state,
+                inputs: state.inputs.map(
+                    (input, i) => i === action.payload.fileId ? {...input, customSignature: action.payload.customSignature } : { ...input }
+                )
             }
         case STORE_RESET:
             return initialState
