@@ -63,20 +63,6 @@
   "browser": {
     "buffer": false
   },
-  "browserslist": {
-    "production": [
-      "Safari >10",
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "ie 11",
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
   "devDependencies": {
     "@svgr/webpack": "^6.3.1",
     "@testing-library/dom": "^8.1.0",
