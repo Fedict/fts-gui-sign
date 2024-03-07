@@ -65,10 +65,8 @@
   },
   "browserslist": {
     "production": [
-      ">0.2%",
       "not dead",
-      "not op_mini all",
-      "PingdomTMS"
+      "not op_mini all"
     ],
     "development": [
       "ie 11",
