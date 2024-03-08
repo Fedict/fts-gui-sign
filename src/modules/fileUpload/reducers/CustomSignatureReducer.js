@@ -1,3 +1,5 @@
+import { createPsfC } from "../../communication/communication"
+
 const SET_SIGNATURES_FIELDS = "SET_SIGNATURES_FIELDS"
 
 export const setSignatureFields = (signatureFields => ({ type: SET_SIGNATURES_FIELDS, payload: signatureFields }))
@@ -28,6 +30,15 @@ export const lock = (locked) => ({ type: LOCK, payload: { locked: locked } })
 const CUST_SIG_STORE_RESET = "CUST_SIG_STORE_RESET"
 
 export const reset = () => ({ type: CUST_SIG_STORE_RESET, payload: null })
+
+export const customSignatureToString = (sig) => {
+    let string;
+    if (sig.signatureSelected === INVISIBLE_SIGNATURE) return "Invisible signature";
+    string = (sig.signatureSelected === MANUAL_SIGNATURE) ?
+        "Drawn signature : " + createPsfC(sig.signatureArea) : "Signature field '" + sig.signatureSelected + "'";
+    if (sig.photoIncluded) string += " with photo";
+    return string;
+}
 
 
 export const initialState = {

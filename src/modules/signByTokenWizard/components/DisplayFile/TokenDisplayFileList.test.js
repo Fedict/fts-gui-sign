@@ -1,7 +1,8 @@
+import React from "react";
 import {TokenDisplayFileList} from "./TokenDisplayFileList";
 import { render, screen} from '../../../testUtils/test-utils.js'
 import { signState } from '../../constants';
-import React from "react";
+import { INVISIBLE_SIGNATURE } from '../../../fileUpload/reducers/CustomSignatureReducer.js'
 
 describe("TokenDisplayFileList", () => {
     test("Displays a list of checkable files with preview",  done => {
@@ -13,7 +14,8 @@ describe("TokenDisplayFileList", () => {
 
         const { container } = render(<TokenDisplayFileList selectedInputId={ 0 } doSendLogInfo={doSendLogInfo} setPreviewFileId={setPreviewFileId} setCustomSignature={setCustomSignature} setSignAttributes={setSignAttributes}
              setInputsSignState={setInputsSignState} tokenFile={ { previewDocuments: true, selectDocuments: true,
-                inputs: [ {signState: signState.SIGN_REQUESTED, mimeType: 'application/xml', fileName: 'file1.xml' }, {signState: signState.SIGN_REQUESTED, mimeType: 'application/pdf', fileName: 'fileB.pdf' } ] }} />);
+                inputs: [ {signState: signState.SIGN_REQUESTED, mimeType: 'application/xml', fileName: 'file1.xml' }, {signState: signState.SIGN_REQUESTED, mimeType: 'application/pdf', fileName: 'fileB.pdf' } ] }}
+                customSignature={{ signatureSelected: INVISIBLE_SIGNATURE }} />);
 
         var elt = screen.getByText(/^UNSELECT ALL/);
         expect(elt).toBeInTheDocument();

@@ -1,7 +1,8 @@
+import React from "react";
 import {TokenWizardIntroComponent} from "./TokenWizardIntroContainer";
 import { render, screen} from '../../testUtils/test-utils.js'
 import { signState } from '../constants';
-import React from "react";
+import { INVISIBLE_SIGNATURE } from '../../../modules/fileUpload/reducers/CustomSignatureReducer'
 
 describe("TokenWizardIntroContainer", () => {
     test("shows start button & can click on it for a single file signature",  done => {
@@ -16,7 +17,7 @@ describe("TokenWizardIntroContainer", () => {
         });
 
         render(<TokenWizardIntroComponent navigateToNextStep={done} getCertificates={getCertificates} doSendLogInfo={doSendLogInfo} setPreview={setPreview} setCustomSignature={setCustomSignature}
-             setInputsSignState={setInputsSignState} fileName={'aFile'} tokenFile={{ noSignedDownloads: true, inputs: [ {signState: signState.SIGN_REQUESTED} ] }} />);
+             setInputsSignState={setInputsSignState} fileName={'aFile'} tokenFile={{ noSignedDownloads: true, inputs: [ {signState: signState.SIGN_REQUESTED} ] }} customSignature={{ signatureSelected: INVISIBLE_SIGNATURE }} />);
 
         expect(screen.getByText(/^Please note:/)).toBeInTheDocument();
 
@@ -45,13 +46,14 @@ describe("TokenWizardIntroContainer", () => {
         const setPreviewFileId = jest.fn();
         const setPreview = jest.fn();
         
-
         getCertificates.mockImplementation((callback) => {
             callback(true);
         });
 
         render(<TokenWizardIntroComponent navigateToNextStep={done} getCertificates={getCertificates} doSendLogInfo={doSendLogInfo} setPreview={setPreview} setPreviewFileId={setPreviewFileId} setCustomSignature={setCustomSignature}
-             setInputsSignState={setInputsSignState} isMultifile={true} tokenFile={{ requestDocumentReadConfirm: true, inputs: [ {signState: signState.SIGN_REQUESTED} , {signState: signState.SIGN_REQUESTED} ] }} />);
+             setInputsSignState={setInputsSignState} isMultifile={true}
+             tokenFile={{ requestDocumentReadConfirm: true, inputs: [ {signState: signState.SIGN_REQUESTED} , {signState: signState.SIGN_REQUESTED} ] }}
+             customSignature={{ signatureSelected: INVISIBLE_SIGNATURE }}  />);
 
         expect(screen.getByText(/^Digitally sign multiple documents/)).toBeInTheDocument();
         expect(screen.getByText(/to digitally sign the documents/)).toBeInTheDocument();

@@ -13,6 +13,7 @@ import { setPreview, setInputsSignState, setPreviewFileId } from "../../signByTo
 import { signingType, signState } from '../constants';
 import {setCustomSignature} from "../actions/TokenActions";
 import PDFSignatureSelection from '../../components/PDFSignatureSelection'
+import { customSignatureToString } from '../../../modules/fileUpload/reducers/CustomSignatureReducer';
 
 const messages = defineMessages({
     title: {
@@ -75,6 +76,8 @@ const TokenWizardIntroContainer = (props) => {
                     className={ readyToSign ? "btn btn-primary text-uppercase" : "btn btn-secondary text-uppercase"} disabled={!readyToSign}
                     onClick={() => {
                         props.setCustomSignature(props.selectedInputId, props.customSignature); 
+                        props.doSendLogInfo('UI - set Custom signature(' + props.selectedInputId + ') to ' + customSignatureToString(props.customSignature) );
+
                         props.setInputsSignState(signState.SIGN_REQUESTED, signState.TO_BE_SIGNED)
                         if (props.tokenFile.signingType === signingType.XadesMultiFile || props.isMultifile) {
                             props.setPreview(false)

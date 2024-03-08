@@ -77,6 +77,7 @@ export const UploadFileContainer = (props) => {
                     if (UploadFileContext === "sign") {
                         props.resetCustomSignature()
                         props.displayFile(e.dataTransfer.files[0])
+                        sendLogInfo('UI - Reset Custom signatures');
                     }
                     return;
                 default:
@@ -113,6 +114,7 @@ export const UploadFileContainer = (props) => {
         if (UploadFileContext === "sign") {
             props.resetCustomSignature()
             props.displayFile(fileSelected)
+            sendLogInfo('UI - Reset Custom signatures');
         }
     }
 

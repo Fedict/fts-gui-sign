@@ -5,7 +5,7 @@ import {FormattedMessage} from 'react-intl';
 import {getBEUrl} from "../../../utils/helper";
 import {setPreviewFileId, setInputsSignState, setCustomSignature, SET_ALL_INPUTS} from "../../actions/TokenActions";
 import {signState} from "../../constants";
-import { setSignAttributes } from '../../../../modules/fileUpload/reducers/CustomSignatureReducer';
+import { setSignAttributes, customSignatureToString } from '../../../../modules/fileUpload/reducers/CustomSignatureReducer';
 import {doSendLogInfo} from "../../../signWizard/actions/WizardLogicActions";
 
 
@@ -37,8 +37,11 @@ export const TokenDisplayFileList = ({ tokenFile, selectedInputId, customSignatu
                 <a href="#" onClick={ () => setInputsSignState(SET_ALL_INPUTS, allNone.set) }><b><FormattedMessage id = { "token.documents.select." + allNone.id } defaultMessage={ allNone.txt }/></b></a> }
             {( inputs.map((input, index) => ( 
                 <div className="m-2 p-2 text-break" key={index} onClick={() => { 
-                    setCustomSignature(selectedInputId, customSignature); setPreviewFileId(index);  setSignAttributes(inputs[index].customSignature);
-                 } }
+                    setCustomSignature(selectedInputId, customSignature);
+                    setPreviewFileId(index);
+                    setSignAttributes(inputs[index].customSignature);
+                    doSendLogInfo('UI - set Custom signature(' + selectedInputId + ') to ' + customSignatureToString(customSignature) );
+                } }
                        style={ selectedInputId !== index ?  { width: 110 } : 
                          { width: 110, backgroundColor: "grey", borderRadius: "3px", border: "1px solid" }}>
                     <div style={{ paddingTop: -20, border: "solid 1px lightgrey", height:70, backgroundColor: "white", position: "relative" }}>

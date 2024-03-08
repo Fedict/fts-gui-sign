@@ -41,7 +41,7 @@ export const getsigningProfileId = (documentType) => {
 /**
  * Function to format a manually drawn Signature definition to a psfC field
  */
-const createPsfC = (signatureArea) => {
+export const createPsfC = (signatureArea) => {
     return signatureArea.page + "," + Math.round(signatureArea.rect.left) + "," +
                             Math.round(signatureArea.rect.top) + "," +
                             Math.round(signatureArea.rect.right - signatureArea.rect.left) + "," +
