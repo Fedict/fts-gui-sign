@@ -34,6 +34,6 @@ describe("SuccesForTokenContainer", () => {
     test("no Download left", () => {
         const { getByText } = render(<SuccesContainerForTokenWithIntl tokenFile={{ noSignedDownload: true, inputs: [], clientNames: { name_en: "Yo!" }  }} />);
 
-        expect(getByText(/Because of an error no file was signed and can be downloaded/)).toBeInTheDocument();
+        expect(getByText(/Due to an error, the file cannot be signed and downloaded. Please try again./)).toBeInTheDocument();
     })
 })

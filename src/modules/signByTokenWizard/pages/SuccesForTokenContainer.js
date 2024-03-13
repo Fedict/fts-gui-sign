@@ -101,7 +101,7 @@ export class SuccesContainerForToken extends React.Component {
             >
                 <div className="form-group">
                     {noFilesToDownload ?
-                        <FormattedMessage id="succes.signed.downloadIsEmptyTxt" defaultMessage="Because of an error no file was signed and can be downloaded" values={{b : boldedText}} />
+                        <FormattedMessage id="succes.signed.downloadIsEmptyTxt" defaultMessage="Due to an error, the file cannot be signed and downloaded. Please try again." values={{b : boldedText}} />
                     :!tokenFile.noSignedDownloads &&
                         <Fragment>
                             <p><FormattedMessage id={bodyTextId} defaultMessage={bodyText}
