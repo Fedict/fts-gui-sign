@@ -116,7 +116,7 @@ const TokenWizardIntroContainer = (props) => {
 function mapStateToProps(state) {
     const selectedInputId = state.filePreview.index;
     const inputs = state.tokenFile.inputs;
-    if (!inputs) {
+    if (!inputs || selectedInputId === -1) {
         return {
             isMultifile: false,
             fileName: "",
