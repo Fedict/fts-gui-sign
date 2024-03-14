@@ -164,7 +164,8 @@ export const logVersions = (guiSign, beID, browserExt, browserStore, token) => {
                 beID: beID,
                 browserExt: browserExt,
                 browserStore: browserStore,
-                token: token
+                token: token,
+                userAgent: navigator.userAgent
             }),
             headers: {
                 'Content-Type': 'application/json'
