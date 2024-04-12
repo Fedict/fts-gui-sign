@@ -69,7 +69,7 @@ export const UploadFileContainer = (props) => {
         e.stopPropagation();
         setDragging(false);
         if (e.dataTransfer.files && e.dataTransfer.files.length === 1 && e.dataTransfer.files[0]) {
-            var ext = e.dataTransfer.files[0].name.match(/.([^.]+)$/)[1];
+            var ext = e.dataTransfer.files[0].name.toLowerCase().match(/\.([^\.]+)$/)[1];
             switch (ext) {
                 case 'xml':
                 case 'pdf':
@@ -192,20 +192,23 @@ export const UploadFileContainer = (props) => {
                                         style={{ display: "none" }}
                                         id="input_hidden_select_file"
                                         onChange={(e) => {
-                                            var ext = e.target.value.match(/.([^.]+)$/)[1];
-                                            switch (ext) {
-                                                case 'xml':
-                                                case 'pdf':
-                                                    if (UploadFileContext === "sign") {
-                                                        sendLogInfo('UI - Upload file to Sign');
-                                                    }
-                                                    else {
-                                                        sendLogInfo('UI - Upload file to Validate');
-                                                    }
-                                                    onchange(e)
-                                                    break;
-                                                default:
-                                                    break;
+                                            var ext = e.target.value
+                                            if (ext) {
+                                                ext = ext.toLowerCase().match(/\.([^\.]+)$/)[1];
+                                                switch (ext) {
+                                                    case 'xml':
+                                                    case 'pdf':
+                                                                if (UploadFileContext === "sign") {
+                                                            sendLogInfo('UI - Upload file to Sign');
+                                                        }
+                                                        else {
+                                                            sendLogInfo('UI - Upload file to Validate');
+                                                        }
+                                                        onchange(e)
+                                                        break;
+                                                    default:
+                                                        break;
+                                                }
                                             }
                                         }} />
                                 </div>
