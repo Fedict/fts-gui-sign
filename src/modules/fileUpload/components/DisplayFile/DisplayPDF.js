@@ -103,7 +103,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
         setPageNumberStr("" + page);
         if (thumbCanvasRefs.current) {
             let element = thumbCanvasRefs.current[page - 1];
-            if (element) element.scrollIntoView();
+            if (element) element.scrollIntoView( { block: "nearest" } );
         }
     }
 
