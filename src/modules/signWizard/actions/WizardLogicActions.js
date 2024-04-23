@@ -564,7 +564,8 @@ export const getDigest = (locale) => (dispatch, getStore) => {
         && certificate.certificateSelected
         && certificate.certificateSelected.APIBody) {
         const flowId = getStore().controlId.flowId
-        getDataToSignAPI(certificate.certificateSelected.APIBody, uploadFile.file, signingDate, customSignature, locale, certificate.certificateSelected.photo)
+        const photo = customSignature.photoIncluded ? certificate.certificateSelected.photo : null;
+        getDataToSignAPI(certificate.certificateSelected.APIBody, uploadFile.file, signingDate, customSignature, locale, photo)
             .then(handleFlowIdError(flowId, getStore))
             .then((resp) => {
                 if(resp.digest && resp.digestAlgorithm && resp.signingDate) {
@@ -769,7 +770,8 @@ export const signDocument = (locale) => (dispatch, getStore) => {
                     }
                 })
         }else{
-            signDocumentAPI(certificate.certificateSelected.APIBody, uploadFile.file, signature.signature, signature.signingDate, customSignature, locale, certificate.certificateSelected.photo)
+            const photo = customSignature.photoIncluded ? certificate.certificateSelected.photo : null;
+            signDocumentAPI(certificate.certificateSelected.APIBody, uploadFile.file, signature.signature, signature.signingDate, customSignature, locale, photo)
 
                 .then(handleFlowIdError(flowId, getStore))
                 .then((resp) => {

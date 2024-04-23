@@ -1923,12 +1923,13 @@ describe("WizardLogicActions", () => {
                         }
 
                     },
-                    uploadFile: { file: mockFile }
+                    uploadFile: { file: mockFile },
+                    customSignature: { photoIncluded: false }
                 }
             })
             getDigest()(mockDispatch, mockGetStore)
             expect(communication.getDataToSignAPI).toBeCalledTimes(1)
-            expect(communication.getDataToSignAPI).toBeCalledWith(mockapiBody, mockFile, expect.anything(), undefined, undefined, undefined)
+            expect(communication.getDataToSignAPI).toBeCalledWith(mockapiBody, mockFile, expect.anything(), {"photoIncluded": false}, undefined, null)
 
         })
 
@@ -1958,7 +1959,8 @@ describe("WizardLogicActions", () => {
                         }
 
                     },
-                    uploadFile: { file: mockFile }
+                    uploadFile: { file: mockFile },
+                    customSignature: { photoIncluded: false }
                 }
             })
             getDigest()(mockDispatch, mockGetStore)
@@ -1991,7 +1993,8 @@ describe("WizardLogicActions", () => {
                             APIBody: mockapiBody
                         }
                     },
-                    uploadFile: { file: mockFile }
+                    uploadFile: { file: mockFile },
+                    customSignature: { photoIncluded: false }
                 }
             })
             const resolvedDigest = {
@@ -2030,7 +2033,8 @@ describe("WizardLogicActions", () => {
                             APIBody: mockapiBody
                         }
                     },
-                    uploadFile: { file: mockFile }
+                    uploadFile: { file: mockFile },
+                    customSignature: { photoIncluded: false }
                 }
             })
             const resolvedDigest = {
@@ -2069,7 +2073,8 @@ describe("WizardLogicActions", () => {
                             APIBody: mockapiBody
                         }
                     },
-                    uploadFile: { file: mockFile }
+                    uploadFile: { file: mockFile },
+                    customSignature: { photoIncluded: false }
                 }
             })
 
@@ -2106,7 +2111,8 @@ describe("WizardLogicActions", () => {
                         }
 
                     },
-                    uploadFile: { file: mockFile }
+                    uploadFile: { file: mockFile },
+                    customSignature: { photoIncluded: false }
                 }
             })
 
@@ -2572,7 +2578,8 @@ describe("WizardLogicActions", () => {
                         }
                     },
                     signature: { signature: "signaturestring" },
-                    uploadFile: { file: { test: "string" } }
+                    uploadFile: { file: { test: "string" } },
+                    customSignature: { photoIncluded: false }
                 }
 
             })
@@ -2600,13 +2607,14 @@ describe("WizardLogicActions", () => {
                         }
                     },
                     signature: { signature: mockSignatureString, signingDate : mockSigningDate },
-                    uploadFile: { file: mockFile }
+                    uploadFile: { file: mockFile },
+                    customSignature: { photoIncluded: false }
                 }
 
             })
             signDocument()(mockDispatch, mockGetStore)
             expect(signDocumentAPI).toBeCalledTimes(1)
-            expect(signDocumentAPI).toBeCalledWith(mockApiBody, mockFile, mockSignatureString, mockSigningDate, undefined, undefined, undefined)
+            expect(signDocumentAPI).toBeCalledWith(mockApiBody, mockFile, mockSignatureString, mockSigningDate, {"photoIncluded": false} , undefined, null)
         })
 
         test("signDocument success handleFlowIdError", () => {
@@ -2628,7 +2636,8 @@ describe("WizardLogicActions", () => {
                         }
                     },
                     signature: { signature: mockSignatureString },
-                    uploadFile: { file: mockFile }
+                    uploadFile: { file: mockFile },
+                    customSignature: { photoIncluded: false }
                 }
 
             })
@@ -2655,7 +2664,8 @@ describe("WizardLogicActions", () => {
                         }
                     },
                     signature: { signature: mockSignatureString },
-                    uploadFile: { file: mockFile }
+                    uploadFile: { file: mockFile },
+                    customSignature: { photoIncluded: false }
                 }
 
             })
@@ -2688,7 +2698,8 @@ describe("WizardLogicActions", () => {
                         }
                     },
                     signature: { signature: mockSignatureString },
-                    uploadFile: { file: mockFile }
+                    uploadFile: { file: mockFile },
+                    customSignature: { photoIncluded: false }
                 }
 
             })
@@ -2719,7 +2730,8 @@ describe("WizardLogicActions", () => {
                         }
                     },
                     signature: { signature: mockSignatureString },
-                    uploadFile: { file: mockFile }
+                    uploadFile: { file: mockFile },
+                    customSignature: { photoIncluded: false }
                 }
 
             })
@@ -2749,7 +2761,8 @@ describe("WizardLogicActions", () => {
                         }
                     },
                     signature: { signature: mockSignatureString },
-                    uploadFile: { file: mockFile }
+                    uploadFile: { file: mockFile },
+                    customSignature: { photoIncluded: false }
                 }
 
             })
