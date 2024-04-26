@@ -88,7 +88,7 @@ export const createBody = (certificateBody, documentName, documentBase64, docume
                 "textSize": "12",
                 "bodyBgColor": "#D0D0D0",
                 "version": "2",
-                "rotation": customSignature.signatureArea.pageInfo.rotate === 90 ? "ROTATE_270" : "NONE"
+                "rotation": sigType === MANUAL_SIGNATURE  && customSignature.signatureArea.pageInfo.rotate === 90 ? "ROTATE_270" : "NONE"
             }
         },
         "signingProfileId": getsigningProfileId(documentType),
