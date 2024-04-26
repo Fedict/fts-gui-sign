@@ -41,11 +41,9 @@ export const getsigningProfileId = (documentType) => {
 /**
  * Function to format a manually drawn Signature definition to a psfC field
  */
-export const createPsfC = (signatureArea) => {
-    return signatureArea.page + "," + Math.round(signatureArea.rect.left) + "," +
-                            Math.round(signatureArea.rect.top) + "," +
-                            Math.round(signatureArea.rect.right - signatureArea.rect.left) + "," +
-                            Math.round(signatureArea.rect.bottom - signatureArea.rect.top);
+export const createPsfC = (sigArea) => {
+    return sigArea.page + "," + sigArea.rect.left + "," + sigArea.rect.top + "," +
+            (sigArea.rect.right - sigArea.rect.left) + "," + (sigArea.rect.bottom - sigArea.rect.top);
 }
 
 /**
@@ -81,10 +79,16 @@ export const createBody = (certificateBody, documentName, documentBase64, docume
                     "de": "Unterzeichnet von %gn% %sn%\nAm %d(HH:mm MMM d YYYY z)%",
                     "nl": "Getekend door %gn% %sn%\nOp %d(HH:mm MMM d YYYY z)%",
                 },
-                "textPos": "RIGHT",
+                "textPos": photo ? "RIGHT" : "TOP",
+                "bgColor": "TRANSPARENT",
+                "textColor": "#000000",
                 "textPadding": 10,
+                "textAlignH": "CENTER",
                 "textAlignV": "MIDDLE",
-                "textSize": "32"
+                "textSize": "12",
+                "bodyBgColor": "#D0D0D0",
+                "version": "2",
+                "rotation": customSignature.signatureArea.pageInfo.rotate === 90 ? "ROTATE_270" : "NONE"
             }
         },
         "signingProfileId": getsigningProfileId(documentType),

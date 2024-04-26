@@ -40,9 +40,11 @@ const getPagesInfo = async (pdf) => {
     let pageIndex = 0;
     while(pageIndex < pdf.numPages) {
         let page = await pdf.getPage(++pageIndex);
+        const rotated = page.rotate === 90;
         let pageInfo =  {
-            width: page.view[2],
-            height: page.view[3],
+            width: page.view[rotated ? 3 : 2],
+            height: page.view[rotated ? 2 : 3],
+            rotate : page.rotate,
             sigAcroforms: []
         };
         let annotations = await page.getAnnotations();
@@ -51,12 +53,11 @@ const getPagesInfo = async (pdf) => {
                 const r = annotation.rect;
                 // Timestamp (and invisible signatures) get an annotation with an "empty" rectangle
                 if (r[0] != 0 || r[1] != 0 || r[2] != 0 || r[3] != 0) {
-                    pageInfo.sigAcroforms.push({
-                        fieldName: annotation.fieldName,
-                        // Coordinate system of pdf "zero" is bottom left hence the "page.view[3] - r[1]"
-                        rect: normalizeRect({ left: r[0], top: page.view[3] - r[1], right: r[2], bottom: page.view[3] - r[3] }),
-                        isSigned: annotation.BoSa_hasValue
-                    })
+                    // Coordinate system of pdf "zero" is bottom left hence the "page.view[3] - r[1]"
+                    const rect = normalizeRect(rotated ?
+                                { left: r[1], top: r[0], right: r[3], bottom: r[2] } :
+                                { left: r[0], top: page.view[3] - r[1], right: r[2], bottom: page.view[3] - r[3] });
+                    pageInfo.sigAcroforms.push({ fieldName: annotation.fieldName, rect, isSigned: annotation.BoSa_hasValue })
                 }
             }
         })
@@ -347,7 +348,8 @@ export const DisplayPDF = ({ file, drawSignature }) => {
             if (rect.bottom > pi.height) rect.bottom = pi.height;
             dispatch(setSignatureArea({
                 page: pageNumber,
-                rect : rect
+                rect,
+                pageInfo: pi
             }));
             dispatch(selectSignature(MANUAL_SIGNATURE))
         } else {
