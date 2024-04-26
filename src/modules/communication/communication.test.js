@@ -90,10 +90,30 @@ describe("createBody", () => {
                 "detachedContents": [],
                 "signingCertificate": startCertificateObject.certificate,
                 "signingDate": null,
-                "photo": null,
-                "psfC": "1,150,100,100.1,100",
-                "psfN": null,
-                "signLanguage": "fr"
+                pdfSigParams: {
+                    "photo": null,
+                    "psfC": "1,150,100,100.1,100",
+                    "psfN": null,
+                    "signLanguage": "fr",
+                    "psp": {
+                        "bgColor": "TRANSPARENT",
+                        "bodyBgColor": "#D0D0D0",
+                        "rotation": "NONE",
+                        "textAlignH": "CENTER",
+                        "textAlignV": "MIDDLE",
+                        "textColor": "#000000",
+                        "textPadding": 10,
+                        "textPos": "TOP",
+                        "textSize": "12",
+                        "texts": {
+                            "de": "Unterzeichnet von %gn% %sn%\nAm %d(HH:mm MMM d YYYY z)%",
+                            "en": "Signed by %gn% %sn%\nOn %d(HH:mm MMM d YYYY z)%",
+                            "fr": "Signé par %gn% %sn%\nLe %d(HH:mm MMM d YYYY z)%",
+                            "nl": "Getekend door %gn% %sn%\nOp %d(HH:mm MMM d YYYY z)%",
+                            },
+                        "version": "2"
+                        },
+                    }
                 },
             "signingProfileId": "XADES_LTA",
             "token": 0,
@@ -646,10 +666,12 @@ describe('getDataToSignForTokenAPI', () => {
             ],
             "signingCertificate": { encodedCertificate: "certificatestring" },
             "signingDate": "this value will be replaced later",
-            "psfC": "1,150,100,100.1,100",
-            "psfN": null,
-            "photo": "picture bytes",
-            "signLanguage": "nl"
+            pdfSigParams: {
+                "psfC": "1,150,100,100.1,100",
+                "psfN": null,
+                "photo": "picture bytes",
+                "signLanguage": "nl"
+            }
         },
         "fileIdToSign": fileIdToSign,
         token : startToken
@@ -707,10 +729,12 @@ describe('signDocumentForTokenAPI', () => {
                     "encodedCertificate": "MIIG"
                 },
                 "signingDate": "2021-06-23T11:53:33+02:00",
-                "psfC": "1,150,100,100.1,100",
-                "psfN": null,
-                "photo": "/9j/4AAQSk",
-                "signLanguage": "fr"
+                pdfSigParams: {
+                    "psfC": "1,150,100,100.1,100",
+                    "psfN": null,
+                    "photo": "/9j/4AAQSk",
+                    "signLanguage": "fr"
+                    }
             },
             "fileIdToSign": 0,
             "token": "eyJraWQiO",

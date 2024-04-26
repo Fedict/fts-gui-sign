@@ -68,27 +68,29 @@ export const createBody = (certificateBody, documentName, documentBase64, docume
             ],
             "signingCertificate": certificateBody.certificate,
             signingDate,
-            "psfN": sigType !== INVISIBLE_SIGNATURE && sigType !== MANUAL_SIGNATURE ? sigType : null,
-            "psfC": sigType === MANUAL_SIGNATURE ? createPsfC(customSignature.signatureArea) : null,
-            photo,
-            signLanguage,
-            "psp": sigType === INVISIBLE_SIGNATURE ? null : {
-                "texts": {
-                    "fr": "Signé par %gn% %sn%\nLe %d(HH:mm MMM d YYYY z)%",
-                    "en": "Signed by %gn% %sn%\nOn %d(HH:mm MMM d YYYY z)%",
-                    "de": "Unterzeichnet von %gn% %sn%\nAm %d(HH:mm MMM d YYYY z)%",
-                    "nl": "Getekend door %gn% %sn%\nOp %d(HH:mm MMM d YYYY z)%",
-                },
-                "textPos": photo ? "RIGHT" : "TOP",
-                "bgColor": "TRANSPARENT",
-                "textColor": "#000000",
-                "textPadding": 10,
-                "textAlignH": "CENTER",
-                "textAlignV": "MIDDLE",
-                "textSize": "12",
-                "bodyBgColor": "#D0D0D0",
-                "version": "2",
-                "rotation": sigType === MANUAL_SIGNATURE  && customSignature.signatureArea.pageInfo.rotate === 90 ? "ROTATE_270" : "NONE"
+            pdfSigParams: {
+                "psfN": sigType !== INVISIBLE_SIGNATURE && sigType !== MANUAL_SIGNATURE ? sigType : null,
+                "psfC": sigType === MANUAL_SIGNATURE ? createPsfC(customSignature.signatureArea) : null,
+                photo,
+                signLanguage,
+                "psp": sigType === INVISIBLE_SIGNATURE ? null : {
+                    "texts": {
+                        "fr": "Signé par %gn% %sn%\nLe %d(HH:mm MMM d YYYY z)%",
+                        "en": "Signed by %gn% %sn%\nOn %d(HH:mm MMM d YYYY z)%",
+                        "de": "Unterzeichnet von %gn% %sn%\nAm %d(HH:mm MMM d YYYY z)%",
+                        "nl": "Getekend door %gn% %sn%\nOp %d(HH:mm MMM d YYYY z)%",
+                    },
+                    "textPos": photo ? "RIGHT" : "TOP",
+                    "bgColor": "TRANSPARENT",
+                    "textColor": "#000000",
+                    "textPadding": 10,
+                    "textAlignH": "CENTER",
+                    "textAlignV": "MIDDLE",
+                    "textSize": "12",
+                    "bodyBgColor": "#D0D0D0",
+                    "version": "2",
+                    "rotation": sigType === MANUAL_SIGNATURE  && customSignature.signatureArea.pageInfo.rotate === 90 ? "ROTATE_270" : "NONE"
+                }
             }
         },
         "signingProfileId": getsigningProfileId(documentType),
@@ -109,10 +111,12 @@ export const createBodyForToken = (certificateBody, token, fileIdToSign, customS
             ],
             "signingCertificate": certificateBody.certificate,
             signingDate,
-            "psfC": sigType === MANUAL_SIGNATURE ? createPsfC(customSignature.signatureArea) : null,
-            "psfN": sigType !== INVISIBLE_SIGNATURE && sigType !== MANUAL_SIGNATURE ? sigType : null,
-            photo,
-            signLanguage,
+            pdfSigParams: {
+                "psfC": sigType === MANUAL_SIGNATURE ? createPsfC(customSignature.signatureArea) : null,
+                "psfN": sigType !== INVISIBLE_SIGNATURE && sigType !== MANUAL_SIGNATURE ? sigType : null,
+                photo,
+                signLanguage,
+                }
         },
         fileIdToSign,
         token
