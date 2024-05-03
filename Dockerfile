@@ -16,4 +16,4 @@ RUN npm install serve -g
 COPY . /app
 
 RUN npm run build
-CMD ["serve", "-s", "build", "-l", "5000"]
+CMD ["ls", "-l", "/app"; "serve", "-s", "build", "-l", "5000"]
