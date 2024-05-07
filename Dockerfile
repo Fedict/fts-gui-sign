@@ -14,4 +14,4 @@ COPY . /app
 
 RUN npm run build
 
-#CMD ["serve", "-c", "/app/serve.json", "-s", "build", "-l", "5000"]
+#Run parameters are in openshift : CMD ["serve", "-c", "/app/serve.json", "-s", "build", "-l", "5000"]
