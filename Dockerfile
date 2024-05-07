@@ -8,10 +8,10 @@ RUN npm config set registry https://registry.npmjs.org/
 
 COPY patches /app/patches/
 RUN npm install --loglevel http
-RUN apt-get install curl
+RUN npm install -g curl
 
 RUN npm install serve -g
 COPY . /app
 
 RUN npm run build
-CMD ["serve", "-c", "servxe.json", "-s", "build", "-l", "5000"]
+CMD ["serve ", "-c ", "serve.json ", "-s ", "build ", "-l ", "5000"]
