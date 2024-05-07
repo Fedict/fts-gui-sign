@@ -75,13 +75,14 @@ export const createBody = (certificateBody, documentName, documentBase64, docume
                 signLanguage,
                 "psp": sigType === INVISIBLE_SIGNATURE ? null : {
                     "texts": {
-                        "fr": "Signé par %gn% %sn%\nLe %d(HH:mm MMM d YYYY z)%",
-                        "en": "Signed by %gn% %sn%\nOn %d(HH:mm MMM d YYYY z)%",
+                        "fr": "Signé par %gn% %sn%\nLe %d(d MMM YYYY z à HH:mm)%",
+                        "en": "Signed by %gn% %sn%\nOn %d(d MMM YYYY z on HH:mm )%",
                         "de": "Unterzeichnet von %gn% %sn%\nAm %d(HH:mm MMM d YYYY z)%",
                         "nl": "Getekend door %gn% %sn%\nOp %d(HH:mm MMM d YYYY z)%",
                     },
                     "textPos": photo ? "RIGHT" : "TOP",
                     "bgColor": "TRANSPARENT",
+                    "font": "freescpt",
                     "textColor": "#000000",
                     "textPadding": 10,
                     "textWrapping": "FILL_BOX",
