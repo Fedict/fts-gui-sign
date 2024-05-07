@@ -8,6 +8,7 @@ RUN npm config set registry https://registry.npmjs.org/
 
 COPY patches /app/patches/
 RUN npm install --loglevel http
+RUN apt-get install curl
 
 RUN npm install serve -g
 COPY . /app
