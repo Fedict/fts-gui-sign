@@ -84,6 +84,7 @@ export const createBody = (certificateBody, documentName, documentBase64, docume
                     "bgColor": "TRANSPARENT",
                     "textColor": "#000000",
                     "textPadding": 10,
+                    "textWrapping": "FILL_BOX",
                     "textAlignH": "CENTER",
                     "textAlignV": "MIDDLE",
                     "textSize": "12",
