@@ -1,4 +1,4 @@
-FROM node:16.14.0-buster-slim
+FROM node:22.1.0-bookworm-slim
 
 WORKDIR /app
 COPY  package.json /app/
@@ -8,9 +8,8 @@ RUN npm config set registry https://registry.npmjs.org/
 
 COPY patches /app/patches/
 RUN npm install --loglevel http
-#RUN apt-get -y update; apt-get -y install curl
 
-#RUN npm install serve -g
+RUN npm install serve -g
 COPY . /app
 
 RUN npm run build
