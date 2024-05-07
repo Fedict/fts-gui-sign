@@ -14,4 +14,6 @@ RUN npm install serve -g
 COPY . /app
 
 RUN npm run build
-ENTRYPOINT ["serve", "-c", "serve.json", "-s", "build", "-l", "5000"]
+CMD serve -c serve.json -s build -l 5001
+
+#CMD ["serve", "-c", "serve.json", "-s", "build", "-l", "5000"]
