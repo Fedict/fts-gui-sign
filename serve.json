@@ -1,6 +1,6 @@
 {
     "headers": [{
-        "source": "**/*",
+        "source": "**",
         "headers": [
             {
                 "key": "Strict-Transport-Security",

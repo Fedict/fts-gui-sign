@@ -4,9 +4,6 @@ WORKDIR /app
 COPY  package.json /app/
 COPY package-lock.json /app/
 
-#RUN npm config set proxy http://dc-proxy.names.belgium.be:3128
-#RUN npm config set https-proxy http://dc-proxy.names.belgium.be:3128
-
 RUN npm config set registry https://registry.npmjs.org/
 
 COPY patches /app/patches/
