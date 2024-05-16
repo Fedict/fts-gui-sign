@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useLayoutEffect, useRef } from "react"
 import {useDispatch, useSelector} from "react-redux";
-import {FormattedMessage} from "react-intl";
-import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist'
+import * as pdfjsLib from 'pdfjs-dist'
+import 'pdfjs-dist/webpack';
 import { INVISIBLE_SIGNATURE, MANUAL_SIGNATURE, selectSignature, setSignatureArea, setSignatureFields } from '../../reducers/CustomSignatureReducer'
 
-GlobalWorkerOptions.workerSrc = require("pdfjs-dist/build/pdf.worker.entry.js");
 const ZOOM_CORRECTION = 60
 
 function scaleRect(r, s) {
@@ -133,7 +132,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
         setPageNumber(1);
         setZoomLevel(100);
         setShowThumbnails(false);
-        getDocument(file.url).promise.then(pdf => {
+        pdfjsLib.getDocument(file.url).promise.then(pdf => {
             setCurrentPDF(pdf);
             setThumbnailsRendered(false);
             getPagesInfo(pdf).then((pagesInfo) => {
