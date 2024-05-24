@@ -137,7 +137,7 @@ configuration of the devtools are found in /src/store/store.js
 ```
 
 
-## pdf viewer
+## PDF viewer
 To allow selecting the position of the signature inside the PDF (free position or inside an annotation),
 the library pdfjs (https://github.com/mozilla/pdfjs-dist) is used.
 This library allows you to display a PDF for preview, list the signing annotations, and allow custom rendering.
