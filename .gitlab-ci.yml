@@ -1,4 +1,4 @@
 include:
   project: eidas/fts-config-files
   file: gitlab-ci/gui-sign.yaml
-  ref: master
+  ref: gs4
