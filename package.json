@@ -57,7 +57,7 @@
       "cobertura"
     ],
     "moduleNameMapper": {
-      "pdfjs-dist/webpack": "<rootDir>/src/modules/utils/pdfjs-dist.webpack.fake.js"
+      "pdfjs-dist/.*": "<rootDir>/src/modules/utils/pdfjs-dist.webpack.fake.js"
     }
   },
   "eslintConfig": {
