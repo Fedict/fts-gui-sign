@@ -55,7 +55,10 @@
       "html",
       "text",
       "cobertura"
-    ]
+    ],
+    "moduleNameMapper": {
+      "pdfjs-dist/webpack": "<rootDir>/src/modules/utils/pdfjs-dist.webpack.fake.js"
+    }
   },
   "eslintConfig": {
     "extends": "react-app"

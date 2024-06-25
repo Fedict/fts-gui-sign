@@ -98,6 +98,7 @@ describe("createBody", () => {
                     "psp": {
                         "bgColor": "TRANSPARENT",
                         "bodyBgColor": "#D0D0D0",
+                        "font": "freescpt",
                         "rotation": "NONE",
                         "textAlignH": "CENTER",
                         "textAlignV": "MIDDLE",
@@ -105,10 +106,11 @@ describe("createBody", () => {
                         "textPadding": 10,
                         "textPos": "TOP",
                         "textSize": "12",
+                        "textWrapping": "FILL_BOX",
                         "texts": {
                             "de": "Unterzeichnet von %gn% %sn%\nAm %d(HH:mm MMM d YYYY z)%",
-                            "en": "Signed by %gn% %sn%\nOn %d(HH:mm MMM d YYYY z)%",
-                            "fr": "Signé par %gn% %sn%\nLe %d(HH:mm MMM d YYYY z)%",
+                            "en": "Signed by %gn% %sn%\nOn %d(d MMM YYYY z - HH:mm )%",
+                            "fr": "Signé par %gn% %sn%\nLe %d(d MMM YYYY z - HH:mm)%",
                             "nl": "Getekend door %gn% %sn%\nOp %d(HH:mm MMM d YYYY z)%",
                             },
                         "version": "2"
