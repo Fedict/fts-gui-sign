@@ -21,6 +21,7 @@ import { getBrowser, browser } from './modules/browserDetection/BrowserDetection
 import { Helmet } from "react-helmet-async";
 
 const BaseApp = () => {
+    const redirect = window.configData.redirectSigning;
     const browserIsSupported = browserIsAccepted();
     const usedBrowser = getBrowser();
     return (
@@ -36,7 +37,7 @@ const BaseApp = () => {
                         <Route path="/gtou"><GeneralTerms /></Route>
                         <Route path="/ps"><PrivacyStatement /></Route>
                         <Route path="/cookies"><CookiePolicy /></Route>
-                        <Route path="/"><StartPageContainer /></Route>
+                        <Route path="/" component={() => { if (redirect) { window.location.href = redirect; return null;} return <StartPageContainer /> }} />
                     </Switch>
                 </div>)
                 : (usedBrowser === browser.IE
