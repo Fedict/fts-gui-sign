@@ -56,13 +56,6 @@ const BaseApp = () => {
     )
 }
 const App = () => {
-    const winloc = window.location;
-    const redirect = window.configData.redirectSigning;
-    if (redirect && !winloc.pathname.startsWith('/sign/')) {
-        window.location.href = redirect + winloc.pathname + winloc.search;
-        return <></>;
-    }
-
     return (
         <Router>
             <Helmet>
