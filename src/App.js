@@ -2,11 +2,7 @@ import React from "react"
 import { useIntl } from 'react-intl';
 import Navbar from './modules/Navbar/Navbar';
 import WizardContainer from './modules/signWizard/WizardContainer';
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import ValidateWizardContainer from './modules/validateWizard/ValidateWizardContainer';
 import { browserIsAccepted } from './modules/browserDetection/BrowserDetection';
 import MessageContainer from './modules/message/MessageContainer';
@@ -21,7 +17,6 @@ import { getBrowser, browser } from './modules/browserDetection/BrowserDetection
 import { Helmet } from "react-helmet-async";
 
 const BaseApp = () => {
-    const redirect = window.configData.redirectSigning;
     const browserIsSupported = browserIsAccepted();
     const usedBrowser = getBrowser();
     return (
@@ -37,7 +32,7 @@ const BaseApp = () => {
                         <Route path="/gtou"><GeneralTerms /></Route>
                         <Route path="/ps"><PrivacyStatement /></Route>
                         <Route path="/cookies"><CookiePolicy /></Route>
-                        <Route path="/" component={() => { if (redirect) { window.location.href = redirect; return null;} return <StartPageContainer /> }} />
+                        <Route path="/"><StartPageContainer /></Route>
                     </Switch>
                 </div>)
                 : (usedBrowser === browser.IE
@@ -61,6 +56,13 @@ const BaseApp = () => {
     )
 }
 const App = () => {
+    const winloc = window.location;
+    const redirect = window.configData.redirectSigning;
+    if (redirect && !winloc.pathname.startsWith('/sign/')) {
+        window.location.href = redirect + winloc.pathname + winloc.search;
+        return <></>;
+    }
+
     return (
         <Router>
             <Helmet>
