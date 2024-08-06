@@ -10,7 +10,7 @@ import { definedMessages } from "../../i18n/translations";
 import { boldedText } from "../../utils/reactIntlUtils";
 import { ReadCertificates } from "../../components/ReadCertificates/ReadCertificates";
 import { setPreview, setInputsSignState, setPreviewFileId } from "../../signByTokenWizard/actions/TokenActions"
-import { signingType, signState } from '../constants';
+import { signState } from '../constants';
 import {setCustomSignature} from "../actions/TokenActions";
 import PDFSignatureSelection from '../../components/PDFSignatureSelection'
 import { customSignatureToString } from '../../../modules/fileUpload/reducers/CustomSignatureReducer';
@@ -76,11 +76,11 @@ const TokenWizardIntroContainer = (props) => {
                     className={ readyToSign ? "btn btn-primary text-uppercase" : "btn btn-secondary text-uppercase"} disabled={!readyToSign}
                     onClick={() => {
                         props.setInputsSignState(signState.SIGN_REQUESTED, signState.TO_BE_SIGNED)
-                        if (props.tokenFile.signingType !== signingType.XadesMultiFile) {
+                        if (!props.tokenFile.signAll) {
                             props.setCustomSignature(props.selectedInputId, props.customSignature); 
                             props.doSendLogInfo('UI - set Custom signature(' + props.selectedInputId + ') to ' + customSignatureToString(props.customSignature) );
                         }
-                        if (props.tokenFile.signingType === signingType.XadesMultiFile || props.isMultifile) {
+                        if (props.tokenFile.signAll || props.isMultifile) {
                             props.setPreview(false)
                             props.setPreviewFileId(-1)
                         }

@@ -10,7 +10,7 @@ import {WIZARD_STATE_UPLOAD, WIZARD_STATE_DIGEST_LOADING, WIZARD_STATE_SUCCES} f
 import moment from "moment";
 import {setDateSigning} from "../../signWizard/actions/SignatureActions";
 import {parseErrorMessage} from "../../utils/helper";
-import {signingType, signState} from "../constants";
+import {signState} from "../constants";
 
 export const TOKEN_RECEIVED = "TOKEN_RECEIVED"
 export const SET_TOKEN_PREVIEW = "SET_TOKEN_PREVIEW"
@@ -38,7 +38,7 @@ export const getDigestForToken = (locale) => (dispatch, getStore) => {
         && tokenFile.token) {
         const flowId = getStore().controlId.flowId;
         var fileIdToSign = tokenFile.inputs.findIndex(input => input.signState === signState.TO_BE_SIGNED);
-        dispatch(setPreviewFileId(tokenFile.signingType === signingType.XadesMultiFile ? -1 : fileIdToSign));
+        dispatch(setPreviewFileId(tokenFile.signAll ? -1 : fileIdToSign));
         const curInput = tokenFile.inputs[fileIdToSign];
         const customSignature = curInput.customSignature;
         const photo = curInput.psfP || customSignature.photoIncluded ? certificate.certificateSelected.photo : null;
@@ -70,7 +70,7 @@ export const getDigestForToken = (locale) => (dispatch, getStore) => {
                         }
                     }
 
-                    if (tokenFile.signingType !== signingType.XadesMultiFile) {
+                    if (!tokenFile.signAll) {
                         if (!getStore().tokenFile.noSkipErrors) {
                             dispatch(setInputsSignState(fileIdToSign, signState.ERROR_DIGEST));
                             var moreToSign =  getStore().tokenFile.inputs.find(input => input.signState === signState.TO_BE_SIGNED);

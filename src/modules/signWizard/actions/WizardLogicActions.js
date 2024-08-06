@@ -53,7 +53,7 @@ import moment from 'moment'
 import {defaults, parseErrorMessage} from "../../utils/helper";
 import {ID_FLAGS} from "../../eIdLink/strategies/createEIDLinkExtensionStrategy";
 import { SET_ALL_INPUTS, setInputsSignState } from "../../signByTokenWizard/actions/TokenActions"
-import { signingType, signState } from "../../signByTokenWizard/constants"
+import { signState } from "../../signByTokenWizard/constants"
 import { globalToken } from "../../../store/globals"
 
 //----------------------------------
@@ -741,12 +741,12 @@ export const signDocument = (locale) => (dispatch, getStore) => {
                     hookInfo.ok = resp === true
                     sendHookInfoAPI(hookInfo, tokenFile);
                     if (resp === true) {
-                        dispatch(setInputsSignState(tokenFile.signingType === signingType.XadesMultiFile ? SET_ALL_INPUTS : fileIdToSign, signState.SIGNED));
+                        dispatch(setInputsSignState(tokenFile.signAll ? SET_ALL_INPUTS : fileIdToSign, signState.SIGNED));
                         var moreToSign = getStore().tokenFile.inputs.find(input => input.signState === signState.TO_BE_SIGNED);
                         dispatch(navigateToStep(moreToSign ? WIZARD_STATE_DIGEST_LOADING: WIZARD_STATE_SUCCES))
                     } else {
                         var errorMessage = messageToError(resp.message);
-                        if (tokenFile.signingType !== signingType.XadesMultiFile) {
+                        if (!tokenFile.signAll) {
                             if (!getStore().tokenFile.noSkipErrors) {
                                 dispatch(setInputsSignState(fileIdToSign, signState.ERROR_SIGN));
                                 moreToSign =  getStore().tokenFile.inputs.find(input => input.signState === signState.TO_BE_SIGNED);

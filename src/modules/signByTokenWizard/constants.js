@@ -7,9 +7,3 @@ export const signState = {
     ERROR_SIGN: 'esign',
     SKIPPED: 'skipped'
 }
-
-export const signingType = {
-    XadesMultiFile: 'XadesMultiFile',
-    Standard: 'Standard'
-}
-
