@@ -4,8 +4,6 @@ import * as pdfjsLib from 'pdfjs-dist'
 import 'pdfjs-dist/webpack';
 import { INVISIBLE_SIGNATURE, MANUAL_SIGNATURE, selectSignature, setSignatureArea, setSignatureFields } from '../../reducers/CustomSignatureReducer'
 
-const ZOOM_CORRECTION = 60
-
 function scaleRect(r, s) {
     return { top: r.top * s, left: r.left * s, bottom: r.bottom * s,  right: r.right * s };
 }
@@ -73,6 +71,7 @@ const getPagesInfo = async (pdf) => {
  * @param {object} props.file.url - dataURL for the file
  */
 export const DisplayPDF = ({ file, drawSignature }) => {
+    const THUMBNAILS_WIDTH = 110;
     const dispatch = useDispatch();
     const [currentPDF, setCurrentPDF] = useState(null);
     const [renderPdf, setRenderPdf] = useState(false);
@@ -91,6 +90,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
 
     const [pageNumber, setPageNumber] = useState(1);
     const [pageNumberStr, setPageNumberStr] = useState("1");
+    const [fitScaleFactor, setFitScaleFactor] = useState(100);
 
     const changePageNumberStr = (page) => {
         setPageNumberStr(page);
@@ -137,10 +137,20 @@ export const DisplayPDF = ({ file, drawSignature }) => {
             setThumbnailsRendered(false);
             getPagesInfo(pdf).then((pagesInfo) => {
                 setPagesInfo(pagesInfo);
+                var fitFactor = 100;
+                if (canvasContainingDivRef.current) {
+                    const wFactor = canvasContainingDivRef.current.offsetWidth / (pagesInfo[0].width + (pagesInfo.length > 1 ? THUMBNAILS_WIDTH : 0));
+                    var factor = canvasContainingDivRef.current.offsetHeight / pagesInfo[0].height;
+                    if (factor > wFactor) factor = wFactor;
+                    fitFactor = fitFactor / factor;
+                }
+                setFitScaleFactor(fitFactor);
+        
                 let signatureFields = [];
                 pagesInfo.forEach((page) => {
                     page.sigAcroforms.forEach((sigAcroform) => { if (!sigAcroform.isSigned) signatureFields.push(sigAcroform.fieldName)});
                 } )
+
                 dispatch(setSignatureFields(signatureFields));
                 setShowThumbnails(true);
             });
@@ -170,18 +180,18 @@ export const DisplayPDF = ({ file, drawSignature }) => {
         if (pagesInfo.length === 0) return;
 
         let pi = pagesInfo[pageNumber - 1];
-        const scale = zoomLevel / ZOOM_CORRECTION; // Scale (to percentage compensated for DPI pseudo mapping)
+        const scale = zoomLevel / fitScaleFactor;
         setCanvasWidth(pi.width * scale);
         setCanvasHeight(pi.height * scale);
         setRenderPdf(true);
-    }, [pagesInfo, pageNumber, zoomLevel]);
+    }, [pagesInfo, pageNumber, zoomLevel, fitScaleFactor]);
 
     useLayoutEffect(() => {
         if (!renderPdf) return;
 
         currentPDF.getPage(pageNumber).then(function (page) {
             const context = pdfCanvasRef.current.getContext('2d');
-            const scale = zoomLevel / ZOOM_CORRECTION; // Scale (to percentage compensated for DPI pseudo mapping)
+            const scale = zoomLevel / fitScaleFactor;
             const renderContext = {
                 canvasContext: context,
                 viewport: page.getViewport({ scale: scale }),
@@ -235,7 +245,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
         }
         if (newPage) changePageNumber(newPage);
         if (newRect) {
-            newRect = scaleRect(newRect, zoomLevel / ZOOM_CORRECTION);
+            newRect = scaleRect(newRect, zoomLevel / fitScaleFactor);
             canvasContainingDivRef.current.scrollTo( { top: newRect.top, left: newRect.left, behavior: "smooth" });
         }
     }, [signatureSelected])
@@ -248,7 +258,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
         const canvas = selectionCanvasRef.current;
         if (!canvas || canvas.height === 0) return;
 
-        const scale = zoomLevel / ZOOM_CORRECTION; // Scale (to percentage compensated for DPI pseudo mapping)
+        const scale = zoomLevel / fitScaleFactor;
 
         const ctx = canvas.getContext('2d');
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -304,12 +314,12 @@ export const DisplayPDF = ({ file, drawSignature }) => {
         // Use indexed for loop to be able to return method
         for(let i = 0; i < sigAcroforms.length; i++) {
             const sigAcroform = sigAcroforms[i];
-            if (intersectRect(scaleRect(sigAcroform.rect, zoomLevel / ZOOM_CORRECTION), rect)) {
+            if (intersectRect(scaleRect(sigAcroform.rect, zoomLevel / fitScaleFactor), rect)) {
                 return sigAcroform.isSigned ? null : { target: sigAcroform.fieldName };
             }
         };
         if (checkSignatureArea && signatureArea && pageNumber === signatureArea.page  &&
-            intersectRect(scaleRect(signatureArea.rect, zoomLevel / ZOOM_CORRECTION), rect)) {
+            intersectRect(scaleRect(signatureArea.rect, zoomLevel / fitScaleFactor), rect)) {
             return { target: MANUAL_SIGNATURE };
         }
 
@@ -338,7 +348,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
 
         if (!isOutOfCanvas) recordNewRectIfValid(e);
         if ((dragRect.right - dragRect.left) !== 0 && (dragRect.bottom - dragRect.top) !== 0) {
-            let rect = scaleRect(dragRect, ZOOM_CORRECTION / zoomLevel);
+            let rect = scaleRect(dragRect, fitScaleFactor / zoomLevel);
             // mouse coordinates can be outside of the canvas => Fix this
             if (rect.top < 0) rect.top = 0;
             if (rect.left < 0) rect.left = 0;
@@ -410,7 +420,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
             </div>
             <div className="row">
                 { pagesInfo.length > 1 && 
-                    <div style={{ overflow: "auto", width: "110px", textAlign: "center", height: "80vh"}}
+                    <div style={{ overflow: "auto", width: THUMBNAILS_WIDTH + "px", textAlign: "center", height: "80vh"}}
                         hidden={ showThumbnails ? null : "hidden" }>{pagesInfo.map((input, pageIndex) => (
                         <canvas key={ "tumbnail-"+pageIndex }
                             ref={(element) => thumbCanvasRefs.current[pageIndex] = element }
