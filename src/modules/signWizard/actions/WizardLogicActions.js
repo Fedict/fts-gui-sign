@@ -570,7 +570,7 @@ export const getDigest = (locale) => (dispatch, getStore) => {
             .then((resp) => {
                 if(resp.digest && resp.digestAlgorithm && resp.signingDate) {
                     dispatch(setDigest(resp))
-                    dispatch(navigateToSign())
+                    dispatch(navigateToSign(locale))
                     dispatch(setDateSigning(resp.signingDate))
                 }else{
                     const parsedError = parseErrorMessage(resp.message);
