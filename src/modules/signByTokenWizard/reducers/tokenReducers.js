@@ -34,7 +34,7 @@ const TokenReducer = (state = initialState, action) => {
                 noSignedDownloads : action.payload.noSignedDownloads,
                 requestDocumentReadConfirm : action.payload.requestDocumentReadConfirm,
                 noSkipErrors: action.payload.noSkipErrors,
-                signingType: action.payload.signingType
+                signAll: action.payload.signAll
             }
         }
         case SET_TOKEN_PREVIEW : {
