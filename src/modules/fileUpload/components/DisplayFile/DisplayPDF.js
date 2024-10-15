@@ -254,6 +254,13 @@ export const DisplayPDF = ({ file, drawSignature }) => {
         if (drawSignature && imgSignatureLoaded && imgSignPhotoLoaded) drawSignatureBoxes();
     }, [renderPdf, signatureSelected, signatureArea, canvasHeight, canvasWidth, photoIncluded, imgSignatureLoaded, imgSignPhotoLoaded]);
 
+    const acceptableSignatureRect = (r) => {
+        r = scaleRect(r, fitScaleFactor / zoomLevel);
+        const w = r.right - r.left;
+        const h = r.bottom - r.top;
+        return w >= 60 && h >= 35;
+    }
+
     const drawSignatureBoxes = (rect = null) => {
         const canvas = selectionCanvasRef.current;
         if (!canvas || canvas.height === 0) return;
@@ -265,8 +272,8 @@ export const DisplayPDF = ({ file, drawSignature }) => {
 
         if (rect) {
             // Draw current drag rectangle ...
-            drawSignatureRect(ctx, rect, true)
-            }
+            drawSignatureRect(ctx, rect, true, acceptableSignatureRect(rect))
+        }
         else {
             // ... or Draw existing manual (drag) signature
             if (signatureArea && signatureArea.page === pageNumber) {
@@ -284,10 +291,10 @@ export const DisplayPDF = ({ file, drawSignature }) => {
         }
     };
 
-    const drawSignatureRect = (ctx, r, isSelected) => {
+    const drawSignatureRect = (ctx, r, isSelected, isValid = true) => {
         const w = r.right - r.left;
         const h = r.bottom - r.top;
-        ctx.fillStyle = isSelected ? '#11a0ba' : '#EEEEEE';
+        ctx.fillStyle = isValid ? (isSelected ? '#11a0ba' : '#EEEEEE') : '#ff717f';
         ctx.fillRect(r.left, r.top, w, h);
         const image = document.getElementById(photoIncluded ? "signPhotoImage" : "signatureImage");
         if (image) {
@@ -347,7 +354,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
         if (!dragRect) return;
 
         if (!isOutOfCanvas) recordNewRectIfValid(e);
-        if ((dragRect.right - dragRect.left) !== 0 && (dragRect.bottom - dragRect.top) !== 0) {
+        if (acceptableSignatureRect(dragRect)) {
             let rect = scaleRect(dragRect, fitScaleFactor / zoomLevel);
             // mouse coordinates can be outside of the canvas => Fix this
             if (rect.top < 0) rect.top = 0;
