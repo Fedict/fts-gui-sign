@@ -82,7 +82,7 @@ export const createBody = (certificateBody, documentName, documentBase64, docume
                     },
                     "textPos": photo ? "RIGHT" : "TOP",
                     "bgColor": "TRANSPARENT",
-                    "font": "freescpt",
+                    "font": "Montserrat-Regular",
                     "textColor": "#000000",
                     "textPadding": 10,
                     "textWrapping": "FILL_BOX",

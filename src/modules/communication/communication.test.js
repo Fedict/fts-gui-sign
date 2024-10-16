@@ -98,7 +98,7 @@ describe("createBody", () => {
                     "psp": {
                         "bgColor": "TRANSPARENT",
                         "bodyBgColor": "#D0D0D0",
-                        "font": "freescpt",
+                        "font": "Montserrat-Regular",
                         "rotation": "NONE",
                         "textAlignH": "CENTER",
                         "textAlignV": "MIDDLE",
