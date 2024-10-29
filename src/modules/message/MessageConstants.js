@@ -1,5 +1,6 @@
 import React from 'react'
 import {defineMessages, FormattedMessage} from "react-intl";
+import {browserNames, getMinBrowserVersions} from "../browserDetection/BrowserDetection"
 
 const errorMessages = defineMessages({
     general_error : {
@@ -51,10 +52,9 @@ export const ErrorNotSupported = {
             <p><FormattedMessage id="error.browser_not_supported.text" defaultMessage="Your browser is not supported. Please use one of the following browsers:"/></p>
             <div className="col col-10 mx-auto" >
                 <ul className="text-left">
-                    <li><FormattedMessage id="error.browser_not_supported.supported.1" defaultMessage="Chrome"/></li>
-                    <li><FormattedMessage id="error.browser_not_supported.supported.2" defaultMessage="Edge (based on Chromium)"/></li>
-                    <li><FormattedMessage id="error.browser_not_supported.supported.4" defaultMessage="Firefox" /></li>
-                    <li><FormattedMessage id="error.browser_not_supported.supported.5" defaultMessage="Opera (based on Chromium)"/></li>
+                    {Object.keys(getMinBrowserVersions()).map((browser) => 
+                        <li><FormattedMessage key={browser} id={"error.browser_not_supported.supported." + browser} defaultMessage={browserNames[browser]}/></li>
+                    )}
                 </ul>
             </div>
             <p><FormattedMessage id="error.browser_not_supported.link" defaultMessage="<a>In which browsers does the signature service work?|https://bosa.belgium.be/en/federal-trust-services-frequently-asked-questions#12</a>"

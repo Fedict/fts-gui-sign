@@ -75,6 +75,14 @@ window.configData = {
     skipCertificateChainValidate : false,
     
     // Where landing on "/" will be redirected
-    redirectSigning: null
+    redirectSigning: null,
     
+    minBrowserVersions: {
+        "FIREFOX" : 115,
+        "EDGE": 0,
+        "CHROMIUMEDGE": 0,
+        "CHROME": 120,
+        "SAFARI": 0,
+        "OPERA": 0
+    }
 };

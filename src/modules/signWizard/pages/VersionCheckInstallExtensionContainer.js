@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { CardContainer } from '../../components/Card/CardContainer'
 import { navigateToStep } from "../../wizard/WizardActions"
 import { resetWizard } from '../actions/WizardLogicActions'
-import { getBrowser, browser } from '../../browserDetection/BrowserDetection'
+import { getBrowserInfo, browser } from '../../browserDetection/BrowserDetection'
 import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
 import {EIDChromeExtMock} from "../../testUtils/EIDChromeExtMock";
 import {WIZARD_STATE_UPLOAD} from "../../wizard/WizardConstants";
@@ -34,7 +34,7 @@ export class VersionCheckInstallExtensionContainer extends React.Component {
         this.setState({extensionClicked : true})
         let url
         if (window.configData && window.configData.eIDLinkExtensionUrls) {
-            const UsedBrowser = getBrowser()
+            const UsedBrowser = getBrowserInfo().browser
             if ((UsedBrowser === browser.CHROME) && window.configData.eIDLinkExtensionUrls.chrome) {
                 url = window.configData.eIDLinkExtensionUrls.chrome
             }

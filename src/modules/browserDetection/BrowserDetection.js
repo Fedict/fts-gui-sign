@@ -12,70 +12,43 @@ export const browser = {
     OTHERS: "OTHERS"
 }
 
-/**
- * Function to determine the used browser based on navigator.userAgent string.
- * will see a chromium version of opera as chrome
- * @return {string} Returns a string with a value out of browser enum
- */
-export const getBrowser = () => {
-    // FIREFOX
-    if (navigator.userAgent.indexOf("Firefox") !== -1) {
-        return (browser.FIREFOX)
-    }
-    // INTERNET EXPLORER
-    else if (navigator.userAgent.indexOf("MSIE") !== -1) {
-        return (browser.IE)
-    }
-    else if (navigator.userAgent.indexOf("Trident/") !== -1) {
-        return (browser.IE)
-    }
-    // EDGE
-    else if (navigator.userAgent.indexOf("Edge") !== -1) {
-        return (browser.EDGE)
-    }
-    else if (navigator.userAgent.indexOf("Edg") !== -1) {
-        return (browser.EDGE)
-    }
-    else if (navigator.userAgent.indexOf("edg") !== -1) {
-        return (browser.CHROMIUMEDGE)
-    }// CHROME
-    else if (navigator.userAgent.indexOf("Chrome") !== -1) {
-        return (browser.CHROME)
-    }
+export const browserNames = {
+    CHROME: "Chrome",
+    CHROMIUMEDGE: "Edge (based on Chromium)",
+    FIREFOX: "Firefox",
+    OPERA: "Opera (based on Chromium)",
+    EDGE: "Edge",
+    SAFARI: "Safari"
+}
 
-    // SAFARI
-    else if (navigator.userAgent.indexOf("Safari") !== -1) {
-        return (browser.SAFARI)
-    }
-
-    // OPERA
-    else if (navigator.userAgent.indexOf("Opera") !== -1) {
-        return (browser.OPERA)
-    }
-
-    // OTHERS
-    else {
-        return (browser.OTHERS)
-    }
-};
-
-/**
- * Function to test if the browser is compatible
- * 
- * @return {boolean} boolean that represents if browser is supported 
- */
-export const browserIsAccepted = () => {
-
-    const usedBrowser = getBrowser()
-    
-    if (usedBrowser !== browser.EDGE
-        && usedBrowser !== browser.CHROMIUMEDGE
-        && usedBrowser !== browser.FIREFOX
-        && usedBrowser !== browser.SAFARI
-        && usedBrowser !== browser.CHROME) {
-        return false
-    }
-    return true
+export const getMinBrowserVersions = () => {
+    return window && window.configData && window.configData.minBrowserVersions ? window.configData.minBrowserVersions : {};
 }
 
 
+const knownBrowsers = [
+        { regex: /Firefox\/(\d+)\./,    browser: browser.FIREFOX },
+        { regex: /MSIE\/(\d+)\./,       browser: browser.IE },
+        { regex: /Trident\/(\d+)\./,    browser: browser.IE },
+        { regex: /Edg\/(\d+)\./,        browser: browser.EDGE },
+        { regex: /Edge\/(\d+)\./,       browser: browser.EDGE },
+        { regex: /edg\/(\d+)\./,        browser: browser.CHROMIUMEDGE },
+        { regex: /Chrome\/(\d+)\./,     browser: browser.CHROME },
+        { regex: /Safari\/(\d+)\./,     browser: browser.SAFARI },
+        { regex: /Opera\/(\d+)\./,      browser: browser.OPERA }
+    ];
+
+export const getBrowserInfo = () => {
+    var i = 0;
+    const ua = navigator.userAgent;
+    while (i != knownBrowsers.length) {
+        const bi = knownBrowsers[i++];
+        var match = ua.match(bi.regex);
+        if (match) {
+            var minVersion = getMinBrowserVersions()[bi.browser];
+            return { browser : bi.browser, version: match[1], accepted: minVersion != undefined && match[1] >= minVersion } 
+        }
+    }
+
+    return { browser : browser.OTHERS , version: "0", accepted: false }
+}

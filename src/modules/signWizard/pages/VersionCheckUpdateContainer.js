@@ -5,7 +5,7 @@ import { navigateToStep } from "../../wizard/WizardActions"
 import { WIZARD_STATE_VERSION_CHECK_LOADING } from '../../wizard/WizardConstants'
 import { resetWizard, checkVersion } from '../actions/WizardLogicActions'
 import { getOS, OS } from '../../browserDetection/OSDetection'
-import { getBrowser, browser } from "../../browserDetection/BrowserDetection";
+import { getBrowserInfo, browser } from "../../browserDetection/BrowserDetection";
 import { EIDLinkLinuxInstall } from '../../components/EIDLinkLinuxInstall/EIDLinkLinuxInstall'
 import {defineMessages, FormattedMessage, injectIntl} from "react-intl";
 import {definedMessages} from "../../i18n/translations";
@@ -48,7 +48,7 @@ export class VersionCheckUpdateContainer extends React.Component {
 
     handleOnClick() {
         const usedOs = getOS()
-        const usedBrowser = getBrowser()
+        const usedBrowser = getBrowserInfo().browser
         const IsAdminWindows = this.props.reader && this.props.reader.beidConnectVersion && this.props.reader.beidConnectVersion.IsAdmin;
         if (usedOs === OS.WINDOWS && window.configData && window.configData.eIDLinkUrls && window.configData.eIDLinkUrls.windows) {
             const { intl } = this.props;
@@ -87,7 +87,6 @@ export class VersionCheckUpdateContainer extends React.Component {
     render() {
         const { resetWizard, intl } = this.props
         const usedOs = getOS()
-        const usedBrowser = getBrowser()
 
         // console.log(usedOs);
         // console.log(usedBrowser);

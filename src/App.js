@@ -4,7 +4,6 @@ import Navbar from './modules/Navbar/Navbar';
 import WizardContainer from './modules/signWizard/WizardContainer';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import ValidateWizardContainer from './modules/validateWizard/ValidateWizardContainer';
-import { browserIsAccepted } from './modules/browserDetection/BrowserDetection';
 import MessageContainer from './modules/message/MessageContainer';
 import { ErrorNotSupported, ErrorIE11NotSupported } from './modules/message/MessageConstants';
 import Footer from './modules/footer/Footer';
@@ -13,16 +12,15 @@ import StartPageContainer from './modules/startPage/StartPageContainer';
 import MainI18nWrapper from "./modules/i18n/MainI18nWrapper";
 import TokenWizardContainer from "./modules/signByTokenWizard/TokenWizardContainer";
 import { isInIframe } from "./modules/utils/helper";
-import { getBrowser, browser } from './modules/browserDetection/BrowserDetection';
+import { getBrowserInfo, browser } from './modules/browserDetection/BrowserDetection';
 import { Helmet } from "react-helmet-async";
 
 const BaseApp = () => {
-    const browserIsSupported = browserIsAccepted();
-    const usedBrowser = getBrowser();
+    const bi = getBrowserInfo();
     return (
         <div lang={ useIntl().locale } >
             {isInIframe() ? false : <Navbar />}
-            {browserIsSupported ?
+            {bi.accepted ?
                 (<div className="container-fluid" style={{ marginBottom: '64px' }} >
                     <Switch>
                         <Route path="/sign/:token"><TokenWizardContainer /></Route>
@@ -35,7 +33,7 @@ const BaseApp = () => {
                         <Route path="/"><StartPageContainer /></Route>
                     </Switch>
                 </div>)
-                : (usedBrowser === browser.IE
+                : (bi.browser === browser.IE
                     ? (
                         <div className="container">
                             <div className="col col-12 col-md-8 mx-auto align-middle">
