@@ -391,7 +391,7 @@ export const DisplayPDF = ({ file, drawSignature }) => {
                 document.documentElement.removeEventListener('mouseup', onDocumentMouseUp); 
             }
         }
-    }, [pagesInfo, pageNumber, zoomLevel, signatureSelected, signatureArea, locked, photoIncluded ]);
+    }, [pagesInfo, pageNumber, zoomLevel, fitScaleFactor, signatureSelected, signatureArea, locked, photoIncluded ]);
 
 
     //****************************************************************************************

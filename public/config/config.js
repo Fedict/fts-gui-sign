@@ -78,10 +78,10 @@ window.configData = {
     redirectSigning: null,
     
     minBrowserVersions: {
-        "FIREFOX" : 115,
+        "FIREFOX" : 128,
         "EDGE": 0,
         "CHROMIUMEDGE": 0,
-        "CHROME": 120,
+        "CHROME": 0,
         "SAFARI": 0,
         "OPERA": 0
     }
