@@ -52,8 +52,8 @@ export const ErrorNotSupported = {
             <p><FormattedMessage id="error.browser_not_supported.text" defaultMessage="Your browser is not supported. Please use one of the following browsers:"/></p>
             <div className="col col-10 mx-auto" >
                 <ul className="text-left">
-                    {Object.keys(getMinBrowserVersions()).map((browser) => 
-                        <li><FormattedMessage key={browser} id={"error.browser_not_supported.supported." + browser} defaultMessage={browserNames[browser]}/></li>
+                    {Object.entries(getMinBrowserVersions()).map(([browser, mminVer]) => 
+                        <li><FormattedMessage key={browser} id={"error.browser_not_supported.supported." + browser} defaultMessage={browserNames[browser]}/>{ mminVer ? " v" + mminVer : "" }</li>
                     )}
                 </ul>
             </div>
