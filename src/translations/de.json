@@ -50,6 +50,7 @@
   "error.faq.URL": "https://bosa.belgium.be/de/federal-trust-services-haeufig-gestellte-fragen",
   "error.CERT_CHAIN_INCOMPLETE": "Die Zertifikatskette ist unvollständig.",
   "error.CERT_REVOKED": "Das Zertifikat ist widerrufen.",
+  "error.DOC_CERT_REVOKED": "Dieses Dokument kann nicht weiter verarbeitet werden, weil es eine ungültige Unterschrift enthält. Kontaktieren Sie den Eigentümer des Dokuments, um das Problem zu lösen.",
   "error.EMPTY_PARAM": "Leerer (null) Parameter in der Anfrage.",
   "error.FAILED_TO_FETCH_DATA_TO_SIGN": "Die Daten zum Unterschreiben konnten nicht geholt werden.",
   "error.FAILED_TO_SIGN": "Unterschreiben des Dokuments fehlgeschlagen.",

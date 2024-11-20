@@ -113,6 +113,10 @@ export const errorMessages = defineMessages({
         defaultMessage: "The certificate is revoked.",
         link: "#13"
     },
+    DOC_CERT_REVOKED: {
+        id: "error.DOC_CERT_REVOKED",
+        defaultMessage: "This document can not be processed any further because it contains an invalid signature. Contact the document owner to resolve the problem."
+    },
     INTERNAL_ERR: {
         id: "error.INTERNAL_ERR",
         defaultMessage: "Unexpected error happened."

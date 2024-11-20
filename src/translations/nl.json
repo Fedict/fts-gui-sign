@@ -49,7 +49,7 @@
   "error.faq.generic": "Help, ik krijg de melding ‘{error}’",
   "error.faq.URL": "https://bosa.belgium.be/nl/federal-trust-services-vaak-gestelde-vragen",
   "error.CERT_CHAIN_INCOMPLETE": "De certificaatreeks is onvolledig.",
-  "error.CERT_REVOKED": "Het certificaat is ingetrokken.",
+  "error.DOC_CERT_REVOKED": "Ce document ne peut plus être traité car il contient une signature non valide. Contactez le propriétaire du document pour résoudre le problème.",
   "error.EMPTY_PARAM": "Lege (null) parameter in het verzoek.",
   "error.FAILED_TO_FETCH_DATA_TO_SIGN": "Kan gegevens niet ophalen om te ondertekenen.",
   "error.FAILED_TO_SIGN": "Kan het document niet ondertekenen.",

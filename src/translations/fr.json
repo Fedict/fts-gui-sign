@@ -50,6 +50,7 @@
   "error.faq.URL": "https://bosa.belgium.be/fr/federal-trust-services-questions-frequemment-posees",
   "error.CERT_CHAIN_INCOMPLETE": "La chaîne de certificats est incomplète.",
   "error.CERT_REVOKED": "Le certificat a été révoqué.",
+  "error.DOC_CERT_REVOKED": "Ce document ne peut plus être traité car il contient une signature non valide. Contactez le propriétaire du document pour résoudre le problème.",
   "error.EMPTY_PARAM": "Paramètre vide (null) dans la demande.",
   "error.FAILED_TO_FETCH_DATA_TO_SIGN": "Impossible de récupérer les données à signer.",
   "error.FAILED_TO_SIGN": "Impossible de signer le document",
