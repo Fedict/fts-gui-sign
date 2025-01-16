@@ -1,5 +1,5 @@
 import {sendLogInfoIgnoreResult} from "../communication/communication";
-import {WIZARD_STATE_MESSAGE, WIZARD_STATE_PIN_INPUT, WIZARD_STATE_PINPAD_ERROR} from "./WizardConstants";
+import {WIZARD_STATE_MESSAGE, WIZARD_STATE_PIN_INPUT, WIZARD_STATE_PINPAD_ERROR, WIZARD_STATE_VERSION_CHECK_INSTALL} from "./WizardConstants";
 
 export const WIZARD_CHANGE_STATE = "WIZARD_CHANGE_STATE"
 export const WIZARD_CHANGE_AUTO_DOWNLOAD_OPTION = "WIZARD_CHANGE_AUTO_DOWNLOAD_OPTION"
@@ -30,6 +30,11 @@ export const doSendLogMessageChangeState = (route) => {
             //compute extra information when WIZARD_STATE_MESSAGE
             let extra = '';
             switch (route){
+                case WIZARD_STATE_VERSION_CHECK_INSTALL :
+                // Avoid logs every 5 sec. when beID Connect installation is pending
+                if (state.wizard.state === route) return;
+                    break;
+
                 case WIZARD_STATE_MESSAGE : {
                     if (state.message) {
                         if (state.message.message) {
