@@ -15,6 +15,8 @@ import { ErrorGeneral } from "../../message/MessageConstants";
 import { showErrorMessage  } from "../../message/actions/MessageActions";
 import {defineMessages} from "react-intl";
 import {sendBEIDLinkErrorToBE} from "../../communication/communication";
+import { errorMessages } from "../../i18n/translations";
+import { getOS, OS } from "../../../modules/browserDetection/OSDetection";
 
 /**
  * enum for the errorResponses from eIDLink
@@ -37,6 +39,11 @@ export const errorStatuses = {
     cancel: "cancel",
     signature_failed: "signature_failed"
 }
+
+const bEIDErrorFaqLink = {
+    id : "eid.link.error.general",
+    defaultMessage : "More details about this type of error"
+};
 
 /**
  * Function that will call the backend to report the error and store the resulting ref in the store.
@@ -70,6 +77,7 @@ export const handleErrorEID = (error, isInSession, token, callback) => (dispatch
             dispatch(showErrorMessage(e))
         }
     }
+
     let reportError = false;
     let message;
     switch (error.message) {
@@ -124,10 +132,18 @@ export const handleErrorEID = (error, isInSession, token, callback) => (dispatch
             dispatch(resetWizard()) //TODO
             break;
         default:
-            message = {
-                ...ErrorGeneral,
-                err : 'BEID_CONNECT_ERROR'
+            var body = error.message;
+            if (error.resultRaw) body += " - " + error.resultType + " - 0x" + error.resultRaw.toString(16);
+            message = { ...ErrorGeneral, message: errorMessages.BEID_CONNECT_ERROR }
+            if (error.resultType === "SCard" && error.resultRaw === 0x80100016 && getOS() === OS.MACOS) {
+                message.message = errorMessages.INVALID_MAC_SCARD_DRIVER;
             }
+            else {
+                message.body = body;
+                message.linkURL = "#14";
+                message.link = bEIDErrorFaqLink;
+            }
+            error.message = body;
             reportError = true;
             break;
     }

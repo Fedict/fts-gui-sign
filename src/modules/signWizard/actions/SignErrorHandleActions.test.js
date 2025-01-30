@@ -169,8 +169,15 @@ describe("SignErrorHandleActions", () => {
 
         })
 
-        test('handleErrorEID error.message unknown shows no message', () => {
-            const error = { message: "unknown", report : "some report" }
+        test('handleErrorEID error.message general_error and raw error 0x8010001', () => {
+            Object.defineProperty(window.navigator, "appVersion", ((value) => ({
+                get() { return value; },
+                set(v) { value = v; }
+            }))(window.navigator["appVersion"]));
+
+            window.navigator.appVersion = "Mac OS";
+
+            const error = { message: "general_error", resultRaw: 0x80100016, resultType: "SCard", report : "some report" }
             const mockDispatch = jest.fn()
             handleErrorEID(error)(mockDispatch)
 
@@ -180,7 +187,10 @@ describe("SignErrorHandleActions", () => {
             expect(mockDispatch).toBeCalledTimes(2)
             expect(showErrorMessage).toBeCalledWith({
                 ...ErrorGeneral,
-                err : 'BEID_CONNECT_ERROR'
+                message: {
+                    defaultMessage: "Your MacOS Driver is invalid",
+                    id: "error.INVALID_MAC_SCARD_DRIVER"
+                }
             })
         })
     })
@@ -410,8 +420,8 @@ describe("SignErrorHandleActions", () => {
                 expect(wizardLogicActions.resetWizard).toBeCalledTimes(1)
             })
             
-            test('handlePinErrorEID error.message unknown shows no message', () => {
-                const startError = { message: "unknown message" }
+            test('handlePinErrorEID error.message general_error', () => {
+                const startError = { message: "general_error" }
 
                 const mockDispatch2 = jest.fn()
                 const mockDispatch1 = jest.fn((val) => { val(mockDispatch2) })
@@ -420,9 +430,44 @@ describe("SignErrorHandleActions", () => {
                 expect(mockDispatch2).toBeCalled()
                 expect(showErrorMessage).toBeCalledWith({
                     ...ErrorGeneral,
-                    err : 'BEID_CONNECT_ERROR'
-                });
+                    body: startError.message,
+                    link: {
+                        defaultMessage: "More details about this type of error",
+                        id: "eid.link.error.general"
+                        },
+                    linkURL: "#14",
+                    message: {
+                        defaultMessage: "Something went wrong. Please reload the page and try again.",
+                        id: "eid.link.error.general.text"
+                        }
+                    });
             })
+
+            
+            test('handleErrorEID error.message general_error and raw error 0xAEC1wf', () => {
+                const error = { message: "general_error", resultRaw: 0xAEC1, resultType: "Card", report : "some report" }
+                const mockDispatch = jest.fn()
+                handleErrorEID(error)(mockDispatch)
+    
+                expect(showErrorMessage).toBeCalledTimes(1)
+    
+                //once for showErrorMessage & once for doReportError
+                expect(mockDispatch).toBeCalledTimes(2)
+                expect(showErrorMessage).toBeCalledWith({
+                    ...ErrorGeneral,
+                    body: "general_error - Card - 0xaec1",
+                    link: {
+                        defaultMessage: "More details about this type of error",
+                        id: "eid.link.error.general"
+                        },
+                  linkURL: "#14",
+                    message: {
+                        defaultMessage: "Something went wrong. Please reload the page and try again.",
+                        id: "eid.link.error.general.text"
+                    }
+                })
+            })
+    
         })
     })
 })

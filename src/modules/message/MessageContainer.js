@@ -78,9 +78,8 @@ const MessageContainer = ({ message, messageInStore, navigateToStep, onCancel,  
             predButtonText = { shownMessage.predButton ? shownMessage.predButton.text : null }
             onClickPred = { () => { handleButtonClick(shownMessage.predButton, 'ACTUAL_RETRY') } }
         >
-            {shownMessage.body? (
-                shownMessage.body.id && intl.formatMessage(shownMessage.body)
-            ):shownMessage.body}
+            {shownMessage.body && <p>{shownMessage.body.id ? intl.formatMessage(shownMessage.body) : shownMessage.body}</p>}
+
             {shownMessage.link && <a href={intl.formatMessage(faqURLs) + shownMessage.linkURL}>{intl.formatMessage(shownMessage.link)}</a>}
         </Container>
     )

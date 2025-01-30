@@ -145,6 +145,10 @@ export const errorMessages = defineMessages({
     SIGN_PERIOD_EXPIRED : {
         id: "error.SIGN_PERIOD_EXPIRED",
         defaultMessage: "Entering the PIN took too long."
+    },
+    INVALID_MAC_SCARD_DRIVER : {
+        id: "error.INVALID_MAC_SCARD_DRIVER",
+        defaultMessage: "Your MacOS Driver is invalid"
     }
 
 })
