@@ -235,7 +235,7 @@ export const getDataToSignAPI = async (certificateBody, document, signingDate, c
  * @param {Object} document - document to be signed
  * @param {string} signature - signature value used to sign th document
  */
-export const signDocumentAPI = async (certificateBody, document, signature, signingDate, customSignature, signLanguage, photo) => {
+export const signDocumentASyncAPI = async (certificateBody, document, signature, signingDate, customSignature, signLanguage, photo) => {
     const documentB64 = await getBase64Data(document)
 
     const body = {
@@ -243,7 +243,7 @@ export const signDocumentAPI = async (certificateBody, document, signature, sign
         "signatureValue": signature
     }
 
-    return fetch(url + "/signing/signDocument", {
+    return fetch(url + "/signing/signDocumentASync", {
         method: 'POST',
         body: JSON.stringify(body),
         headers: {
@@ -257,7 +257,7 @@ export const signDocumentAPI = async (certificateBody, document, signature, sign
  * API request to validate the signature on a document
  * @param {Object} document - document to be signed
  */
-export const validateSignatureAPI = async (document) => {
+export const validateSignatureASyncAPI = async (document) => {
     const documentB64 = await getBase64Data(document)
     const body = {
         "signedDocument": {
@@ -267,7 +267,7 @@ export const validateSignatureAPI = async (document) => {
         token : globalToken
     }
 
-    return fetch(url + "/validation/validateSignature", {
+    return fetch(url + "/validation/validateSignatureASync", {
         method: 'POST',
         body: JSON.stringify(body),
         headers: {
@@ -299,6 +299,15 @@ export const getDataToSignForTokenAPI = async (certificateBody, token, fileIdToS
         }
     )
         .then(jsonHandler)
+}
+
+
+/**
+ * API request to get the outcome of a long running task
+ * @param {Object} id - Id of the long running task
+ */
+export const getTaskResultAPI = async (id) => {
+    return fetch(url + "/signing/getTaskResult/" + id).then(jsonHandler)
 }
 
 

@@ -24,7 +24,7 @@ import {
 } from "./CertificateActions"
 import {
     getDataToSignAPI, sendLogInfo, sendLogInfoIgnoreResult,
-    signDocumentAPI, signDocumentForTokenAPI,
+    signDocumentASyncAPI, signDocumentForTokenAPI,getTaskResultAPI,
     validateCertificatesAPI, sendHookInfoAPI, logVersions
 } from "../../communication/communication"
 import { setDigest } from "./DigestActions"
@@ -709,6 +709,57 @@ export const sign = (pin, locale) => (dispatch, getStore) => {
 
 }
 
+const handleSignError = (dispatch, getStore, hookInfo, tokenFile, fileIdToSign, resp) => {
+    sendHookInfoAPI(hookInfo, tokenFile);
+    var errorMessage = messageToError(resp.message);
+    if (!tokenFile.signAll) {
+        if (!getStore().tokenFile.noSkipErrors) {
+            dispatch(setInputsSignState(fileIdToSign, signState.ERROR_SIGN));
+            const moreToSign =  getStore().tokenFile.inputs.find(input => input.signState === signState.TO_BE_SIGNED);
+            errorMessage.predButton = { text: { id: "button.retry", defaultMessage: "Try again" }, action: () => {
+                dispatch(setInputsSignState(fileIdToSign, signState.TO_BE_SIGNED)) },
+                nextPage: WIZARD_STATE_DIGEST_LOADING }
+            errorMessage.nextButton = { isVisible: true, text: { id: "signing.error.skipButton", defaultMessage: "Skip file" }, action: () => {
+                dispatch(setInputsSignState(fileIdToSign, signState.SKIPPED)) },
+                nextPage: moreToSign ? WIZARD_STATE_DIGEST_LOADING : WIZARD_STATE_SUCCES }
+        }
+    }
+    dispatch(showErrorMessage(errorMessage));
+}
+
+const waitForTokenSignedDocument = (dispatch, getStore, hookInfo, tokenFile, fileIdToSign, uuid) => {
+    setTimeout(() => {
+        getTaskResultAPI(uuid).then((resp) => {
+            if (resp === true) {
+                hookInfo.ok = true
+                sendHookInfoAPI(hookInfo, tokenFile);
+                dispatch(setInputsSignState(tokenFile.signAll ? SET_ALL_INPUTS : fileIdToSign, signState.SIGNED));
+                var moreToSign = getStore().tokenFile.inputs.find(input => input.signState === signState.TO_BE_SIGNED);
+                dispatch(navigateToStep(moreToSign ? WIZARD_STATE_DIGEST_LOADING: WIZARD_STATE_SUCCES))
+            } else {
+                if (resp === false) setTimeout(() => { waitForTokenSignedDocument(dispatch, getStore, hookInfo, tokenFile, fileIdToSign, uuid) }, 500);
+                else handleSignError(dispatch, getStore, hookInfo, tokenFile, fileIdToSign, resp);
+            }
+        })
+    }, 500);
+}
+
+const waitForSignedDocument = (dispatch, uuid) => {
+    setTimeout(() => {
+        getTaskResultAPI(uuid).then((resp) => {
+            if (resp.name && resp.bytes) {
+                dispatch(setDownloadFile( { bytes: resp.bytes, fileName: resp.name } ))
+                dispatch(navigateToStep(WIZARD_STATE_SUCCES))
+            } else {
+                if (resp === false) setTimeout(() => { waitForSignedDocument(dispatch, uuid) }, 500);
+                else dispatch(showErrorMessage(messageToError(resp.message)));
+
+            }
+        })
+    }, 500);
+}
+
+
 /**
  * function (action) that calls signDocumentAPI 
  * - if success navigates to WIZARD_STATE_SUCCES
@@ -729,40 +780,17 @@ export const signDocument = (locale) => (dispatch, getStore) => {
         const flowId = getStore().controlId.flowId;
         if(tokenFile && tokenFile.token){
             var fileIdToSign = tokenFile.inputs.findIndex(input => input.signState === signState.TO_BE_SIGNED);
-            var hookInfo = { id: 'FILE_SIGNED', fileId: fileIdToSign };
+            var hookInfo = { id: 'FILE_SIGNED', fileId: fileIdToSign, ok: false };
             const curInput = tokenFile.inputs[fileIdToSign];
             const customSignature = curInput.customSignature;
             const photo = curInput.psfP || customSignature.photoIncluded ? certificate.certificateSelected.photo : null;
             const signLanguage = curInput.signLanguage ? curInput.signLanguage : locale;
-            signDocumentForTokenAPI(certificate.certificateSelected.APIBody, tokenFile.token, fileIdToSign, customSignature, signLanguage, signature.signature, signature.signingDate, photo, true)
+            signDocumentForTokenAPI(certificate.certificateSelected.APIBody, tokenFile.token, fileIdToSign, customSignature, signLanguage, signature.signature, signature.signingDate, photo, false)
                 .then(handleFlowIdError(flowId, getStore))
                 .then((resp) => {
-                    //console.log('signDocumentForTokenAPI response', resp)
-                    hookInfo.ok = resp === true
-                    sendHookInfoAPI(hookInfo, tokenFile);
-                    if (resp === true) {
-                        dispatch(setInputsSignState(tokenFile.signAll ? SET_ALL_INPUTS : fileIdToSign, signState.SIGNED));
-                        var moreToSign = getStore().tokenFile.inputs.find(input => input.signState === signState.TO_BE_SIGNED);
-                        dispatch(navigateToStep(moreToSign ? WIZARD_STATE_DIGEST_LOADING: WIZARD_STATE_SUCCES))
-                    } else {
-                        var errorMessage = messageToError(resp.message);
-                        if (!tokenFile.signAll) {
-                            if (!getStore().tokenFile.noSkipErrors) {
-                                dispatch(setInputsSignState(fileIdToSign, signState.ERROR_SIGN));
-                                moreToSign =  getStore().tokenFile.inputs.find(input => input.signState === signState.TO_BE_SIGNED);
-                                errorMessage.predButton = { text: { id: "button.retry", defaultMessage: "Try again" }, action: () => {
-                                    dispatch(setInputsSignState(fileIdToSign, signState.TO_BE_SIGNED)) },
-                                    nextPage: WIZARD_STATE_DIGEST_LOADING }
-                                errorMessage.nextButton = { isVisible: true, text: { id: "signing.error.skipButton", defaultMessage: "Skip file" }, action: () => {
-                                    dispatch(setInputsSignState(fileIdToSign, signState.SKIPPED)) },
-                                    nextPage: moreToSign ? WIZARD_STATE_DIGEST_LOADING : WIZARD_STATE_SUCCES }
-                            }
-                        }
-
-                        dispatch(showErrorMessage(errorMessage));
-                    }
-                })
-                .catch((err) => {
+                    if (resp.match('[0-9,a-f,-]{36}')) waitForTokenSignedDocument(dispatch, getStore, hookInfo, tokenFile, fileIdToSign, resp);
+                    else handleSignError(dispatch, getStore, hookInfo, tokenFile, fileIdToSign, resp);
+                }).catch((err) => {
                     hookInfo.ok = false
                     sendHookInfoAPI(hookInfo, tokenFile);
                     if (err !== INCORECT_FLOW_ID) {
@@ -771,22 +799,12 @@ export const signDocument = (locale) => (dispatch, getStore) => {
                 })
         }else{
             const photo = customSignature.photoIncluded ? certificate.certificateSelected.photo : null;
-            signDocumentAPI(certificate.certificateSelected.APIBody, uploadFile.file, signature.signature, signature.signingDate, customSignature, locale, photo)
-
+            signDocumentASyncAPI(certificate.certificateSelected.APIBody, uploadFile.file, signature.signature, signature.signingDate, customSignature, locale, photo)
                 .then(handleFlowIdError(flowId, getStore))
                 .then((resp) => {
-                    if (resp
-                        && resp.name
-                        && resp.bytes) {
-                        dispatch(setDownloadFile( { bytes: resp.bytes, fileName: resp.name } ))
-                        dispatch(navigateToStep(WIZARD_STATE_SUCCES))
-                    }
-                    else {
-                        dispatch(showErrorMessage(messageToError(resp.message)));
-                    }
-
-                })
-                .catch((err) => {
+                    if (resp.match('[0-9,a-f,-]{36}')) waitForSignedDocument(dispatch, resp);
+                    else dispatch(showErrorMessage(messageToError(resp.message)));
+                }).catch((err) => {
                     if (err !== INCORECT_FLOW_ID) {
                         dispatch(showErrorMessage(ErrorGeneral))
                     }
