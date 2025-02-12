@@ -301,14 +301,32 @@ export const getDataToSignForTokenAPI = async (certificateBody, token, fileIdToS
         .then(jsonHandler)
 }
 
+// Wait for a long running "backend ASync" task with growing duration between two polling of the backend
+// Maximum 100 trials
 
-/**
- * API request to get the outcome of a long running task
- * @param {Object} id - Id of the long running task
- */
-export const getTaskResultAPI = async (id) => {
-    return fetch(url + "/signing/getTaskResult/" + id).then(jsonHandler)
-}
+export const waitForASyncTask = (uuid, tryOK, goError, goCatch, runId = 0) => {
+    if (runId === 0) {
+        if (!uuid.match('[0-9,a-f,-]{36}')) {
+            goError(uuid);
+            return;
+        }
+    } else if (runId > 100) {
+        goCatch("timeout");
+        return;
+    }
+    var waitTime = [150, 300, 450, 600, 1000, 1000, 1000][runId];
+    if (!waitTime) waitTime = 2000;
+    setTimeout(() => {
+        fetch(url + "/signing/getTaskResult/" + uuid)
+        .then(jsonHandler)
+        .then((resp) => {
+            if (!tryOK(resp)) {
+                if (resp === false) waitForASyncTask(uuid, tryOK, goError, goCatch, runId + 1);
+                else goError(resp);
+            }
+        }).catch((err) => { goCatch(err) })
+    }, waitTime);
+};
 
 
 /**
