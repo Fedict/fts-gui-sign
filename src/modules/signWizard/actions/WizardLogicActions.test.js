@@ -46,7 +46,7 @@ import * as CertificateActions from "./CertificateActions"
 import { handleErrorEID, handlePinErrorEID } from "./SignErrorHandleActions"
 import * as SignErrorHandleActions from "./SignErrorHandleActions"
 
-import { validateCertificatesAPI, getDataToSignAPI, signDocumentAPI } from "../../communication/communication"
+import { validateCertificatesAPI, getDataToSignAPI, signDocumentASyncAPI, waitForASyncTask } from "../../communication/communication"
 import * as communication from "../../communication/communication"
 
 import { setDigest } from "./DigestActions"
@@ -66,6 +66,7 @@ import * as FlowIdActions from "../../controlIds/flowId/FlowIdActions"
 import { MessageCertificatesNotFound } from "../messages/MessageCertificatesNotFound"
 import {EIDChromeExtMock} from "../../testUtils/EIDChromeExtMock";
 import {setImmediate} from 'timers'
+import { INVISIBLE_SIGNATURE } from "../../fileUpload/reducers/CustomSignatureReducer"
 
 const ORIGINAL_controller = controller
 const ORIGINAL_navigateToStep = navigateToStep
@@ -87,10 +88,11 @@ const ORIGINAL_getDataToSignAPI = getDataToSignAPI
 const ORIGINAL_setDigest = setDigest
 const ORIGINAL_setSignature = setSignature
 const ORIGINAL_handlePinErrorEID = handlePinErrorEID
-const ORIGINAL_signDocumentAPI = signDocumentAPI
+const ORIGINAL_signDocumentASyncAPI = signDocumentASyncAPI
 const ORIGINAL_setDownloadFile = setDownloadFile
 const ORIGINAL_resetStore = resetStore
 const ORIGINAL_setNewFlowId = setNewFlowId
+const ORIGINAL_waitForASyncTask = waitForASyncTask
 
 function flushPromises() {
     return new Promise(resolve => setImmediate(resolve));
@@ -2544,10 +2546,11 @@ describe("WizardLogicActions", () => {
 
         beforeEach(() => {
             navigation.navigateToStep = jest.fn()
-            communication.signDocumentAPI = jest.fn(() => { return Promise.resolve() })
+            communication.signDocumentASyncAPI = jest.fn(() => { return Promise.resolve() })
             FlowIdHelpers.handleFlowIdError = jest.fn(() => (val) => val)
             UploadFileActions.setDownloadFile = jest.fn()
             MessageActions.showErrorMessage = jest.fn();
+            communication.waitForASyncTask = jest.fn();
         })
 
         test("signDocument shows ErrorGeneral when not all data is present", () => {
@@ -2588,7 +2591,7 @@ describe("WizardLogicActions", () => {
             expect(navigateToStep).toBeCalledWith(WIZARD_STATE_SIGNING_LOADING)
         })
 
-        test("signDocument calls signDocumentAPI", () => {
+        test("signDocument calls signDocumentASyncAPI", () => {
             const mockApiBody = {
                 certificate: {
                     encodedCertificate: 'certificate string'
@@ -2613,8 +2616,8 @@ describe("WizardLogicActions", () => {
 
             })
             signDocument()(mockDispatch, mockGetStore)
-            expect(signDocumentAPI).toBeCalledTimes(1)
-            expect(signDocumentAPI).toBeCalledWith(mockApiBody, mockFile, mockSignatureString, mockSigningDate, {"photoIncluded": false} , undefined, null)
+            expect(signDocumentASyncAPI).toBeCalledTimes(1)
+            expect(signDocumentASyncAPI).toBeCalledWith(mockApiBody, mockFile, mockSignatureString, mockSigningDate, {"photoIncluded": false} , undefined, null)
         })
 
         test("signDocument success handleFlowIdError", () => {
@@ -2653,7 +2656,6 @@ describe("WizardLogicActions", () => {
                 }
             }
             const mockSignatureString = "signatureString"
-            const mockFile = { test: "string" }
             const mockDispatch = jest.fn((val) => val)
             const mockGetStore = jest.fn(() => {
                 return {
@@ -2664,13 +2666,13 @@ describe("WizardLogicActions", () => {
                         }
                     },
                     signature: { signature: mockSignatureString },
-                    uploadFile: { file: mockFile },
-                    customSignature: { photoIncluded: false }
+                    uploadFile: { file: "mockFile" },
+                    customSignature: { signatureSelected: INVISIBLE_SIGNATURE, photoIncluded: false }
                 }
 
             })
 
-            communication.signDocumentAPI = jest.fn(() => { return Promise.resolve({ name: "filename", bytes: "bytestring" }) })
+            communication.waitForASyncTask = jest.fn((resp, ok, error, except) => { ok({ name: "filename", bytes: "bytestring" }) })
             signDocument()(mockDispatch, mockGetStore)
 
             await flushPromises()
@@ -2704,7 +2706,7 @@ describe("WizardLogicActions", () => {
 
             })
 
-            communication.signDocumentAPI = jest.fn(() => { return Promise.resolve() })
+            communication.waitForASyncTask = jest.fn((resp, ok, error, except) => { except("ANY ERROR") })
             signDocument()(mockDispatch, mockGetStore)
 
             await flushPromises()
@@ -2736,7 +2738,7 @@ describe("WizardLogicActions", () => {
 
             })
 
-            communication.signDocumentAPI = jest.fn(() => { return Promise.reject() })
+            communication.signDocumentASyncAPI = jest.fn(() => { return Promise.reject() })
             signDocument()(mockDispatch, mockGetStore)
             await flushPromises()
 
@@ -2767,7 +2769,6 @@ describe("WizardLogicActions", () => {
 
             })
 
-            communication.signDocumentAPI = jest.fn(() => { return Promise.resolve() })
             FlowIdHelpers.handleFlowIdError = jest.fn(() => () => { throw INCORECT_FLOW_ID })
             signDocument()(mockDispatch, mockGetStore)
             await flushPromises()
@@ -2777,10 +2778,11 @@ describe("WizardLogicActions", () => {
 
         afterEach(() => {
             navigation.navigateToStep = ORIGINAL_navigateToStep
-            communication.signDocumentAPI = ORIGINAL_signDocumentAPI
+            communication.signDocumentASyncAPI = ORIGINAL_signDocumentASyncAPI
             FlowIdHelpers.handleFlowIdError = ORIGINAL_handleFlowIdError
             UploadFileActions.setDownloadFile = ORIGINAL_setDownloadFile
             MessageActions.showErrorMessage = ORIGINAL_showErrorMessage
+            communication.waitForASyncTask = ORIGINAL_waitForASyncTask
         })
     })
 

@@ -3,8 +3,8 @@ import {
     createBody,
     validateCertificatesAPI,
     getDataToSignAPI,
-    signDocumentAPI,
-    validateSignatureAPI, getDataToSignForTokenAPI, sendLogInfo, signDocumentForTokenAPI
+    signDocumentASyncAPI,
+    validateSignatureASyncAPI, getDataToSignForTokenAPI, sendLogInfo, signDocumentForTokenAPI
 } from "./communication";
 import { MANUAL_SIGNATURE } from "../fileUpload/reducers/CustomSignatureReducer"
 import { getBase64Data } from "../fileUpload/helpers/FileHelper"
@@ -374,7 +374,7 @@ describe('getDataToSignAPI', () => {
 })
 
 
-describe('signDocumentAPI', () => {
+describe('signDocumentASyncAPI', () => {
 
     beforeEach(() => {
         filehelper.getBase64Data = jest.fn(() => { return Promise.resolve(BASE64STRING) })
@@ -388,7 +388,7 @@ describe('signDocumentAPI', () => {
         }
     })
 
-    test("signDocumentAPI does correct fetch request", async () => {
+    test("signDocumentASyncAPI does correct fetch request", async () => {
         //start var
         const startDocument = { name: "documentName", type: "application/xml" }
         const startCertificateObject = {
@@ -415,11 +415,11 @@ describe('signDocumentAPI', () => {
         global.fetch = jest.fn().mockImplementation(() => Promise.resolve(mockResponse));
 
         //result
-        const result = await signDocumentAPI(startCertificateObject, startDocument, startSignature, null, anotherCustSignature, "nl", null)
+        const result = await signDocumentASyncAPI(startCertificateObject, startDocument, startSignature, null, anotherCustSignature, "nl", null)
 
         //assertions
         expect(global.fetch).toHaveBeenCalledTimes(1)
-        expect(global.fetch.mock.calls[0][0]).toEqual("/signing/signDocument")
+        expect(global.fetch.mock.calls[0][0]).toEqual("/signing/signDocumentASync")
         expect(global.fetch.mock.calls[0][1].body.replace(/"token":[0-9]*/, "\"token\":0")).toEqual(JSON.stringify(expectedBody))
         expect(global.fetch.mock.calls[0][1].method).toEqual('POST')
 
@@ -428,7 +428,7 @@ describe('signDocumentAPI', () => {
         expect(result).toEqual(resultJson)
     })
 
-    test("signDocumentAPI can return text", async () => {
+    test("signDocumentASyncAPI can return text", async () => {
 
         //start var
         const startDocument = { name: "documentName", type: "application/xml" }
@@ -459,11 +459,11 @@ describe('signDocumentAPI', () => {
         global.fetch = jest.fn().mockImplementation(mockPromiseFunction);
 
         //result
-        const result = await signDocumentAPI(startCertificateObject, startDocument, startSignature, null, anotherCustSignature, "en", null)
+        const result = await signDocumentASyncAPI(startCertificateObject, startDocument, startSignature, null, anotherCustSignature, "en", null)
 
         //assertions
         expect(global.fetch).toHaveBeenCalledTimes(1)
-        expect(global.fetch.mock.calls[0][0]).toEqual("/signing/signDocument")
+        expect(global.fetch.mock.calls[0][0]).toEqual("/signing/signDocumentASync")
         expect(global.fetch.mock.calls[0][1].body.replace(/"token":[0-9]*/, "\"token\":0")).toEqual(JSON.stringify(expectedBody))
         expect(global.fetch.mock.calls[0][1].method).toEqual('POST')
 
@@ -472,7 +472,7 @@ describe('signDocumentAPI', () => {
         expect(result).toEqual(resultString)
     })
 
-    test("signDocumentAPI can throw error", async () => {
+    test("signDocumentASyncAPI can throw error", async () => {
         expect.assertions(7)
         //start var
         const startDocument = { name: "documentName", type: "application/xml" }
@@ -499,12 +499,12 @@ describe('signDocumentAPI', () => {
         global.fetch = jest.fn().mockImplementation(() => Promise.resolve(mockResponse));
 
         try {
-            await signDocumentAPI(startCertificateObject, startDocument, startSignature, null, anotherCustSignature, "fr", null)
+            await signDocumentASyncAPI(startCertificateObject, startDocument, startSignature, null, anotherCustSignature, "fr", null)
         }
         catch (e) {
             expect(e.message).toBe(REQUEST_FAILED)
             expect(global.fetch).toHaveBeenCalledTimes(1)
-            expect(global.fetch.mock.calls[0][0]).toEqual("/signing/signDocument")
+            expect(global.fetch.mock.calls[0][0]).toEqual("/signing/signDocumentASync")
             expect(global.fetch.mock.calls[0][1].body.replace(/"token":[0-9]*/, "\"token\":0")).toEqual(JSON.stringify(expectedBody))
             expect(global.fetch.mock.calls[0][1].method).toEqual('POST')
 
@@ -551,11 +551,11 @@ describe('validateSignatureAPI', () => {
         global.fetch = jest.fn().mockImplementation(() => Promise.resolve(mockResponse));
 
         //result
-        const result = await validateSignatureAPI(startDocument)
+        const result = await validateSignatureASyncAPI(startDocument)
 
         //assertions
         expect(global.fetch).toHaveBeenCalledTimes(1)
-        expect(global.fetch.mock.calls[0][0]).toEqual("/validation/validateSignature")
+        expect(global.fetch.mock.calls[0][0]).toEqual("/validation/validateSignatureASync")
         expect(global.fetch.mock.calls[0][1].body.replace(/"token":[0-9]*/, "\"token\":0")).toEqual(JSON.stringify(expectedBody))
         expect(global.fetch.mock.calls[0][1].method).toEqual('POST')
 
@@ -564,7 +564,7 @@ describe('validateSignatureAPI', () => {
         expect(result).toEqual(resultJson)
     })
 
-    test("signDocumentAPI can return text", async () => {
+    test("signDocumentASyncAPI can return text", async () => {
 
         //start var
         const startDocument = { name: "documentName", type: "application/xml" }
@@ -591,11 +591,11 @@ describe('validateSignatureAPI', () => {
         global.fetch = jest.fn().mockImplementation(mockPromiseFunction);
 
         //result
-        const result = await validateSignatureAPI(startDocument)
+        const result = await validateSignatureASyncAPI(startDocument)
 
         //assertions
         expect(global.fetch).toHaveBeenCalledTimes(1)
-        expect(global.fetch.mock.calls[0][0]).toEqual("/validation/validateSignature")
+        expect(global.fetch.mock.calls[0][0]).toEqual("/validation/validateSignatureASync")
         expect(global.fetch.mock.calls[0][1].body.replace(/"token":[0-9]*/, "\"token\":0")).toEqual(JSON.stringify(expectedBody))
         expect(global.fetch.mock.calls[0][1].method).toEqual('POST')
 
@@ -604,7 +604,7 @@ describe('validateSignatureAPI', () => {
         expect(result).toEqual(resultString)
     })
 
-    test("signDocumentAPI can throw error", async () => {
+    test("signDocumentASyncAPI can throw error", async () => {
         expect.assertions(7)
          //start var
          const startDocument = { name: "documentName", type: "application/xml" }
@@ -627,12 +627,12 @@ describe('validateSignatureAPI', () => {
         global.fetch = jest.fn().mockImplementation(() => Promise.resolve(mockResponse));
 
         try {
-            await validateSignatureAPI(startDocument)
+            await validateSignatureASyncAPI(startDocument)
         }
         catch (e) {
             expect(e.message).toBe(REQUEST_FAILED)
             expect(global.fetch).toHaveBeenCalledTimes(1)
-            expect(global.fetch.mock.calls[0][0]).toEqual("/validation/validateSignature")
+            expect(global.fetch.mock.calls[0][0]).toEqual("/validation/validateSignatureASync")
             expect(global.fetch.mock.calls[0][1].body.replace(/"token":[0-9]*/, "\"token\":0")).toEqual(JSON.stringify(expectedBody))
             expect(global.fetch.mock.calls[0][1].method).toEqual('POST')
 

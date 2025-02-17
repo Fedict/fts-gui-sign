@@ -718,7 +718,7 @@ const handleSignTokenCatch = (err, hookInfo, tokenFile, dispatch) => {
 }
 
 /**
- * function (action) that calls signDocumentAPI 
+ * function (action) that calls signDocumentASyncAPI 
  * - if success navigates to WIZARD_STATE_SUCCES
  */
 export const signDocument = (locale) => (dispatch, getStore) => {
@@ -746,7 +746,7 @@ export const signDocument = (locale) => (dispatch, getStore) => {
                 .then(handleFlowIdError(flowId, getStore))
                 .then((resp) => {
                     waitForASyncTask(resp, (resp) => {
-                        if (resp === true) {
+                        if (resp.done) {
                             hookInfo.ok = true
                             sendHookInfoAPI(hookInfo, tokenFile);
                             dispatch(setInputsSignState(tokenFile.signAll ? SET_ALL_INPUTS : fileIdToSign, signState.SIGNED));

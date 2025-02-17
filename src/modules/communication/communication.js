@@ -304,9 +304,10 @@ export const getDataToSignForTokenAPI = async (certificateBody, token, fileIdToS
 // Wait for a long running "backend ASync" task with growing duration between two polling of the backend
 // Maximum 100 trials
 
-export const waitForASyncTask = (uuid, tryOK, goError, goCatch, runId = 0) => {
+export const waitForASyncTask = (resp, tryOK, goError, goCatch, runId = 0) => {
+    const uuid = resp.uuid;
     if (runId === 0) {
-        if (!uuid.match('[0-9,a-f,-]{36}')) {
+        if (!uuid || !uuid.match('[0-9,a-f,-]{36}')) {
             goError(uuid);
             return;
         }
@@ -321,7 +322,7 @@ export const waitForASyncTask = (uuid, tryOK, goError, goCatch, runId = 0) => {
         .then(jsonHandler)
         .then((resp) => {
             if (!tryOK(resp)) {
-                if (resp === false) waitForASyncTask(uuid, tryOK, goError, goCatch, runId + 1);
+                if (resp.done === false) waitForASyncTask(uuid, tryOK, goError, goCatch, runId + 1);
                 else goError(resp);
             }
         }).catch((err) => { goCatch(err) })
