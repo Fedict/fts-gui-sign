@@ -322,7 +322,7 @@ export const waitForASyncTask = (resp, tryOK, goError, goCatch, runId = 0) => {
         .then(jsonHandler)
         .then((resp) => {
             if (!tryOK(resp)) {
-                if (resp.done === false) waitForASyncTask(uuid, tryOK, goError, goCatch, runId + 1);
+                if (resp.done === false) waitForASyncTask({ uuid }, tryOK, goError, goCatch, runId + 1);
                 else goError(resp);
             }
         }).catch((err) => { goCatch(err) })
