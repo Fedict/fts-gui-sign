@@ -18,5 +18,5 @@ FPS P&S reserves the right to amend the Privacy Statement at any time. This Priv
 
 <b>7. Contact details</b>
 FPS P&S ensures the confidentiality and security of the data. If you require further information or wish to submit comments, please contact FPS P&S at the following address: Federal Public Service Policy and Support, Simon Bolivarlaan 30 (WTC III), 1000 Brussels, at servicedesk.dto@bosa.fgov.be or call  02/740.80.27.
-The FPS P&S has appointed a data Protection Officer, who monitors the confidentiality and protection of the data and compliance with the GPDR requirements. You can contact the administrator at privacy@bosa.fgov.be for all your queries concerning privacy protection. Incidents and complaints may be sent to privacyincident@bosa.fgov.be.
+The FPS P&S has appointed a data Protection Officer, who monitors the confidentiality and protection of the data and compliance with the GPDR requirements. You can contact the administrator at dpo@bosa.fgov.be for all your queries concerning privacy protection. Incidents and complaints may be sent to dpo@bosa.fgov.be.
 `;
