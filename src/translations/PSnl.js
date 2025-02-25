@@ -18,5 +18,5 @@ De FOD BOSA behoudt zich het recht voor om de Privacyverklaring steeds te verand
 
 <b>7. Contactgegevens</b>
 De FOD BOSA ziet toe op de vertrouwelijkheid en de veiligheid van de gegevens. U kan de FOD BOSA contacteren op het volgende adres: de Federale Overheidsdienst Beleid en Ondersteuning, Simon Bolivarlaan 30, 1000 Brussel, op servicedesk.dto@bosa.fgov.be of op telefoonnummer 02/740.80.27.
-De FOD BOSA beschikt over een functionaris voor gegevensbescherming die toeziet op de vertrouwelijkheid en de veiligheid van de gegevens, en op de naleving van de vereisten van de AVG. U kan deze functionaris contacteren op privacy@bosa.fgov.be voor al uw vragen inzake privacybescherming. Incidenten en klachten mag u sturen naar privacyincident@bosa.fgov.be.
+De FOD BOSA beschikt over een functionaris voor gegevensbescherming die toeziet op de vertrouwelijkheid en de veiligheid van de gegevens, en op de naleving van de vereisten van de AVG. U kan deze functionaris contacteren op dpo@bosa.fgov.be voor al uw vragen inzake privacybescherming. Incidenten en klachten mag u sturen naar dpo@bosa.fgov.be.
 `;
