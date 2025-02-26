@@ -235,7 +235,7 @@ export const getDataToSignAPI = async (certificateBody, document, signingDate, c
  * @param {Object} document - document to be signed
  * @param {string} signature - signature value used to sign th document
  */
-export const signDocumentAPI = async (certificateBody, document, signature, signingDate, customSignature, signLanguage, photo) => {
+export const signDocumentASyncAPI = async (certificateBody, document, signature, signingDate, customSignature, signLanguage, photo) => {
     const documentB64 = await getBase64Data(document)
 
     const body = {
@@ -243,7 +243,7 @@ export const signDocumentAPI = async (certificateBody, document, signature, sign
         "signatureValue": signature
     }
 
-    return fetch(url + "/signing/signDocument", {
+    return fetch(url + "/signing/signDocumentASync", {
         method: 'POST',
         body: JSON.stringify(body),
         headers: {
@@ -257,7 +257,7 @@ export const signDocumentAPI = async (certificateBody, document, signature, sign
  * API request to validate the signature on a document
  * @param {Object} document - document to be signed
  */
-export const validateSignatureAPI = async (document) => {
+export const validateSignatureASyncAPI = async (document) => {
     const documentB64 = await getBase64Data(document)
     const body = {
         "signedDocument": {
@@ -267,7 +267,7 @@ export const validateSignatureAPI = async (document) => {
         token : globalToken
     }
 
-    return fetch(url + "/validation/validateSignature", {
+    return fetch(url + "/validation/validateSignatureASync", {
         method: 'POST',
         body: JSON.stringify(body),
         headers: {
@@ -300,6 +300,34 @@ export const getDataToSignForTokenAPI = async (certificateBody, token, fileIdToS
     )
         .then(jsonHandler)
 }
+
+// Wait for a long running "backend ASync" task with growing duration between two polling of the backend
+// Maximum 100 trials
+
+export const waitForASyncTask = (resp, tryOK, goError, goCatch, runId = 0) => {
+    const uuid = resp.uuid;
+    if (runId === 0) {
+        if (!uuid || !uuid.match('[0-9,a-f,-]{36}')) {
+            goError(uuid);
+            return;
+        }
+    } else if (runId > 100) {
+        goCatch("timeout");
+        return;
+    }
+    var waitTime = [150, 300, 450, 600, 1000, 1000, 1000][runId];
+    if (!waitTime) waitTime = 2000;
+    setTimeout(() => {
+        fetch(url + "/signing/getTaskResult/" + uuid)
+        .then(jsonHandler)
+        .then((resp) => {
+            if (!tryOK(resp)) {
+                if (resp.done === false) waitForASyncTask({ uuid }, tryOK, goError, goCatch, runId + 1);
+                else goError(resp);
+            }
+        }).catch((err) => { goCatch(err) })
+    }, waitTime);
+};
 
 
 /**

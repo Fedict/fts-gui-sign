@@ -29,7 +29,7 @@ module with all the requests to the API
   + POST /validation/validateCertificates
 + getDataToSignAPI (certificateBody, document)
   + POST /signing/getDataToSign
-+ signDocumentAPI (ertificateBody, document, signature)
++ signDocumentASyncAPI (ertificateBody, document, signature)
   + POST /signing/signDocument
 + validateSignatureAPI (document)
   + POST /validation/validateSignature

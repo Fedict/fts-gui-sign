@@ -6,7 +6,7 @@ import { navigateToStep } from "../../wizard/WizardActions";
 import * as wizardActions from "../../wizard/WizardActions";
 import { resetWizard, validateDocument } from "./WizardLogicActions";
 import { WIZARD_STATE_START, WIZARD_STATE_RESULT } from "../../wizard/WizardConstants";
-import { validateSignatureAPI } from "../../communication/communication";
+import { validateSignatureASyncAPI, waitForASyncTask } from "../../communication/communication";
 import * as communication from "../../communication/communication";
 import { handleFlowIdError, INCORECT_FLOW_ID } from "../../controlIds/flowId/FlowIdHelpers";
 import * as FlowIdHelpers from "../../controlIds/flowId/FlowIdHelpers";
@@ -20,10 +20,11 @@ import {setImmediate} from 'timers'
 const ORIGINAL_resetStore = resetStore
 const ORIGINAL_setNewFlowId = setNewFlowId
 const ORIGINAL_navigateToStep = navigateToStep
-const ORIGINAL_validateSignatureAPI = validateSignatureAPI
+const ORIGINAL_validateSignatureASyncAPI = validateSignatureASyncAPI
 const ORIGINAL_handleFlowIdError = handleFlowIdError
 const ORIGINAL_validationSet = validationSet
 const ORIGINAL_showErrorMessage = showErrorMessage
+const ORIGINAL_waitForASyncTask = waitForASyncTask
 
 function flushPromises() {
     return new Promise(resolve => setImmediate(resolve));
@@ -69,22 +70,21 @@ describe("WizardLogicActions", () => {
 
     describe("validateDocument", () => {
         beforeEach(() => {
-            communication.validateSignatureAPI = jest.fn()
+            communication.validateSignatureASyncAPI = jest.fn(() => { return Promise.resolve() })
             FlowIdHelpers.handleFlowIdError = jest.fn()
             ValidationActions.validationSet = jest.fn()
             wizardActions.navigateToStep = jest.fn()
             MessageActions.showErrorMessage = jest.fn()
         })
         afterEach(() => {
-            communication.validateSignatureAPI = ORIGINAL_validateSignatureAPI
+            communication.validateSignatureASyncAPI = ORIGINAL_validateSignatureASyncAPI
+            communication.waitForASyncTask = ORIGINAL_waitForASyncTask
             FlowIdHelpers.handleFlowIdError = ORIGINAL_handleFlowIdError
             ValidationActions.validationSet = ORIGINAL_validationSet
             wizardActions.navigateToStep = ORIGINAL_navigateToStep
             MessageActions.showErrorMessage = ORIGINAL_showErrorMessage
         })
-        test("validateDocument calls validateSignatureAPI", async () => {
-
-            communication.validateSignatureAPI = jest.fn(() => { return Promise.resolve() })
+        test("validateDocument calls validateSignatureASyncAPI", async () => {
 
             const uploadFile = { file: { type: "xml", name: "filename" } }
             const controlId = { flowId: 5555 }
@@ -98,13 +98,11 @@ describe("WizardLogicActions", () => {
             validateDocument()(mockDispatch, mockGetStore)
             await flushPromises()
 
-            expect(communication.validateSignatureAPI).toBeCalledTimes(1)
-            expect(communication.validateSignatureAPI).toHaveBeenCalledWith(uploadFile.file)
+            expect(communication.validateSignatureASyncAPI).toBeCalledTimes(1)
+            expect(communication.validateSignatureASyncAPI).toHaveBeenCalledWith(uploadFile.file)
 
         })
         test("validateDocument calls handleFlowIdError", async () => {
-            communication.validateSignatureAPI = jest.fn(() => { return Promise.resolve() })
-
             const uploadFile = { file: { type: "xml", name: "filename" } }
             const controlId = { flowId: 5555 }
             const startStore = { uploadFile: uploadFile, controlId: controlId }
@@ -122,10 +120,9 @@ describe("WizardLogicActions", () => {
         })
         test("validateDocument success set validation Indications", async () => {
             const response = {
-                report: "report",
+                indication: "indication",
                 normalizedReport: "normalizedReport"
             }
-            communication.validateSignatureAPI = jest.fn(() => { return Promise.resolve(response) })
 
             const uploadFile = { file: { type: "xml", name: "filename" } }
             const controlId = { flowId: 5555 }
@@ -135,6 +132,7 @@ describe("WizardLogicActions", () => {
             const mockGetStore = jest.fn(() => { return startStore })
 
             FlowIdHelpers.handleFlowIdError = jest.fn(() => (val) => { return val })
+            communication.waitForASyncTask = jest.fn((resp, ok, error, except) => { ok(response) })
 
             validateDocument()(mockDispatch, mockGetStore)
             await flushPromises()
@@ -144,10 +142,9 @@ describe("WizardLogicActions", () => {
         })
         test("validateDocument success navigates to WIZARD_STATE_RESULT", async () => {
             const response = {
-                report: "testvalue",
+                indication: "indication",
                 normalizedReport: "normalizedReport"
             }
-            communication.validateSignatureAPI = jest.fn(() => { return Promise.resolve(response) })
 
             const uploadFile = { file: { type: "xml", name: "filename" } }
             const controlId = { flowId: 5555 }
@@ -157,6 +154,7 @@ describe("WizardLogicActions", () => {
             const mockGetStore = jest.fn(() => { return startStore })
 
             FlowIdHelpers.handleFlowIdError = jest.fn(() => (val) => { return val })
+            communication.waitForASyncTask = jest.fn((resp, ok, error, except) => { ok(response) })
 
             validateDocument()(mockDispatch, mockGetStore)
             await flushPromises()
@@ -167,7 +165,7 @@ describe("WizardLogicActions", () => {
         })
         test("signDocument error shows ErrorGeneral", async () => {
 
-            communication.validateSignatureAPI = jest.fn(() => { return Promise.reject() })
+            communication.validateSignatureASyncAPI = jest.fn(() => { return Promise.reject() })
 
             const uploadFile = { file: { type: "xml", name: "filename" } }
             const controlId = { flowId: 5555 }
@@ -187,8 +185,6 @@ describe("WizardLogicActions", () => {
 
         })
         test("signDocument error INCORECT_FLOW_ID does nothing", async () => {
-            communication.validateSignatureAPI = jest.fn(() => { return Promise.resolve() })
-
             const uploadFile = { file: { type: "xml", name: "filename" } }
             const controlId = { flowId: 5555 }
             const startStore = { uploadFile: uploadFile, controlId: controlId }

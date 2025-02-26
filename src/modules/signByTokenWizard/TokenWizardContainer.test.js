@@ -77,11 +77,9 @@ describe('TokenWizardContainer', () => {
             },
             status: 200
         })
-        fetchMock.post('/signing/signDocumentForToken', {
-            "bytes" : "WVhCbWEyRXhaV0UyTXpWNllXTmhJRzloZWlCa2VqVmtNU0F6WVhvMUlERmtlZ29nTXpFPQ==",
-            "digestAlgorithm" : null,
-            "name" : "20201223121854-signed-pades-baseline-lta.pdf"
-        })
+        const uuid = 'bd3b97f5-ba77-46d9-b705-8caf044cff4a';
+        fetchMock.post('/signing/signDocumentForToken', {uuid});
+        fetchMock.get('/signing/getTaskResult/' + uuid, { "done" : true })
 
         fetchMock.post(`/hook`, {
             "id": 'FILE_SIGNED',
@@ -241,12 +239,9 @@ describe('TokenWizardContainer', () => {
             },
             status: 200
         })
-        fetchMock.post('/signing/signDocumentForToken', {
-            "bytes" : "WVhCbWEyRXhaV0UyTXpWNllXTmhJRzloZWlCa2VqVmtNU0F6WVhvMUlERmtlZ29nTXpFPQ==",
-            "digestAlgorithm" : null,
-            "name" : "20201223121854-signed-pades-baseline-lta.pdf"
-        })
-
+        const uuid = 'bd3b97f5-ba77-46d9-b705-8caf044cff4a';
+        fetchMock.post('/signing/signDocumentForToken', {uuid});
+        fetchMock.get('/signing/getTaskResult/' + uuid, { "done" : true })
         fetchMock.post(`/hook`, {
             "id": 'FILE_SIGNED',
             "fileName": "fileName"
@@ -367,11 +362,10 @@ describe('TokenWizardContainer', () => {
             },
             status: 200
         })
-        fetchMock.post('/signing/signDocumentForToken', {
-            "bytes" : "WVhCbWEyRXhaV0UyTXpWNllXTmhJRzloZWlCa2VqVmtNU0F6WVhvMUlERmtlZ29nTXpFPQ==",
-            "digestAlgorithm" : null,
-            "name" : "20201223121854-signed-pades-baseline-lta.pdf"
-        })
+
+        const uuid = 'bd3b97f5-ba77-46d9-b705-8caf044cff4a';
+        fetchMock.post('/signing/signDocumentForToken', {uuid});
+        fetchMock.get('/signing/getTaskResult/' + uuid, { "done" : true })
 
         fetchMock.post(`/hook`, { });
 
