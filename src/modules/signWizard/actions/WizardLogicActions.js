@@ -753,7 +753,7 @@ export const signDocument = (locale) => (dispatch, getStore) => {
                             var moreToSign = getStore().tokenFile.inputs.find(input => input.signState === signState.TO_BE_SIGNED);
                             dispatch(navigateToStep(moreToSign ? WIZARD_STATE_DIGEST_LOADING: WIZARD_STATE_SUCCES))
                         }
-                        return resp;
+                        return resp.done;
                     },
                     (resp) => {
                         sendHookInfoAPI(hookInfo, tokenFile);
