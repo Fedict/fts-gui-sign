@@ -18,5 +18,5 @@ Der FÖD BOSA behält sich das Recht vor, diese Nutzungsbedingungen jederzeit zu
 
 <b>7. Kontaktangaben</b>
 Der FÖD BOSA achtet auf die Vertraulichkeit und Sicherheit der Daten. Für weitere Informationen oder Bemerkungen können Sie den FÖD BOSA wie folgt kontaktieren: Föderaler Öffentlicher Dienst Politik und Unterstützung, Boulevard Simon Bolivar 30, 1000 Brüssel, unter servicedesk.dto@bosa.fgov.be oder unter der Telefonnummer 02/740.80.27.
-Der FÖD BOSA verfügt über einen Datenschutzbeauftragten, der für die Vertraulichkeit und Sicherheit der Daten sowie die Einhaltung der Anforderungen der Datenschutz-Grundverordnung zuständig ist. Sie können diesen Beauftragten für alle Ihre Datenschutzfragen unter privacy@bosa.fgov.be kontaktieren. Datenschutzvorfälle und Beschwerden können per E-Mail gesendet werden an: privacyincident@bosa.fgov.be.
+Der FÖD BOSA verfügt über einen Datenschutzbeauftragten, der für die Vertraulichkeit und Sicherheit der Daten sowie die Einhaltung der Anforderungen der Datenschutz-Grundverordnung zuständig ist. Sie können diesen Beauftragten für alle Ihre Datenschutzfragen unter dpo@bosa.fgov.be kontaktieren. Datenschutzvorfälle und Beschwerden können per E-Mail gesendet werden an: dpo@bosa.fgov.be.
 `;

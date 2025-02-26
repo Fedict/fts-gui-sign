@@ -18,5 +18,5 @@ Le SPF BOSA se réserve le droit de modifier en tout temps la présente déclara
 
 <b>7. Coordonnées</b>
 Le SPF BOSA veille à la confidentialité et à la sécurité des données. Vous pouvez contacter le SPF BOSA à l’adresse suivante : le Service public fédéral Stratégie et Appui, Boulevard Simon Bolivar 30, 1000 Bruxelles, ou par mail à servicedesk.dto@bosa.fgov.be, ou par téléphone au numéro 02 740 80 27.
-Le SPF BOSA dispose d’un délégué à la protection des données qui veille à la confidentialité et à la sécurité des données, ainsi qu’au respect des exigences du RGPD. Vous pouvez contacter ce délégué par e-mail à privacy@bosa.fgov.be pour toutes vos questions relatives à la protection de la vie privée. Vous pouvez communiquer vos incidents et envoyer vos plaintes à privacyincident@bosa.fgov.be.
+Le SPF BOSA dispose d’un délégué à la protection des données qui veille à la confidentialité et à la sécurité des données, ainsi qu’au respect des exigences du RGPD. Vous pouvez contacter ce délégué par e-mail à dpo@bosa.fgov.be pour toutes vos questions relatives à la protection de la vie privée. Vous pouvez communiquer vos incidents et envoyer vos plaintes à dpo@bosa.fgov.be.
 `;
