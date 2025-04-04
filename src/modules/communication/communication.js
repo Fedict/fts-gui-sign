@@ -244,6 +244,7 @@ export const signDocumentASyncAPI = async (certificateBody, document, signature,
     }
 
     return fetch(url + "/signing/signDocumentASync", {
+        credentials: "include",
         method: 'POST',
         body: JSON.stringify(body),
         headers: {
@@ -268,6 +269,7 @@ export const validateSignatureASyncAPI = async (document) => {
     }
 
     return fetch(url + "/validation/validateSignatureASync", {
+        credentials: "include",
         method: 'POST',
         body: JSON.stringify(body),
         headers: {
