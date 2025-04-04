@@ -320,7 +320,7 @@ export const waitForASyncTask = (resp, tryOK, goError, goCatch, runId = 0) => {
     var waitTime = [150, 300, 450, 600, 1000, 1000, 1000][runId];
     if (!waitTime) waitTime = 2000;
     setTimeout(() => {
-        fetch(url + "/signing/getTaskResult/" + uuid)
+        fetch(url + "/signing/getTaskResult/" + uuid, { credentials: "include" })
         .then(jsonHandler)
         .then((resp) => {
             if (!tryOK(resp)) {
