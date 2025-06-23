@@ -345,6 +345,7 @@ export const signDocumentForTokenAPI = async (certificateBody, token, fileIdToSi
     }
 
     return fetch(url + "/signing/signDocumentForToken", {
+        credentials: "include",
         method: 'POST',
         body: JSON.stringify(body),
         headers: {
@@ -461,6 +462,7 @@ export const sendLogInfo = (message, callback, token) => {
     );
 
     return fetch(url + "/logging/log", {
+        credentials: "include",
         method: 'POST',
         body: JSON.stringify(body),
         headers: {
