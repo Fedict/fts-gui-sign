@@ -462,7 +462,6 @@ export const sendLogInfo = (message, callback, token) => {
     );
 
     return fetch(url + "/logging/log", {
-        credentials: "include",
         method: 'POST',
         body: JSON.stringify(body),
         headers: {
