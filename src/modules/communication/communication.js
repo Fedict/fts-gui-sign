@@ -1,6 +1,6 @@
 import { getBase64Data } from "../fileUpload/helpers/FileHelper"
 import packageJson from '../../../package.json';
-import {defaults, defaultsExcludeEmpty, getBEUrl} from "../utils/helper";
+import { defaults, defaultsExcludeEmpty, getBEUrl } from "../utils/helper";
 import { globalToken } from "../../store/globals"
 import { INVISIBLE_SIGNATURE, MANUAL_SIGNATURE } from '../fileUpload/reducers/CustomSignatureReducer'
 
@@ -43,7 +43,7 @@ export const getsigningProfileId = (documentType) => {
  */
 export const createPsfC = (sigArea) => {
     return sigArea.page + "," + sigArea.rect.left + "," + sigArea.rect.top + "," +
-            (sigArea.rect.right - sigArea.rect.left) + "," + (sigArea.rect.bottom - sigArea.rect.top);
+        (sigArea.rect.right - sigArea.rect.left) + "," + (sigArea.rect.bottom - sigArea.rect.top);
 }
 
 /**
@@ -91,7 +91,7 @@ export const createBody = (certificateBody, documentName, documentBase64, docume
                     "textSize": "12",
                     "bodyBgColor": "#D0D0D0",
                     "version": "2",
-                    "rotation": sigType === MANUAL_SIGNATURE  && customSignature.signatureArea.pageInfo.rotate === 90 ? "ROTATE_270" : "NONE"
+                    "rotation": sigType === MANUAL_SIGNATURE && customSignature.signatureArea.pageInfo.rotate === 90 ? "ROTATE_270" : "NONE"
                 }
             }
         },
@@ -118,7 +118,7 @@ export const createBodyForToken = (certificateBody, token, fileIdToSign, customS
                 "psfN": sigType !== INVISIBLE_SIGNATURE && sigType !== MANUAL_SIGNATURE ? sigType : null,
                 photo,
                 signLanguage,
-                }
+            }
         },
         fileIdToSign,
         token
@@ -127,7 +127,7 @@ export const createBodyForToken = (certificateBody, token, fileIdToSign, customS
 
 const noContentHandler = (response) => {
     if (!response.ok) {
-        if(response.headers){
+        if (response.headers) {
             const contentType = response.headers.get("content-type");
             if (contentType && contentType.indexOf("application/json") > -1) {
                 return response.json();
@@ -140,7 +140,7 @@ const noContentHandler = (response) => {
 
 const jsonHandler = (response) => {
     if (!response.ok) {
-        if(response.headers){
+        if (response.headers) {
             const contentType = response.headers.get("content-type");
             if (contentType && contentType.indexOf("application/json") > -1) {
                 return response.json();
@@ -149,9 +149,9 @@ const jsonHandler = (response) => {
         throw new Error(REQUEST_FAILED)
     }
     try {
-        return response.json()
+        return response.status === 204 ? ("{}").json() : response.json()
     }
-    catch{
+    catch {
         return response.text()
     }
 }
@@ -167,20 +167,20 @@ const jsonHandler = (response) => {
 export const logVersions = (guiSign, beID, browserExt, browserStore, token) => {
 
     return fetch(url + "/logging/versions", {
-            method: 'POST',
-            body: JSON.stringify({
-                frontEndType: "GUISIGN",
-                frontEnd: guiSign,
-                beID: beID,
-                browserExt: browserExt,
-                browserStore: browserStore,
-                token: token,
-                userAgent: navigator.userAgent
-            }),
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        }
+        method: 'POST',
+        body: JSON.stringify({
+            frontEndType: "GUISIGN",
+            frontEnd: guiSign,
+            beID: beID,
+            browserExt: browserExt,
+            browserStore: browserStore,
+            token: token,
+            userAgent: navigator.userAgent
+        }),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    }
     ).then((response) => response.text())
 }
 
@@ -265,7 +265,7 @@ export const validateSignatureASyncAPI = async (document) => {
             "bytes": documentB64,
             "name": document.name
         },
-        token : globalToken
+        token: globalToken
     }
 
     return fetch(url + "/validation/validateSignatureASync", {
@@ -321,16 +321,18 @@ export const waitForASyncTask = (resp, tryOK, goError, goCatch, runId = 0) => {
     if (!waitTime) waitTime = 2000;
     setTimeout(() => {
         fetch(url + "/signing/getTaskResult/" + uuid, { credentials: "include" })
-        .then(jsonHandler)
-        .then((resp) => {
-            if (!tryOK(resp)) {
-                if (resp.done === false) waitForASyncTask({ uuid }, tryOK, goError, goCatch, runId + 1);
-                else goError(resp);
-            }
-        }).catch((err) => { goCatch(err) })
+            .then((res) => {
+                if (res.status !== 202) {
+                    jsonHandler(res).then((json) => {
+                        if (res.ok) {
+                            if (!tryOK(json)) goError(json);
+                        }
+                        else goError(json);
+                    });
+                } else waitForASyncTask({ uuid }, tryOK, goError, goCatch, runId + 1);
+            }).catch((err) => { goCatch(err) })
     }, waitTime);
 };
-
 
 /**
  * API request to sign a document
@@ -352,7 +354,7 @@ export const signDocumentForTokenAPI = async (certificateBody, token, fileIdToSi
             'Content-Type': 'application/json'
         },
     })
-        .then(expectNoContent?noContentHandler:jsonHandler)
+        .then(expectNoContent ? noContentHandler : jsonHandler)
 }
 /**
  * API request to get document metadata by token, to set filename
@@ -386,7 +388,7 @@ export const sendBEIDLinkErrorToBE = async (report, message, token) => {
         "err": "FE_NATIVE_ERR",
         "report": report,
         "result": message,
-        "token": token && token.substring(token.length-8)
+        "token": token && token.substring(token.length - 8)
     }
 
 
@@ -401,7 +403,7 @@ export const sendBEIDLinkErrorToBE = async (report, message, token) => {
 }
 
 let lastLogInfo = {
-    amount : 0
+    amount: 0
 };
 
 export const sendHookInfoAPI = async (o, tokenFile) => {
@@ -431,16 +433,16 @@ export const sendHookInfoAPI = async (o, tokenFile) => {
 }
 
 export const sendLogInfoIgnoreResult = (message, token) => {
-    sendLogInfo(message, () =>{}, token);
+    sendLogInfo(message, () => { }, token);
 }
 
 export const sendLogInfo = (message, callback, token) => {
     //console.log('sendLogInfo', message, token);
-    if(defaultsExcludeEmpty(message, '______') === '______'
-//        || defaultsExcludeEmpty(token, '______') === '______'
-        || (lastLogInfo.message === message && lastLogInfo.token === token && lastLogInfo.amount++ > 5)){
+    if (defaultsExcludeEmpty(message, '______') === '______'
+        //        || defaultsExcludeEmpty(token, '______') === '______'
+        || (lastLogInfo.message === message && lastLogInfo.token === token && lastLogInfo.amount++ > 5)) {
         //ignore if message is empty or when sending the same message more than 5 times to the CS
-        if(typeof callback === 'function'){
+        if (typeof callback === 'function') {
             callback();
         }
         return;
@@ -451,14 +453,14 @@ export const sendLogInfo = (message, callback, token) => {
 
     if (!token) token = globalToken;
     const body = {
-        "level" : "INFO",
+        "level": "INFO",
         "message": message,
         "token": token
     }
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(),
-        typeof callback === 'function'?
-            defaults((window.configData?window.configData.logTimeout:undefined), 10000):90000
+        typeof callback === 'function' ?
+            defaults((window.configData ? window.configData.logTimeout : undefined), 10000) : 90000
     );
 
     return fetch(url + "/logging/log", {
@@ -472,7 +474,7 @@ export const sendLogInfo = (message, callback, token) => {
         .then(() => {
             clearTimeout(id);
 
-            if(typeof callback === 'function'){
+            if (typeof callback === 'function') {
                 callback();
             }
         })
@@ -480,7 +482,7 @@ export const sendLogInfo = (message, callback, token) => {
             clearTimeout(id);
 
             //error but try calling callback anyway
-            if(typeof callback === 'function'){
+            if (typeof callback === 'function') {
                 callback();
             }
         })
