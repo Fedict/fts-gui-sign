@@ -24,12 +24,12 @@ import {
 } from "./CertificateActions"
 import {
     getDataToSignAPI, sendLogInfo, sendLogInfoIgnoreResult,
-    signDocumentASyncAPI, signDocumentForTokenAPI,waitForASyncTask,
+    signDocumentASyncAPI, signDocumentForTokenAPI, waitForASyncTask,
     validateCertificatesAPI, sendHookInfoAPI, logVersions
 } from "../../communication/communication"
 import { setDigest } from "./DigestActions"
-import {handleErrorEID, handlePinErrorEID, resetPinError} from "./SignErrorHandleActions"
-import {setDateSigning, setSignature} from "./SignatureActions"
+import { handleErrorEID, handlePinErrorEID, resetPinError } from "./SignErrorHandleActions"
+import { setDateSigning, setSignature } from "./SignatureActions"
 import { setDownloadFile } from "../../fileUpload/actions/UploadFileActions"
 import {
     readerSetCheck,
@@ -47,11 +47,11 @@ import { handleRequestIdError } from "../../controlIds/requestId/RequestIdHelper
 import { handleFlowIdError } from "../../controlIds/flowId/FlowIdHelpers"
 import { INCORECT_REQUEST_ID } from '../../controlIds/requestId/RequestIdHelpers'
 import { INCORECT_FLOW_ID } from '../../controlIds/flowId/FlowIdHelpers'
-import {errorMessages} from "../../i18n/translations";
-import {redirectErrorCodes} from "../../../const";
+import { errorMessages } from "../../i18n/translations";
+import { redirectErrorCodes } from "../../../const";
 import moment from 'moment'
-import {defaults, parseErrorMessage} from "../../utils/helper";
-import {ID_FLAGS} from "../../eIdLink/strategies/createEIDLinkExtensionStrategy";
+import { defaults, parseErrorMessage } from "../../utils/helper";
+import { ID_FLAGS } from "../../eIdLink/strategies/createEIDLinkExtensionStrategy";
 import { SET_ALL_INPUTS, setInputsSignState } from "../../signByTokenWizard/actions/TokenActions"
 import { signState } from "../../signByTokenWizard/constants"
 import { globalToken } from "../../../store/globals"
@@ -143,7 +143,7 @@ export const getCertificatesFromIdResponse = (response) => {
                     cardType: reader.cardType,
                     certificate: reader.signcert,
                     APIBody: createCertificateObject(reader.signcert),
-                    photo : reader.photo
+                    photo: reader.photo
                 }
                 certificateList.push(certificateObject)
             }
@@ -196,9 +196,9 @@ export const checkVersion = (isErrorCheck) => (dispatch, getStore) => {
             dispatch(removeRequestId(requestId))
             dispatch(readerSetCheck(true))
             dispatch(readerSetOk(true))
-            let token  = getStore().tokenFile;
-            if (token) token=token.token;
-            if (!token) token=globalToken;  // Use the GlobalToken for Signbox operations
+            let token = getStore().tokenFile;
+            if (token) token = token.token;
+            if (!token) token = globalToken;  // Use the GlobalToken for Signbox operations
 
             logVersions(process.env.REACT_APP_VERSION,
                 installedVersion.version,
@@ -258,9 +258,9 @@ export const getCertificates = () => (dispatch, getStore) => {
         'en',
         "0123456789ABCDEF0123456789ABCDEF",
         ID_FLAGS.ID_FLAG_INCLUDE_SIGN_CERT |
-            ID_FLAGS.ID_FLAG_INCLUDE_PHOTO |
-            ID_FLAGS.ID_FLAG_INCLUDE_INTEGRITY |
-            ID_FLAGS.ID_FLAG_INCLUDE_ID
+        ID_FLAGS.ID_FLAG_INCLUDE_PHOTO |
+        ID_FLAGS.ID_FLAG_INCLUDE_INTEGRITY |
+        ID_FLAGS.ID_FLAG_INCLUDE_ID
     )
         .then(handleFlowIdError(flowId, getStore))
         .then(handleRequestIdError(requestId, dispatch, getStore))
@@ -339,7 +339,7 @@ export const getCertificatesWithCallback = (callback) => (dispatch, getStore) =>
 
             dispatch(saveCertificateList(certificateList))
 
-            if(typeof callback === 'function'){
+            if (typeof callback === 'function') {
                 if (certificateList.length === 0) {
                     callback(MessageCertificatesNotFound)
                 } else {
@@ -380,9 +380,9 @@ export const validateCertificates = () => (dispatch, getStore) => {
             }
         })
 
-        if(certificate.certificateList.length === 1
+        if (certificate.certificateList.length === 1
             && window.configData
-            && defaults(window.configData.skipCertificateChainValidate, true)){
+            && defaults(window.configData.skipCertificateChainValidate, true)) {
             dispatch(saveCertificateList(certificate.certificateList))
             dispatch(selectCertificate(certificate.certificateList[0]))
             dispatch(navigateToStep(WIZARD_STATE_CERTIFICATES_VALIDATE_CHAIN))
@@ -399,7 +399,7 @@ export const validateCertificates = () => (dispatch, getStore) => {
                     const res = resp.indications[index];
                     if ((res.indication !== "PASSED" && res.subIndication === "REVOKED_NO_POE")) hasRevokedCert = true
                     if (!res.keyUsageCheckOk) return undefined;
-                    
+
                     val.indication = res.indication
                     val.keyUsageCheckOk = res.keyUsageCheckOk
                     val.commonName = res.commonName
@@ -413,8 +413,8 @@ export const validateCertificates = () => (dispatch, getStore) => {
                     if (hasRevokedCert) {
                         errorMessage = {
                             ...ErrorGeneral,
-                            title : errorMessages.CERT_REVOKED,
-                            message : errorMessages.CERT_REVOKED,
+                            title: errorMessages.CERT_REVOKED,
+                            message: errorMessages.CERT_REVOKED,
                         }
                     }
 
@@ -510,7 +510,7 @@ export const validateCertificate = (certificateObject) => (dispatch, getStore) =
 
 
     if (certificateObject.APIBody) {
-        if(window.configData && defaults(window.configData.skipCertificateChainValidate, true)){
+        if (window.configData && defaults(window.configData.skipCertificateChainValidate, true)) {
             //console.log('skip validateCertificate', certificateObject)
             dispatch(selectCertificate(certificateObject))
             dispatch(navigateToStep(WIZARD_STATE_DIGEST_LOADING))
@@ -557,7 +557,7 @@ export const validateCertificate = (certificateObject) => (dispatch, getStore) =
  */
 export const getDigest = (locale) => (dispatch, getStore) => {
     const { certificate, uploadFile, customSignature } = getStore()
-    
+
     const signingDate = moment().format();
     dispatch(setDateSigning(signingDate))
     if (certificate
@@ -568,21 +568,21 @@ export const getDigest = (locale) => (dispatch, getStore) => {
         getDataToSignAPI(certificate.certificateSelected.APIBody, uploadFile.file, signingDate, customSignature, locale, photo)
             .then(handleFlowIdError(flowId, getStore))
             .then((resp) => {
-                if(resp.digest && resp.digestAlgorithm && resp.signingDate) {
+                if (resp.digest && resp.digestAlgorithm && resp.signingDate) {
                     dispatch(setDigest(resp))
                     dispatch(navigateToSign(locale))
                     dispatch(setDateSigning(resp.signingDate))
-                }else{
+                } else {
                     const parsedError = parseErrorMessage(resp.message);
-                    if(parsedError && errorMessages[parsedError.type]){
+                    if (parsedError && errorMessages[parsedError.type]) {
                         dispatch(showErrorMessage({
                             ...ErrorGeneral,
-                            title : errorMessages.failedToFetchDataToSign,
-                            message : errorMessages[parsedError.type],
-                            ref : parsedError.ref,
-                            errorDetails : parsedError.details
+                            title: errorMessages.failedToFetchDataToSign,
+                            message: errorMessages[parsedError.type],
+                            ref: parsedError.ref,
+                            errorDetails: parsedError.details
                         }));
-                    }else{
+                    } else {
                         dispatch(showErrorMessage({
                             ...ErrorGeneral,
                             message: errorMessages.failedToFetchDataToSign,
@@ -713,7 +713,7 @@ const handleSignTokenCatch = (err, hookInfo, tokenFile, dispatch) => {
     hookInfo.ok = false
     sendHookInfoAPI(hookInfo, tokenFile);
     if (err !== INCORECT_FLOW_ID) {
-        dispatch(showErrorMessage({...ErrorGeneral, message : errorMessages.FAILED_TO_SIGN}))
+        dispatch(showErrorMessage({ ...ErrorGeneral, message: errorMessages.FAILED_TO_SIGN }))
     }
 }
 
@@ -731,11 +731,11 @@ export const signDocument = (locale) => (dispatch, getStore) => {
         && signature
         && signature.signature
         && ((uploadFile
-        && uploadFile.file) || (tokenFile && tokenFile.token))) {
+            && uploadFile.file) || (tokenFile && tokenFile.token))) {
 
         dispatch(navigateToStep(WIZARD_STATE_SIGNING_LOADING))
         const flowId = getStore().controlId.flowId;
-        if(tokenFile && tokenFile.token){
+        if (tokenFile && tokenFile.token) {
             var fileIdToSign = tokenFile.inputs.findIndex(input => input.signState === signState.TO_BE_SIGNED);
             var hookInfo = { id: 'FILE_SIGNED', fileId: fileIdToSign, ok: false };
             const curInput = tokenFile.inputs[fileIdToSign];
@@ -746,39 +746,43 @@ export const signDocument = (locale) => (dispatch, getStore) => {
                 .then(handleFlowIdError(flowId, getStore))
                 .then((resp) => {
                     waitForASyncTask(resp, (resp) => {
-                        if (resp.done) {
-                            hookInfo.ok = true
-                            sendHookInfoAPI(hookInfo, tokenFile);
-                            dispatch(setInputsSignState(tokenFile.signAll ? SET_ALL_INPUTS : fileIdToSign, signState.SIGNED));
-                            var moreToSign = getStore().tokenFile.inputs.find(input => input.signState === signState.TO_BE_SIGNED);
-                            dispatch(navigateToStep(moreToSign ? WIZARD_STATE_DIGEST_LOADING: WIZARD_STATE_SUCCES))
-                        }
-                        return resp.done;
-                    },
-                    (resp) => {
+                        hookInfo.ok = true
                         sendHookInfoAPI(hookInfo, tokenFile);
-                        var errorMessage = messageToError(resp.message);
-                        if (!tokenFile.signAll) {
-                            if (!getStore().tokenFile.noSkipErrors) {
-                                dispatch(setInputsSignState(fileIdToSign, signState.ERROR_SIGN));
-                                const moreToSign =  getStore().tokenFile.inputs.find(input => input.signState === signState.TO_BE_SIGNED);
-                                errorMessage.predButton = { text: { id: "button.retry", defaultMessage: "Try again" }, action: () => {
-                                    dispatch(setInputsSignState(fileIdToSign, signState.TO_BE_SIGNED)) },
-                                    nextPage: WIZARD_STATE_DIGEST_LOADING }
-                                errorMessage.nextButton = { isVisible: true, text: { id: "signing.error.skipButton", defaultMessage: "Skip file" }, action: () => {
-                                    dispatch(setInputsSignState(fileIdToSign, signState.SKIPPED)) },
-                                    nextPage: moreToSign ? WIZARD_STATE_DIGEST_LOADING : WIZARD_STATE_SUCCES }
-                            }
-                        }
-                        dispatch(showErrorMessage(errorMessage));
+                        dispatch(setInputsSignState(tokenFile.signAll ? SET_ALL_INPUTS : fileIdToSign, signState.SIGNED));
+                        var moreToSign = getStore().tokenFile.inputs.find(input => input.signState === signState.TO_BE_SIGNED);
+                        dispatch(navigateToStep(moreToSign ? WIZARD_STATE_DIGEST_LOADING : WIZARD_STATE_SUCCES))
+                        return true;
                     },
-                    (err) => {
-                        handleSignTokenCatch(err, hookInfo, tokenFile, dispatch);
-                    })
+                        (resp) => {
+                            sendHookInfoAPI(hookInfo, tokenFile);
+                            var errorMessage = messageToError(resp.message);
+                            if (!tokenFile.signAll) {
+                                if (!getStore().tokenFile.noSkipErrors) {
+                                    dispatch(setInputsSignState(fileIdToSign, signState.ERROR_SIGN));
+                                    const moreToSign = getStore().tokenFile.inputs.find(input => input.signState === signState.TO_BE_SIGNED);
+                                    errorMessage.predButton = {
+                                        text: { id: "button.retry", defaultMessage: "Try again" }, action: () => {
+                                            dispatch(setInputsSignState(fileIdToSign, signState.TO_BE_SIGNED))
+                                        },
+                                        nextPage: WIZARD_STATE_DIGEST_LOADING
+                                    }
+                                    errorMessage.nextButton = {
+                                        isVisible: true, text: { id: "signing.error.skipButton", defaultMessage: "Skip file" }, action: () => {
+                                            dispatch(setInputsSignState(fileIdToSign, signState.SKIPPED))
+                                        },
+                                        nextPage: moreToSign ? WIZARD_STATE_DIGEST_LOADING : WIZARD_STATE_SUCCES
+                                    }
+                                }
+                            }
+                            dispatch(showErrorMessage(errorMessage));
+                        },
+                        (err) => {
+                            handleSignTokenCatch(err, hookInfo, tokenFile, dispatch);
+                        })
                 }).catch((err) => {
                     handleSignTokenCatch(err, hookInfo, tokenFile, dispatch);
-            })
-        }else{
+                })
+        } else {
             const photo = customSignature.photoIncluded ? certificate.certificateSelected.photo : null;
             signDocumentASyncAPI(certificate.certificateSelected.APIBody, uploadFile.file, signature.signature, signature.signingDate, customSignature, locale, photo)
                 .then(handleFlowIdError(flowId, getStore))
@@ -786,17 +790,17 @@ export const signDocument = (locale) => (dispatch, getStore) => {
                     waitForASyncTask(resp, (resp) => {
                         const ok = resp.name && resp.bytes;
                         if (ok) {
-                            dispatch(setDownloadFile( { bytes: resp.bytes, fileName: resp.name } ))
+                            dispatch(setDownloadFile({ bytes: resp.bytes, fileName: resp.name }))
                             dispatch(navigateToStep(WIZARD_STATE_SUCCES))
                         }
                         return ok;
                     },
-                    (resp) => {
-                        dispatch(showErrorMessage(messageToError(resp.message)))
-                    },
-                    (err) => {
-                        if (err !== INCORECT_FLOW_ID) dispatch(showErrorMessage(ErrorGeneral))
-                    })
+                        (resp) => {
+                            dispatch(showErrorMessage(messageToError(resp.message)))
+                        },
+                        (err) => {
+                            if (err !== INCORECT_FLOW_ID) dispatch(showErrorMessage(ErrorGeneral))
+                        })
                 }).catch((err) => {
                     if (err !== INCORECT_FLOW_ID) dispatch(showErrorMessage(ErrorGeneral))
                 })
@@ -807,16 +811,15 @@ export const signDocument = (locale) => (dispatch, getStore) => {
     }
 }
 
-const messageToError = (message) =>
-{
+const messageToError = (message) => {
     const parsedError = parseErrorMessage(message);
-    if (parsedError && errorMessages[parsedError.type]){
+    if (parsedError && errorMessages[parsedError.type]) {
         return {
             ...ErrorGeneral,
-            title : errorMessages.failedToSignWrongResultFromAPI,
-            message : errorMessages[parsedError.type],
-            ref : parsedError.ref,
-            errorDetails : parsedError.details
+            title: errorMessages.failedToSignWrongResultFromAPI,
+            message: errorMessages[parsedError.type],
+            ref: parsedError.ref,
+            errorDetails: parsedError.details
         }
     }
     return {
@@ -829,8 +832,7 @@ const messageToError = (message) =>
 
 
 let resetWizardClicked = false;
-export const clearResetWizardClicked = () =>
-{
+export const clearResetWizardClicked = () => {
     resetWizardClicked = false;
 }
 /**
@@ -840,41 +842,41 @@ export const clearResetWizardClicked = () =>
  * - navigates to / 
  */
 export const resetWizard = () => (dispatch, getStore) => {
-    if(resetWizardClicked){
+    if (resetWizardClicked) {
         //this to prevent redirecting the browser twice for example with double click
         return;
     }
     resetWizardClicked = true;
     let eIDLink = controller.getInstance()
     eIDLink.stop()
-    const {tokenFile, wizard, message, certificate} = getStore();
+    const { tokenFile, wizard, message, certificate } = getStore();
 
     let url;
-    if(tokenFile && tokenFile.redirectUrl){
+    if (tokenFile && tokenFile.redirectUrl) {
         url = new URL(tokenFile.redirectUrl);
-    }else{
+    } else {
         url = new URL(window.location);
     }
 
-    if(wizard && wizard.state){
-        try{
+    if (wizard && wizard.state) {
+        try {
             url.searchParams.delete('details');
             url.searchParams.delete('err');
             url.searchParams.delete('ref');
-        }catch (e){
+        } catch (e) {
         }
-        if(message && message.ref){
+        if (message && message.ref) {
             url.searchParams.set('ref', message.ref);
         }
-        if(message && message.errorDetails){
+        if (message && message.errorDetails) {
             url.searchParams.set('details', message.errorDetails);
         }
-        if(wizard.state === 'WIZARD_STATE_MESSAGE' && message && message.message && message.message.id){
+        if (wizard.state === 'WIZARD_STATE_MESSAGE' && message && message.message && message.message.id) {
             const errorType = Object.keys(errorMessages).find((k) => errorMessages[k].id === message.message.id);
             url.searchParams.set('err', defaults(redirectErrorCodes[errorType], errorType, message.err, 'SERVER_ERROR'));
-        }else{
+        } else {
             url.searchParams.set('err', certificate && !certificate.neverSaved && certificate.certificateList.length === 0 ?
-                                redirectErrorCodes.USER_CANCELLED_NO_CERT : redirectErrorCodes.USER_CANCELLED);
+                redirectErrorCodes.USER_CANCELLED_NO_CERT : redirectErrorCodes.USER_CANCELLED);
             url.searchParams.set('details', wizard.state);
         }
     }
@@ -883,14 +885,14 @@ export const resetWizard = () => (dispatch, getStore) => {
         dispatch(setNewFlowId());
         window.location.href = url.toString();
         resetWizardClicked = false;
-    }, tokenFile?tokenFile.token:undefined);
+    }, tokenFile ? tokenFile.token : undefined);
 
 
 }
 
 export const doSendLogInfo = (message) => (dispatch, getStore) => {
-    console.log('doSendLogInfo',message)
-    const {tokenFile} = getStore();
-    sendLogInfoIgnoreResult(message, tokenFile && tokenFile.token?tokenFile.token:undefined);
+    console.log('doSendLogInfo', message)
+    const { tokenFile } = getStore();
+    sendLogInfoIgnoreResult(message, tokenFile && tokenFile.token ? tokenFile.token : undefined);
 }
 
