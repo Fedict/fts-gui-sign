@@ -1,4 +1,4 @@
-import {defineMessages} from "react-intl";
+import { defineMessages } from "react-intl";
 
 
 export const definedMessages = defineMessages({
@@ -25,23 +25,23 @@ export const definedMessages = defineMessages({
 })
 
 export const errorMessages = defineMessages({
-    BEID_CONNECT_ERROR : {
-        id : "eid.link.error.general.text",
-        defaultMessage : "Something went wrong. Please reload the page and try again."
+    BEID_CONNECT_ERROR: {
+        id: "eid.link.error.general.text",
+        defaultMessage: "Something went wrong. Please reload the page and try again."
     },
-    CARD_BLOCKED_ERROR : {
-        id : "eid.link.error.card.blocked",
-        defaultMessage : "PIN is incorrect: no attempts left. The eID card is blocked.",
+    CARD_BLOCKED_ERROR: {
+        id: "eid.link.error.card.blocked",
+        defaultMessage: "PIN is incorrect: no attempts left. The eID card is blocked.",
         link: "#2",
         linkDefaultMessage: "My PIN code was blocked"
     },
-    CARD_BUSY : {
-        id : "eid.link.error.card.busy",
-        defaultMessage : "eID card temporarily unavailable"
+    CARD_BUSY: {
+        id: "eid.link.error.card.busy",
+        defaultMessage: "eID card temporarily unavailable"
     },
-    CARD_BUSY2 : {
-        id : "eid.link.error.card.busy2",
-        defaultMessage : "Our service can’t reach your eID card because it is being used by another service on your computer. Please close the service or end the process and try again."
+    CARD_BUSY2: {
+        id: "eid.link.error.card.busy2",
+        defaultMessage: "Our service can’t reach your eID card because it is being used by another service on your computer. Please close the service or end the process and try again."
     },
     failedToFetchMetadata: {
         id: "error.METADATA_FETCH",
@@ -79,7 +79,7 @@ export const errorMessages = defineMessages({
         id: "error.CERT_CHAIN_INCOMPLETE",
         defaultMessage: "The certificate chain is incomplete.",
         link: "#5"
-        },
+    },
     NO_SIGN_CERT: {
         id: "error.NO_SIGN_CERT",
         defaultMessage: "No signing certificate provided.",
@@ -129,24 +129,28 @@ export const errorMessages = defineMessages({
         id: "error.EMPTY_PARAM",
         defaultMessage: "Empty (null) parameter in request."
     },
-    INVALID_TOKEN : {
+    INVALID_TOKEN: {
         id: "error.INVALID_TOKEN",
         defaultMessage: "Invalid token in request.",
         link: "#10"
     },
-    PARSE_ERROR : {
+    PARSE_ERROR: {
         id: "error.PARSE_ERROR",
         defaultMessage: "Couldn't parse request."
     },
-    NOT_ALLOWED_TO_SIGN : {
+    NOT_ALLOWED_TO_SIGN: {
         id: "error.NOT_ALLOWED_TO_SIGN",
         defaultMessage: "You do not have permission to sign this specific document. Please contact the owner of the document for more information."
     },
-    SIGN_PERIOD_EXPIRED : {
+    UNSIGNABLE_DOCUMENT: {
+        id: "error.UNSIGNABLE_DOCUMENT",
+        defaultMessage: "The document cannot be signed."
+    },
+    SIGN_PERIOD_EXPIRED: {
         id: "error.SIGN_PERIOD_EXPIRED",
         defaultMessage: "Entering the PIN took too long."
     },
-    INVALID_MAC_SCARD_DRIVER : {
+    INVALID_MAC_SCARD_DRIVER: {
         id: "error.INVALID_MAC_SCARD_DRIVER",
         defaultMessage: "Your MacOS Driver is invalid"
     }
