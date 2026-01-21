@@ -2,7 +2,7 @@ window.configData = {
     eIDLinkMinimumVersion: "2.6",
     eIDLinkExtensionUrls: {
         chrome: "https://chrome.google.com/webstore/detail/beidconnect/pencgnkbgaekikmiahiaakjdgaibiipp",
-        edge:   "https://microsoftedge.microsoft.com/addons/detail/beidconnect/cjhdnjahbjhicmbmejmcifaaiigbgjjd",
+        edge: "https://microsoftedge.microsoft.com/addons/detail/beidconnect/cjhdnjahbjhicmbmejmcifaaiigbgjjd",
         firefox: "https://eid.static.bosa.fgov.be/beidconnect-fx-0.0.11.xpi",
         safari: "https://eid.static.bosa.fgov.be/BeIDConnect_Extension_2.7.dmg",
         IE: "https://eid.static.bosa.fgov.be/beidconnect_2.7.msi"
@@ -10,19 +10,19 @@ window.configData = {
 
     eIDLinkUrls: {
         windows: {
-            en : "https://eid.static.bosa.fgov.be/beidconnect_2.7.msi",
-            de : "https://eid.static.bosa.fgov.be/beidconnect_2.7_de.msi",
-            nl : "https://eid.static.bosa.fgov.be/beidconnect_2.7_nl.msi",
-            fr : "https://eid.static.bosa.fgov.be/beidconnect_2.7_fr.msi",
+            en: "https://eid.static.bosa.fgov.be/beidconnect_2.7.msi",
+            de: "https://eid.static.bosa.fgov.be/beidconnect_2.7_de.msi",
+            nl: "https://eid.static.bosa.fgov.be/beidconnect_2.7_nl.msi",
+            fr: "https://eid.static.bosa.fgov.be/beidconnect_2.7_fr.msi",
         },
         windowsX64: {
-            en : "https://eid.static.bosa.fgov.be/beidconnect_x64_2.7.msi",
-            de : "https://eid.static.bosa.fgov.be/beidconnect_x64_2.7_de.msi",
-            nl : "https://eid.static.bosa.fgov.be/beidconnect_x64_2.7_nl.msi",
-            fr : "https://eid.static.bosa.fgov.be/beidconnect_x64_2.7_fr.msi",
+            en: "https://eid.static.bosa.fgov.be/beidconnect_x64_2.7.msi",
+            de: "https://eid.static.bosa.fgov.be/beidconnect_x64_2.7_de.msi",
+            nl: "https://eid.static.bosa.fgov.be/beidconnect_x64_2.7_nl.msi",
+            fr: "https://eid.static.bosa.fgov.be/beidconnect_x64_2.7_fr.msi",
         },
         windowsAdmin: {
-            en : "https://eid.static.bosa.fgov.be/beidconnect_admin_2.7.msi",
+            en: "https://eid.static.bosa.fgov.be/beidconnect_admin_2.7.msi",
         },
         macOs: "https://eid.static.bosa.fgov.be/beidconnect_2.7.dmg",
         linux: {
@@ -56,29 +56,35 @@ window.configData = {
 
     defaultSigningProfileId: "XADES_LTA",
     signingProfileIds: {
-        "application/pdf":"PADES_LTA" ,
+        "application/pdf": "PADES_LTA",
         "application/xml": "XADES_LTA",
         "text/xml": "XADES_LTA"
     },
 
-    mxaxUploadSize: 10*1024*1024,
+    mxaxUploadSize: 10 * 1024 * 1024,
 
+    // TA
     //BEurl: "https://validate.ta.fts.bosa.belgium.be/signandvalidation",
-    BEurl: "http://localhost:8751",
-    
-    // Local settings
-    CSP: "default-src 'self'; connect-src blob: 'self' http://localhost:8751  http://localhost:8081 http://localhost:3000; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline' http://localhost:3000; object-src 'self' blob: data: http://localhost:8751; frame-src 'self' blob: data: http://localhost:8751;",
-
-    // "TA" settings
     //CSP: "default-src 'self'; connect-src 'self' https://*.ta.fts.bosa.belgium.be; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline' https://*.ta.fts.bosa.belgium.be; object-src 'self' blob: data: https://*.ta.fts.bosa.belgium.be; frame-src 'self' blob: data: https://*.ta.fts.bosa.belgium.be;",
 
-    skipCertificateChainValidate : false,
-    
+    // Local
+    BEurl: "http://localhost:8751",
+    CSP: "default-src 'self'; connect-src blob: 'self' http://localhost:8751  http://localhost:8081 http://localhost:3000; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline' http://localhost:3000; object-src 'self' blob: data: http://localhost:8751; frame-src 'self' blob: data: http://localhost:8751;",
+
+    // Remote debug settings
+    //BEurl: "http://ZX54home.synology.me:8751",
+    //CSP: "default-src 'self'; connect-src blob: 'self' http://ZX54home.synology.me:8751  http://ZX54home.synology.me:8081 http://ZX54home.synology.me:3000; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline' http://ZX54home.synology.me:3000; object-src 'self' blob: data: http://ZX54home.synology.me:8751; frame-src 'self' blob: data: http://ZX54home.synology.me:8751;",
+
+
+
+
+    skipCertificateChainValidate: false,
+
     // Where landing on "/" will be redirected
     redirectSigning: null,
-    
+
     minBrowserVersions: {
-        "FIREFOX" : 128,
+        "FIREFOX": 128,
         "EDGE": 0,
         "CHROMIUMEDGE": 0,
         "CHROME": 0,
