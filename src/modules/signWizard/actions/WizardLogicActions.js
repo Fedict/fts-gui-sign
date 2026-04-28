@@ -1,4 +1,3 @@
-import { useIntl } from 'react-intl';
 import { navigateToStep } from "../../wizard/WizardActions"
 import {
     WIZARD_STATE_VERSION_CHECK_UPDATE,
@@ -564,8 +563,7 @@ export const getDigest = (locale) => (dispatch, getStore) => {
         && certificate.certificateSelected
         && certificate.certificateSelected.APIBody) {
         const flowId = getStore().controlId.flowId
-        const photo = customSignature.photoIncluded ? certificate.certificateSelected.photo : null;
-        getDataToSignAPI(certificate.certificateSelected.APIBody, uploadFile.file, signingDate, customSignature, locale, photo)
+        getDataToSignAPI(certificate.certificateSelected.APIBody, uploadFile.file, signingDate, customSignature, locale)
             .then(handleFlowIdError(flowId, getStore))
             .then((resp) => {
                 if (resp.digest && resp.digestAlgorithm && resp.signingDate) {
@@ -783,8 +781,7 @@ export const signDocument = (locale) => (dispatch, getStore) => {
                     handleSignTokenCatch(err, hookInfo, tokenFile, dispatch);
                 })
         } else {
-            const photo = customSignature.photoIncluded ? certificate.certificateSelected.photo : null;
-            signDocumentASyncAPI(certificate.certificateSelected.APIBody, uploadFile.file, signature.signature, signature.signingDate, customSignature, locale, photo)
+            signDocumentASyncAPI(certificate.certificateSelected.APIBody, uploadFile.file, signature.signature, signature.signingDate, customSignature, locale)
                 .then(handleFlowIdError(flowId, getStore))
                 .then((resp) => {
                     waitForASyncTask(resp, (resp) => {

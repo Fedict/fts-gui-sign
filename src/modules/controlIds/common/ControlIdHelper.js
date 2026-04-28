@@ -18,7 +18,7 @@ export const generateIdFromArray = (idList) => {
  * function to generate a unique id
  * @param {number} oldId - a id where the new random id is not equeal to
  * 
- * @returns {number} newId - a new id that is equel to the old id
+ * @returns {number} newId - a new id that is NOT equal to the old id
  */
 export const generateId = (oldId) => {
     return generateIdFromArray([oldId])

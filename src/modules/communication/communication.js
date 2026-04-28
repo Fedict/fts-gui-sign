@@ -58,7 +58,7 @@ export const createPsfC = (sigArea) => {
  * 
  * @returns {object} body to use in the API request
  */
-export const createBody = (certificateBody, documentName, documentBase64, documentType, signingDate, customSignature, signLanguage, photo) => {
+export const createBody = (certificateBody, documentName, documentBase64, documentType, signingDate, customSignature, signLanguage) => {
 
     const sigType = customSignature.signatureSelected;
     return {
@@ -71,26 +71,9 @@ export const createBody = (certificateBody, documentName, documentBase64, docume
             pdfSigParams: {
                 "psfN": sigType !== INVISIBLE_SIGNATURE && sigType !== MANUAL_SIGNATURE ? sigType : null,
                 "psfC": sigType === MANUAL_SIGNATURE ? createPsfC(customSignature.signatureArea) : null,
-                photo,
                 signLanguage,
                 "psp": sigType === INVISIBLE_SIGNATURE ? null : {
-                    "texts": {
-                        "fr": "Signé par %gn% %sn%\nLe %d(d MMM YYYY z - HH:mm)%",
-                        "en": "Signed by %gn% %sn%\nOn %d(d MMM YYYY z - HH:mm )%",
-                        "de": "Unterzeichnet von %gn% %sn%\nAm %d(HH:mm MMM d YYYY z)%",
-                        "nl": "Getekend door %gn% %sn%\nOp %d(HH:mm MMM d YYYY z)%",
-                    },
-                    "textPos": photo ? "RIGHT" : "TOP",
-                    "bgColor": "TRANSPARENT",
-                    "font": "Montserrat-Regular",
-                    "textColor": "#000000",
-                    "textPadding": 10,
-                    "textWrapping": "FILL_BOX",
-                    "textAlignH": "CENTER",
-                    "textAlignV": "MIDDLE",
-                    "textSize": "12",
-                    "bodyBgColor": "#D0D0D0",
-                    "version": "2",
+                    "version": "3",
                     "rotation": sigType === MANUAL_SIGNATURE && customSignature.signatureArea.pageInfo.rotate === 90 ? "ROTATE_270" : "NONE"
                 }
             }
@@ -211,11 +194,11 @@ export const validateCertificatesAPI = (certificateBody) => {
  * 
  * @returns {Promise} Promise that resolves the result of the API request
  */
-export const getDataToSignAPI = async (certificateBody, document, signingDate, customSignature, signLanguage, photo) => {
+export const getDataToSignAPI = async (certificateBody, document, signingDate, customSignature, signLanguage) => {
 
     const documentB64 = await getBase64Data(document)
 
-    const body = createBody(certificateBody, document.name, documentB64, document.type, signingDate, customSignature, signLanguage, photo);
+    const body = createBody(certificateBody, document.name, documentB64, document.type, signingDate, customSignature, signLanguage);
 
     return fetch(url + "/signing/getDataToSign",
         {
@@ -235,11 +218,11 @@ export const getDataToSignAPI = async (certificateBody, document, signingDate, c
  * @param {Object} document - document to be signed
  * @param {string} signature - signature value used to sign th document
  */
-export const signDocumentASyncAPI = async (certificateBody, document, signature, signingDate, customSignature, signLanguage, photo) => {
+export const signDocumentASyncAPI = async (certificateBody, document, signature, signingDate, customSignature, signLanguage) => {
     const documentB64 = await getBase64Data(document)
 
     const body = {
-        ...createBody(certificateBody, document.name, documentB64, document.type, signingDate, customSignature, signLanguage, photo),
+        ...createBody(certificateBody, document.name, documentB64, document.type, signingDate, customSignature, signLanguage),
         "signatureValue": signature
     }
 

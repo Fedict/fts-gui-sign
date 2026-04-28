@@ -64,8 +64,8 @@ import * as storeActions from "../../../store/storeActions"
 import { setNewFlowId } from "../../controlIds/flowId/FlowIdActions"
 import * as FlowIdActions from "../../controlIds/flowId/FlowIdActions"
 import { MessageCertificatesNotFound } from "../messages/MessageCertificatesNotFound"
-import {EIDChromeExtMock} from "../../testUtils/EIDChromeExtMock";
-import {setImmediate} from 'timers'
+import { EIDChromeExtMock } from "../../testUtils/EIDChromeExtMock";
+import { setImmediate } from 'timers'
 import { INVISIBLE_SIGNATURE } from "../../fileUpload/reducers/CustomSignatureReducer"
 
 const ORIGINAL_controller = controller
@@ -104,7 +104,7 @@ window.confirm = () => (false);
 describe("Pinpad support", () => {
 
     beforeEach(() => {
-        navigation.navigateToStep = jest.fn()      
+        navigation.navigateToStep = jest.fn()
         global.window.configData = { BEurl: "" }
     })
 
@@ -413,7 +413,7 @@ describe("WizardLogicActions", () => {
             const mockStop = jest.fn()
 
             const location = window.location
-            
+
             delete window.location;
             window.location = {
                 ...location,
@@ -515,7 +515,7 @@ describe("WizardLogicActions", () => {
 
             fetchMock.reset();
             fetchMock.post('/logging/versions', {})
-            
+
             const requestId = 55555
             RequestIdActions.createRequestId = jest.fn(() => { return requestId })
 
@@ -1109,7 +1109,7 @@ describe("WizardLogicActions", () => {
                 return {
                     ...val.APIBody,
                     "expectedKeyUsage": "NON_REPUDIATION",
-                    "token": expect.any(Number) 
+                    "token": expect.any(Number)
                 }
             })
             const mockDispatch = jest.fn()
@@ -1931,7 +1931,7 @@ describe("WizardLogicActions", () => {
             })
             getDigest()(mockDispatch, mockGetStore)
             expect(communication.getDataToSignAPI).toBeCalledTimes(1)
-            expect(communication.getDataToSignAPI).toBeCalledWith(mockapiBody, mockFile, expect.anything(), {"photoIncluded": false}, undefined, null)
+            expect(communication.getDataToSignAPI).toBeCalledWith(mockapiBody, mockFile, expect.anything(), { "photoIncluded": false }, undefined)
 
         })
 
@@ -2042,7 +2042,7 @@ describe("WizardLogicActions", () => {
             const resolvedDigest = {
                 digest: 'digest',
                 digestAlgorithm: 'SHA256',
-                signingDate : "2022-01-26T15:53:53Z"
+                signingDate: "2022-01-26T15:53:53Z"
             }
             communication.getDataToSignAPI = jest.fn(() => { return Promise.resolve(resolvedDigest) })
             getDigest()(mockDispatch, mockGetStore)
@@ -2609,7 +2609,7 @@ describe("WizardLogicActions", () => {
                             APIBody: mockApiBody
                         }
                     },
-                    signature: { signature: mockSignatureString, signingDate : mockSigningDate },
+                    signature: { signature: mockSignatureString, signingDate: mockSigningDate },
                     uploadFile: { file: mockFile },
                     customSignature: { photoIncluded: false }
                 }
@@ -2617,7 +2617,7 @@ describe("WizardLogicActions", () => {
             })
             signDocument()(mockDispatch, mockGetStore)
             expect(signDocumentASyncAPI).toBeCalledTimes(1)
-            expect(signDocumentASyncAPI).toBeCalledWith(mockApiBody, mockFile, mockSignatureString, mockSigningDate, {"photoIncluded": false} , undefined, null)
+            expect(signDocumentASyncAPI).toBeCalledWith(mockApiBody, mockFile, mockSignatureString, mockSigningDate, { "photoIncluded": false }, undefined)
         })
 
         test("signDocument success handleFlowIdError", () => {
@@ -2793,7 +2793,7 @@ describe("WizardLogicActions", () => {
             storeActions.resetStore = jest.fn(() => { })
             FlowIdActions.setNewFlowId = jest.fn(() => { })
             navigation.navigateToStep = jest.fn()
-            communication.sendLogInfo = jest.fn(() => {  FlowIdActions.setNewFlowId(); storeActions.resetStore(); })
+            communication.sendLogInfo = jest.fn(() => { FlowIdActions.setNewFlowId(); storeActions.resetStore(); })
         })
 
         test("resetWizard resetStore and creates new flowId", () => {
@@ -2824,8 +2824,8 @@ describe("WizardLogicActions", () => {
             clearResetWizardClicked()
             resetWizard()(mockDispatch, mockGetstore)
             expect(window.location.pathname).toBe("/")
-        }) 
-        
+        })
+
         afterEach(() => {
             eIDLinkController.controller = ORIGINAL_controller
             storeActions.resetStore = ORIGINAL_resetStore

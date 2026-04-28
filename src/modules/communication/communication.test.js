@@ -91,32 +91,15 @@ describe("createBody", () => {
                 "signingCertificate": startCertificateObject.certificate,
                 "signingDate": null,
                 pdfSigParams: {
-                    "photo": null,
                     "psfC": "1,150,100,100.1,100",
                     "psfN": null,
                     "signLanguage": "fr",
                     "psp": {
-                        "bgColor": "TRANSPARENT",
-                        "bodyBgColor": "#D0D0D0",
-                        "font": "Montserrat-Regular",
                         "rotation": "NONE",
-                        "textAlignH": "CENTER",
-                        "textAlignV": "MIDDLE",
-                        "textColor": "#000000",
-                        "textPadding": 10,
-                        "textPos": "TOP",
-                        "textSize": "12",
-                        "textWrapping": "FILL_BOX",
-                        "texts": {
-                            "de": "Unterzeichnet von %gn% %sn%\nAm %d(HH:mm MMM d YYYY z)%",
-                            "en": "Signed by %gn% %sn%\nOn %d(d MMM YYYY z - HH:mm )%",
-                            "fr": "Signé par %gn% %sn%\nLe %d(d MMM YYYY z - HH:mm)%",
-                            "nl": "Getekend door %gn% %sn%\nOp %d(HH:mm MMM d YYYY z)%",
-                            },
-                        "version": "2"
-                        },
-                    }
-                },
+                        "version": "3"
+                    },
+                }
+            },
             "signingProfileId": "XADES_LTA",
             "token": 0,
             "toSignDocument": {
@@ -126,7 +109,7 @@ describe("createBody", () => {
         }
 
         const result = createBody(startCertificateObject, startDocumentName, startDocumentBase64, startDocumentType, null, aCustomSignature, "fr", null)
-        delete result.clientSignatureParameters.psp;        result.token = 0;
+        delete result.clientSignatureParameters.psp; result.token = 0;
 
         expect(result).toEqual(expected)
     })
@@ -187,16 +170,16 @@ describe('validateCertificatesAPI', () => {
     test("validateCertificatesAPI can throw error", async () => {
         expect.assertions(1)
         const errorResponse = {
-            status : 400,
+            status: 400,
             message: 'SIGN_CERT_EXPIRED',
-            error : 'Some err happened'
+            error: 'Some err happened'
         };
         const mockResponse = {
             ok: false,
             json: jest.fn(() => Promise.resolve(errorResponse)),
             text: jest.fn(),
-            headers : {
-                get : jest.fn((headerName) => (headerName === 'content-type'?'application/json':undefined))
+            headers: {
+                get: jest.fn((headerName) => (headerName === 'content-type' ? 'application/json' : undefined))
             }
         }
 
@@ -606,17 +589,17 @@ describe('validateSignatureAPI', () => {
 
     test("signDocumentASyncAPI can throw error", async () => {
         expect.assertions(7)
-         //start var
-         const startDocument = { name: "documentName", type: "application/xml" }
+        //start var
+        const startDocument = { name: "documentName", type: "application/xml" }
 
-         //expected
-         const expectedBody = {
-             "signedDocument": {
-                 "bytes": BASE64STRING,
-                 "name": startDocument.name
-                },
+        //expected
+        const expectedBody = {
+            "signedDocument": {
+                "bytes": BASE64STRING,
+                "name": startDocument.name
+            },
             "token": 0
-             }
+        }
 
         //mocking
         const mockResponse = {
@@ -676,7 +659,7 @@ describe('getDataToSignForTokenAPI', () => {
             }
         },
         "fileIdToSign": fileIdToSign,
-        token : startToken
+        token: startToken
     }
     test("fetch called", async () => {
         //mocking
@@ -687,8 +670,8 @@ describe('getDataToSignForTokenAPI', () => {
             ok: false,
             json: jest.fn(() => { return resultJson }),
             text: jest.fn(),
-            headers : {
-                get : jest.fn((headerName) => (headerName === 'content-type'?'application/json':undefined))
+            headers: {
+                get: jest.fn((headerName) => (headerName === 'content-type' ? 'application/json' : undefined))
             }
         }
         const mockPromiseFunction = jest.fn(() => Promise.resolve(mockResponse))
@@ -736,7 +719,7 @@ describe('signDocumentForTokenAPI', () => {
                     "psfN": null,
                     "photo": "/9j/4AAQSk",
                     "signLanguage": "fr"
-                    }
+                }
             },
             "fileIdToSign": 0,
             "token": "eyJraWQiO",
@@ -754,7 +737,7 @@ describe('signDocumentForTokenAPI', () => {
 
         //result
         const result = await signDocumentForTokenAPI({
-            certificateChain : [
+            certificateChain: [
                 {
                     "encodedCertificate": "MIIF"
                 },
@@ -762,7 +745,7 @@ describe('signDocumentForTokenAPI', () => {
                     "encodedCertificate": "MIIG"
                 }
             ],
-            certificate : {
+            certificate: {
                 "encodedCertificate": "MIIG"
             }
         }, "eyJraWQiO", 0, aCustomSignature, "fr", "q42MZUa", "2021-06-23T11:53:33+02:00", "/9j/4AAQSk")
@@ -786,21 +769,21 @@ describe('calling sendLogInfo', () => {
 
     test('fetch called', async () => {
         global.fetch.resetMocks();
-        sendLogInfo('A message', () => {}, 'the token 12345678');
+        sendLogInfo('A message', () => { }, 'the token 12345678');
         expect(global.fetch).toHaveBeenCalledTimes(1)
         expect(global.fetch.mock.calls[0][0]).toEqual("/logging/log")
         let bodyCalled = JSON.parse(global.fetch.mock.calls[0][1].body);
         const expectedBody = {
-            "level" : "INFO",
-            "message" : 'A message',
-            "token" : 'the token 12345678'
+            "level": "INFO",
+            "message": 'A message',
+            "token": 'the token 12345678'
         }
         expect(global.fetch.mock.calls[0][1].body).toEqual(JSON.stringify(expectedBody))
     });
 
     test("Don't call CS logging when message is empty string", () => {
         global.fetch.resetMocks();
-        sendLogInfo('', () => {},'the token 12345678');
+        sendLogInfo('', () => { }, 'the token 12345678');
         expect(global.fetch).toHaveBeenCalledTimes(0)
     })
 })

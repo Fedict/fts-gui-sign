@@ -1,56 +1,52 @@
-import { generateIdFromArray, generateId } from "./ControlIdHelper"
+import { generateIdFromArray, generateId } from './ControlIdHelper';
 
-const ORIGINAL_MATH = Math
+describe('generateIdFromArray', () => {
 
-describe('controlIdHelper', () => {
+    afterEach(() => {
+        jest.spyOn(global.Math, 'random').mockRestore();
+    });
 
-    describe("generateIdFromArray", () => {
+    test('Random number', () => {
+        jest.spyOn(global.Math, 'random').mockReturnValue(0.12345);
 
-        beforeEach(() => {
-            Math.random = jest.fn()
-        })
+        // Math.floor(0.12345 * 99999) = 12344
+        const id = generateIdFromArray([]);
 
-        test("generateIdFromArray generates a id not in the array", () => {
-            const expectedResult = 55555
-            const startIDs = [88888, 77777]
+        expect(id).toBe(12344);
+        expect(typeof id).toBe('number');
+    });
 
-            Math.random = jest.fn()
-            Math.random.mockReturnValueOnce(startIDs[0] / 99999)
-                .mockReturnValueOnce(startIDs[1] / 99999)
-                .mockReturnValueOnce(expectedResult / 99999)
-            const result = generateIdFromArray(startIDs)
+    test('Collision test -> looping', () => {
+        const mockRandom = jest.spyOn(global.Math, 'random');
 
-            expect(result).toEqual(expectedResult)
-            expect(Math.random).toBeCalledTimes(3)
+        // 1st call : 0.5 -> ID 49999
+        // 2nd call: 0.1 -> ID 9999 free
+        mockRandom
+            .mockReturnValueOnce(0.5)
+            .mockReturnValueOnce(0.1);
 
-        })
+        const existingIds = [49999];
+        const id = generateIdFromArray(existingIds);
 
-        afterEach(() => {
-            Math = ORIGINAL_MATH
-        })
+        expect(id).toBe(9999);
+        expect(mockRandom).toHaveBeenCalledTimes(2);
+    });
 
-    })
+    test('Random number with empty list', () => {
+        const id = generateIdFromArray([]);
+        expect(id).toBeGreaterThanOrEqual(0);
+        expect(id).toBeLessThan(99999);
+    });
 
-    describe("generateId", () => {
 
-        beforeEach(() => {
-            Math.random = jest.fn()
-        })
+    test('Single id', () => {
+        const mockRandom = jest.spyOn(global.Math, 'random');
+        mockRandom
+            .mockReturnValueOnce(0.12346)
+            .mockReturnValueOnce(0.4564);
 
-        test("generateId creates new unique id", () => {
-            const expectedResult = 55555
-            const startID = 88888
-            Math.random = jest.fn()
-            Math.random.mockReturnValueOnce(startID / 99999)
-                .mockReturnValueOnce(expectedResult / 99999)
-
-            const result = generateId(startID)
-            expect(result).toEqual(expectedResult)
-            expect(Math.random).toBeCalledTimes(2)
-        })
-
-        afterEach(() => {
-            Math = ORIGINAL_MATH
-        })
-    })
-})
+        const id = generateId(12345);
+        expect(id).toBe(45639);
+        expect(mockRandom).toHaveBeenCalledTimes(2);
+    });
+});
